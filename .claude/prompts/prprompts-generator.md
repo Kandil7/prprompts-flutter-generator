@@ -108,7 +108,27 @@ Extract YAML frontmatter for customization:
 
 ## OUTPUT DIRECTORY
 
-Create: `PRPROMPTS/` with 32 numbered markdown files + README.md
+**IMPORTANT**: All generated files MUST go inside the `PRPROMPTS/` folder.
+
+### Folder Structure
+
+```
+PRPROMPTS/
+├── 01-feature_scaffold.md
+├── 02-responsive_layout.md
+├── 03-bloc_implementation.md
+├── ... (29 more numbered files)
+├── 32-lessons_learned_engine.md
+└── README.md
+```
+
+### Generation Steps
+
+1. **First**: Create the `PRPROMPTS/` directory (if it doesn't exist)
+2. **Then**: Generate all 32 numbered markdown files inside `PRPROMPTS/`
+3. **Finally**: Generate `PRPROMPTS/README.md` as the index file
+
+**Total**: 33 files (32 guides + 1 README), all inside `PRPROMPTS/` folder
 
 ## DELIVERY STRATEGY
 
@@ -852,8 +872,34 @@ Quality checklist:
 
 ## BEGIN GENERATION
 
-1. Read `docs/PRD.md` and extract YAML frontmatter
-2. Confirm phase to generate (1, 2, or 3)
-3. Generate files with strict PRP structure
-4. Apply customizations based on PRD metadata
-5. Show success message with applied customizations
+### Preparation Steps
+
+1. **Read PRD**: Read `docs/PRD.md` and extract YAML frontmatter
+2. **Create Folder**: Ensure `PRPROMPTS/` directory exists (create if needed)
+3. **Confirm Phase**: Confirm which phase to generate (1, 2, 3, or all)
+
+### Generation Steps
+
+4. **Generate Files**: Create numbered markdown files inside `PRPROMPTS/`
+   - Use the naming convention: `01-feature_scaffold.md`, `02-responsive_layout.md`, etc.
+   - Always prefix with 2-digit numbers (01-32)
+   - All files go inside the `PRPROMPTS/` folder
+5. **Apply Customizations**: Adapt content based on PRD metadata (compliance, auth, team size, etc.)
+6. **Generate README**: Create `PRPROMPTS/README.md` as the final file
+
+### Verification
+
+7. **Verify Structure**: Confirm all files are inside `PRPROMPTS/` folder
+8. **Show Success Message**: Display the success message with applied customizations
+
+### Example File Paths
+
+```
+PRPROMPTS/01-feature_scaffold.md              ✅ Correct
+PRPROMPTS/16-security_and_compliance.md       ✅ Correct
+PRPROMPTS/32-lessons_learned_engine.md        ✅ Correct
+PRPROMPTS/README.md                           ✅ Correct
+
+01-feature_scaffold.md                        ❌ Wrong (missing PRPROMPTS/)
+docs/PRPROMPTS/01-feature_scaffold.md         ❌ Wrong (wrong location)
+```
