@@ -27,3 +27,4 @@ Thumbs.db
 # Personal configs
 .env
 .env.local
+.claude/settings.local.json
