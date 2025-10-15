@@ -1,0 +1,45 @@
+name: PRPROMPTS Validation
+
+on:
+  pull_request:
+    paths:
+      - '.claude/**'
+      - 'scripts/**'
+      - 'examples/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Validate scripts
+        run: |
+          chmod +x scripts/*.sh
+          shellcheck scripts/*.sh
+
+      - name: Test with healthcare example
+        run: |
+          mkdir -p test-project/docs
+          cp examples/healthcare-prd.md test-project/docs/PRD.md
+          cd test-project
+          ../scripts/generate-prprompts.sh all --dry-run
+
+      - name: Validate prompt structure
+        run: |
+          for file in .claude/prompts/*.md; do
+            if ! grep -q "## Task" "$file"; then
+              echo "❌ Missing Task section in $file"
+              exit 1
+            fi
+          done
+          echo "✅ All prompt files valid"

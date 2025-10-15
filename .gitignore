@@ -1,0 +1,29 @@
+# Claude Code
+.claude/logs/
+*.log
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Generated files (for testing)
+test-output/
+PRPROMPTS-temp/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temp files
+*.tmp
+.temp/
+
+# Personal configs
+.env
+.env.local

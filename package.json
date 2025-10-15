@@ -1,0 +1,33 @@
+{
+  "name": "prprompts-flutter-generator",
+  "version": "1.0.0",
+  "description": "Generate customized PRPROMPTS for Flutter projects from PRD",
+  "keywords": [
+    "flutter",
+    "claude-code",
+    "prprompts",
+    "clean-architecture",
+    "bloc",
+    "hipaa",
+    "pci-dss",
+    "compliance"
+  ],
+  "author": "Kandil7",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kandil7/prprompts-flutter-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kandil7/prprompts-flutter-generator/issues"
+  },
+  "homepage": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "./scripts/setup.sh",
+    "generate": "./scripts/generate-prprompts.sh all"
+  },
+  "peerDependencies": {
+    "@anthropic-ai/claude-code": ">=1.0.0"
+  }
+}
