@@ -99,9 +99,53 @@ prp-gen
 
 ## 📝 Creating Your PRD
 
-### Quick Start: Interactive Wizard
+### 🤖 Auto-Generate (Zero Interaction) - NEW!
 
-The easiest way to create a PRD is using our interactive generator:
+**Fastest way!** Generate complete PRD from a simple description file - no questions asked!
+
+```bash
+# Step 1: Create description (30 seconds)
+cat > project_description.md << 'EOF'
+# HealthTrack Pro
+
+Diabetes tracking app for patients to log blood glucose and
+message their doctor. Must comply with HIPAA and work offline.
+
+## Users
+- Diabetes patients
+- Endocrinologists
+
+## Features
+1. Blood glucose tracking
+2. Medication reminders
+3. Secure messaging
+4. Health reports
+EOF
+
+# Step 2: Auto-generate PRD (10 seconds)
+./scripts/auto-gen-prd.sh
+
+# Step 3: Generate PRPROMPTS (30 seconds)
+prp-gen
+
+# Done! Start coding
+```
+
+**What Gets Auto-Inferred:**
+✅ Project type (healthcare/fintech/education/etc.)
+✅ Compliance requirements (HIPAA/PCI-DSS/GDPR)
+✅ Platforms (iOS/Android/Web)
+✅ Authentication method (JWT/OAuth2/Firebase)
+✅ Offline support & Real-time requirements
+✅ Team size & Timeline estimates
+
+📖 **Full Guide:** [docs/AUTO-PRD-GUIDE.md](docs/AUTO-PRD-GUIDE.md)
+
+---
+
+### 💬 Interactive Wizard
+
+Interactive generator with 10 questions:
 
 ```bash
 claude --prompt .claude/prompts/generate-prd.md
@@ -168,8 +212,22 @@ prp-gen
 
 📖 **Full Guide:** See [docs/PRD-GUIDE.md](docs/PRD-GUIDE.md)
 
+---
+
+### 🔄 Method Comparison
+
+| Method | Time | Accuracy | Best For |
+|--------|------|----------|----------|
+| **🤖 Auto** | 1 min | 85% | Quick prototypes, standard projects |
+| **💬 Interactive** | 5 min | 95% | Production projects, high stakes |
+| **✍️ Manual** | 30 min | 100% | Complex projects, unique requirements |
+
+**Recommendation:** Start with Auto, review output, switch to Interactive if needed.
+
 ## 📖 Documentation
 
+- [Auto PRD Guide](docs/AUTO-PRD-GUIDE.md) - Zero-interaction PRD generation
+- [PRD Creation Guide](docs/PRD-GUIDE.md) - Interactive PRD creation
 - [Usage Guide](docs/USAGE.md) - Detailed usage instructions
 - [Customization](docs/CUSTOMIZATION.md) - How to customize prompts
 - [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
