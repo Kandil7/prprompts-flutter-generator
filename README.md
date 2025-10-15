@@ -1,18 +1,44 @@
 # PRD-to-PRPROMPTS Generator
 
+<div align="center">
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://claude.ai/code)
 [![Flutter](https://img.shields.io/badge/Flutter-3.24+-blue)](https://flutter.dev)
-[![Windows](https://img.shields.io/badge/Windows-Supported-success)](WINDOWS.md)
-[![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#-creating-your-prd)
+[![Version](https://img.shields.io/badge/Version-2.0-success)](CHANGELOG.md)
 
-**Automatically generate 32 customized PRPROMPTS files for Flutter projects based on your Product Requirements Document (PRD).**
+[![Windows](https://img.shields.io/badge/Windows-Supported-0078D6?logo=windows)](WINDOWS.md)
+[![macOS](https://img.shields.io/badge/macOS-Supported-000000?logo=apple)](README.md)
+[![Linux](https://img.shields.io/badge/Linux-Supported-FCC624?logo=linux&logoColor=black)](README.md)
+
+[![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#-creating-your-prd)
+[![PRPROMPTS Files](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#-what-gets-generated)
+[![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#-security--compliance)
+
+</div>
+
+---
+
+<div align="center">
+
+### **Transform your PRD into 32 secure, production-ready development guides**
+
+**Automatically generate customized PRPROMPTS files for Flutter projects with strict security patterns, Clean Architecture, and compliance-aware guidance.**
+
+[🚀 Quick Start](#-quick-start---choose-your-path) • [📖 Docs](docs/PRPROMPTS-SPECIFICATION.md) • [💻 Install](#-installation) • [⭐ Examples](#-examples)
+
+</div>
+
+---
 
 ## 📑 Table of Contents
 
 - [What's New](#-whats-new)
+- [Why Choose This](#-why-choose-this)
+- [Security & Compliance](#-security--compliance)
 - [Quick Start](#-quick-start---choose-your-path)
 - [Installation](#-installation)
+- [What Gets Generated](#-what-gets-generated)
 - [Creating Your PRD](#-creating-your-prd)
 - [Commands Reference](#-all-available-commands)
 - [Documentation](#-documentation)
@@ -32,6 +58,139 @@
 - 📄 **Generate PRD from Files** - Convert existing markdown docs to structured PRDs
 - ⚡ **One-Line Install** - Works on Windows, macOS, and Linux
 - 🧠 **Smart Inference** - Auto-detects compliance, tech stack, and architecture
+
+---
+
+## 🎯 Why Choose This?
+
+### The Problem
+Most Flutter projects lack **consistent, security-aware development guides**. Developers either:
+- ❌ Waste time searching for best practices
+- ❌ Make critical security mistakes (JWT signing in Flutter, storing credit cards, logging PHI)
+- ❌ Lack compliance-specific guidance (HIPAA, PCI-DSS, GDPR)
+- ❌ Struggle to onboard junior developers effectively
+
+### The Solution
+**PRPROMPTS Generator v2.0** creates 32 customized, security-audited guides that:
+- ✅ **Prevent Common Mistakes** - Correct JWT verification, PCI-DSS tokenization, HIPAA encryption
+- ✅ **Explain the "Why"** - Junior-friendly explanations behind every rule
+- ✅ **Adapt to Your Stack** - Customized for your compliance needs, auth method, team size
+- ✅ **Save Development Time** - 500-600 word guides covering all major aspects
+- ✅ **Enforce Best Practices** - Validation gates for every rule
+
+### What Makes It Unique?
+
+| Feature | Generic Templates | PRPROMPTS Generator v2.0 |
+|---------|-------------------|--------------------------|
+| **Security Patterns** | Generic or incorrect | ✅ Audited (JWT, PCI-DSS, HIPAA) |
+| **Customization** | One-size-fits-all | ✅ PRD-driven (compliance, team, stack) |
+| **Junior-Friendly** | Assumes knowledge | ✅ Explains "why" behind every rule |
+| **Validation Gates** | No enforcement | ✅ Pre-merge checklists + CI checks |
+| **Tool Integration** | Manual setup | ✅ Structurizr, Serena MCP, GitHub CLI |
+| **Real Examples** | Placeholder code | ✅ Real Flutter paths + working code |
+
+---
+
+## 🔐 Security & Compliance
+
+### Critical Security Patterns (v2.0)
+
+#### JWT Authentication ⚠️ **Most Common Mistake**
+
+**❌ WRONG (Security Vulnerability)**:
+```dart
+// NEVER do this - exposes private key!
+final token = JWT({'user': 'john'}).sign(SecretKey('my-secret'));
+```
+
+**✅ CORRECT (Secure Pattern)**:
+```dart
+// Flutter only verifies tokens (public key)
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+
+Future<bool> verifyToken(String token) async {
+  try {
+    final jwt = JWT.verify(
+      token,
+      RSAPublicKey(publicKey), // Public key only!
+      audience: Audience(['my-app']),
+      issuer: 'api.example.com',
+    );
+    return jwt.payload['exp'] > DateTime.now().millisecondsSinceEpoch / 1000;
+  } catch (e) {
+    return false;
+  }
+}
+```
+
+**Why?** Backend signs with private key (RS256), Flutter verifies with public key. This prevents token forgery.
+
+---
+
+#### PCI-DSS Compliance 💳
+
+**❌ WRONG (PCI-DSS Violation)**:
+```dart
+// NEVER store full card numbers!
+await db.insert('cards', {'number': '4242424242424242'});
+```
+
+**✅ CORRECT (PCI-DSS Compliant)**:
+```dart
+// Use tokenization (Stripe, PayPal, etc.)
+final token = await stripe.createToken(cardNumber);
+await db.insert('cards', {
+  'last4': cardNumber.substring(cardNumber.length - 4),
+  'token': token, // Only store token
+  'brand': 'Visa',
+});
+```
+
+**Why?** Storing full card numbers requires PCI-DSS Level 1 certification. Tokenization reduces your scope.
+
+---
+
+#### HIPAA Compliance 🏥
+
+**❌ WRONG (HIPAA Violation)**:
+```dart
+// NEVER log PHI (Protected Health Information)!
+print('Patient SSN: ${patient.ssn}');
+```
+
+**✅ CORRECT (HIPAA Compliant)**:
+```dart
+// Encrypt PHI at rest (AES-256-GCM)
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final encrypted = await _encryptor.encrypt(
+  patientData,
+  key: await _secureStorage.read(key: 'encryption_key'),
+);
+await db.insert('patients', {'encrypted_data': encrypted});
+
+// Safe logging (no PHI)
+print('Patient record updated: ${patient.id}');
+```
+
+**Why?** HIPAA §164.312(a)(2)(iv) requires encryption of ePHI at rest. Logging PHI is an audit violation.
+
+---
+
+### Compliance Support
+
+PRPROMPTS automatically adapts based on your PRD's `compliance` field:
+
+| Compliance | What Gets Generated |
+|------------|---------------------|
+| **HIPAA** | PHI encryption, audit logging, HTTPS-only, consent forms |
+| **PCI-DSS** | Payment tokenization, TLS 1.2+, SAQ checklist, secure transmission |
+| **GDPR** | Consent management, right to erasure, data portability, cookie consent |
+| **SOC2** | Access controls, encryption, audit trails, incident response |
+| **COPPA** | Parental consent, age verification, data minimization |
+| **FERPA** | Student records protection, authorized access only |
+
+---
 
 ## 🎯 What is This?
 
@@ -766,25 +925,38 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 🗺️ Roadmap
 
-### ✅ Completed (v1.0)
+### ✅ Completed
+
+**v2.0 - PRPROMPTS Generator Upgrade** (Current)
+- [x] Strict PRP pattern (6 mandatory sections)
+- [x] Critical security corrections (JWT, PCI-DSS, HIPAA)
+- [x] Tool integration (Structurizr, Serena MCP, GitHub CLI)
+- [x] Comprehensive customization rules
+- [x] 500-600 words per file (enforced)
+- [x] Junior-friendly "why" explanations
+
+**v1.0 - Multi-Platform & PRD Generation**
 - [x] Full Windows support (batch, PowerShell, Git Bash)
 - [x] Generate PRD from existing markdown files
 - [x] One-line installers for all platforms
 - [x] Smart compliance and tech stack inference
 - [x] Auto-generate PRD from simple description
+- [x] 4 PRD generation methods
 
-### 🔜 Coming Soon (v1.1)
-- [ ] VS Code extension
-- [ ] GitHub Actions workflow generator
-- [ ] Docker containerization examples
-- [ ] More compliance standards (ISO 27001, NIST, FedRAMP)
+### 🚀 Coming Soon (v2.1)
+- [ ] **Phase prompt enhancements** - Update phase-1, phase-2, phase-3 prompts to v2.0 spec
+- [ ] **Example PRPROMPTS** - Generated samples for healthcare, fintech, education
+- [ ] **VS Code snippets** - Code snippets for common patterns
+- [ ] **GitHub Actions workflows** - CI/CD templates
 
-### 🎯 Future (v2.0+)
-- [ ] Web UI for PRD creation
-- [ ] Multi-language support (Spanish, French, German)
-- [ ] Integration with Jira/Linear/Asana
-- [ ] AI-powered PRD refinement and suggestions
-- [ ] Team collaboration features
+### 🎯 Future (v3.0+)
+- [ ] **VS Code Extension** - Generate PRPROMPTS directly from VSCode
+- [ ] **Web UI** - Browser-based PRD creation
+- [ ] **More Compliance** - ISO 27001, NIST, FedRAMP, CCPA
+- [ ] **Multi-language** - Spanish, French, German PRPROMPTS
+- [ ] **Jira/Linear Integration** - Sync with project management tools
+- [ ] **AI-Powered Refinement** - Suggest improvements to existing PRDs
+- [ ] **Team Collaboration** - Shared PRD editing and commenting
 
 ## ⭐ Star Us!
 
