@@ -20,6 +20,14 @@
 
 ## ✨ What's New
 
+### v2.0 - PRPROMPTS Generator Upgrade 🎯
+- **Strict PRP Pattern** - 6-section structure (FEATURE, EXAMPLES, CONSTRAINTS, VALIDATION GATES, BEST PRACTICES, REFERENCES)
+- **Critical Security Patterns** - Correct JWT verification, PCI-DSS tokenization, HIPAA encryption
+- **Tool Integration** - Structurizr C4, Serena MCP, GitHub CLI
+- **500-600 Words/File** - Consistent, comprehensive guides
+- **Junior-Friendly** - Explains "why" behind every rule
+
+### v1.0 - Multi-Platform & PRD Generation
 - 🪟 **Full Windows Support** - Native batch & PowerShell installers
 - 📄 **Generate PRD from Files** - Convert existing markdown docs to structured PRDs
 - ⚡ **One-Line Install** - Works on Windows, macOS, and Linux
@@ -517,9 +525,15 @@ prp-gen
 
 ## 📖 Documentation
 
+### PRPROMPTS Generation
+- **[PRPROMPTS Specification v2.0](docs/PRPROMPTS-SPECIFICATION.md)** - Complete guide (PRP pattern, security, customization)
+
+### PRD Creation
 - [Auto PRD Guide](docs/AUTO-PRD-GUIDE.md) - Zero-interaction PRD generation
 - [PRD from Files Guide](docs/PRD-FROM-FILES-GUIDE.md) - Generate PRD from existing markdown
 - [PRD Creation Guide](docs/PRD-GUIDE.md) - Interactive PRD creation
+
+### Configuration & Usage
 - [Usage Guide](docs/USAGE.md) - Detailed usage instructions
 - [Customization](docs/CUSTOMIZATION.md) - How to customize prompts
 - [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions

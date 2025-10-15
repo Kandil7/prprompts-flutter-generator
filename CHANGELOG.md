@@ -5,6 +5,51 @@ All notable changes to the PRPROMPTS Flutter Generator project will be documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### 🎯 Enhanced - PRPROMPTS Generator v2.0
+
+Major upgrade to PRPROMPTS generation with comprehensive security patterns and strict PRP structure.
+
+#### ✨ Added
+
+**PRPROMPTS Generator v2.0** (`.claude/prompts/prprompts-generator.md`):
+- **Strict PRP Pattern** - Mandatory 6-section structure (FEATURE, EXAMPLES, CONSTRAINTS, VALIDATION GATES, BEST PRACTICES, REFERENCES)
+- **Critical Security Corrections**:
+  - JWT: NEVER sign in Flutter, only verify with public key (RS256)
+  - PCI-DSS: NEVER store full credit cards, use tokenization
+  - HIPAA: Always encrypt PHI at rest (AES-256-GCM)
+- **Integrated Tools**:
+  - Structurizr for C4 diagrams
+  - Serena MCP for semantic analysis
+  - GitHub CLI for AI commands
+- **Comprehensive Customization Rules**:
+  - Compliance-based (HIPAA/PCI-DSS/GDPR)
+  - Auth method (JWT/OAuth2/Firebase)
+  - Offline support patterns
+  - Team size adaptation
+  - State management (BLoC/Riverpod)
+- **Quality Requirements**:
+  - 500-600 words per file (strict)
+  - Real Flutter file paths (no placeholders)
+  - Junior-friendly "why" explanations
+  - Validation gates for every rule
+
+**Documentation**:
+- `docs/PRPROMPTS-SPECIFICATION.md` - Complete v2.0 specification
+  - PRP pattern definition
+  - JWT security best practices (with examples)
+  - Clean Architecture layers explained
+  - All 32 files detailed specifications
+  - Common mistakes to avoid
+  - Customization rules matrix
+  - Tool integration guide
+
+#### 🔧 Changed
+
+- Updated README badges and version to 2.0
+- Enhanced CHANGELOG with detailed PRPROMPTS v2.0 changes
+
 ## [1.0.0] - 2025-10-16
 
 ### 🎉 Major Release
