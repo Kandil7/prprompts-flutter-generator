@@ -33,7 +33,19 @@ Transform your PRD into a complete set of development guides that adapt to your 
 - Flutter 3.24+ (for your project)
 - Git
 
-### Quick Install
+### ⚡ Quick Install (Copy & Paste)
+
+**One command - installs everything:**
+
+```bash
+curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.sh | bash
+```
+
+**That's it!** Now run `claude create-prd` from any directory.
+
+---
+
+### Standard Install
 
 ```bash
 # Clone repository
@@ -64,17 +76,26 @@ source ~/.bashrc
 
 **NEW!** Use simple commands like `claude create-prd` instead of full paths.
 
-### Quick Install
+### ⚡ Super Quick Install
+
+**Copy and paste this one command:**
 
 ```bash
-# Global install (recommended - works everywhere)
-./scripts/install-commands.sh --global
-
-# Local install (this project only)
-./scripts/install-commands.sh --local
+curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.sh | bash
 ```
 
-**That's it!** Now you can use:
+Installs commands globally - works everywhere!
+
+### Alternative Install Methods
+
+```bash
+# If you already cloned the repo:
+cd prprompts-flutter-generator
+./scripts/install-commands.sh --global  # Global
+./scripts/install-commands.sh --local   # Local only
+```
+
+**Now you can use:
 
 ```bash
 claude create-prd      # Interactive PRD wizard
