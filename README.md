@@ -741,44 +741,76 @@ real_time: true
 
 ## 🏗️ What Gets Generated
 
+**All files are created inside the `PRPROMPTS/` folder** for organized, easy-to-navigate structure.
+
+### 📂 Folder Structure
+
+```
+your-flutter-project/
+├── lib/
+├── test/
+├── docs/
+│   └── PRD.md
+└── PRPROMPTS/                  ← All generated files here
+    ├── 01-feature_scaffold.md
+    ├── 02-responsive_layout.md
+    ├── 03-bloc_implementation.md
+    ├── ... (29 more files)
+    ├── 32-lessons_learned_engine.md
+    └── README.md               ← Index & usage guide
+```
+
+**Total**: 33 files (32 guides + 1 README), all in `PRPROMPTS/`
+
+---
+
 ### Phase 1: Core Architecture (10 files)
-1. feature_scaffold.md - Clean Architecture patterns
-2. responsive_layout.md - Adaptive UI
-3. bloc_implementation.md - BLoC vs Cubit
-4. api_integration.md - Auth, error handling
-5. testing_strategy.md - Unit/Widget/Integration tests
-6. design_system_usage.md - Theme, components
-7. onboarding_junior.md - Junior developer guide
-8. accessibility_a11y.md - WCAG 2.1 compliance
-9. internationalization_i18n.md - Multi-language
-10. performance_optimization.md - Build times, FPS
+
+**Location**: `PRPROMPTS/01-*.md` through `PRPROMPTS/10-*.md`
+
+1. **01-feature_scaffold.md** - Clean Architecture patterns
+2. **02-responsive_layout.md** - Adaptive UI
+3. **03-bloc_implementation.md** - BLoC vs Cubit
+4. **04-api_integration.md** - Auth, error handling, JWT verification
+5. **05-testing_strategy.md** - Unit/Widget/Integration tests
+6. **06-design_system_usage.md** - Theme, components
+7. **07-onboarding_junior.md** - Junior developer guide
+8. **08-accessibility_a11y.md** - WCAG 2.1 compliance
+9. **09-internationalization_i18n.md** - Multi-language
+10. **10-performance_optimization.md** - Build times, FPS
 
 ### Phase 2: Quality & Security (12 files)
-11. git_branching_strategy.md - Git workflows
-12. progress_tracking_workflow.md - Sprint planning
-13. multi_team_coordination.md - Cross-team collab
-14. security_audit_checklist.md - Pre-release validation
-15. release_management.md - App Store process
-16. security_and_compliance.md - ⭐ PRD-sensitive
-17. performance_optimization_detailed.md - Advanced profiling
-18. quality_gates_and_code_metrics.md - Coverage, complexity
-19. localization_and_accessibility.md - Combined L10n+A11y
-20. versioning_and_release_notes.md - Semantic versioning
-21. team_culture_and_communication.md - Async-first
-22. autodoc_integration.md - Auto-documentation
+
+**Location**: `PRPROMPTS/11-*.md` through `PRPROMPTS/22-*.md`
+
+11. **11-git_branching_strategy.md** - Git workflows
+12. **12-progress_tracking_workflow.md** - Sprint planning
+13. **13-multi_team_coordination.md** - Cross-team collab
+14. **14-security_audit_checklist.md** - Pre-release validation
+15. **15-release_management.md** - App Store process
+16. **16-security_and_compliance.md** - ⭐ PRD-sensitive (HIPAA/PCI-DSS/GDPR)
+17. **17-performance_optimization_detailed.md** - Advanced profiling
+18. **18-quality_gates_and_code_metrics.md** - Coverage, complexity
+19. **19-localization_and_accessibility.md** - Combined L10n+A11y
+20. **20-versioning_and_release_notes.md** - Semantic versioning
+21. **21-team_culture_and_communication.md** - Async-first
+22. **22-autodoc_integration.md** - Auto-documentation
 
 ### Phase 3: Demo & Learning (10 files + README)
-23. ai_pair_programming_guide.md - Claude/Copilot
-24. dashboard_and_analytics.md - Metrics, monitoring
-25. tech_debt_and_refactor_strategy.md - Debt tracking
-26. demo_environment_setup.md - ⭐ PRD-scenario based
-27. demo_progress_tracker.md - Client dashboard
-28. demo_branding_and_visuals.md - Demo UI
-29. demo_deployment_automation.md - Demo CI/CD
-30. client_demo_report_template.md - Weekly reports
-31. project_role_adaptation.md - ⭐ PRD-driven roles
-32. lessons_learned_engine.md - Retrospectives
-+ PRPROMPTS/README.md - Usage guide
+
+**Location**: `PRPROMPTS/23-*.md` through `PRPROMPTS/32-*.md` + `PRPROMPTS/README.md`
+
+23. **23-ai_pair_programming_guide.md** - Claude/Copilot
+24. **24-dashboard_and_analytics.md** - Metrics, monitoring
+25. **25-tech_debt_and_refactor_strategy.md** - Debt tracking
+26. **26-demo_environment_setup.md** - ⭐ PRD-scenario based
+27. **27-demo_progress_tracker.md** - Client dashboard
+28. **28-demo_branding_and_visuals.md** - Demo UI
+29. **29-demo_deployment_automation.md** - Demo CI/CD
+30. **30-client_demo_report_template.md** - Weekly reports
+31. **31-project_role_adaptation.md** - ⭐ PRD-driven roles
+32. **32-lessons_learned_engine.md** - Retrospectives
++ **README.md** - Usage guide & index
 
 ## 🎯 PRP Framework
 
