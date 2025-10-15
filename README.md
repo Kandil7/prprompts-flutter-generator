@@ -60,6 +60,96 @@ echo "source $(pwd)/scripts/prp-aliases.sh" >> ~/.bashrc
 source ~/.bashrc
 ```
 
+## ⚙️ Configure Claude Code Commands
+
+To use simple commands like `claude create-prd` instead of full paths, add these to your Claude Code configuration:
+
+### Option 1: Project-Level Configuration (Recommended)
+
+Copy `.claude` directory to your Flutter project:
+
+```bash
+cd your-flutter-project
+cp -r /path/to/prprompts-flutter-generator/.claude .
+```
+
+Now you can run:
+```bash
+claude create-prd      # Interactive PRD wizard
+claude auto-gen-prd    # Auto-generate from description
+```
+
+### Option 2: Global Configuration
+
+Add to your global Claude Code config (`~/.config/claude/config.yml` or `~/.claude/config.yml`):
+
+```yaml
+# ~/.config/claude/config.yml
+prompts:
+  create-prd:
+    file: "/path/to/prprompts-flutter-generator/.claude/prompts/generate-prd.md"
+    description: "Interactive PRD creation wizard"
+
+  auto-gen-prd:
+    file: "/path/to/prprompts-flutter-generator/.claude/prompts/auto-generate-prd.md"
+    description: "Auto-generate PRD from description (no questions)"
+
+commands:
+  prp-gen:
+    script: "/path/to/prprompts-flutter-generator/scripts/generate-prprompts.sh all"
+    description: "Generate all PRPROMPTS files"
+
+  prp-auto:
+    script: "/path/to/prprompts-flutter-generator/scripts/auto-gen-prd.sh"
+    description: "Auto-generate PRD and PRPROMPTS"
+```
+
+Then use anywhere:
+```bash
+claude create-prd      # From any project directory
+claude auto-gen-prd    # From any project directory
+claude prp-gen         # Generate PRPROMPTS
+claude prp-auto        # Full auto workflow
+```
+
+### Option 3: Shell Aliases (Fastest)
+
+Add to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+# PRD Generator Aliases
+export PRPROMPTS_DIR="/path/to/prprompts-flutter-generator"
+
+alias create-prd="claude --prompt $PRPROMPTS_DIR/.claude/prompts/generate-prd.md"
+alias auto-prd="$PRPROMPTS_DIR/scripts/auto-gen-prd.sh"
+alias gen-prprompts="$PRPROMPTS_DIR/scripts/generate-prprompts.sh all"
+
+# Reload shell
+source ~/.bashrc  # or source ~/.zshrc
+```
+
+Then use:
+```bash
+create-prd         # Interactive wizard
+auto-prd           # Auto-generate
+gen-prprompts      # Generate PRPROMPTS
+```
+
+### Verify Installation
+
+Test your setup:
+```bash
+# Test interactive PRD creation
+claude create-prd --help
+
+# Test auto PRD generation
+claude auto-gen-prd --help
+
+# Or with aliases
+create-prd --help
+auto-prd --help
+```
+
 ## 🚀 Quick Start
 
 ### 1. Create Your PRD
@@ -123,10 +213,12 @@ message their doctor. Must comply with HIPAA and work offline.
 EOF
 
 # Step 2: Auto-generate PRD (10 seconds)
-./scripts/auto-gen-prd.sh
+claude auto-gen-prd
+# Or: ./scripts/auto-gen-prd.sh
 
 # Step 3: Generate PRPROMPTS (30 seconds)
-prp-gen
+claude prp-gen
+# Or: prp-gen
 
 # Done! Start coding
 ```
@@ -148,7 +240,8 @@ prp-gen
 Interactive generator with 10 questions:
 
 ```bash
-claude --prompt .claude/prompts/generate-prd.md
+claude create-prd
+# Or: claude --prompt .claude/prompts/generate-prd.md
 ```
 
 Answer 10 simple questions and get a complete PRD with YAML frontmatter!
@@ -341,25 +434,53 @@ Official docs, compliance guides, internal ADRs
 
 ## 🔧 CLI Commands
 
+### PRD Creation Commands
+
 ```bash
-# Basic commands
-prp-analyze           # Analyze PRD
-prp-gen              # Generate all files
-prp-p1               # Generate Phase 1
-prp-p2               # Generate Phase 2
-prp-p3               # Generate Phase 3
+# Auto-generate PRD (zero interaction)
+claude auto-gen-prd
+
+# Interactive PRD wizard (10 questions)
+claude create-prd
+
+# Or use full paths
+./scripts/auto-gen-prd.sh
+claude --prompt .claude/prompts/generate-prd.md
+```
+
+### PRPROMPTS Generation Commands
+
+```bash
+# Generate all PRPROMPTS
+claude prp-gen       # If configured
+prp-gen             # Using aliases
+
+# Generate by phase
+prp-p1              # Phase 1: Core Architecture (10 files)
+prp-p2              # Phase 2: Quality & Security (12 files)
+prp-p3              # Phase 3: Demo & Learning (10 files + README)
 
 # Generate specific file
 prp-file security_and_compliance
 
 # Full workflow
-prp-full             # Analyze + Generate + Validate
+prp-full            # Analyze + Generate + Validate
 
 # YOLO mode (auto-approve)
 prp-yolo
 
 # Interactive mode
 prp-chat
+```
+
+### Complete Workflow
+
+```bash
+# Full automation (1 minute total)
+claude auto-gen-prd && claude prp-gen
+
+# Or with aliases
+auto-prd && gen-prprompts
 ```
 
 ## 🤝 Contributing
