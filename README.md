@@ -60,9 +60,38 @@ echo "source $(pwd)/scripts/prp-aliases.sh" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-## ⚙️ Configure Claude Code Commands
+## ⚙️ Claude Code Commands (One-Line Install)
 
-To use simple commands like `claude create-prd` instead of full paths, add these to your Claude Code configuration:
+**NEW!** Use simple commands like `claude create-prd` instead of full paths.
+
+### Quick Install
+
+```bash
+# Global install (recommended - works everywhere)
+./scripts/install-commands.sh --global
+
+# Local install (this project only)
+./scripts/install-commands.sh --local
+```
+
+**That's it!** Now you can use:
+
+```bash
+claude create-prd      # Interactive PRD wizard
+claude auto-gen-prd    # Auto-generate from description
+claude analyze-prd     # Validate PRD
+claude gen-prprompts   # Generate all 32 files
+claude gen-phase-1     # Generate Phase 1
+claude gen-file        # Generate single file
+```
+
+📖 **Full Command Reference:** [docs/CLAUDE-COMMANDS.md](docs/CLAUDE-COMMANDS.md)
+
+---
+
+## ⚙️ Manual Configuration (Optional)
+
+If you prefer manual setup, here are alternative methods:
 
 ### Option 1: Project-Level Configuration (Recommended)
 

@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Create PRD",
+      "type": "shell",
+      "command": "claude create-prd",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Auto-Generate PRD",
+      "type": "shell",
+      "command": "claude auto-gen-prd",
+      "problemMatcher": []
+    },
+    {
+      "label": "Analyze PRD",
+      "type": "shell",
+      "command": "claude analyze-prd",
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate PRPROMPTS",
+      "type": "shell",
+      "command": "claude gen-prprompts",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Generate Phase 1",
+      "type": "shell",
+      "command": "claude gen-phase-1",
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate Phase 2",
+      "type": "shell",
+      "command": "claude gen-phase-2",
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate Phase 3",
+      "type": "shell",
+      "command": "claude gen-phase-3",
+      "problemMatcher": []
+    }
+  ]
+}
