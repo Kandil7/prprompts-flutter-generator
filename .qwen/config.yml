@@ -1,0 +1,68 @@
+# Qwen Code Commands Configuration for PRPROMPTS Generator
+# Version: 1.0.0
+# Optimized for Qwen3-Coder (256K-1M token context)
+
+commands:
+  # PRD Creation Commands
+  create-prd:
+    prompt: "prompts/generate-prd.md"
+    description: "Interactive PRD creation wizard (10 questions)"
+
+  auto-gen-prd:
+    prompt: "prompts/auto-generate-prd.md"
+    description: "Auto-generate PRD from description (zero interaction)"
+
+  prd-from-files:
+    prompt: "prompts/generate-prd-from-files.md"
+    description: "Generate PRD from existing markdown files (optional input)"
+
+  # PRD Analysis
+  analyze-prd:
+    prompt: "prompts/analyze-prd.md"
+    description: "Validate and analyze PRD, show customizations"
+
+  # PRPROMPTS Generation Commands
+  gen-prprompts:
+    prompt: "prompts/prprompts-generator.md"
+    description: "Generate all 32 PRPROMPTS files from PRD"
+
+  gen-phase-1:
+    prompt: "prompts/phase-1-core.md"
+    description: "Generate Phase 1: Core Architecture (10 files)"
+
+  gen-phase-2:
+    prompt: "prompts/phase-2-quality.md"
+    description: "Generate Phase 2: Quality & Security (12 files)"
+
+  gen-phase-3:
+    prompt: "prompts/phase-3-demo.md"
+    description: "Generate Phase 3: Demo & Learning (10 files)"
+
+  gen-file:
+    prompt: "prompts/single-file-generator.md"
+    description: "Generate a single PRPROMPTS file by name"
+
+# Project Settings
+project:
+  name: "PRPROMPTS Flutter Generator (Qwen Edition)"
+  version: "1.0.0"
+  description: "Generate customized development guides from PRD using Qwen3-Coder"
+  ai_model: "qwen3-coder"
+  context_length: "256K-1M tokens"
+
+# Default Behaviors
+defaults:
+  auto_approve: false
+  verbose: true
+  save_context: true
+
+# Qwen-Specific Optimizations
+qwen_settings:
+  # Leverage Qwen's extended context for large codebases
+  use_extended_context: true
+
+  # Qwen3-Coder excels at multi-file understanding
+  enable_codebase_analysis: true
+
+  # Agentic features
+  enable_workflow_automation: true

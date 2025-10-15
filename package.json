@@ -1,16 +1,19 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "1.0.0",
-  "description": "Generate customized PRPROMPTS for Flutter projects from PRD",
+  "version": "2.0.0",
+  "description": "Generate customized PRPROMPTS for Flutter projects from PRD - Works with Claude Code & Qwen Code",
   "keywords": [
     "flutter",
     "claude-code",
+    "qwen-code",
+    "qwen3-coder",
     "prprompts",
     "clean-architecture",
     "bloc",
     "hipaa",
     "pci-dss",
-    "compliance"
+    "compliance",
+    "ai-assisted-development"
   ],
   "author": "Kandil7",
   "license": "MIT",
@@ -25,9 +28,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "setup": "./scripts/setup.sh",
-    "generate": "./scripts/generate-prprompts.sh all"
+    "generate": "./scripts/generate-prprompts.sh all",
+    "install-claude": "./scripts/install-commands.sh --global",
+    "install-qwen": "./scripts/install-qwen-commands.sh --global",
+    "install-both": "./scripts/install-both.sh --global"
   },
   "peerDependencies": {
     "@anthropic-ai/claude-code": ">=1.0.0"
+  },
+  "optionalDependencies": {
+    "@qwenlm/qwen-code": ">=1.0.0"
   }
 }

@@ -4,6 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://claude.ai/code)
+[![Qwen Code](https://img.shields.io/badge/Qwen-Code-orange)](QWEN.md)
 [![Flutter](https://img.shields.io/badge/Flutter-3.24+-blue)](https://flutter.dev)
 [![Version](https://img.shields.io/badge/Version-2.0-success)](CHANGELOG.md)
 
@@ -34,6 +35,7 @@
 ## 📑 Table of Contents
 
 - [What's New](#-whats-new)
+- [Choose Your AI Assistant](#-choose-your-ai-assistant)
 - [Why Choose This](#-why-choose-this)
 - [Security & Compliance](#-security--compliance)
 - [Quick Start](#-quick-start---choose-your-path)
@@ -58,6 +60,32 @@
 - 📄 **Generate PRD from Files** - Convert existing markdown docs to structured PRDs
 - ⚡ **One-Line Install** - Works on Windows, macOS, and Linux
 - 🧠 **Smart Inference** - Auto-detects compliance, tech stack, and architecture
+
+---
+
+## 🤖 Choose Your AI Assistant
+
+PRPROMPTS Generator works with **both** Claude Code and Qwen Code:
+
+| Feature | Claude Code | Qwen Code | Winner |
+|---------|-------------|-----------|---------|
+| **Context Length** | 200K tokens | 256K-1M tokens | Qwen (5x larger) |
+| **Cost** | $20/month (Pro) | Free tier + lower costs | Qwen |
+| **Accuracy** | Excellent (Sonnet 4.5) | Excellent (SOTA) | Tie |
+| **Best For** | Production apps, high-stakes | Large codebases, cost-conscious | Depends |
+
+**Installation**:
+- **Claude Code**: Follow [Installation](#-installation) below
+- **Qwen Code**: See [QWEN.md](QWEN.md)
+- **Both**: Run `./scripts/install-both.sh --global`
+
+**Commands are identical**:
+```bash
+claude create-prd    # Claude version
+qwen create-prd      # Qwen version (same workflow!)
+```
+
+📖 **Full Comparison**: [Claude vs Qwen](docs/CLAUDE-VS-QWEN.md)
 
 ---
 
@@ -692,6 +720,13 @@ prp-gen
 - [PRD from Files Guide](docs/PRD-FROM-FILES-GUIDE.md) - Generate PRD from existing markdown
 - [PRD Creation Guide](docs/PRD-GUIDE.md) - Interactive PRD creation
 
+### AI Assistant Guides
+- **[Qwen Code Installation](QWEN.md)** - Complete guide for Qwen3-Coder
+- [Qwen Commands Reference](docs/QWEN-COMMANDS.md) - Qwen command list
+- **[Claude vs Qwen Comparison](docs/CLAUDE-VS-QWEN.md)** - Which to choose?
+- [Claude Commands Reference](docs/CLAUDE-COMMANDS.md) - Claude command list
+- [Windows Installation](WINDOWS.md) - Windows-specific guide
+
 ### Configuration & Usage
 - [Usage Guide](docs/USAGE.md) - Detailed usage instructions
 - [Customization](docs/CUSTOMIZATION.md) - How to customize prompts
@@ -1006,6 +1041,7 @@ If this project helps you, please give it a ⭐ on GitHub!
 [📦 Install](#-installation) •
 [📝 Create PRD](#-creating-your-prd) •
 [📖 Docs](docs/) •
+[🤖 Qwen Guide](QWEN.md) •
 [🪟 Windows Guide](WINDOWS.md) •
 [💬 Support](https://github.com/Kandil7/prprompts-flutter-generator/issues)
 
@@ -1015,6 +1051,6 @@ If this project helps you, please give it a ⭐ on GitHub!
 ![macOS](https://img.shields.io/badge/macOS-000000?style=flat&logo=apple&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
 
-**Powered by** [Claude Code](https://claude.ai/code) | **Built for** [Flutter](https://flutter.dev)
+**Powered by** [Claude Code](https://claude.ai/code) & [Qwen Code](https://github.com/QwenLM/qwen-code) | **Built for** [Flutter](https://flutter.dev)
 
 </div>

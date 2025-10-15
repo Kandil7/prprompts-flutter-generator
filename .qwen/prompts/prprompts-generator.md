@@ -1,0 +1,905 @@
+---
+name: Generate PRPROMPTS
+description: Generate all 32 PRPROMPTS files from PRD with strict PRP pattern
+author: PRPROMPTS Generator
+version: 2.0.0
+tags: [prprompts, generator, flutter, clean-architecture, bloc]
+---
+
+# Generate Complete PRPROMPTS Folder
+
+**IMPORTANT**: Generate a complete, secure, and adaptive `PRPROMPTS/` folder for a large-scale Flutter project using Clean Architecture, BLoC/Cubit, and dynamic team structuring.
+
+## DEFINITIONS
+
+### PRP (Prompt Reference Pattern)
+Every file MUST follow this exact structure:
+
+```markdown
+## FEATURE
+What this guide helps you accomplish
+
+## EXAMPLES
+Real code with actual file paths (e.g., lib/features/login/presentation/login_page.dart)
+
+## CONSTRAINTS
+✅ DO / ❌ DON'T rules
+
+## VALIDATION GATES
+Manual checklist + automated CI checks
+
+## BEST PRACTICES
+Junior-friendly explanations with "Why?" sections
+
+## REFERENCES
+Official docs, compliance guides, internal ADRs
+```
+
+### Clean Architecture
+Uncle Bob's layered approach:
+- **Presentation Layer**: UI, BLoC/Cubit, Widgets
+- **Domain Layer**: Entities, Use Cases, Repository Interfaces
+- **Data Layer**: Repository Implementations, Data Sources, Models
+
+### JWT in Flutter (CRITICAL)
+- ❌ **NEVER** sign tokens in Flutter
+- ✅ **Backend signs** tokens (e.g., Node.js with `node-jsonwebtoken`, RS256)
+- ✅ **Flutter only verifies** tokens using public key (`dart_jsonwebtoken` package)
+- ❌ **NEVER** store private keys or secrets in Flutter code
+- ✅ Always verify claims: `aud`, `iss`, `exp`, `sub`
+
+**Example (Backend - Node.js)**:
+```javascript
+const token = jwt.sign(payload, privateKey, {
+  algorithm: 'RS256',
+  expiresIn: '15m',
+  audience: 'my-flutter-app',
+  issuer: 'api.example.com'
+});
+```
+
+**Example (Flutter - Verification Only)**:
+```dart
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+
+Future<bool> verifyToken(String token) async {
+  try {
+    final jwt = JWT.verify(
+      token,
+      RSAPublicKey(publicKeyString),
+      audience: Audience(['my-flutter-app']),
+      issuer: 'api.example.com',
+    );
+    return jwt.payload['exp'] > DateTime.now().millisecondsSinceEpoch / 1000;
+  } catch (e) {
+    return false;
+  }
+}
+```
+
+### Integrated Tools
+
+1. **Structurizr** - C4 model as code
+   - Generates interactive architecture diagrams
+   - DSL format: `workspace.dsl`
+   - Example: `structurizr-cli export -workspace workspace.dsl -format plantuml`
+
+2. **Serena MCP** - Semantic code analysis for Flutter
+   - Context-aware refactoring
+   - Flutter-specific rules
+   - Example: `serena analyze lib/features/`
+
+3. **GitHub CLI** - AI-powered commands
+   - `/fix-github-issue 123` - Auto-fix issues
+   - `gh pr create --fill` - Auto PR descriptions
+   - `gh copilot suggest "add unit tests"`
+
+## INPUT
+
+Read and parse: `docs/PRD.md`
+
+Extract YAML frontmatter for customization:
+- `project_name`, `project_type`
+- `platforms`, `auth_method`
+- `compliance`, `sensitive_data`
+- `team_size`, `team_composition`
+- `offline_support`, `real_time`
+- `state_management`, `database`
+
+## OUTPUT DIRECTORY
+
+**IMPORTANT**: All generated files MUST go inside the `PRPROMPTS/` folder.
+
+### Folder Structure
+
+```
+PRPROMPTS/
+├── 01-feature_scaffold.md
+├── 02-responsive_layout.md
+├── 03-bloc_implementation.md
+├── ... (29 more numbered files)
+├── 32-lessons_learned_engine.md
+└── README.md
+```
+
+### Generation Steps
+
+1. **First**: Create the `PRPROMPTS/` directory (if it doesn't exist)
+2. **Then**: Generate all 32 numbered markdown files inside `PRPROMPTS/`
+3. **Finally**: Generate `PRPROMPTS/README.md` as the index file
+
+**Total**: 33 files (32 guides + 1 README), all inside `PRPROMPTS/` folder
+
+## DELIVERY STRATEGY
+
+Generate in **3 phases** to ensure completeness and avoid token limits.
+
+---
+
+## PHASE 1: Core Architecture (Files 1–10)
+
+### 1. feature_scaffold.md
+**Focus**: Clean Architecture + BLoC pattern for new features
+
+**Required Sections**:
+- FEATURE: Step-by-step scaffold for `lib/features/{feature_name}/`
+- EXAMPLES: Full file paths for presentation/domain/data layers
+- CONSTRAINTS: Dependency rules (domain → no imports)
+- VALIDATION GATES: Tests required (unit, widget, integration)
+- BEST PRACTICES: Why Clean Architecture? (testability, independence)
+- REFERENCES: Uncle Bob's Clean Architecture book, Flutter BLoC docs
+
+**Length**: 500-600 words
+
+### 2. responsive_layout.md
+**Focus**: Adaptive UI for mobile/tablet/desktop
+
+**Required Sections**:
+- FEATURE: `LayoutBuilder`, `MediaQuery`, breakpoints
+- EXAMPLES: `lib/core/ui/responsive/responsive_layout.dart`
+- CONSTRAINTS: ✅ DO use adaptive widgets, ❌ DON'T hardcode sizes
+- VALIDATION GATES: Test on 3 screen sizes (phone/tablet/desktop)
+- BEST PRACTICES: Why responsive? (user experience, App Store requirements)
+- REFERENCES: Material Design responsive guidelines
+
+**Length**: 500-600 words
+
+### 3. bloc_implementation.md
+**Focus**: BLoC vs Cubit decision matrix
+
+**Required Sections**:
+- FEATURE: When to use BLoC (complex state) vs Cubit (simple state)
+- EXAMPLES: Login (Cubit), Search (BLoC with transformers)
+- CONSTRAINTS: ✅ DO use `on<Event>`, ❌ DON'T emit in constructor
+- VALIDATION GATES: 80%+ test coverage for BLoCs
+- BEST PRACTICES: Why BLoC? (predictability, time-travel debugging)
+- REFERENCES: BLoC library docs, state management comparison
+
+**Length**: 500-600 words
+
+### 4. api_integration.md
+**Focus**: HTTP clients, JWT verification, error handling
+
+**CRITICAL**: Include JWT verification (Flutter side only!)
+
+**Required Sections**:
+- FEATURE: Dio/Retrofit setup, interceptors, JWT verification
+- EXAMPLES:
+  ```dart
+  // lib/core/network/api_client.dart
+  class ApiClient {
+    final Dio dio;
+    Future<Response> get(String path) async {
+      final token = await _storage.getToken();
+      if (!await _verifyToken(token)) throw UnauthorizedException();
+      return dio.get(path, options: Options(headers: {'Authorization': 'Bearer $token'}));
+    }
+  }
+  ```
+- CONSTRAINTS: ✅ DO verify tokens client-side, ❌ DON'T trust expired tokens
+- VALIDATION GATES: Test unauthorized scenarios (401/403)
+- BEST PRACTICES: Why verify locally? (reduce server load, faster UX)
+- REFERENCES: Dio docs, JWT RFC 7519, OWASP API Security
+
+**Length**: 500-600 words
+
+### 5. testing_strategy.md
+**Focus**: Unit/Widget/Integration tests pyramid
+
+**Required Sections**:
+- FEATURE: Test structure, mocking, golden tests
+- EXAMPLES:
+  ```dart
+  // test/features/login/presentation/login_bloc_test.dart
+  blocTest<LoginBloc, LoginState>('emits [Loading, Success] on valid login',
+    build: () => LoginBloc(mockAuthRepository),
+    act: (bloc) => bloc.add(LoginSubmitted('user@email.com', 'pass123')),
+    expect: () => [Loading(), Success()],
+  );
+  ```
+- CONSTRAINTS: ✅ 70% unit, 20% widget, 10% integration
+- VALIDATION GATES: 80%+ coverage required for merge
+- BEST PRACTICES: Why test pyramid? (fast feedback, reliable builds)
+- REFERENCES: Flutter testing docs, `bloc_test` package
+
+**Length**: 500-600 words
+
+### 6. design_system_usage.md
+**Focus**: Shared theme, typography, spacing
+
+**Required Sections**:
+- FEATURE: `lib/core/theme/app_theme.dart`, Material 3
+- EXAMPLES: `AppColors.primary`, `AppTextStyles.heading1`
+- CONSTRAINTS: ✅ DO use theme constants, ❌ DON'T hardcode colors
+- VALIDATION GATES: Design review required for new components
+- BEST PRACTICES: Why design system? (consistency, maintainability)
+- REFERENCES: Material Design 3, Figma design tokens
+
+**Length**: 500-600 words
+
+### 7. onboarding_junior.md
+**Focus**: Step-by-step guide for new developers
+
+**Required Sections**:
+- FEATURE: Setup (Flutter SDK, IDE, Git), first PR workflow
+- EXAMPLES: Checklist format with commands
+- CONSTRAINTS: ✅ DO ask questions, ❌ DON'T commit to master
+- VALIDATION GATES: Complete checklist before first PR
+- BEST PRACTICES: Why structured onboarding? (faster ramp-up, culture)
+- REFERENCES: Flutter setup docs, team coding standards
+
+**Length**: 500-600 words
+
+### 8. accessibility_a11y.md
+**Focus**: WCAG 2.1 Level AA compliance
+
+**Required Sections**:
+- FEATURE: `Semantics` widget, screen readers, color contrast
+- EXAMPLES:
+  ```dart
+  Semantics(
+    label: 'Submit login form',
+    button: true,
+    child: ElevatedButton(onPressed: _submit, child: Text('Login')),
+  );
+  ```
+- CONSTRAINTS: ✅ 4.5:1 contrast ratio, ❌ DON'T rely on color alone
+- VALIDATION GATES: TalkBack/VoiceOver testing required
+- BEST PRACTICES: Why accessibility? (legal compliance, 15% of users)
+- REFERENCES: WCAG 2.1 guidelines, Flutter accessibility docs
+
+**Length**: 500-600 words
+
+### 9. internationalization_i18n.md
+**Focus**: Multi-language support (intl, ARB files)
+
+**Required Sections**:
+- FEATURE: `flutter_localizations`, ARB workflow
+- EXAMPLES:
+  ```dart
+  // lib/l10n/app_en.arb
+  {
+    "loginButton": "Login",
+    "@loginButton": { "description": "Text for login button" }
+  }
+  ```
+- CONSTRAINTS: ✅ DO use ARB descriptions, ❌ DON'T hardcode strings
+- VALIDATION GATES: All user-facing strings must be in ARB
+- BEST PRACTICES: Why i18n? (global reach, user preference)
+- REFERENCES: Flutter i18n docs, ISO 639 language codes
+
+**Length**: 500-600 words
+
+### 10. performance_optimization.md
+**Focus**: Build times, FPS, memory
+
+**Required Sections**:
+- FEATURE: `const` constructors, lazy loading, profiling
+- EXAMPLES:
+  ```dart
+  // Use const for stateless widgets
+  const Text('Static text'); // ✅
+  Text('Static text'); // ❌ (creates new instance)
+  ```
+- CONSTRAINTS: ✅ 60 FPS target, ❌ DON'T block UI thread
+- VALIDATION GATES: DevTools profiler check before merge
+- BEST PRACTICES: Why optimize? (battery life, user retention)
+- REFERENCES: Flutter performance docs, Dart analyzer
+
+**Length**: 500-600 words
+
+---
+
+## PHASE 2: Quality, Security & Team (Files 11–22)
+
+### 11. git_branching_strategy.md
+**Focus**: Git workflow (feature branches, PR reviews)
+
+**Required Sections**:
+- FEATURE: Branch naming (`feature/`, `fix/`, `hotfix/`), merge strategy
+- EXAMPLES: `git checkout -b feature/login-screen`
+- CONSTRAINTS: ✅ DO squash commits, ❌ DON'T force-push to main
+- VALIDATION GATES: 2 approvals required for merge
+- BEST PRACTICES: Why feature branches? (parallel work, rollback)
+- REFERENCES: Git Flow, GitHub Flow, team Git standards
+
+**Length**: 500-600 words
+
+### 12. progress_tracking_workflow.md
+**Focus**: Sprint planning, issue tracking
+
+**Required Sections**:
+- FEATURE: Jira/Linear/GitHub Projects, story points
+- EXAMPLES: Issue template with acceptance criteria
+- CONSTRAINTS: ✅ DO link PRs to issues, ❌ DON'T work without tickets
+- VALIDATION GATES: All PRs must reference an issue
+- BEST PRACTICES: Why tracking? (transparency, velocity metrics)
+- REFERENCES: Agile manifesto, Scrum guide
+
+**Length**: 500-600 words
+
+### 13. multi_team_coordination.md
+**Focus**: Cross-team dependencies, sync meetings
+
+**Required Sections**:
+- FEATURE: API contracts, feature flags, shared libraries
+- EXAMPLES: `lib/shared/` for cross-team code
+- CONSTRAINTS: ✅ DO document breaking changes, ❌ DON'T break downstream
+- VALIDATION GATES: Downstream team approval for API changes
+- BEST PRACTICES: Why coordination? (avoid blockers, reduce duplication)
+- REFERENCES: API design guidelines, RFC process
+
+**Length**: 500-600 words
+
+### 14. security_audit_checklist.md
+**Focus**: Pre-release security validation
+
+**Required Sections**:
+- FEATURE: Checklist (no secrets in code, HTTPS only, etc.)
+- EXAMPLES:
+  ```bash
+  # Check for secrets
+  git secrets --scan
+  # Check dependencies
+  flutter pub outdated
+  ```
+- CONSTRAINTS: ✅ DO use `.env` files, ❌ DON'T commit API keys
+- VALIDATION GATES: Security audit before production deploy
+- BEST PRACTICES: Why audit? (compliance, reputation risk)
+- REFERENCES: OWASP Mobile Top 10, Flutter security best practices
+
+**Length**: 500-600 words
+
+### 15. release_management.md
+**Focus**: App Store submission, versioning
+
+**Required Sections**:
+- FEATURE: Release notes, screenshots, beta testing (TestFlight/Firebase)
+- EXAMPLES: `pubspec.yaml` version bump (1.0.0+1 → 1.0.1+2)
+- CONSTRAINTS: ✅ DO test on real devices, ❌ DON'T skip beta
+- VALIDATION GATES: QA signoff required
+- BEST PRACTICES: Why staged rollout? (early bug detection)
+- REFERENCES: App Store Connect docs, Google Play Console docs
+
+**Length**: 500-600 words
+
+### 16. security_and_compliance.md ⭐ **PRD-SENSITIVE**
+**Focus**: HIPAA/PCI-DSS/GDPR compliance (if applicable)
+
+**CRITICAL**: Adapt based on PRD's `compliance` field
+
+**Required Sections**:
+- FEATURE: Encryption (AES-256-GCM), audit logging, JWT verification
+- EXAMPLES (if HIPAA):
+  ```dart
+  // Encrypt PHI before storage
+  final encrypted = await _encryptor.encrypt(
+    patientData,
+    key: await _secureStorage.getEncryptionKey(),
+  );
+  await _db.insert('patients', {'data': encrypted});
+  ```
+- EXAMPLES (if PCI-DSS):
+  ```dart
+  // NEVER store full credit card numbers
+  final last4 = cardNumber.substring(cardNumber.length - 4);
+  await _db.insert('cards', {'last4': last4, 'token': stripeToken});
+  ```
+- CONSTRAINTS: ✅ DO use `flutter_secure_storage`, ❌ DON'T log sensitive data
+- VALIDATION GATES: Compliance audit before production
+- BEST PRACTICES: Why encrypt at rest? (HIPAA §164.312(a)(2)(iv) requirement)
+- REFERENCES: HIPAA Security Rule, PCI-DSS v4.0, GDPR Article 32
+
+**Length**: 500-600 words
+
+### 17. performance_optimization_detailed.md
+**Focus**: Advanced profiling (DevTools, memory leaks)
+
+**Required Sections**:
+- FEATURE: Timeline view, memory snapshots, `compute()` for heavy tasks
+- EXAMPLES:
+  ```dart
+  // Offload JSON parsing to isolate
+  final data = await compute(parseJsonInBackground, response.body);
+  ```
+- CONSTRAINTS: ✅ DO profile on low-end devices, ❌ DON'T optimize prematurely
+- VALIDATION GATES: < 100ms jank frames on profiling
+- BEST PRACTICES: Why isolates? (avoid blocking UI thread)
+- REFERENCES: Flutter DevTools docs, Dart isolates guide
+
+**Length**: 500-600 words
+
+### 18. quality_gates_and_code_metrics.md
+**Focus**: Coverage, complexity, linting
+
+**Required Sections**:
+- FEATURE: `lcov` reports, cyclomatic complexity, `dart analyze`
+- EXAMPLES:
+  ```yaml
+  # .github/workflows/quality.yml
+  - run: flutter test --coverage
+  - run: genhtml coverage/lcov.info -o coverage/html
+  - uses: codecov/codecov-action@v3
+  ```
+- CONSTRAINTS: ✅ 80%+ coverage, ❌ DON'T ignore lints
+- VALIDATION GATES: CI must pass before merge
+- BEST PRACTICES: Why metrics? (technical debt visibility)
+- REFERENCES: Dart analyzer rules, SonarQube for Flutter
+
+**Length**: 500-600 words
+
+### 19. localization_and_accessibility.md
+**Focus**: Combined i18n + a11y best practices
+
+**Required Sections**:
+- FEATURE: RTL support, screen reader labels in multiple languages
+- EXAMPLES:
+  ```dart
+  // lib/l10n/app_ar.arb (Arabic - RTL)
+  {
+    "loginButton": "تسجيل الدخول",
+    "@loginButton": { "description": "زر تسجيل الدخول" }
+  }
+  ```
+- CONSTRAINTS: ✅ DO test RTL layouts, ❌ DON'T assume LTR
+- VALIDATION GATES: Native speaker review for each language
+- BEST PRACTICES: Why RTL testing? (Arabic, Hebrew user experience)
+- REFERENCES: Unicode bidirectional algorithm, Flutter RTL docs
+
+**Length**: 500-600 words
+
+### 20. versioning_and_release_notes.md
+**Focus**: Semantic versioning, changelog automation
+
+**Required Sections**:
+- FEATURE: `pubspec.yaml` versioning, `CHANGELOG.md` format
+- EXAMPLES:
+  ```markdown
+  ## [1.2.0] - 2024-03-15
+  ### Added
+  - Dark mode support
+  ### Fixed
+  - Login crash on iOS 12
+  ```
+- CONSTRAINTS: ✅ DO follow semver (MAJOR.MINOR.PATCH)
+- VALIDATION GATES: Changelog updated before release
+- BEST PRACTICES: Why semver? (dependency management clarity)
+- REFERENCES: semver.org, Keep a Changelog
+
+**Length**: 500-600 words
+
+### 21. team_culture_and_communication.md
+**Focus**: Async-first communication, documentation
+
+**Required Sections**:
+- FEATURE: Slack/Discord best practices, RFC process
+- EXAMPLES: RFC template for architectural decisions
+- CONSTRAINTS: ✅ DO document decisions, ❌ DON'T rely on tribal knowledge
+- VALIDATION GATES: ADR (Architecture Decision Record) for major changes
+- BEST PRACTICES: Why async? (global teams, deep work time)
+- REFERENCES: Remote work guides, ADR templates
+
+**Length**: 500-600 words
+
+### 22. autodoc_integration.md
+**Focus**: Auto-generate docs from code comments
+
+**Required Sections**:
+- FEATURE: `dartdoc`, JSDoc for APIs, Swagger/OpenAPI
+- EXAMPLES:
+  ```dart
+  /// Logs in a user with [email] and [password].
+  ///
+  /// Throws [UnauthorizedException] if credentials are invalid.
+  /// Returns a [User] object on success.
+  Future<User> login(String email, String password) async { ... }
+  ```
+- CONSTRAINTS: ✅ DO document public APIs, ❌ DON'T over-comment private methods
+- VALIDATION GATES: `dartdoc` must build without warnings
+- BEST PRACTICES: Why doc comments? (IDE autocomplete, onboarding)
+- REFERENCES: Effective Dart: Documentation, JSDoc spec
+
+**Length**: 500-600 words
+
+---
+
+## PHASE 3: Advanced Systems (Files 23–32 + README)
+
+### 23. ai_pair_programming_guide.md
+**Focus**: Claude Code, GitHub Copilot integration
+
+**Required Sections**:
+- FEATURE: AI-assisted refactoring, test generation
+- EXAMPLES:
+  ```dart
+  // Prompt: "Add null safety checks to this function"
+  // Copilot suggests:
+  if (user?.email == null) throw ArgumentError('Email required');
+  ```
+- CONSTRAINTS: ✅ DO review AI suggestions, ❌ DON'T blindly accept
+- VALIDATION GATES: Human review required for AI-generated code
+- BEST PRACTICES: Why AI? (faster boilerplate, learning tool)
+- REFERENCES: GitHub Copilot docs, Claude Code documentation
+
+**Length**: 500-600 words
+
+### 24. dashboard_and_analytics.md
+**Focus**: Firebase Analytics, Crashlytics, custom metrics
+
+**Required Sections**:
+- FEATURE: Event tracking, crash reports, performance monitoring
+- EXAMPLES:
+  ```dart
+  await FirebaseAnalytics.instance.logEvent(
+    name: 'login_success',
+    parameters: {'method': 'email'},
+  );
+  ```
+- CONSTRAINTS: ✅ DO track user flows, ❌ DON'T log PII
+- VALIDATION GATES: Privacy review for analytics events
+- BEST PRACTICES: Why analytics? (data-driven decisions, bug prioritization)
+- REFERENCES: Firebase docs, GDPR consent guidelines
+
+**Length**: 500-600 words
+
+### 25. tech_debt_and_refactor_strategy.md
+**Focus**: Tracking debt, scheduled refactors
+
+**Required Sections**:
+- FEATURE: Debt scoring (High/Medium/Low), refactor sprints
+- EXAMPLES: GitHub Issues labeled `tech-debt`
+- CONSTRAINTS: ✅ DO allocate 20% sprint capacity, ❌ DON'T ignore warnings
+- VALIDATION GATES: Quarterly tech debt review
+- BEST PRACTICES: Why track debt? (compound interest analogy)
+- REFERENCES: Martin Fowler on refactoring, Code Complete
+
+**Length**: 500-600 words
+
+### 26. demo_environment_setup.md ⭐ **PRD-SCENARIO BASED**
+**Focus**: Demo-specific data, workflows
+
+**Adapt based on PRD's `project_type`**:
+- Healthcare: Pre-populated patient records
+- Fintech: Test credit card numbers (4242...)
+- Education: Sample courses and students
+
+**Required Sections**:
+- FEATURE: Demo database seeding, mock APIs
+- EXAMPLES:
+  ```dart
+  // lib/core/demo/demo_data.dart
+  final demoPatientsHealthcare = [
+    Patient(id: '1', name: 'John Doe', condition: 'Diabetes'),
+  ];
+  final demoCardsFintech = [
+    CreditCard(last4: '4242', brand: 'Visa', expiryMonth: 12, expiryYear: 2025),
+  ];
+  ```
+- CONSTRAINTS: ✅ DO use "Demo" badges, ❌ DON'T mix with prod data
+- VALIDATION GATES: QA approval of demo scenarios
+- BEST PRACTICES: Why demo mode? (sales presentations, user testing)
+- REFERENCES: Feature flags guide, environment configs
+
+**Length**: 500-600 words
+
+### 27. demo_progress_tracker.md
+**Focus**: Client-facing dashboard for demos
+
+**Required Sections**:
+- FEATURE: Sprint burn-down, completed features list
+- EXAMPLES: Public-facing `/demo-status` page
+- CONSTRAINTS: ✅ DO update weekly, ❌ DON'T show internal metrics
+- VALIDATION GATES: PM approval before publishing
+- BEST PRACTICES: Why transparency? (builds client trust)
+- REFERENCES: Agile reporting tools, burndown chart templates
+
+**Length**: 500-600 words
+
+### 28. demo_branding_and_visuals.md
+**Focus**: Client-specific theming for demos
+
+**Required Sections**:
+- FEATURE: Logo replacement, color scheme overrides
+- EXAMPLES:
+  ```dart
+  // lib/core/theme/demo_theme.dart
+  final clientATheme = AppTheme.copyWith(primaryColor: Color(0xFF1E88E5));
+  ```
+- CONSTRAINTS: ✅ DO use feature flags, ❌ DON'T hardcode client names
+- VALIDATION GATES: Design review for each client theme
+- BEST PRACTICES: Why custom themes? (shows product flexibility)
+- REFERENCES: Material Design theming, brand guidelines
+
+**Length**: 500-600 words
+
+### 29. demo_deployment_automation.md
+**Focus**: CI/CD for demo builds
+
+**Required Sections**:
+- FEATURE: GitHub Actions for demo.example.com deployments
+- EXAMPLES:
+  ```yaml
+  # .github/workflows/deploy-demo.yml
+  on:
+    push:
+      branches: [demo]
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - run: flutter build web
+        - uses: peaceiris/actions-gh-pages@v3
+  ```
+- CONSTRAINTS: ✅ DO use separate Firebase projects, ❌ DON'T deploy to prod accidentally
+- VALIDATION GATES: Smoke tests after deployment
+- BEST PRACTICES: Why automate? (consistent demos, faster iterations)
+- REFERENCES: GitHub Actions docs, Firebase hosting
+
+**Length**: 500-600 words
+
+### 30. client_demo_report_template.md
+**Focus**: Weekly/biweekly demo summaries
+
+**Required Sections**:
+- FEATURE: Template with screenshots, video links, next sprint goals
+- EXAMPLES:
+  ```markdown
+  ## Demo Report - Week 12
+  **Completed**:
+  - Login screen with biometric auth
+  **In Progress**:
+  - Offline sync implementation
+  **Next**:
+  - Dashboard analytics
+  ```
+- CONSTRAINTS: ✅ DO include visuals, ❌ DON'T use technical jargon
+- VALIDATION GATES: PM review before sending to client
+- BEST PRACTICES: Why reports? (stakeholder alignment, issue early detection)
+- REFERENCES: Project status report templates
+
+**Length**: 500-600 words
+
+### 31. project_role_adaptation.md ⭐ **PRD-DRIVEN**
+**Focus**: Dynamic role assignment based on team size/composition
+
+**Adapt based on PRD's `team_size` and `team_composition`**:
+- Small (5-10): Generalists, rotated roles
+- Medium (11-25): Dedicated QA, DevOps
+- Large (26-50+): Specialized teams (iOS, Android, Backend, etc.)
+
+**Required Sections**:
+- FEATURE: RACI matrix, role definitions
+- EXAMPLES:
+  ```markdown
+  ## Team: Medium (15 devs)
+  - Tech Lead (1)
+  - Senior Developers (3) - architecture reviews, mentoring
+  - Mid-level Developers (6) - feature implementation
+  - Junior Developers (3) - bug fixes, tests
+  - QA Engineer (1)
+  - DevOps Engineer (1)
+  ```
+- CONSTRAINTS: ✅ DO cross-train, ❌ DON'T silo knowledge
+- VALIDATION GATES: Quarterly role review
+- BEST PRACTICES: Why adapt roles? (scale efficiency, prevent bottlenecks)
+- REFERENCES: Spotify model, team topologies
+
+**Length**: 500-600 words
+
+### 32. lessons_learned_engine.md
+**Focus**: Retrospectives, continuous improvement
+
+**Required Sections**:
+- FEATURE: Retro format (Start/Stop/Continue), action items tracking
+- EXAMPLES:
+  ```markdown
+  ## Sprint 10 Retro
+  **Start**: Pair programming for complex features
+  **Stop**: Last-minute PRs on Fridays
+  **Continue**: Weekly design reviews
+  **Actions**:
+  - [ ] @john Schedule pairing sessions in calendar
+  - [ ] @team Enforce PR deadline: Thursday 5pm
+  ```
+- CONSTRAINTS: ✅ DO make retros blameless, ❌ DON'T skip action items
+- VALIDATION GATES: Follow-up on previous retro actions
+- BEST PRACTICES: Why retros? (team morale, process optimization)
+- REFERENCES: Agile Retrospectives book, Retro formats
+
+**Length**: 500-600 words
+
+---
+
+### PRPROMPTS/README.md
+**Focus**: Index of all 32 files with usage guide
+
+**Required Sections**:
+- Overview of PRP pattern
+- File structure (numbered list with descriptions)
+- How to use (e.g., "Reference during feature development", "Pre-merge checklist")
+- Customizations applied (based on PRD)
+- Tools integrated (Structurizr, Serena MCP, GitHub CLI)
+
+**Length**: 300-400 words
+
+---
+
+## CUSTOMIZATION RULES
+
+Apply these rules based on PRD YAML metadata:
+
+### Compliance-Based Customization
+- **HIPAA** (`compliance: ["hipaa"]`):
+  - `16-security_and_compliance.md`: Add PHI encryption, audit logging
+  - `04-api_integration.md`: Add HTTPS-only validation
+  - `24-dashboard_and_analytics.md`: Warn against logging PHI
+
+- **PCI-DSS** (`compliance: ["pci-dss"]`):
+  - `16-security_and_compliance.md`: Add payment tokenization (Stripe/PayPal)
+  - `04-api_integration.md`: Add TLS 1.2+ requirement
+  - `14-security_audit_checklist.md`: Add PCI SAQ checklist
+
+- **GDPR** (`compliance: ["gdpr"]`):
+  - `16-security_and_compliance.md`: Add consent management, right to erasure
+  - `24-dashboard_and_analytics.md`: Add cookie consent
+
+### Auth Method Customization
+- **JWT** (`auth_method: "jwt"`):
+  - `04-api_integration.md`: Add JWT verification example (Flutter side only!)
+  - `16-security_and_compliance.md`: Add token refresh flow
+
+- **OAuth2** (`auth_method: "oauth2"`):
+  - `04-api_integration.md`: Add OAuth2 flow (Google/GitHub)
+  - `16-security_and_compliance.md`: Add PKCE requirement
+
+- **Firebase** (`auth_method: "firebase"`):
+  - `04-api_integration.md`: Add Firebase Auth example
+  - `24-dashboard_and_analytics.md`: Add Firebase Console integration
+
+### Offline Support Customization
+- **Offline Mode** (`offline_support: true`):
+  - `04-api_integration.md`: Add retry logic, queue sync
+  - `10-performance_optimization.md`: Add offline-first patterns
+  - `26-demo_environment_setup.md`: Add offline demo scenario
+
+### Team Size Customization
+- **Small** (`team_size: "5-10"`):
+  - `31-project_role_adaptation.md`: Generalist roles, rotated responsibilities
+  - `13-multi_team_coordination.md`: Simplified, single team focus
+
+- **Large** (`team_size: "26-50|50+"`):
+  - `31-project_role_adaptation.md`: Specialized roles (iOS/Android/Backend)
+  - `13-multi_team_coordination.md`: Cross-team API contracts, RFC process
+
+### State Management Customization
+- **BLoC** (`state_management: "bloc"`):
+  - `03-bloc_implementation.md`: Full BLoC examples with events/states
+  - `05-testing_strategy.md`: Use `bloc_test` package
+
+- **Riverpod** (`state_management: "riverpod"`):
+  - `03-bloc_implementation.md`: Rename to `state_management.md`, use Riverpod
+  - `05-testing_strategy.md`: Use `ProviderContainer` for tests
+
+---
+
+## QUALITY REQUIREMENTS
+
+### Per File:
+- ✅ **Length**: 500-600 words (README: 300-400)
+- ✅ **Format**: Strict PRP sections (FEATURE, EXAMPLES, CONSTRAINTS, VALIDATION GATES, BEST PRACTICES, REFERENCES)
+- ✅ **Examples**: Real Flutter paths (e.g., `lib/features/login/presentation/login_page.dart`)
+- ✅ **Junior-Friendly**: Explain "why" (e.g., "We verify `aud` to prevent token reuse across services")
+- ✅ **Validation Gates**: Tests/docs/reviews required before merge
+- ❌ **NO PLACEHOLDERS**: Replace all `[...]`, `{feature_name}`, `TODO` with actual content
+
+### Critical Technical Corrections:
+1. **JWT**: NEVER show Flutter signing tokens. Only verification with public key.
+2. **PCI-DSS**: NEVER store full credit card numbers. Use tokenization.
+3. **HIPAA**: Always encrypt PHI at rest (AES-256-GCM).
+4. **State Management**: BLoC for complex, Cubit for simple.
+
+---
+
+## SUCCESS MESSAGE
+
+After generating all files:
+
+```
+✅ Generated 33 files in PRPROMPTS/
+
+Files created:
+- 01-feature_scaffold.md through 32-lessons_learned_engine.md
+- README.md
+
+Customizations applied based on PRD:
+[List customizations, e.g.:]
+- HIPAA compliance: PHI encryption in security_and_compliance.md
+- JWT auth: Token verification in api_integration.md
+- Offline support: Sync strategies in performance_optimization.md
+- Team size (26-50): Specialized roles in project_role_adaptation.md
+
+Integrated Tools:
+- Structurizr C4 diagrams
+- Serena MCP for semantic analysis
+- GitHub CLI AI commands
+
+Next steps:
+1. Review: cat PRPROMPTS/README.md
+2. Start feature: cat PRPROMPTS/01-feature_scaffold.md
+3. Reference during development: grep "jwt" PRPROMPTS/*.md
+
+Quality checklist:
+✅ All files 500-600 words
+✅ All sections follow PRP pattern
+✅ No placeholders or TODOs
+✅ Real code examples with file paths
+✅ Junior-friendly "why" explanations
+✅ Validation gates specified
+```
+
+---
+
+## IMPORTANT NOTES
+
+1. **Generate in 3 phases** to avoid token limits
+2. **Read PRD first** to extract customization metadata
+3. **Apply customizations** based on compliance, auth, team size, etc.
+4. **No placeholders** - all content must be complete and actionable
+5. **Junior-friendly** - explain the "why" behind every rule
+6. **Security-critical** - double-check JWT, PCI-DSS, HIPAA examples
+
+---
+
+## BEGIN GENERATION
+
+### Preparation Steps
+
+1. **Read PRD**: Read `docs/PRD.md` and extract YAML frontmatter
+2. **Create Folder**: Ensure `PRPROMPTS/` directory exists (create if needed)
+3. **Confirm Phase**: Confirm which phase to generate (1, 2, 3, or all)
+
+### Generation Steps
+
+4. **Generate Files**: Create numbered markdown files inside `PRPROMPTS/`
+   - Use the naming convention: `01-feature_scaffold.md`, `02-responsive_layout.md`, etc.
+   - Always prefix with 2-digit numbers (01-32)
+   - All files go inside the `PRPROMPTS/` folder
+5. **Apply Customizations**: Adapt content based on PRD metadata (compliance, auth, team size, etc.)
+6. **Generate README**: Create `PRPROMPTS/README.md` as the final file
+
+### Verification
+
+7. **Verify Structure**: Confirm all files are inside `PRPROMPTS/` folder
+8. **Show Success Message**: Display the success message with applied customizations
+
+### Example File Paths
+
+```
+PRPROMPTS/01-feature_scaffold.md              ✅ Correct
+PRPROMPTS/16-security_and_compliance.md       ✅ Correct
+PRPROMPTS/32-lessons_learned_engine.md        ✅ Correct
+PRPROMPTS/README.md                           ✅ Correct
+
+01-feature_scaffold.md                        ❌ Wrong (missing PRPROMPTS/)
+docs/PRPROMPTS/01-feature_scaffold.md         ❌ Wrong (wrong location)
+```

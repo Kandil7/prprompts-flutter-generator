@@ -7,6 +7,90 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🚀 NEW - Qwen Code Support (v2.1)
+
+Added full support for Alibaba's Qwen3-Coder AI assistant alongside Claude Code. Users can now choose between two world-class AI assistants or use both!
+
+#### ✨ Added - Qwen Code Integration
+
+**Qwen Configuration** (`.qwen/`):
+- `config.yml` - Qwen Code command configuration (optimized for 256K-1M token context)
+- `prompts/` - All 9 prompt files (identical to Claude version)
+- Qwen-specific settings for extended context and agentic features
+
+**Installation Scripts**:
+- `scripts/install-qwen-commands.sh` - Linux/macOS installer
+- `scripts/install-qwen-commands.bat` - Windows batch installer
+- `scripts/install-qwen-commands.ps1` - Windows PowerShell installer
+- `scripts/setup-qwen-gist.sh` - One-line curl installer
+- `scripts/install-both.sh` - Dual installer (Claude + Qwen)
+- `scripts/install-both.bat` - Windows dual installer
+
+**Documentation**:
+- `QWEN.md` - Complete Qwen Code installation guide
+  - Qwen3-Coder overview and benefits
+  - Three installation methods
+  - Qwen-specific optimizations
+  - Extended context (256K-1M tokens) examples
+  - Troubleshooting section
+- `docs/QWEN-COMMANDS.md` - Qwen command reference
+  - All 9 commands detailed
+  - Workflows and examples
+  - Performance comparison with Claude
+  - Advanced usage tips
+- `docs/CLAUDE-VS-QWEN.md` - Comprehensive comparison guide
+  - Feature comparison table
+  - Real-world scenario recommendations
+  - Performance benchmarks
+  - Cost analysis
+  - Security & privacy comparison
+  - Quick decision matrix
+
+**Package Updates**:
+- Updated `package.json` to v2.0.0
+- Added Qwen Code keywords
+- Added npm scripts: `install-qwen`, `install-both`
+- Added optional dependency: `@qwenlm/qwen-code`
+
+**README Enhancements**:
+- Added "Choose Your AI Assistant" section
+- Qwen Code badge in header
+- Updated table of contents
+- Added Qwen to documentation section
+- Updated footer with Qwen Code link
+- Added Qwen Quick Link
+
+#### 🎯 Key Benefits
+
+**Extended Context**:
+- Qwen supports 256K-1M tokens (vs Claude's 200K)
+- Can process entire large codebases at once
+- Better for microservices and monorepos
+
+**Cost-Effective**:
+- Free tier available (self-hosted)
+- 50-80% lower costs than Claude API
+- Perfect for budget-conscious teams
+
+**Open Source**:
+- Self-hostable for maximum data privacy
+- Audit security yourself
+- No data leaves your infrastructure
+
+**Same Workflow**:
+- Commands are identical: `qwen create-prd` = `claude create-prd`
+- PRD format is the same
+- Switch between AIs anytime without changes
+
+#### 🔄 Compatibility
+
+- **Dual Support**: All prompts work with both Claude and Qwen
+- **Cross-Platform**: Windows, macOS, Linux support for Qwen
+- **Seamless Switching**: Use Claude for some tasks, Qwen for others
+- **No Conflicts**: Both can be installed side-by-side
+
+---
+
 ### 🎯 Enhanced - PRPROMPTS Generator v2.0
 
 Major upgrade to PRPROMPTS generation with comprehensive security patterns and strict PRP structure.
