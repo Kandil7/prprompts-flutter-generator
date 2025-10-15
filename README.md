@@ -97,6 +97,77 @@ cat PRPROMPTS/16-security_and_compliance.md
 prp-gen
 ```
 
+## 📝 Creating Your PRD
+
+### Quick Start: Interactive Wizard
+
+The easiest way to create a PRD is using our interactive generator:
+
+```bash
+claude --prompt .claude/prompts/generate-prd.md
+```
+
+Answer 10 simple questions and get a complete PRD with YAML frontmatter!
+
+### Questions You'll Be Asked:
+
+1. **Project name?** → "HealthTrack Pro"
+2. **Project type?** → Healthcare, Fintech, Education, etc.
+3. **Platforms?** → iOS, Android, Web
+4. **Compliance?** → HIPAA, PCI-DSS, GDPR, etc.
+5. **Authentication?** → JWT, OAuth2, Firebase
+6. **Offline support?** → Yes/No
+7. **Real-time updates?** → Yes/No
+8. **Sensitive data?** → PHI, PII, Payment, etc.
+9. **Team size?** → Small, Medium, Large
+10. **Demo frequency?** → Weekly, Biweekly, Monthly
+
+### What You Get
+
+✅ **YAML Frontmatter** - Structured metadata for automation
+✅ **Executive Summary** - Product overview and vision
+✅ **Feature Specifications** - Detailed user stories and acceptance criteria
+✅ **Compliance Sections** - HIPAA, PCI-DSS, GDPR requirements
+✅ **Technical Architecture** - Clean Architecture, BLoC, API specs
+✅ **Testing Strategy** - Unit, widget, integration, golden tests
+✅ **Timeline & Milestones** - Sprint plans and deliverables
+✅ **Success Metrics** - KPIs and measurement tools
+
+### Alternative Methods
+
+**Copy Template:**
+```bash
+cp templates/PRD-full-template.md docs/PRD.md
+vim docs/PRD.md  # Customize
+```
+
+**Copy Example:**
+```bash
+# Healthcare
+cp examples/healthcare-prd.md docs/PRD.md
+
+# Fintech
+cp examples/fintech-prd.md docs/PRD.md
+
+# Education
+cp examples/education-prd.md docs/PRD.md
+
+# SaaS
+cp examples/saas-prd.md docs/PRD.md
+```
+
+### Next Steps
+
+```bash
+# Start development with your PRD
+cat docs/PRD.md
+
+# Generate PRPROMPTS based on PRD
+prp-gen
+```
+
+📖 **Full Guide:** See [docs/PRD-GUIDE.md](docs/PRD-GUIDE.md)
+
 ## 📖 Documentation
 
 - [Usage Guide](docs/USAGE.md) - Detailed usage instructions
