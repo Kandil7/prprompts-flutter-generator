@@ -11,6 +11,10 @@ commands:
     prompt: "prompts/auto-generate-prd.md"
     description: "Auto-generate PRD from description (zero interaction)"
 
+  prd-from-files:
+    prompt: "prompts/generate-prd-from-files.md"
+    description: "Generate PRD from existing markdown files (optional input)"
+
   # PRD Analysis
   analyze-prd:
     prompt: "prompts/analyze-prd.md"

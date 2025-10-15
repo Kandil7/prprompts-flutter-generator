@@ -88,6 +88,7 @@ echo -e "${BLUE}╚════════════════════�
 echo ""
 echo -e "  ${GREEN}claude create-prd${NC}       Interactive PRD wizard"
 echo -e "  ${GREEN}claude auto-gen-prd${NC}     Auto-generate PRD"
+echo -e "  ${GREEN}claude prd-from-files${NC}   Generate PRD from markdown files"
 echo -e "  ${GREEN}claude analyze-prd${NC}      Validate PRD"
 echo -e "  ${GREEN}claude gen-prprompts${NC}    Generate all 32 files"
 echo -e "  ${GREEN}claude gen-phase-1${NC}      Generate Phase 1"

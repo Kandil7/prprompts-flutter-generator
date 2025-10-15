@@ -3,8 +3,27 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://claude.ai/code)
 [![Flutter](https://img.shields.io/badge/Flutter-3.24+-blue)](https://flutter.dev)
+[![Windows](https://img.shields.io/badge/Windows-Supported-success)](WINDOWS.md)
+[![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#-creating-your-prd)
 
 **Automatically generate 32 customized PRPROMPTS files for Flutter projects based on your Product Requirements Document (PRD).**
+
+## 📑 Table of Contents
+
+- [What's New](#-whats-new)
+- [Quick Start](#-quick-start---choose-your-path)
+- [Installation](#-installation)
+- [Creating Your PRD](#-creating-your-prd)
+- [Commands Reference](#-all-available-commands)
+- [Documentation](#-documentation)
+- [Examples](#-examples)
+
+## ✨ What's New
+
+- 🪟 **Full Windows Support** - Native batch & PowerShell installers
+- 📄 **Generate PRD from Files** - Convert existing markdown docs to structured PRDs
+- ⚡ **One-Line Install** - Works on Windows, macOS, and Linux
+- 🧠 **Smart Inference** - Auto-detects compliance, tech stack, and architecture
 
 ## 🎯 What is This?
 
@@ -15,14 +34,34 @@ Transform your PRD into a complete set of development guides that adapt to your 
 - ✅ **Offline-first app?** → Auto-generates sync strategies, conflict resolution, local database patterns
 - ✅ **Team with juniors?** → Auto-generates onboarding docs with "why" explanations
 
+### 🚀 Quick Start - Choose Your Path
+
+| I have... | Use this command | Time | Docs |
+|-----------|------------------|------|------|
+| 📝 **Existing markdown files** | `claude prd-from-files` | 2 min | [Guide](docs/PRD-FROM-FILES-GUIDE.md) |
+| 💭 **A simple project idea** | `claude auto-gen-prd` | 1 min | [Guide](docs/AUTO-PRD-GUIDE.md) |
+| 🎯 **Time to answer 10 questions** | `claude create-prd` | 5 min | [Guide](docs/PRD-GUIDE.md) |
+| ✍️ **Full control needed** | Copy template | 30 min | [Template](templates/) |
+
 ## 🌟 Key Features
 
+### PRD Generation (4 Methods)
+- 📄 **From Existing Files** - Convert markdown docs to structured PRD (NEW!)
+- 🤖 **Auto-Generate** - Zero-interaction from simple description
+- 💬 **Interactive Wizard** - 10 questions for complete PRD
+- ✍️ **Manual Templates** - Full control with examples
+
+### Smart & Adaptive
 - **PRD-Driven**: Every output is traceable to your PRD
-- **Compliance-Aware**: HIPAA, PCI-DSS, GDPR, SOC2, COPPA, FERPA
+- **Compliance-Aware**: HIPAA, PCI-DSS, GDPR, SOC2, COPPA, FERPA (auto-detected)
 - **Architecture-Specific**: Clean Architecture, BLoC/Cubit, offline-first, real-time
 - **Team-Adaptive**: Scales from 5 to 50+ developers, adjusts for junior/senior mix
-- **Tool-Integrated**: Structurizr (C4), Serena MCP, GitHub CLI
-- **Production-Ready**: Includes tests, CI/CD, security scans, audit logging
+
+### Cross-Platform & Production-Ready
+- 🪟 **Windows Support** - Native batch, PowerShell, Git Bash
+- 🍎 **macOS/Linux** - One-line curl install
+- 🔧 **Tool-Integrated**: Structurizr (C4), Serena MCP, GitHub CLI
+- 🚀 **Production-Ready**: Tests, CI/CD, security scans, audit logging
 
 ## 📦 Installation
 
@@ -33,12 +72,28 @@ Transform your PRD into a complete set of development guides that adapt to your 
 - Flutter 3.24+ (for your project)
 - Git
 
+**Windows Users:** See [WINDOWS.md](WINDOWS.md) for detailed Windows installation guide.
+
 ### ⚡ Quick Install (Copy & Paste)
 
 **One command - installs everything:**
 
+#### Linux / macOS / Git Bash
+
 ```bash
 curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.sh | bash
+```
+
+#### Windows PowerShell
+
+```powershell
+irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.ps1 | iex
+```
+
+#### Windows Command Prompt
+
+```cmd
+curl -o %TEMP%\setup-prprompts.bat https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.bat && %TEMP%\setup-prprompts.bat
 ```
 
 **That's it!** Now run `claude create-prd` from any directory.
@@ -78,15 +133,28 @@ source ~/.bashrc
 
 ### ⚡ Super Quick Install
 
-**Copy and paste this one command:**
+**Copy and paste one command:**
 
+**Linux / macOS / Git Bash:**
 ```bash
 curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.sh | bash
+```
+
+**Windows PowerShell:**
+```powershell
+irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.ps1 | iex
+```
+
+**Windows Command Prompt:**
+```cmd
+curl -o %TEMP%\setup-prprompts.bat https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.bat && %TEMP%\setup-prprompts.bat
 ```
 
 Installs commands globally - works everywhere!
 
 ### Alternative Install Methods
+
+#### Linux / macOS / Git Bash
 
 ```bash
 # If you already cloned the repo:
@@ -95,15 +163,50 @@ cd prprompts-flutter-generator
 ./scripts/install-commands.sh --local   # Local only
 ```
 
+#### Windows (Native)
+
+**Option 1: Batch Script (Recommended)**
+```cmd
+cd prprompts-flutter-generator
+scripts\install-commands.bat --global
+```
+
+**Option 2: PowerShell**
+```powershell
+cd prprompts-flutter-generator
+powershell -ExecutionPolicy Bypass -File .\scripts\install-commands.ps1 --global
+```
+
+**Option 3: Git Bash (if installed)**
+```bash
+cd prprompts-flutter-generator
+./scripts/install-commands.sh --global
+```
+
 **Now you can use:
 
 ```bash
 claude create-prd      # Interactive PRD wizard
 claude auto-gen-prd    # Auto-generate from description
+claude prd-from-files  # Generate PRD from markdown files
 claude analyze-prd     # Validate PRD
 claude gen-prprompts   # Generate all 32 files
 claude gen-phase-1     # Generate Phase 1
 claude gen-file        # Generate single file
+```
+
+### ✅ Verify Installation
+
+Test your installation:
+```bash
+# Check if commands are available
+claude create-prd --help
+claude prd-from-files --help
+claude gen-prprompts --help
+
+# Verify config files exist
+# Windows: %USERPROFILE%\.config\claude\
+# macOS/Linux: ~/.config/claude/
 ```
 
 📖 **Full Command Reference:** [docs/CLAUDE-COMMANDS.md](docs/CLAUDE-COMMANDS.md)
@@ -320,6 +423,47 @@ Answer 10 simple questions and get a complete PRD with YAML frontmatter!
 ✅ **Timeline & Milestones** - Sprint plans and deliverables
 ✅ **Success Metrics** - KPIs and measurement tools
 
+### 📄 Generate from Existing Files - NEW!
+
+**Have existing documentation?** Convert your markdown files into a structured PRD!
+
+```bash
+# Step 1: Run the command
+claude prd-from-files
+
+# Step 2: Provide file paths (one per line)
+docs/requirements.md
+specs/features.md
+notes/tech-stack.md
+
+# Step 3: Answer 2-3 clarifying questions (if needed)
+# Step 4: Get complete PRD with YAML frontmatter!
+```
+
+**What it does:**
+- ✅ Reads your existing markdown files
+- ✅ Extracts project info, features, and requirements
+- ✅ Auto-detects compliance needs (HIPAA, PCI-DSS, etc.)
+- ✅ Infers technical stack and architecture
+- ✅ Only asks questions for missing critical info
+- ✅ Generates complete PRD in `docs/PRD.md`
+
+**Example files you can provide:**
+- Requirements documents
+- Feature specifications
+- Technical architecture docs
+- Meeting notes
+- Project proposals
+- Existing PRDs (to restructure)
+
+**Smart inference:**
+- "patient" + "health" → Healthcare app with HIPAA
+- "payment" + "checkout" → Fintech app with PCI-DSS
+- "real-time chat" → WebSocket + real_time: true
+- "offline mode" → SQLite + offline_support: true
+
+---
+
 ### Alternative Methods
 
 **Copy Template:**
@@ -362,14 +506,19 @@ prp-gen
 | Method | Time | Accuracy | Best For |
 |--------|------|----------|----------|
 | **🤖 Auto** | 1 min | 85% | Quick prototypes, standard projects |
+| **📄 From Files** | 2 min | 90% | Existing docs, legacy projects |
 | **💬 Interactive** | 5 min | 95% | Production projects, high stakes |
 | **✍️ Manual** | 30 min | 100% | Complex projects, unique requirements |
 
-**Recommendation:** Start with Auto, review output, switch to Interactive if needed.
+**Recommendation:**
+- Have existing docs? Use **From Files**
+- Starting fresh? Use **Auto** or **Interactive**
+- Need full control? Go **Manual**
 
 ## 📖 Documentation
 
 - [Auto PRD Guide](docs/AUTO-PRD-GUIDE.md) - Zero-interaction PRD generation
+- [PRD from Files Guide](docs/PRD-FROM-FILES-GUIDE.md) - Generate PRD from existing markdown
 - [PRD Creation Guide](docs/PRD-GUIDE.md) - Interactive PRD creation
 - [Usage Guide](docs/USAGE.md) - Detailed usage instructions
 - [Customization](docs/CUSTOMIZATION.md) - How to customize prompts
@@ -490,12 +639,16 @@ Official docs, compliance guides, internal ADRs
 # Auto-generate PRD (zero interaction)
 claude auto-gen-prd
 
+# Generate from existing markdown files
+claude prd-from-files
+
 # Interactive PRD wizard (10 questions)
 claude create-prd
 
 # Or use full paths
 ./scripts/auto-gen-prd.sh
 claude --prompt .claude/prompts/generate-prd.md
+claude --prompt .claude/prompts/generate-prd-from-files.md
 ```
 
 ### PRPROMPTS Generation Commands
@@ -526,11 +679,36 @@ prp-chat
 ### Complete Workflow
 
 ```bash
-# Full automation (1 minute total)
-claude auto-gen-prd && claude prp-gen
+# Method 1: From existing docs (2 min)
+claude prd-from-files && claude gen-prprompts
 
-# Or with aliases
+# Method 2: Auto-generate (1 min)
+claude auto-gen-prd && claude gen-prprompts
+
+# Method 3: Interactive (5 min)
+claude create-prd && claude gen-prprompts
+
+# Or with aliases (if configured)
 auto-prd && gen-prprompts
+```
+
+### 📋 All Available Commands
+
+**PRD Creation:**
+```bash
+claude create-prd          # Interactive wizard (10 questions)
+claude auto-gen-prd        # Auto from description file
+claude prd-from-files      # From existing markdown files
+claude analyze-prd         # Validate and analyze PRD
+```
+
+**PRPROMPTS Generation:**
+```bash
+claude gen-prprompts       # All 32 files
+claude gen-phase-1         # Phase 1: Core (10 files)
+claude gen-phase-2         # Phase 2: Quality (12 files)
+claude gen-phase-3         # Phase 3: Demo (10 files)
+claude gen-file            # Single file by name
 ```
 
 ## 🤝 Contributing
@@ -574,12 +752,25 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 🗺️ Roadmap
 
+### ✅ Completed (v1.0)
+- [x] Full Windows support (batch, PowerShell, Git Bash)
+- [x] Generate PRD from existing markdown files
+- [x] One-line installers for all platforms
+- [x] Smart compliance and tech stack inference
+- [x] Auto-generate PRD from simple description
+
+### 🔜 Coming Soon (v1.1)
 - [ ] VS Code extension
+- [ ] GitHub Actions workflow generator
+- [ ] Docker containerization examples
+- [ ] More compliance standards (ISO 27001, NIST, FedRAMP)
+
+### 🎯 Future (v2.0+)
 - [ ] Web UI for PRD creation
-- [ ] More compliance standards (ISO 27001, NIST)
 - [ ] Multi-language support (Spanish, French, German)
 - [ ] Integration with Jira/Linear/Asana
-- [ ] AI-powered PRD generation from natural language
+- [ ] AI-powered PRD refinement and suggestions
+- [ ] Team collaboration features
 
 ## ⭐ Star Us!
 
@@ -587,4 +778,25 @@ If this project helps you, please give it a ⭐ on GitHub!
 
 ---
 
+<div align="center">
+
 **Made with ❤️ for Flutter developers**
+
+### Quick Links
+
+[🚀 Quick Start](#-quick-start---choose-your-path) •
+[📦 Install](#-installation) •
+[📝 Create PRD](#-creating-your-prd) •
+[📖 Docs](docs/) •
+[🪟 Windows Guide](WINDOWS.md) •
+[💬 Support](https://github.com/Kandil7/prprompts-flutter-generator/issues)
+
+### Supported Platforms
+
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=flat&logo=windows&logoColor=white)
+![macOS](https://img.shields.io/badge/macOS-000000?style=flat&logo=apple&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
+
+**Powered by** [Claude Code](https://claude.ai/code) | **Built for** [Flutter](https://flutter.dev)
+
+</div>
