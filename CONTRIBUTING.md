@@ -11,7 +11,7 @@ Click the "Fork" button at the top right of the repository page.
 ### 2. Clone Your Fork
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/prprompts-flutter-generator.git
+git clone https://github.com/Kandil7/prprompts-flutter-generator.git
 cd prprompts-flutter-generator
 ```
 
