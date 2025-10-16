@@ -7,6 +7,91 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🚀 NEW - Gemini CLI Support (v2.2)
+
+Added Google Gemini CLI as the **third AI assistant** option! Users can now choose between Claude Code, Qwen Code, OR Gemini CLI - or use all three together!
+
+#### ✨ Added - Gemini CLI Integration
+
+**Gemini Configuration** (`.gemini/`):
+- `config.yml` - Gemini CLI configuration (optimized for 1M token context)
+- `prompts/` - All 9 prompt files (shared with Claude/Qwen)
+- Gemini-specific settings (agent mode with ReAct loop, 1M context)
+
+**Installation Scripts (6 files)**:
+- `scripts/install-gemini-commands.sh` - Linux/macOS installer
+- `scripts/install-gemini-commands.bat` - Windows batch installer
+- `scripts/install-gemini-commands.ps1` - Windows PowerShell installer
+- `scripts/setup-gemini-gist.sh` - One-line curl installer
+- `scripts/install-all.sh` - **NEW**: Triple installer (Claude + Qwen + Gemini)
+- `scripts/install-all.bat` - **NEW**: Windows triple installer
+
+**Documentation (3 comprehensive guides)**:
+- `GEMINI.md` - Complete Gemini CLI installation guide (~300 lines)
+  - Gemini CLI overview (Google's 1M context AI)
+  - Three installation methods
+  - Free tier benefits (60 req/min, 1,000/day)
+  - Agent mode with ReAct loop
+  - Troubleshooting section
+- `docs/GEMINI-COMMANDS.md` - Gemini command reference (~350 lines)
+  - All 9 commands detailed
+  - Gemini-specific workflows
+  - Free tier usage strategies
+  - CI/CD integration examples
+- `docs/AI-COMPARISON.md` - **3-way comparison** (~500 lines)
+  - Claude vs Qwen vs Gemini feature table
+  - Real-world scenario recommendations (5 scenarios)
+  - Performance benchmarks (all three)
+  - Cost analysis (free tier vs paid)
+  - Quick decision matrix
+
+**Package Updates**:
+- Updated `package.json` to v2.2.0
+- Added Gemini CLI keywords: gemini-cli, gemini-code-assist, google-gemini
+- Added npm scripts: `install-gemini`, `install-all`
+- Added optional dependency: `@google/gemini-cli`
+
+**README Enhancements**:
+- Updated "Choose Your AI Assistant" to 3-way comparison
+- Added Gemini CLI badge in header (green)
+- Updated version badge to v2.2
+- Added Gemini to AI Assistant Guides section
+- Updated comparison link to AI-COMPARISON.md
+- Updated footer with Gemini CLI link
+- Added Gemini Quick Link
+
+#### 🎯 Key Benefits
+
+**Massive Free Tier**:
+- 60 requests per minute (perfect for CI/CD)
+- 1,000 requests per day
+- 1M token context window
+- No credit card required
+
+**Extended Context**:
+- 1M tokens (equal to Qwen, 5x larger than Claude)
+- Process entire large codebases at once
+- Handle 400+ page PRDs
+
+**Google Integration**:
+- Works with Google Cloud, Vertex AI, Firebase
+- Agent mode with ReAct loop
+- Open-source CLI tool
+
+**Same Workflow**:
+- Commands identical: `gemini create-prd` = `claude create-prd`
+- PRD format unchanged
+- Switch between any of 3 AIs anytime
+
+#### 🔄 Compatibility
+
+- **Triple Support**: All prompts work with Claude, Qwen, AND Gemini
+- **Cross-Platform**: Windows, macOS, Linux support
+- **No Conflicts**: All three can be installed side-by-side
+- **Seamless Switching**: Use best AI for each task
+
+---
+
 ### 🚀 NEW - Qwen Code Support (v2.1)
 
 Added full support for Alibaba's Qwen3-Coder AI assistant alongside Claude Code. Users can now choose between two world-class AI assistants or use both!

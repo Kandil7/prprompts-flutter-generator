@@ -5,8 +5,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://claude.ai/code)
 [![Qwen Code](https://img.shields.io/badge/Qwen-Code-orange)](QWEN.md)
+[![Gemini CLI](https://img.shields.io/badge/Gemini-CLI-green)](GEMINI.md)
 [![Flutter](https://img.shields.io/badge/Flutter-3.24+-blue)](https://flutter.dev)
-[![Version](https://img.shields.io/badge/Version-2.0-success)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-2.2-success)](CHANGELOG.md)
 
 [![Windows](https://img.shields.io/badge/Windows-Supported-0078D6?logo=windows)](WINDOWS.md)
 [![macOS](https://img.shields.io/badge/macOS-Supported-000000?logo=apple)](README.md)
@@ -63,29 +64,32 @@
 
 ---
 
-## 🤖 Choose Your AI Assistant
+## 🤖 Choose Your AI Assistant (3 Options!)
 
-PRPROMPTS Generator works with **both** Claude Code and Qwen Code:
+PRPROMPTS Generator works with **Claude Code**, **Qwen Code**, AND **Gemini CLI**:
 
-| Feature | Claude Code | Qwen Code | Winner |
-|---------|-------------|-----------|---------|
-| **Context Length** | 200K tokens | 256K-1M tokens | Qwen (5x larger) |
-| **Cost** | $20/month (Pro) | Free tier + lower costs | Qwen |
-| **Accuracy** | Excellent (Sonnet 4.5) | Excellent (SOTA) | Tie |
-| **Best For** | Production apps, high-stakes | Large codebases, cost-conscious | Depends |
+| Feature | Claude Code | Qwen Code | Gemini CLI |
+|---------|-------------|-----------|------------|
+| **Context** | 200K tokens | 256K-1M | **1M tokens** |
+| **Free Tier** | 20 msgs/day | Self-host | **60 req/min, 1K/day** ✨ |
+| **Cost (API)** | $3-15/1M | $0.60-3/1M | **FREE** (preview) |
+| **Accuracy** | 9.5/10 | 9.0/10 | 8.5/10 |
+| **Best For** | Production | Large codebases | **Free tier, MVPs** |
 
 **Installation**:
 - **Claude Code**: Follow [Installation](#-installation) below
 - **Qwen Code**: See [QWEN.md](QWEN.md)
-- **Both**: Run `./scripts/install-both.sh --global`
+- **Gemini CLI**: See [GEMINI.md](GEMINI.md)
+- **All 3**: Run `./scripts/install-all.sh --global` 🚀
 
 **Commands are identical**:
 ```bash
-claude create-prd    # Claude version
-qwen create-prd      # Qwen version (same workflow!)
+claude create-prd    # Claude Code
+qwen create-prd      # Qwen Code
+gemini create-prd    # Gemini CLI (same workflow!)
 ```
 
-📖 **Full Comparison**: [Claude vs Qwen](docs/CLAUDE-VS-QWEN.md)
+📖 **Full Comparison**: [Claude vs Qwen vs Gemini](docs/AI-COMPARISON.md)
 
 ---
 
@@ -721,9 +725,11 @@ prp-gen
 - [PRD Creation Guide](docs/PRD-GUIDE.md) - Interactive PRD creation
 
 ### AI Assistant Guides
+- **[Gemini CLI Installation](GEMINI.md)** - Complete guide for Gemini CLI ✨ NEW!
 - **[Qwen Code Installation](QWEN.md)** - Complete guide for Qwen3-Coder
+- **[AI Comparison (3-way)](docs/AI-COMPARISON.md)** - Claude vs Qwen vs Gemini
+- [Gemini Commands Reference](docs/GEMINI-COMMANDS.md) - Gemini command list
 - [Qwen Commands Reference](docs/QWEN-COMMANDS.md) - Qwen command list
-- **[Claude vs Qwen Comparison](docs/CLAUDE-VS-QWEN.md)** - Which to choose?
 - [Claude Commands Reference](docs/CLAUDE-COMMANDS.md) - Claude command list
 - [Windows Installation](WINDOWS.md) - Windows-specific guide
 
@@ -1041,6 +1047,7 @@ If this project helps you, please give it a ⭐ on GitHub!
 [📦 Install](#-installation) •
 [📝 Create PRD](#-creating-your-prd) •
 [📖 Docs](docs/) •
+[🤖 Gemini Guide](GEMINI.md) •
 [🤖 Qwen Guide](QWEN.md) •
 [🪟 Windows Guide](WINDOWS.md) •
 [💬 Support](https://github.com/Kandil7/prprompts-flutter-generator/issues)
@@ -1051,6 +1058,6 @@ If this project helps you, please give it a ⭐ on GitHub!
 ![macOS](https://img.shields.io/badge/macOS-000000?style=flat&logo=apple&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
 
-**Powered by** [Claude Code](https://claude.ai/code) & [Qwen Code](https://github.com/QwenLM/qwen-code) | **Built for** [Flutter](https://flutter.dev)
+**Powered by** [Claude Code](https://claude.ai/code) • [Qwen Code](https://github.com/QwenLM/qwen-code) • [Gemini CLI](https://developers.google.com/gemini-code-assist/docs/gemini-cli) | **Built for** [Flutter](https://flutter.dev)
 
 </div>

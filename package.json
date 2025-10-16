@@ -1,19 +1,23 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "2.0.0",
-  "description": "Generate customized PRPROMPTS for Flutter projects from PRD - Works with Claude Code & Qwen Code",
+  "version": "2.2.0",
+  "description": "Generate customized PRPROMPTS for Flutter projects from PRD - Works with Claude Code, Qwen Code & Gemini CLI",
   "keywords": [
     "flutter",
     "claude-code",
     "qwen-code",
     "qwen3-coder",
+    "gemini-cli",
+    "gemini-code-assist",
+    "google-gemini",
     "prprompts",
     "clean-architecture",
     "bloc",
     "hipaa",
     "pci-dss",
     "compliance",
-    "ai-assisted-development"
+    "ai-assisted-development",
+    "ai-code-generator"
   ],
   "author": "Kandil7",
   "license": "MIT",
@@ -31,12 +35,14 @@
     "generate": "./scripts/generate-prprompts.sh all",
     "install-claude": "./scripts/install-commands.sh --global",
     "install-qwen": "./scripts/install-qwen-commands.sh --global",
-    "install-both": "./scripts/install-both.sh --global"
+    "install-gemini": "./scripts/install-gemini-commands.sh --global",
+    "install-all": "./scripts/install-all.sh --global"
   },
   "peerDependencies": {
     "@anthropic-ai/claude-code": ">=1.0.0"
   },
   "optionalDependencies": {
-    "@qwenlm/qwen-code": ">=1.0.0"
+    "@qwenlm/qwen-code": ">=1.0.0",
+    "@google/gemini-cli": ">=1.0.0"
   }
 }
