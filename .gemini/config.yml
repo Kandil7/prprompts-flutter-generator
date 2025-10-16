@@ -1,0 +1,80 @@
+# Gemini Code CLI Configuration for PRPROMPTS Generator
+# Version: 1.0.0
+# Optimized for Gemini 2.5 Pro (1M token context window)
+
+commands:
+  # PRD Creation Commands
+  create-prd:
+    prompt: "prompts/generate-prd.md"
+    description: "Interactive PRD creation wizard (10 questions)"
+
+  auto-gen-prd:
+    prompt: "prompts/auto-generate-prd.md"
+    description: "Auto-generate PRD from description (zero interaction)"
+
+  prd-from-files:
+    prompt: "prompts/generate-prd-from-files.md"
+    description: "Generate PRD from existing markdown files (optional input)"
+
+  # PRD Analysis
+  analyze-prd:
+    prompt: "prompts/analyze-prd.md"
+    description: "Validate and analyze PRD, show customizations"
+
+  # PRPROMPTS Generation Commands
+  gen-prprompts:
+    prompt: "prompts/prprompts-generator.md"
+    description: "Generate all 32 PRPROMPTS files from PRD"
+
+  gen-phase-1:
+    prompt: "prompts/phase-1-core.md"
+    description: "Generate Phase 1: Core Architecture (10 files)"
+
+  gen-phase-2:
+    prompt: "prompts/phase-2-quality.md"
+    description: "Generate Phase 2: Quality & Security (12 files)"
+
+  gen-phase-3:
+    prompt: "prompts/phase-3-demo.md"
+    description: "Generate Phase 3: Demo & Learning (10 files)"
+
+  gen-file:
+    prompt: "prompts/single-file-generator.md"
+    description: "Generate a single PRPROMPTS file by name"
+
+# Project Settings
+project:
+  name: "PRPROMPTS Flutter Generator (Gemini Edition)"
+  version: "2.2.0"
+  description: "Generate customized development guides from PRD using Gemini 2.5 Pro"
+  ai_model: "gemini-2.5-pro"
+  context_length: "1M tokens"
+
+# Default Behaviors
+defaults:
+  auto_approve: false
+  verbose: true
+  save_context: true
+
+# Gemini-Specific Optimizations
+gemini_settings:
+  # Leverage Gemini's massive 1M token context
+  use_extended_context: true
+  max_context_tokens: 1000000
+
+  # Enable agent mode with ReAct loop
+  enable_agent_mode: true
+  use_react_loop: true
+
+  # Gemini excels at multi-file understanding
+  enable_codebase_analysis: true
+
+  # Free tier limits (preview)
+  free_tier:
+    requests_per_minute: 60
+    requests_per_day: 1000
+    context_window: "1M tokens"
+
+  # Agentic features
+  enable_workflow_automation: true
+  multi_step_planning: true
