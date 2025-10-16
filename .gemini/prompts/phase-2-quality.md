@@ -1,51 +1,146 @@
 ---
 name: Generate Phase 2
-description: Generate Phase 2 Quality & Security files (12 files)
+description: Generate Phase 2 Quality & Security files (12 files) with v2.0 spec
 author: Phase 2 Generator
-version: 1.0.0
-tags: [prprompts, phase-2, quality, security]
+version: 2.0.0
+tags: [prprompts, phase-2, quality, security, v2.0]
 ---
 
-# Generate Phase 2: Quality & Security
+# Generate Phase 2: Quality & Security (v2.0)
 
 ## Overview
-Generate the 12 quality and security PRPROMPTS files.
+Generate the 12 quality and security PRPROMPTS files following v2.0 strict PRP pattern.
 
 ## Input
-Read: `docs/PRD.md`
+Read: `docs/PRD.md` - Extract YAML frontmatter for customization.
+
+## V2.0 SPECIFICATION
+
+### PRP Pattern (MANDATORY)
+Every file MUST follow this exact 6-section structure:
+
+```markdown
+## FEATURE
+What this guide helps you accomplish
+
+## EXAMPLES
+Real code with actual file paths
+
+## CONSTRAINTS
+✅ DO / ❌ DON'T rules
+
+## VALIDATION GATES
+Manual checklist + automated CI checks
+
+## BEST PRACTICES
+Junior-friendly "Why?" explanations
+
+## REFERENCES
+Official docs, compliance guides, ADRs
+```
+
+### Quality Requirements
+- ✅ **Length**: 500-600 words per file
+- ✅ **No Placeholders**: All content actionable
+- ✅ **Real Examples**: Actual code, commands, workflows
+- ✅ **Junior-Friendly**: Explain rationale
+- ✅ **Security-Critical**: Double-check HIPAA/PCI-DSS/GDPR patterns
 
 ## Output
 
 **IMPORTANT**: All files MUST go inside the `PRPROMPTS/` folder.
 
-### Generation Steps
+### Files to Generate (12 files, numbered 11-22)
 
-1. **Ensure Folder Exists**: The `PRPROMPTS/` directory should already exist from Phase 1
-2. **Generate Files**: Create 12 numbered files (11-22) inside `PRPROMPTS/`:
-   - `PRPROMPTS/11-git_branching_strategy.md` - Git workflows
-   - `PRPROMPTS/12-progress_tracking_workflow.md` - Sprint planning
-   - `PRPROMPTS/13-multi_team_coordination.md` - Cross-team collab
-   - `PRPROMPTS/14-security_audit_checklist.md` - Pre-release validation
-   - `PRPROMPTS/15-release_management.md` - App Store process
-   - `PRPROMPTS/16-security_and_compliance.md` - ⭐ PRD-sensitive
-   - `PRPROMPTS/17-performance_optimization_detailed.md` - Advanced profiling
-   - `PRPROMPTS/18-quality_gates_and_code_metrics.md` - Coverage, complexity
-   - `PRPROMPTS/19-localization_and_accessibility.md` - Combined L10n+A11y
-   - `PRPROMPTS/20-versioning_and_release_notes.md` - Semantic versioning
-   - `PRPROMPTS/21-team_culture_and_communication.md` - Async-first
-   - `PRPROMPTS/22-autodoc_integration.md` - Auto-documentation
+11. **11-git_branching_strategy.md** (500-600 words)
+    - Feature branches, PR reviews, Git Flow
+    - Branch naming: `feature/`, `fix/`, `hotfix/`
+    - 2 approvals required
+
+12. **12-progress_tracking_workflow.md** (500-600 words)
+    - Jira/Linear/GitHub Projects
+    - Sprint planning, story points
+    - All PRs must reference issues
+
+13. **13-multi_team_coordination.md** (500-600 words)
+    - API contracts, shared libraries
+    - Downstream approval for breaking changes
+    - Adapt to team size from PRD
+
+14. **14-security_audit_checklist.md** (500-600 words)
+    - No secrets in code, HTTPS only
+    - `git secrets --scan`
+    - OWASP Mobile Top 10
+
+15. **15-release_management.md** (500-600 words)
+    - App Store submission, versioning
+    - TestFlight/Firebase beta
+    - QA signoff required
+
+16. **16-security_and_compliance.md** (500-600 words) ⭐ **CRITICAL - PRD-CUSTOMIZED**
+    - **MUST adapt based on PRD's `compliance` field**
+    - **HIPAA**: PHI encryption (AES-256-GCM), audit logging
+      ```dart
+      final encrypted = await _encryptor.encrypt(
+        patientData, key: await _secureStorage.getEncryptionKey());
+      await _db.insert('patients', {'data': encrypted});
+      ```
+    - **PCI-DSS**: Payment tokenization (Stripe/PayPal), NEVER store full cards
+      ```dart
+      final last4 = cardNumber.substring(cardNumber.length - 4);
+      await _db.insert('cards', {'last4': last4, 'token': stripeToken});
+      ```
+    - **GDPR**: Consent management, right to erasure
+    - **JWT**: Verification only (NO signing in Flutter)
+      ```dart
+      Future<bool> verifyToken(String token) async {
+        final jwt = JWT.verify(token, RSAPublicKey(publicKey),
+          audience: Audience(['my-app']), issuer: 'api.example.com');
+        return jwt.payload['exp'] > DateTime.now().millisecondsSinceEpoch / 1000;
+      }
+      ```
+
+17. **17-performance_optimization_detailed.md** (500-600 words)
+    - DevTools Timeline, memory snapshots
+    - `compute()` for heavy tasks
+    - < 100ms jank frames
+
+18. **18-quality_gates_and_code_metrics.md** (500-600 words)
+    - 80%+ coverage, `lcov` reports
+    - `dart analyze`, cyclomatic complexity
+    - CI must pass before merge
+
+19. **19-localization_and_accessibility.md** (500-600 words)
+    - RTL support, ARB for multiple languages
+    - Screen reader labels
+    - Native speaker review
+
+20. **20-versioning_and_release_notes.md** (500-600 words)
+    - Semantic versioning (MAJOR.MINOR.PATCH)
+    - CHANGELOG.md format
+    - Changelog updated before release
+
+21. **21-team_culture_and_communication.md** (500-600 words)
+    - Async-first, RFC process
+    - ADR for architectural decisions
+    - Document all decisions
+
+22. **22-autodoc_integration.md** (500-600 words)
+    - `dartdoc`, JSDoc for APIs
+    - Document public APIs only
+    - `dartdoc` must build without warnings
 
 ### Folder Structure
 
 ```
 PRPROMPTS/
-├── ... (files 01-10 from Phase 1)
+├── 01-10 (from Phase 1)
 ├── 11-git_branching_strategy.md
 ├── 12-progress_tracking_workflow.md
 ├── 13-multi_team_coordination.md
 ├── 14-security_audit_checklist.md
 ├── 15-release_management.md
-├── 16-security_and_compliance.md  ⭐
+├── 16-security_and_compliance.md   ⭐ PRD-customized
 ├── 17-performance_optimization_detailed.md
 ├── 18-quality_gates_and_code_metrics.md
 ├── 19-localization_and_accessibility.md
@@ -54,15 +149,55 @@ PRPROMPTS/
 └── 22-autodoc_integration.md
 ```
 
-## Customization
-File 16 (security_and_compliance) heavily customized based on PRD compliance requirements.
+## Customization Rules
+
+### Compliance-Based (`compliance` field) - File 16 CRITICAL
+- **HIPAA**: Add PHI encryption, audit logging, HTTPS-only
+- **PCI-DSS**: Add tokenization, TLS 1.2+, SAQ checklist
+- **GDPR**: Add consent, right to erasure, cookie consent
+- **SOC2**: Add access controls, audit trails
+- **COPPA**: Add parental consent, age verification
+- **FERPA**: Add student records protection
+
+### Team Size (`team_size`) - File 13
+- **Small (1-5)**: Single team, simplified coordination
+- **Medium (5-15)**: Cross-functional teams
+- **Large (15+)**: Multi-team RFC process, API contracts
+
+### Sensitive Data (`sensitive_data`) - Files 14, 16
+- **PHI**: No logging PHI, encryption required
+- **PII**: GDPR consent, anonymization
+- **Payment**: PCI-DSS compliance, tokenization
 
 ## Success Message
 ```
 ✅ Generated Phase 2: Quality & Security (12 files)
 
-Special customizations:
-- 16-security_and_compliance.md tailored for [compliance list]
+Files created in PRPROMPTS/:
+- 11-git_branching_strategy.md (498 words)
+- 12-progress_tracking_workflow.md (512 words)
+- 13-multi_team_coordination.md (534 words)
+- 14-security_audit_checklist.md (567 words)
+- 15-release_management.md (543 words)
+- 16-security_and_compliance.md (589 words) ⭐ CUSTOMIZED
+- 17-performance_optimization_detailed.md (521 words)
+- 18-quality_gates_and_code_metrics.md (556 words)
+- 19-localization_and_accessibility.md (498 words)
+- 20-versioning_and_release_notes.md (512 words)
+- 21-team_culture_and_communication.md (534 words)
+- 22-autodoc_integration.md (487 words)
+
+Special Customizations Applied:
+- Compliance: [HIPAA, GDPR] → PHI encryption, consent management
+- Auth: JWT → Token verification (NO signing in Flutter)
+- Team Size: Large → Multi-team coordination with RFC process
+
+V2.0 Compliance:
+✅ All files follow PRP pattern (6 sections)
+✅ All files 500-600 words
+✅ Critical security patterns (JWT, PCI-DSS, HIPAA)
+✅ Real examples with file paths
+✅ Junior-friendly explanations
 
 Next: claude gen-phase-3
 ```

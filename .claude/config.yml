@@ -1,5 +1,5 @@
 # Claude Code Commands Configuration for PRPROMPTS Generator
-# Version: 1.0.0
+# Version: 2.2.0
 
 commands:
   # PRD Creation Commands
@@ -44,7 +44,7 @@ commands:
 # Project Settings
 project:
   name: "PRPROMPTS Flutter Generator"
-  version: "1.0.0"
+  version: "2.2.0"
   description: "Generate customized development guides from PRD"
 
 # Default Behaviors

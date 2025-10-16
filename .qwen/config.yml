@@ -1,5 +1,5 @@
 # Qwen Code Commands Configuration for PRPROMPTS Generator
-# Version: 1.0.0
+# Version: 2.2.0
 # Optimized for Qwen3-Coder (256K-1M token context)
 
 commands:
@@ -45,7 +45,7 @@ commands:
 # Project Settings
 project:
   name: "PRPROMPTS Flutter Generator (Qwen Edition)"
-  version: "1.0.0"
+  version: "2.2.0"
   description: "Generate customized development guides from PRD using Qwen3-Coder"
   ai_model: "qwen3-coder"
   context_length: "256K-1M tokens"
