@@ -1,5 +1,5 @@
 # Gemini Code CLI Configuration for PRPROMPTS Generator
-# Version: 1.0.0
+# Version: 2.2.0
 # Optimized for Gemini 2.5 Pro (1M token context window)
 
 commands:

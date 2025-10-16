@@ -738,6 +738,7 @@ prp-gen
 - [Customization](docs/CUSTOMIZATION.md) - How to customize prompts
 - [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
 - [API Reference](docs/API.md) - CLI commands and options
+- [Testing Guide](TESTING.md) - Test commands across all AI assistants
 
 ## 🎓 Examples
 

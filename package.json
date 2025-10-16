@@ -32,6 +32,7 @@
   "scripts": {
     "test": "bash ./scripts/test-validation.sh",
     "test:quick": "echo \"✅ Quick validation: Checking prompt files...\" && ls .claude/prompts/*.md | wc -l",
+    "test:commands": "bash ./scripts/test-commands.sh",
     "setup": "./scripts/setup.sh",
     "generate": "./scripts/generate-prprompts.sh all",
     "install-claude": "./scripts/install-commands.sh --global",
