@@ -66,6 +66,187 @@ curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/
 
 ---
 
+## 🤖 v4.0: Full Automation (NEW!)
+
+<div align="center">
+
+**🚀 Go from PRD to working code automatically!**
+
+**Zero-touch automation with PRPROMPTS-guided implementation**
+
+</div>
+
+### Complete Automation Pipeline
+
+```bash
+# 1. Generate PRPROMPTS (60 seconds)
+prprompts auto && prprompts generate
+
+# 2. Start AI assistant
+claude  # or qwen, or gemini
+
+# 3. Bootstrap project (2 minutes)
+/bootstrap-from-prprompts
+
+# 4. Auto-implement features (1-2 hours)
+/full-cycle
+10
+
+# 5. QA audit (2 minutes)
+/qa-check
+```
+
+### New Automation Commands
+
+<table>
+<tr>
+<td width="50%">
+
+**`/bootstrap-from-prprompts`**
+Complete project setup in 2-5 minutes:
+- ✅ Clean Architecture structure
+- ✅ Design system (Material 3)
+- ✅ Security infrastructure (JWT, encryption)
+- ✅ Test infrastructure
+- ✅ ARCHITECTURE.md & IMPLEMENTATION_PLAN.md
+
+</td>
+<td width="50%">
+
+**`/implement-next`**
+Auto-implement next task:
+- ✅ Follows PRPROMPTS patterns
+- ✅ Generates comprehensive tests
+- ✅ Security validation (JWT, PCI-DSS, HIPAA)
+- ✅ Code quality checks
+- ✅ Automatic staging
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**`/review-and-commit`**
+Validate and commit:
+- ✅ PRPROMPTS compliance check
+- ✅ Security validation
+- ✅ Test coverage verification
+- ✅ Code formatting
+- ✅ Conventional commit messages
+
+</td>
+<td width="50%">
+
+**`/full-cycle`**
+Complete automation loop:
+- ✅ Implement multiple tasks (1-10)
+- ✅ Auto-test each task
+- ✅ Auto-commit with validation
+- ✅ Progress tracking
+- ✅ Quality gate at end
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+
+**`/qa-check`**
+Comprehensive PRPROMPTS compliance audit:
+- ✅ Architecture validation (Clean Architecture, BLoC)
+- ✅ Security patterns (JWT verification, PII encryption, PCI-DSS)
+- ✅ Test coverage (>70%)
+- ✅ Static analysis (flutter analyze)
+- ✅ Generates QA_REPORT.md with compliance score
+
+</td>
+</tr>
+</table>
+
+### Example: Healthcare App Automation
+
+```bash
+# Complete healthcare app in 2-3 hours (vs 2-3 days manual)
+cd ~/projects/healthtrack-pro
+flutter create .
+
+# Generate PRPROMPTS with HIPAA compliance
+cp templates/healthcare.md project_description.md
+prprompts auto && prprompts generate
+
+# Auto-bootstrap
+claude
+/bootstrap-from-prprompts
+
+# Auto-implement 15 features
+/full-cycle
+15
+
+# Security audit
+/qa-check
+
+# Result: Production-ready HIPAA-compliant app!
+# - JWT verification (RS256)
+# - PHI encryption (AES-256-GCM)
+# - Audit logging
+# - 85% test coverage
+# - Zero security violations
+```
+
+### What Gets Automated
+
+<table>
+<tr>
+<th>Manual (3-5 days)</th>
+<th>Automated with v4.0 (2-3 hours)</th>
+</tr>
+<tr>
+<td>
+
+- Set up folder structure
+- Configure dependencies
+- Create design system
+- Implement security
+- Write features
+- Generate tests
+- Fix bugs
+- Run QA
+- Make commits
+
+</td>
+<td>
+
+**All of this happens automatically:**
+- `/bootstrap-from-prprompts` - Setup (2 min)
+- `/full-cycle` - Implement & test (1-2 hours)
+- `/qa-check` - Validate (2 min)
+
+**Every line follows PRPROMPTS patterns**
+**Security built-in (JWT, encryption, compliance)**
+**Tests auto-generated and passing**
+
+</td>
+</tr>
+</table>
+
+### Installation
+
+```bash
+# Install automation commands (works with existing installation)
+./scripts/install-automation-commands.sh --global
+
+# Verify commands available
+claude  # In Claude Code, you'll see all 5 automation commands
+```
+
+**Works with:**
+- ✅ Claude Code
+- ✅ Qwen Code
+- ✅ Gemini CLI
+
+📖 **[Complete Automation Guide](docs/AUTOMATION-GUIDE.md)** - Full workflow examples, troubleshooting, security validation
+
+---
+
 ## ✨ v3.0 New Features
 
 <div align="center">
