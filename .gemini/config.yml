@@ -42,11 +42,32 @@ commands:
     prompt: "prompts/single-file-generator.md"
     description: "Generate a single PRPROMPTS file by name"
 
+  # v4.0 Automation Commands (Full AI-Powered Development Pipeline)
+  bootstrap-from-prprompts:
+    prompt: "commands/automation/bootstrap-from-prprompts.md"
+    description: "🚀 Complete project setup from PRPROMPTS (2 min) - Clean Architecture, security, tests"
+
+  implement-next:
+    prompt: "commands/automation/implement-next.md"
+    description: "✨ Auto-implement next feature from IMPLEMENTATION_PLAN.md (10 min) - with tests & validation"
+
+  full-cycle:
+    prompt: "commands/automation/full-cycle.md"
+    description: "🤖 Auto-implement 1-10 features automatically (1-2 hours) - complete automation loop"
+
+  review-and-commit:
+    prompt: "commands/automation/review-and-commit.md"
+    description: "✅ Validate and commit changes - PRPROMPTS compliance, security checks, tests"
+
+  qa-check:
+    prompt: "commands/automation/qa-check.md"
+    description: "🔍 Comprehensive compliance audit - generates QA_REPORT.md with score"
+
 # Project Settings
 project:
   name: "PRPROMPTS Flutter Generator (Gemini Edition)"
-  version: "2.2.0"
-  description: "Generate customized development guides from PRD using Gemini 2.5 Pro"
+  version: "4.0.0"
+  description: "AI-powered Flutter development with full automation - 40-60x faster (3-5 days → 2-3 hours)"
   ai_model: "gemini-2.5-pro"
   context_length: "1M tokens"
 
