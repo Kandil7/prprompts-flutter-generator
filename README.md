@@ -36,16 +36,25 @@
 
 ### **🚀 One Command. Complete Setup.**
 
-```bash
-# Smart installer - Auto-detects everything!
-curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
-
-# Then use the unified CLI
-prprompts create      # Create PRD
-prprompts generate    # Generate all 32 files
+**Windows:**
+```powershell
+# PowerShell - Just copy and paste!
+irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.ps1 | iex
 ```
 
-[📦 Quick Install](#installation) • [✨ v3.0 Features](#v30-new-features) • [📖 Documentation](docs/PRPROMPTS-SPECIFICATION.md) • [⭐ Examples](#examples)
+**Linux / macOS / Git Bash:**
+```bash
+# One-line installer
+curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
+```
+
+**Then use:**
+```bash
+claude create-prd      # Create PRD
+claude gen-prprompts   # Generate all 32 files
+```
+
+[📦 Quick Install](#installation) • [🪟 Windows Guide](WINDOWS-QUICKSTART.md) • [✨ v3.0 Features](#v30-new-features) • [📖 Docs](docs/PRPROMPTS-SPECIFICATION.md)
 
 </div>
 
@@ -437,23 +446,10 @@ print('Patient record updated: ${patient.id}');
 <tr>
 <th>Platform</th>
 <th>Command</th>
+<th>Notes</th>
 </tr>
 <tr>
-<td><strong>Linux / macOS / Git Bash</strong></td>
-<td>
-
-```bash
-# Smart installer (v3.0) - Recommended!
-curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
-
-# Or classic installer (v2.2)
-curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.sh | bash
-```
-
-</td>
-</tr>
-<tr>
-<td><strong>Windows PowerShell</strong></td>
+<td><strong>🪟 Windows PowerShell</strong></td>
 <td>
 
 ```powershell
@@ -461,18 +457,48 @@ irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master
 ```
 
 </td>
+<td><strong><a href="WINDOWS-QUICKSTART.md">📖 Full Windows Guide</a></strong></td>
 </tr>
 <tr>
-<td><strong>Windows Command Prompt</strong></td>
+<td><strong>🪟 Windows (Alternative)</strong></td>
 <td>
 
 ```cmd
-curl -o %TEMP%\setup-prprompts.bat https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.bat && %TEMP%\setup-prprompts.bat
+# Download and double-click
+git clone https://github.com/Kandil7/prprompts-flutter-generator.git
+cd prprompts-flutter-generator
+INSTALL-WINDOWS.bat
 ```
 
 </td>
+<td>One-click installer included!</td>
+</tr>
+<tr>
+<td><strong>🐧 Linux / 🍎 macOS</strong></td>
+<td>
+
+```bash
+# Smart installer (v3.0) - Recommended!
+curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
+```
+
+</td>
+<td>Auto-detects OS & AIs</td>
+</tr>
+<tr>
+<td><strong>Git Bash (Windows)</strong></td>
+<td>
+
+```bash
+curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
+```
+
+</td>
+<td>If you have Git Bash</td>
 </tr>
 </table>
+
+**⚠️ Windows Users:** Don't use `bash` commands in PowerShell! Use the PowerShell method above. [See Windows Guide](WINDOWS-QUICKSTART.md)
 
 **That's it!** Now run `prprompts create` or `claude create-prd` from any directory.
 
