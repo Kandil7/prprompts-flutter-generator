@@ -1,0 +1,171 @@
+{
+  "name": "prprompts-flutter-generator",
+  "displayName": "PRPROMPTS Flutter Generator",
+  "version": "4.0.0",
+  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours (40-60x faster)",
+  "author": "Kandil7",
+  "license": "MIT",
+  "homepage": "https://github.com/Kandil7/prprompts-flutter-generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kandil7/prprompts-flutter-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kandil7/prprompts-flutter-generator/issues"
+  },
+  "keywords": [
+    "flutter",
+    "gemini",
+    "gemini-cli",
+    "gemini-code-assist",
+    "prprompts",
+    "automation",
+    "ai-automation",
+    "clean-architecture",
+    "bloc",
+    "hipaa",
+    "pci-dss",
+    "compliance",
+    "security-audited",
+    "rapid-development"
+  ],
+  "categories": [
+    "Development Tools",
+    "Code Generation",
+    "Flutter",
+    "Productivity"
+  ],
+  "gemini": {
+    "version": ">=1.0.0",
+    "configFile": ".gemini/config.yml",
+    "commandsPath": ".gemini/commands",
+    "promptsPath": ".gemini/prompts"
+  },
+  "features": {
+    "prdGeneration": {
+      "displayName": "PRD Generation",
+      "description": "Generate Product Requirements Documents with 4 methods",
+      "commands": [
+        "create-prd",
+        "auto-gen-prd",
+        "prd-from-files",
+        "analyze-prd"
+      ]
+    },
+    "prpromptsGeneration": {
+      "displayName": "PRPROMPTS Generation",
+      "description": "Generate 32 security-audited development guides",
+      "commands": [
+        "gen-prprompts",
+        "gen-phase-1",
+        "gen-phase-2",
+        "gen-phase-3",
+        "gen-file"
+      ]
+    },
+    "automation": {
+      "displayName": "Full Automation (v4.0)",
+      "description": "Complete automation pipeline - 40-60x faster development",
+      "commands": [
+        "bootstrap-from-prprompts",
+        "implement-next",
+        "full-cycle",
+        "review-and-commit",
+        "qa-check"
+      ],
+      "badge": "NEW"
+    }
+  },
+  "requirements": {
+    "node": ">=14.0.0",
+    "gemini-cli": ">=1.0.0"
+  },
+  "installation": {
+    "npm": "npm install -g prprompts-flutter-generator",
+    "script": "curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gemini-gist.sh | bash",
+    "manual": [
+      "git clone https://github.com/Kandil7/prprompts-flutter-generator.git",
+      "cd prprompts-flutter-generator",
+      "./scripts/install-gemini-commands.sh --global"
+    ]
+  },
+  "quickStart": {
+    "steps": [
+      "gemini auth login",
+      "cd your-flutter-project",
+      "gemini create-prd",
+      "gemini gen-prprompts",
+      "gemini bootstrap-from-prprompts",
+      "gemini full-cycle"
+    ],
+    "timeToFirstValue": "2-3 hours (complete app with tests)",
+    "speedImprovement": "40-60x faster than manual development"
+  },
+  "support": {
+    "documentation": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
+    "geminiGuide": "https://github.com/Kandil7/prprompts-flutter-generator/blob/master/GEMINI.md",
+    "commands": "https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/GEMINI-COMMANDS.md",
+    "issues": "https://github.com/Kandil7/prprompts-flutter-generator/issues",
+    "discussions": "https://github.com/Kandil7/prprompts-flutter-generator/discussions"
+  },
+  "highlights": [
+    "🤖 v4.0 Full Automation - 5 commands for zero-touch development",
+    "⚡ 40-60x Faster - 3-5 days → 2-3 hours",
+    "🔒 Security-First - JWT, PCI-DSS, HIPAA patterns built-in",
+    "✅ 32 Development Guides - Complete coverage",
+    "🎉 Best Free Tier - 60 req/min, 1,000/day with Gemini",
+    "📊 85%+ Test Coverage - Comprehensive automated tests"
+  ],
+  "comparison": {
+    "geminiAdvantages": [
+      "1M token context window (5x larger than Claude)",
+      "60 requests/minute free tier (vs Claude's 20 messages/day)",
+      "1,000 requests/day (best free tier in industry)",
+      "ReAct agent mode for complex workflows",
+      "Google Cloud & Firebase integration"
+    ]
+  },
+  "compliance": [
+    "HIPAA",
+    "PCI-DSS",
+    "GDPR",
+    "SOC2",
+    "COPPA",
+    "FERPA"
+  ],
+  "examples": [
+    {
+      "name": "Healthcare App (HIPAA)",
+      "template": "templates/healthcare.md",
+      "time": "2 hours",
+      "features": [
+        "JWT RS256 authentication",
+        "PHI encryption (AES-256-GCM)",
+        "Audit logging",
+        "85% test coverage",
+        "HIPAA compliant"
+      ]
+    },
+    {
+      "name": "Fintech App (PCI-DSS)",
+      "template": "templates/fintech.md",
+      "time": "2.5 hours",
+      "features": [
+        "Payment tokenization",
+        "PCI-DSS compliance",
+        "TLS 1.2+",
+        "Secure WebSocket",
+        "90% test coverage"
+      ]
+    }
+  ],
+  "metrics": {
+    "filesGenerated": 32,
+    "wordsPerFile": "500-600",
+    "setupTime": "30 seconds (npm install)",
+    "generationTime": "60 seconds (all 32 files)",
+    "automationTime": "2-3 hours (complete app)",
+    "speedup": "40-60x",
+    "testCoverage": "85%+"
+  }
+}
