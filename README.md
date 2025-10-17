@@ -12,9 +12,9 @@
 [![New](https://img.shields.io/badge/NEW-v4.0%20Automation-blue)](#v40-full-automation-new)
 [![Speed](https://img.shields.io/badge/Speed-40--60x%20Faster-green)](#v40-full-automation-new)
 
-[![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://claude.ai/code)
-[![Qwen Code](https://img.shields.io/badge/Qwen-Code-orange)](QWEN.md)
-[![Gemini CLI](https://img.shields.io/badge/Gemini-CLI-green)](GEMINI.md)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-Extension-blue)](CLAUDE.md)
+[![Qwen Code](https://img.shields.io/badge/Qwen_Code-Extension-orange)](QWEN.md)
+[![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-Extension-green)](GEMINI.md)
 [![Flutter](https://img.shields.io/badge/Flutter-3.24+-blue)](https://flutter.dev)
 
 [![Windows](https://img.shields.io/badge/Windows-Supported-0078D6?logo=windows)](WINDOWS.md)
@@ -525,6 +525,141 @@ graph LR
 ```
 
 📖 **Detailed Comparison:** [Claude vs Qwen vs Gemini](docs/AI-COMPARISON.md)
+
+---
+
+## 🎁 Official AI Extensions (v4.0)
+
+**Each AI assistant now has a dedicated extension!** Install PRPROMPTS as a proper extension with optimized configurations:
+
+<table>
+<tr>
+<th width="33%">🔵 Claude Code</th>
+<th width="33%">🟠 Qwen Code</th>
+<th width="33%">🟢 Gemini CLI</th>
+</tr>
+<tr>
+<td>
+
+**Production-Quality Extension**
+
+📦 [claude-extension.json](claude-extension.json)
+
+**Install:**
+```bash
+bash install-claude-extension.sh
+```
+
+**Best For:**
+- Production apps
+- Mission-critical systems
+- Enterprise clients
+- Healthcare/Finance
+
+**Highlights:**
+- 9.5/10 accuracy
+- Official Anthropic support
+- Strong security focus
+- Best reasoning
+
+</td>
+<td>
+
+**Extended-Context Extension**
+
+📦 [qwen-extension.json](qwen-extension.json)
+
+**Install:**
+```bash
+bash install-qwen-extension.sh
+```
+
+**Best For:**
+- Large codebases
+- Cost-sensitive projects
+- Self-hosting
+- Entire monorepos
+
+**Highlights:**
+- 256K-1M token context
+- State-of-the-art agentic
+- Open source
+- Cost-effective
+
+</td>
+<td>
+
+**Free-Tier Extension**
+
+📦 [gemini-extension.json](gemini-extension.json)
+
+**Install:**
+```bash
+bash install-gemini-extension.sh
+```
+
+**Best For:**
+- MVPs & prototypes
+- Free tier usage
+- CI/CD automation
+- Students/learning
+
+**Highlights:**
+- 1M token context
+- 60 req/min FREE
+- No credit card
+- Google integration
+
+</td>
+</tr>
+<tr>
+<td colspan="3" align="center">
+
+**📖 Full Documentation:**
+[Claude Code Guide](CLAUDE.md) • [Qwen Code Guide](QWEN.md) • [Gemini CLI Guide](GEMINI.md)
+
+**All extensions include:** v4.0 automation • 14 commands • Extension manifest • Optimized configs • Quick Start guides
+
+</td>
+</tr>
+</table>
+
+### Extension Features
+
+✅ **Extension Manifest** - Proper extension.json with full metadata
+✅ **Dedicated Installer** - AI-specific installation scripts
+✅ **Optimized Configs** - Tuned for each AI's strengths
+✅ **v4.0 Automation** - All 5 automation commands included
+✅ **Complete Docs** - Full setup & usage guides
+✅ **npm Support** - Auto-install via postinstall script
+
+### Quick Extension Setup
+
+**Option 1: npm (Easiest)**
+```bash
+# Automatically installs extension for detected AIs
+npm install -g prprompts-flutter-generator
+```
+
+**Option 2: Extension Script (AI-specific)**
+```bash
+# Clone repo once
+git clone https://github.com/Kandil7/prprompts-flutter-generator.git
+cd prprompts-flutter-generator
+
+# Install extension for your AI
+bash install-claude-extension.sh   # Claude Code
+bash install-qwen-extension.sh     # Qwen Code
+bash install-gemini-extension.sh   # Gemini CLI
+```
+
+**Option 3: Install All Extensions**
+```bash
+# Install extensions for all 3 AIs at once
+bash install-claude-extension.sh
+bash install-qwen-extension.sh
+bash install-gemini-extension.sh
+```
 
 ---
 
@@ -1765,11 +1900,12 @@ rm -rf ~/.config/gemini/prompts/*prprompts*
 - [PRD from Files](docs/PRD-FROM-FILES-GUIDE.md) - Convert existing docs
 - [Interactive Wizard](docs/PRD-GUIDE.md) - 10-question wizard
 
-### AI Assistant Setup
-- [Claude Code Commands](docs/CLAUDE-COMMANDS.md)
-- [Qwen Code Setup](QWEN.md) + [Commands](docs/QWEN-COMMANDS.md)
-- [Gemini CLI Setup](GEMINI.md) + [Commands](docs/GEMINI-COMMANDS.md)
+### AI Extensions & Setup
+- **[Claude Code Extension](CLAUDE.md)** - Production-quality extension guide
+- **[Qwen Code Extension](QWEN.md)** - Extended-context extension guide
+- **[Gemini CLI Extension](GEMINI.md)** - Free-tier extension guide
 - [AI Comparison](docs/AI-COMPARISON.md) - Claude vs Qwen vs Gemini
+- [Command Reference](docs/CLAUDE-COMMANDS.md) - All commands (identical across AIs)
 
 ### Platform Support
 - [Windows Installation](WINDOWS.md) - Native batch, PowerShell, Git Bash
