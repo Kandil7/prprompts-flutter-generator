@@ -3,7 +3,7 @@
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-3.0-success)](docs/NEW-FEATURES-V3.md)
+[![Version](https://img.shields.io/badge/Version-3.1-success)](docs/NEW-FEATURES-V3.md)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
 [![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#security--compliance)
@@ -28,7 +28,7 @@
 
 **Automatically generate customized PRPROMPTS files for Flutter projects with strict security patterns, Clean Architecture, and compliance-aware guidance.**
 
-**⏱️ Total Setup Time: 60 seconds** • **🎯 Smart Auto-Installer** • **🔒 Security Audited** • **✨ NEW: Unified CLI**
+**⏱️ Total Setup Time: 30 seconds** • **🎯 npm Install Available** • **🔒 Security Audited** • **✨ NEW v3.1: npm Support**
 
 </div>
 
@@ -36,22 +36,26 @@
 
 ### **🚀 One Command. Complete Setup.**
 
-**Windows:**
+**🆕 v3.1 - All Platforms (Easiest!):**
+```bash
+# Install via npm (works on Windows/macOS/Linux)
+npm install -g prprompts-flutter-generator
+
+# Then use anywhere:
+prprompts create       # Create PRD
+prprompts generate     # Generate all 32 files
+```
+
+**Alternative Methods:**
+
+**Windows PowerShell:**
 ```powershell
-# PowerShell - Just copy and paste!
 irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.ps1 | iex
 ```
 
 **Linux / macOS / Git Bash:**
 ```bash
-# One-line installer
 curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
-```
-
-**Then use:**
-```bash
-claude create-prd      # Create PRD
-claude gen-prprompts   # Generate all 32 files
 ```
 
 [📦 Quick Install](#installation) • [🪟 Windows Guide](WINDOWS-QUICKSTART.md) • [✨ v3.0 Features](#v30-new-features) • [📖 Docs](docs/PRPROMPTS-SPECIFICATION.md)
@@ -438,7 +442,39 @@ print('Patient record updated: ${patient.id}');
 
 ## 📦 Installation
 
-### ⚡ Quick Install (Recommended)
+### ⚡ Super Quick Install - npm (Easiest!)
+
+**🆕 v3.1 - One command for all platforms!**
+
+```bash
+npm install -g prprompts-flutter-generator
+```
+
+**That's it!** The postinstall script will:
+- ✅ Auto-detect installed AI assistants (Claude/Qwen/Gemini)
+- ✅ Configure commands for all detected AIs
+- ✅ Create unified configuration
+- ✅ Set up the `prprompts` CLI
+
+**Then use anywhere:**
+```bash
+prprompts create      # Create PRD
+prprompts generate    # Generate all 32 files
+claude create-prd     # Or use AI-specific commands
+```
+
+**Don't have an AI assistant?** Install one first:
+```bash
+# Install Claude Code (Recommended)
+npm install -g @anthropic-ai/claude-code
+
+# Then install PRPROMPTS
+npm install -g prprompts-flutter-generator
+```
+
+---
+
+### 🚀 Alternative Install Methods
 
 **🆕 v3.0 Smart Installer - Auto-detects everything:**
 

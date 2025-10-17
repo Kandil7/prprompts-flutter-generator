@@ -1,0 +1,236 @@
+#!/usr/bin/env node
+/**
+ * Post-install script for PRPROMPTS Flutter Generator
+ * Automatically configures AI assistant commands after npm install
+ */
+
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+const os = require('os');
+
+// ANSI color codes
+const colors = {
+  reset: '\x1b[0m',
+  green: '\x1b[32m',
+  blue: '\x1b[34m',
+  yellow: '\x1b[33m',
+  red: '\x1b[31m',
+  cyan: '\x1b[36m'
+};
+
+function log(message, color = 'reset') {
+  console.log(`${colors[color]}${message}${colors.reset}`);
+}
+
+function commandExists(command) {
+  try {
+    if (os.platform() === 'win32') {
+      execSync(`where ${command}`, { stdio: 'ignore' });
+    } else {
+      execSync(`which ${command}`, { stdio: 'ignore' });
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function getConfigPath(ai) {
+  const home = os.homedir();
+  const platform = os.platform();
+
+  if (platform === 'win32') {
+    // Windows: %USERPROFILE%\.config\<ai>
+    return path.join(home, '.config', ai);
+  } else {
+    // macOS/Linux: ~/.config/<ai>
+    return path.join(home, '.config', ai);
+  }
+}
+
+function ensureDirectory(dir) {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+}
+
+function copyPrompts(ai, configPath) {
+  const promptsDir = path.join(configPath, 'prompts');
+  ensureDirectory(promptsDir);
+
+  const sourceDir = path.join(__dirname, '..', '.claude', 'prompts');
+
+  if (!fs.existsSync(sourceDir)) {
+    log(`  ⚠️  Warning: Source prompts directory not found at ${sourceDir}`, 'yellow');
+    return false;
+  }
+
+  const files = fs.readdirSync(sourceDir).filter(f => f.endsWith('.md'));
+
+  files.forEach(file => {
+    const source = path.join(sourceDir, file);
+    const dest = path.join(promptsDir, file);
+    fs.copyFileSync(source, dest);
+  });
+
+  log(`  ✓ Copied ${files.length} prompt files`, 'green');
+  return true;
+}
+
+function copyConfig(ai, configPath) {
+  const configFile = path.join(configPath, 'config.yml');
+  const sourceConfig = path.join(__dirname, '..', '.claude', 'config.yml');
+
+  if (!fs.existsSync(sourceConfig)) {
+    log(`  ⚠️  Warning: Source config not found at ${sourceConfig}`, 'yellow');
+    return false;
+  }
+
+  // Don't overwrite existing config
+  if (fs.existsSync(configFile)) {
+    log(`  ℹ️  Config already exists, skipping`, 'cyan');
+    return true;
+  }
+
+  fs.copyFileSync(sourceConfig, configFile);
+  log(`  ✓ Copied config file`, 'green');
+  return true;
+}
+
+function installForAI(ai, aiName) {
+  log(`\nConfiguring ${aiName}...`, 'blue');
+
+  const configPath = getConfigPath(ai);
+  ensureDirectory(configPath);
+
+  const promptsSuccess = copyPrompts(ai, configPath);
+  const configSuccess = copyConfig(ai, configPath);
+
+  if (promptsSuccess && configSuccess) {
+    log(`✓ ${aiName} configured successfully!`, 'green');
+    return true;
+  }
+
+  return false;
+}
+
+function createPRPROMPTSConfig() {
+  const home = os.homedir();
+  const prpromptsDir = path.join(home, '.prprompts');
+  const configFile = path.join(prpromptsDir, 'config.json');
+
+  ensureDirectory(prpromptsDir);
+
+  const config = {
+    version: '3.0.0',
+    default_ai: 'claude',
+    ais: {
+      claude: { enabled: false, config_path: getConfigPath('claude') },
+      qwen: { enabled: false, config_path: getConfigPath('qwen') },
+      gemini: { enabled: false, config_path: getConfigPath('gemini') }
+    },
+    features: {
+      auto_update: true,
+      telemetry: false,
+      verbose: true
+    }
+  };
+
+  // Detect installed AIs
+  if (commandExists('claude')) config.ais.claude.enabled = true;
+  if (commandExists('qwen')) config.ais.qwen.enabled = true;
+  if (commandExists('gemini')) config.ais.gemini.enabled = true;
+
+  // Set default to first available AI
+  if (config.ais.qwen.enabled) config.default_ai = 'qwen';
+  if (config.ais.gemini.enabled) config.default_ai = 'gemini';
+  if (config.ais.claude.enabled) config.default_ai = 'claude';
+
+  fs.writeFileSync(configFile, JSON.stringify(config, null, 2));
+  log(`\n✓ Created unified config at ${configFile}`, 'green');
+}
+
+function main() {
+  log('\n========================================================', 'cyan');
+  log('  PRPROMPTS Flutter Generator - Post-Install Setup', 'cyan');
+  log('========================================================\n', 'cyan');
+
+  // Detect installed AI assistants
+  const ais = [
+    { command: 'claude', name: 'Claude Code', key: 'claude' },
+    { command: 'qwen', name: 'Qwen Code', key: 'qwen' },
+    { command: 'gemini', name: 'Gemini CLI', key: 'gemini' }
+  ];
+
+  const installedAIs = ais.filter(ai => commandExists(ai.command));
+
+  if (installedAIs.length === 0) {
+    log('⚠️  No AI assistants detected!', 'yellow');
+    log('\nPlease install at least one of the following:', 'yellow');
+    log('  • Claude Code: npm install -g @anthropic-ai/claude-code', 'cyan');
+    log('  • Qwen Code: npm install -g @qwen/qwen-code', 'cyan');
+    log('  • Gemini CLI: npm install -g @google/gemini-cli', 'cyan');
+    log('\nThen run: npm run postinstall', 'cyan');
+    return;
+  }
+
+  log('Detected AI assistants:', 'blue');
+  installedAIs.forEach(ai => {
+    try {
+      const version = execSync(`${ai.command} --version`, { encoding: 'utf-8' }).trim();
+      log(`  ✓ ${ai.name}: ${version}`, 'green');
+    } catch {
+      log(`  ✓ ${ai.name}`, 'green');
+    }
+  });
+
+  // Install for each detected AI
+  let successCount = 0;
+  installedAIs.forEach(ai => {
+    if (installForAI(ai.key, ai.name)) {
+      successCount++;
+    }
+  });
+
+  // Create unified config
+  createPRPROMPTSConfig();
+
+  // Summary
+  log('\n========================================================', 'cyan');
+  log('  Installation Complete!', 'green');
+  log('========================================================\n', 'cyan');
+
+  log(`✓ Configured ${successCount} AI assistant(s)`, 'green');
+  log('\nAvailable commands:', 'blue');
+
+  installedAIs.forEach(ai => {
+    log(`  ${ai.command} create-prd       - Create PRD interactively`, 'cyan');
+    log(`  ${ai.command} gen-prprompts    - Generate all 32 files`, 'cyan');
+  });
+
+  log('\nOr use the unified CLI:', 'blue');
+  log('  prprompts create               - Create PRD', 'cyan');
+  log('  prprompts generate             - Generate all 32 files', 'cyan');
+  log('  prprompts doctor               - Check installation', 'cyan');
+
+  log('\nQuick Start:', 'blue');
+  log('  1. cd your-flutter-project', 'cyan');
+  log('  2. prprompts create', 'cyan');
+  log('  3. prprompts generate', 'cyan');
+  log('  4. Start coding!', 'cyan');
+
+  log('\nDocumentation:', 'blue');
+  log('  https://github.com/Kandil7/prprompts-flutter-generator\n', 'cyan');
+}
+
+// Run installation
+try {
+  main();
+} catch (error) {
+  log('\n❌ Installation failed:', 'red');
+  log(error.message, 'red');
+  log('\nPlease report this issue:', 'yellow');
+  log('  https://github.com/Kandil7/prprompts-flutter-generator/issues\n', 'cyan');
+  process.exit(1);
+}

@@ -1,6 +1,6 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "2.2.0",
+  "version": "3.1.0",
   "description": "Generate customized PRPROMPTS for Flutter projects from PRD - Works with Claude Code, Qwen Code & Gemini CLI",
   "keywords": [
     "flutter",
@@ -29,9 +29,21 @@
     "url": "https://github.com/Kandil7/prprompts-flutter-generator/issues"
   },
   "homepage": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
+  "preferGlobal": true,
   "bin": {
     "prprompts": "./bin/prprompts"
   },
+  "files": [
+    "bin/",
+    "lib/",
+    "scripts/",
+    ".claude/",
+    "completions/",
+    "templates/",
+    "README.md",
+    "LICENSE",
+    "WINDOWS-QUICKSTART.md"
+  ],
   "scripts": {
     "test": "bash ./scripts/test-validation.sh",
     "test:quick": "echo \"✅ Quick validation: Checking prompt files...\" && ls .claude/prompts/*.md | wc -l",
@@ -45,7 +57,7 @@
     "install-all": "./scripts/install-all.sh --global",
     "update": "node ./lib/updater.js update",
     "check-updates": "node ./lib/updater.js check",
-    "postinstall": "echo '✅ PRPROMPTS installed! Run: npm run smart-install'"
+    "postinstall": "node ./scripts/postinstall.js"
   },
   "peerDependencies": {
     "@anthropic-ai/claude-code": ">=1.0.0"

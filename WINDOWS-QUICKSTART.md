@@ -1,8 +1,38 @@
 # Windows Quick Start Guide
 
-## 🚀 Super Fast Installation (3 Methods)
+## 🚀 Super Fast Installation (4 Methods)
 
-### ⚡ Method 1: One-Click Installer (Easiest!)
+### ⚡ Method 1: npm Install (Easiest & Fastest!)
+
+**🆕 v3.1 - Works on all Windows versions!**
+
+1. **Install via npm:**
+   ```cmd
+   npm install -g prprompts-flutter-generator
+   ```
+
+2. **Done!** The installer will automatically:
+   - Detect your installed AI assistants (Claude/Qwen/Gemini)
+   - Configure all commands
+   - Set up the unified CLI
+
+3. **Start using:**
+   ```cmd
+   prprompts create
+   prprompts generate
+   ```
+
+**Prerequisites:** You need Node.js (v14+). [Download here](https://nodejs.org)
+
+**Don't have Claude Code yet?** Install it first:
+```cmd
+npm install -g @anthropic-ai/claude-code
+npm install -g prprompts-flutter-generator
+```
+
+---
+
+### ⚡ Method 2: One-Click Installer
 
 1. **Download** the repository:
    ```cmd
@@ -19,7 +49,7 @@
 
 ---
 
-### 💻 Method 2: PowerShell One-Liner
+### 💻 Method 3: PowerShell One-Liner
 
 Open **PowerShell** and run:
 
@@ -38,7 +68,7 @@ irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master
 
 ---
 
-### 🔧 Method 3: Command Prompt
+### 🔧 Method 4: Command Prompt
 
 Open **Command Prompt (cmd)** and run:
 
