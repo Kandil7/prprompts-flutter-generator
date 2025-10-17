@@ -30,7 +30,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kandil7/prprompts-flutter-generator.git"
+    "url": "git+https://github.com/Kandil7/prprompts-flutter-generator.git"
   },
   "bugs": {
     "url": "https://github.com/Kandil7/prprompts-flutter-generator/issues"
@@ -38,7 +38,7 @@
   "homepage": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
   "preferGlobal": true,
   "bin": {
-    "prprompts": "./bin/prprompts"
+    "prprompts": "bin/prprompts"
   },
   "files": [
     "bin/",
