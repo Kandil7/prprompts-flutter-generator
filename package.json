@@ -45,11 +45,17 @@
     "lib/",
     "scripts/",
     ".claude/",
+    ".qwen/",
+    ".gemini/",
     "completions/",
     "templates/",
+    "gemini-extension.json",
+    "install-gemini-extension.sh",
     "README.md",
     "LICENSE",
-    "WINDOWS-QUICKSTART.md"
+    "WINDOWS-QUICKSTART.md",
+    "GEMINI.md",
+    "QWEN.md"
   ],
   "scripts": {
     "test": "bash ./scripts/test-validation.sh",
