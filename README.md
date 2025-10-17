@@ -2,10 +2,10 @@
 
 <div align="center">
 
-[![npm version](https://img.shields.io/badge/npm-v3.1.0-blue)](https://www.npmjs.com/package/prprompts-flutter-generator)
+[![npm version](https://img.shields.io/npm/v/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
+[![npm downloads](https://img.shields.io/npm/dt/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/Version-3.1-success)](docs/NEW-FEATURES-V3.md)
-[![Downloads](https://img.shields.io/badge/Install-npm%20i%20-g-red)](#installation)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
 [![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#security--compliance)
