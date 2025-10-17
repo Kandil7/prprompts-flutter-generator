@@ -5,11 +5,12 @@
 [![npm version](https://img.shields.io/npm/v/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![npm downloads](https://img.shields.io/npm/dt/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-3.1-success)](docs/NEW-FEATURES-V3.md)
+[![Version](https://img.shields.io/badge/Version-4.0-success)](docs/NEW-FEATURES-V3.md)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
 [![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#security--compliance)
-[![New](https://img.shields.io/badge/NEW-npm%20Install-blue)](#installation)
+[![New](https://img.shields.io/badge/NEW-v4.0%20Automation-blue)](#v40-full-automation-new)
+[![Speed](https://img.shields.io/badge/Speed-40--60x%20Faster-green)](#v40-full-automation-new)
 
 [![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://claude.ai/code)
 [![Qwen Code](https://img.shields.io/badge/Qwen-Code-orange)](QWEN.md)
@@ -30,7 +31,7 @@
 
 **Automatically generate customized PRPROMPTS files for Flutter projects with strict security patterns, Clean Architecture, and compliance-aware guidance.**
 
-**⏱️ Total Setup Time: 30 seconds** • **🎯 npm Install Available** • **🔒 Security Audited** • **✨ NEW v3.1: npm Support**
+**⏱️ Setup: 30 seconds** • **🤖 NEW v4.0: Full Automation** • **⚡ 40-60x Faster** • **🔒 Security Audited**
 
 </div>
 
@@ -407,6 +408,12 @@ npm install -g prprompts-flutter-generator
 <tr>
 <td width="33%" align="center">
 
+### 🤖 Full Automation (v4.0)
+2-3 hours vs 3-5 days<br/>40-60x faster development
+
+</td>
+<td width="33%" align="center">
+
 ### 32 Files Generated
 Complete development guides<br/>covering all aspects
 
@@ -417,24 +424,18 @@ Complete development guides<br/>covering all aspects
 Claude • Qwen • Gemini<br/>Choose your favorite
 
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 
 ### 6 Compliance Standards
 HIPAA • PCI-DSS • GDPR<br/>SOC2 • COPPA • FERPA
 
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 
-### 4 PRD Methods
-Auto • From Files • Interactive<br/>Manual Templates
-
-</td>
-<td width="33%" align="center">
-
-### 500-600 Words/File
-Comprehensive guides<br/>Junior-friendly
+### 5 Automation Commands
+Bootstrap • Implement • Review<br/>Full-Cycle • QA Check
 
 </td>
 <td width="33%" align="center">
@@ -1798,7 +1799,18 @@ npm run test:commands     # Command availability
 
 ## 🗺️ Roadmap
 
-### ✅ v3.1 (Current) - npm Install Support
+### ✅ v4.0 (Current) - Full Automation
+- [x] `/bootstrap-from-prprompts` - Complete project setup (2 min)
+- [x] `/implement-next` - Auto-implement features (10 min each)
+- [x] `/full-cycle` - Implement 1-10 features automatically
+- [x] `/review-and-commit` - Validate & commit
+- [x] `/qa-check` - Comprehensive compliance audit
+- [x] Zero-touch automation pipeline
+- [x] 40-60x speed improvement (3-5 days → 2-3 hours)
+- [x] Security validation built into automation
+- [x] Works with Claude Code, Qwen Code, Gemini CLI
+
+### ✅ v3.1 - npm Install Support
 - [x] npm package distribution
 - [x] Automatic postinstall configuration
 - [x] Auto-detection of installed AIs
@@ -1825,22 +1837,22 @@ npm run test:commands     # Command availability
 - [x] Cross-platform installers
 - [x] Testing framework
 
-### 🚀 v3.2 (Next) - Enhanced Tooling
-- [ ] Publish to npm registry (public)
+### 🚀 v4.1 (Next) - Enhanced Tooling
 - [ ] VS Code snippets for common patterns
 - [ ] GitHub Actions workflow templates
 - [ ] Interactive demo environment
 - [ ] Example PRPROMPTS (complete healthcare & fintech samples)
 - [ ] Docker support for CI/CD
+- [ ] Real-time progress dashboard
 
-### 🎯 v3.2 (Future) - IDE Integration
+### 🎯 v4.2 (Future) - IDE Integration
 - [ ] VS Code Extension - Generate from IDE
 - [ ] IntelliJ/Android Studio plugin
 - [ ] Web UI - Browser-based PRD creation
 - [ ] Git hooks integration
 - [ ] Automated validation on PR
 
-### 🌟 v4.0 (Future) - Advanced Features
+### 🌟 v5.0 (Future) - Advanced Features
 - [ ] More compliance (ISO 27001, NIST, FedRAMP, CCPA)
 - [ ] Multi-language (Spanish, French, German)
 - [ ] Jira/Linear integration
