@@ -795,6 +795,354 @@ Replace `claude` with `qwen` or `gemini` to use different AI assistants!
 
 ---
 
+## 💼 Practical Workflow Examples
+
+###  **Scenario 1: Brand New Healthcare App**
+
+```bash
+# Day 1: Setup (2 minutes)
+cd ~/projects
+mkdir healthtrack-pro && cd healthtrack-pro
+
+# Initialize Flutter project
+flutter create .
+
+# Use healthcare template
+cat > project_description.md < templates/healthcare.md
+
+# Generate PRD with unified CLI
+prprompts auto
+
+# Generate all guides
+prprompts generate
+
+# Result: Ready to start coding with 32 security-audited guides!
+```
+
+### **Scenario 2: Adding PRPROMPTS to Existing Project**
+
+```bash
+# Navigate to your existing Flutter project
+cd ~/projects/my-existing-app
+
+# Create PRD from existing documentation
+prprompts from-files
+# Enter your existing docs when prompted:
+#   docs/requirements.md
+#   docs/architecture.md
+#   docs/api-spec.md
+
+# Review the generated PRD
+cat docs/PRD.md
+
+# Generate PRPROMPTS for existing codebase
+prprompts generate
+
+# Now you have comprehensive guides for your team!
+```
+
+### **Scenario 3: Switching Between AI Assistants**
+
+```bash
+# Check current AI
+prprompts which
+# Output: Current AI: claude
+
+# Try Gemini for faster free generation
+prprompts switch gemini
+# Output: ✓ Default AI set to: gemini
+
+# Generate with Gemini
+prprompts generate
+
+# Switch back to Claude for production
+prprompts switch claude
+
+# Regenerate specific file with Claude
+prprompts gen-file security_and_compliance
+```
+
+### **Scenario 4: Team Onboarding**
+
+```bash
+# New developer joins the team
+
+# 1. Quick diagnosis
+prprompts doctor
+# Checks: Node.js ✓, npm ✓, Claude ✓, Qwen ✗, Gemini ✓
+
+# 2. View project guides
+cd PRPROMPTS
+cat README.md
+
+# 3. Read junior onboarding guide
+cat 07-junior_onboarding.md
+
+# 4. Check security requirements
+cat 16-security_and_compliance.md
+
+# Team member is now productive in < 30 minutes!
+```
+
+### **Scenario 5: Compliance Requirement Change**
+
+```bash
+# Client now requires PCI-DSS compliance
+
+# 1. Update PRD
+vim docs/PRD.md
+# Add: compliance: ["hipaa", "pci-dss", "gdpr"]
+
+# 2. Regenerate affected files
+prprompts gen-file security_and_compliance
+prprompts gen-file api_integration
+prprompts gen-file security_audit
+
+# 3. Review changes
+git diff PRPROMPTS/
+
+# Now you have PCI-DSS patterns integrated!
+```
+
+### **Scenario 6: Multi-Platform Expansion**
+
+```bash
+# Originally mobile-only, now adding Web
+
+# 1. Update PRD platforms
+vim docs/PRD.md
+# Change: platforms: ["ios", "android", "web"]
+
+# 2. Regenerate responsive layout guide
+prprompts gen-file responsive_layout
+
+# 3. Regenerate design system
+prprompts gen-file design_system
+
+# 4. Check web-specific considerations
+cat PRPROMPTS/02-responsive_layout.md | grep -i "web"
+```
+
+### **Scenario 7: Pre-Release Security Audit**
+
+```bash
+# Before releasing to production
+
+# 1. Run security audit checklist
+cat PRPROMPTS/14-security_audit_checklist.md
+
+# 2. Verify compliance
+cat PRPROMPTS/16-security_and_compliance.md
+
+# 3. Check JWT implementation
+grep -r "JWT" lib/ --include="*.dart"
+
+# 4. Validate against PRPROMPTS patterns
+# Review: Are we verifying tokens with public key only?
+# Review: Are we using RS256, not HS256?
+
+# Ship with confidence!
+```
+
+###  **Scenario 8: Quick Template-Based Start**
+
+```bash
+# Starting a fintech app
+
+# Use pre-configured template
+cp templates/fintech.md project_description.md
+
+# Customize for your needs
+vim project_description.md
+
+# Auto-generate PRD
+prprompts auto
+
+# Generate PRPROMPTS
+prprompts generate
+
+# You now have PCI-DSS compliant guides ready!
+```
+
+---
+
+## 📋 Quick Reference Card
+
+### 🆕 Unified CLI Commands (v3.0)
+
+<table>
+<tr>
+<th>Command</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+<tr>
+<td><code>prprompts init</code></td>
+<td>Initialize PRPROMPTS in project</td>
+<td><code>prprompts init</code></td>
+</tr>
+<tr>
+<td><code>prprompts create</code></td>
+<td>Interactive PRD wizard</td>
+<td><code>prprompts create</code></td>
+</tr>
+<tr>
+<td><code>prprompts auto</code></td>
+<td>Auto-generate from description</td>
+<td><code>prprompts auto</code></td>
+</tr>
+<tr>
+<td><code>prprompts from-files</code></td>
+<td>Generate from existing docs</td>
+<td><code>prprompts from-files</code></td>
+</tr>
+<tr>
+<td><code>prprompts analyze</code></td>
+<td>Validate PRD structure</td>
+<td><code>prprompts analyze</code></td>
+</tr>
+<tr>
+<td><code>prprompts generate</code></td>
+<td>Generate all 32 files</td>
+<td><code>prprompts generate</code></td>
+</tr>
+<tr>
+<td><code>prprompts gen-phase-1</code></td>
+<td>Generate Phase 1 only</td>
+<td><code>prprompts gen-phase-1</code></td>
+</tr>
+<tr>
+<td><code>prprompts gen-file</code></td>
+<td>Generate single file</td>
+<td><code>prprompts gen-file bloc_implementation</code></td>
+</tr>
+<tr>
+<td><code>prprompts config</code></td>
+<td>Show configuration</td>
+<td><code>prprompts config</code></td>
+</tr>
+<tr>
+<td><code>prprompts switch</code></td>
+<td>Change default AI</td>
+<td><code>prprompts switch gemini</code></td>
+</tr>
+<tr>
+<td><code>prprompts which</code></td>
+<td>Show current AI</td>
+<td><code>prprompts which</code></td>
+</tr>
+<tr>
+<td><code>prprompts doctor</code></td>
+<td>Diagnose issues</td>
+<td><code>prprompts doctor</code></td>
+</tr>
+<tr>
+<td><code>prprompts update</code></td>
+<td>Update to latest version</td>
+<td><code>prprompts update</code></td>
+</tr>
+<tr>
+<td><code>prprompts version</code></td>
+<td>Show version info</td>
+<td><code>prprompts version</code></td>
+</tr>
+<tr>
+<td><code>prprompts help</code></td>
+<td>Show help</td>
+<td><code>prprompts help</code></td>
+</tr>
+</table>
+
+### 📝 Common Workflows
+
+**Complete Setup (60 seconds):**
+```bash
+prprompts auto && prprompts generate
+```
+
+**Healthcare App:**
+```bash
+cp templates/healthcare.md project_description.md
+prprompts auto && prprompts generate
+```
+
+**Fintech App:**
+```bash
+cp templates/fintech.md project_description.md
+prprompts auto && prprompts generate
+```
+
+**From Existing Docs:**
+```bash
+prprompts from-files && prprompts generate
+```
+
+**Regenerate Security File:**
+```bash
+prprompts gen-file security_and_compliance
+```
+
+**Switch to Gemini (Free Tier):**
+```bash
+prprompts switch gemini && prprompts generate
+```
+
+**Check Installation:**
+```bash
+prprompts doctor
+```
+
+### 🔄 Upgrade from v2.2 to v3.0
+
+```bash
+# Pull latest
+cd prprompts-flutter-generator
+git pull origin master
+
+# Run smart installer
+bash scripts/smart-install.sh
+
+# Add to PATH
+echo 'export PATH="$HOME/.prprompts/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+# Test unified CLI
+prprompts --version
+prprompts doctor
+```
+
+### 💡 Pro Tips
+
+1. **Tab Completion**: Install shell completions for faster typing
+   ```bash
+   sudo cp completions/prprompts.bash /etc/bash_completion.d/
+   ```
+
+2. **Quick Template**: Use templates for common project types
+   ```bash
+   ls templates/  # See all available templates
+   ```
+
+3. **Selective Regeneration**: Only regenerate files that changed
+   ```bash
+   prprompts gen-file security_and_compliance
+   prprompts gen-file api_integration
+   ```
+
+4. **Multiple AIs**: Install all 3 AIs and switch based on task
+   ```bash
+   prprompts switch gemini  # For free tier
+   prprompts switch claude  # For production quality
+   prprompts switch qwen    # For large codebases
+   ```
+
+5. **Diagnose Issues**: Use doctor command first
+   ```bash
+   prprompts doctor  # Shows what's installed and configured
+   ```
+
+---
+
 ## ❓ FAQ
 
 <details>
@@ -904,7 +1252,16 @@ npm run test:commands     # Command availability
 
 ## 🗺️ Roadmap
 
-### ✅ v2.2 (Current) - Multi-AI Support
+### ✅ v3.0 (Current) - Smart Installation & Unified CLI
+- [x] Smart unified installer with auto-detection
+- [x] Unified CLI wrapper (`prprompts` command)
+- [x] Auto-update system with backup/rollback
+- [x] Shell completions (Bash/Zsh/Fish)
+- [x] Project templates (Healthcare, Fintech, E-Commerce, Generic)
+- [x] Doctor command for diagnostics
+- [x] Enhanced configuration system
+
+### ✅ v2.2 - Multi-AI Support
 - [x] Claude Code, Qwen Code, Gemini CLI support
 - [x] Strict PRP pattern (6 sections)
 - [x] Critical security corrections (JWT, PCI-DSS, HIPAA)
@@ -913,19 +1270,27 @@ npm run test:commands     # Command availability
 - [x] Cross-platform installers
 - [x] Testing framework
 
-### 🚀 v2.3 (Next) - Enhanced Tooling
-- [ ] Example PRPROMPTS (healthcare, fintech, education samples)
+### 🚀 v3.1 (Next) - Enhanced Tooling
 - [ ] VS Code snippets for common patterns
 - [ ] GitHub Actions workflow templates
 - [ ] Interactive demo environment
+- [ ] Example PRPROMPTS (complete healthcare & fintech samples)
+- [ ] Docker support for CI/CD
 
-### 🎯 v3.0 (Future) - Advanced Features
+### 🎯 v3.2 (Future) - IDE Integration
 - [ ] VS Code Extension - Generate from IDE
+- [ ] IntelliJ/Android Studio plugin
 - [ ] Web UI - Browser-based PRD creation
+- [ ] Git hooks integration
+- [ ] Automated validation on PR
+
+### 🌟 v4.0 (Future) - Advanced Features
 - [ ] More compliance (ISO 27001, NIST, FedRAMP, CCPA)
 - [ ] Multi-language (Spanish, French, German)
 - [ ] Jira/Linear integration
 - [ ] AI-powered PRD refinement
+- [ ] Team collaboration features
+- [ ] Analytics and insights dashboard
 
 ---
 
