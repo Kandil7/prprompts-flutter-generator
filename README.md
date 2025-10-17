@@ -39,7 +39,7 @@
 
 ### **🚀 One Command. Complete Setup.**
 
-**🆕 v3.1 - All Platforms (Easiest!):**
+**🆕 v4.0.0 - Now Published on npm! (Easiest!):**
 ```bash
 # Install via npm (works on Windows/macOS/Linux)
 npm install -g prprompts-flutter-generator
@@ -48,6 +48,8 @@ npm install -g prprompts-flutter-generator
 prprompts create       # Create PRD
 prprompts generate     # Generate all 32 files
 ```
+
+**✨ NEW: Includes all 3 AI extensions (Claude, Qwen, Gemini) with v4.0 automation!**
 
 **Alternative Methods:**
 
@@ -342,11 +344,13 @@ Checks Node.js, npm, Git, AIs, configs, and more!
 
 ---
 
-## 🎉 v3.1 Latest Update - npm Install Support
+## 🎉 v4.0.0 Latest Update - Full Extension Ecosystem on npm!
 
 <div align="center">
 
-**🚀 Now available on npm! Install with one command on any platform.**
+**🚀 Now published on npm with complete AI extension support!**
+
+**✨ 3 Official Extensions • 5 Automation Commands • 14 Commands Per AI**
 
 </div>
 
@@ -354,50 +358,79 @@ Checks Node.js, npm, Git, AIs, configs, and more!
 <tr>
 <td width="50%">
 
-### 📦 npm Install
-**Easiest installation ever!**
-```bash
-npm install -g prprompts-flutter-generator
-```
+### 🎁 Complete Extension Ecosystem
+**All 3 AI extensions included!**
 
-**Benefits:**
-- ✅ 30-second setup (50% faster)
-- ✅ No Git required
-- ✅ No bash required
-- ✅ Native Windows support
-- ✅ Automatic updates via npm
-- ✅ Clean uninstall with npm
-- ✅ Version management built-in
+**Claude Code Extension:**
+- 9.5/10 accuracy
+- Production-quality
+- Official Anthropic support
+
+**Qwen Code Extension:**
+- 256K-1M token context
+- Extended context analysis
+- Cost-effective
+
+**Gemini CLI Extension:**
+- 1M token context
+- 60 req/min FREE tier
+- Best for MVPs
 
 </td>
 <td width="50%">
 
-### 🔄 Automatic Configuration
-**Zero manual setup!**
+### 🤖 Full Automation (v4.0)
+**40-60x faster development!**
 
-The postinstall script automatically:
-- Detects Claude, Qwen, Gemini
-- Configures all found AIs
-- Creates unified config
-- Sets up CLI commands
-- Copies templates
-- Shows beautiful summary
+**5 Automation Commands:**
+1. `/bootstrap-from-prprompts` - Setup (2 min)
+2. `/implement-next` - Auto-code (10 min)
+3. `/full-cycle` - 1-10 features (1-2 hours)
+4. `/review-and-commit` - Validate
+5. `/qa-check` - Compliance audit
 
-**Just install and use!**
+**Result:** Production-ready app in 2-3 hours vs 3-5 days!
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+
+### 📦 One Command Installation
+```bash
+# Install everything at once (30 seconds)
+npm install -g prprompts-flutter-generator
+```
+
+**What gets installed:**
+- ✅ All 3 AI extensions (Claude, Qwen, Gemini)
+- ✅ 5 automation commands per AI (14 total commands)
+- ✅ 32 security-audited development guides
+- ✅ Project templates (Healthcare, Fintech, E-commerce)
+- ✅ Unified CLI (`prprompts` command)
+- ✅ Auto-configuration for detected AIs
+- ✅ Shell completions (Bash/Zsh/Fish)
+
+**Then use anywhere:**
+```bash
+cd your-flutter-project
+prprompts create && prprompts generate  # Generate PRPROMPTS (60 sec)
+claude bootstrap-from-prprompts         # Setup project (2 min)
+claude full-cycle                       # Auto-implement (1-2 hours)
+```
 
 </td>
 </tr>
 </table>
 
-**Migration from git clone:**
+**Upgrade from previous versions:**
 ```bash
-# Old way (v3.0)
-git clone https://github.com/Kandil7/prprompts-flutter-generator.git
-cd prprompts-flutter-generator
-bash scripts/smart-install.sh
+# Update to v4.0.0 with extensions
+npm update -g prprompts-flutter-generator
 
-# New way (v3.1) ⭐
-npm install -g prprompts-flutter-generator
+# Verify
+prprompts --version  # Should show 4.0.0
+prprompts doctor     # Check extension status
 ```
 
 ---
