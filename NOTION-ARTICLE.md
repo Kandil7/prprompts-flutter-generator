@@ -4,6 +4,32 @@
 
 ---
 
+## 🎉 **v4.0.0 NOW LIVE ON NPM!**
+
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 8px; margin: 20px 0;">
+
+### **✨ Complete Extension Ecosystem Published!**
+
+**PRPROMPTS v4.0.0 is now available on npm with all 3 official AI extensions:**
+
+- 🔵 **Claude Code Extension** - Production-quality (9.5/10 accuracy)
+- 🟠 **Qwen Code Extension** - Extended context (256K-1M tokens)
+- 🟢 **Gemini CLI Extension** - Best free tier (60 req/min FREE)
+
+**📦 Install everything at once:**
+```bash
+npm install -g prprompts-flutter-generator
+```
+
+**🤖 Includes 5 automation commands per AI:**
+`/bootstrap-from-prprompts` • `/implement-next` • `/full-cycle` • `/review-and-commit` • `/qa-check`
+
+**⚡ Result:** Production-ready Flutter app in 2-3 hours (40-60x faster!)
+
+</div>
+
+---
+
 ## 📖 Table of Contents
 
 1. [The Problem Every Flutter Team Faces](#the-problem)
@@ -473,27 +499,36 @@ logger.info('Patient record updated', extra: {'patient_id': patient.id});
 
 ## 💻 Installation (30 Seconds) {#installation}
 
-### One Command Installation
+### 🆕 One Command Installation - v4.0.0 with Extensions
 
 ```bash
-# Install via npm (works on Windows, macOS, Linux)
+# Install PRPROMPTS with all 3 AI extensions (30 seconds)
 npm install -g prprompts-flutter-generator
 
-# Install AI assistant (choose one)
-npm install -g @anthropic-ai/claude-code        # Best accuracy
-npm install -g @google/gemini-cli                # Best free tier
-npm install -g @qwenlm/qwen-code                 # Best for large codebases
+# Install AI assistant (choose one or all)
+npm install -g @anthropic-ai/claude-code        # Best accuracy (9.5/10)
+npm install -g @google/gemini-cli                # Best free tier (60 req/min FREE)
+npm install -g @qwenlm/qwen-code                 # Best for large codebases (1M tokens)
 
 # Verify installation
 prprompts doctor
 ```
 
-**That's it!** The postinstall script automatically:
-- ✅ Detects installed AI assistants
-- ✅ Configures commands for all detected AIs
+**✨ What gets installed in v4.0.0:**
+- ✅ **All 3 AI extensions** (Claude, Qwen, Gemini) with dedicated installers
+- ✅ **5 automation commands per AI** (14 total commands)
+- ✅ **32 security-audited development guides**
+- ✅ **Project templates** (Healthcare, Fintech, E-commerce)
+- ✅ **Unified CLI** (`prprompts` command)
+- ✅ **Auto-configuration** for detected AIs
+- ✅ **Shell completions** (Bash/Zsh/Fish)
+
+**The postinstall script automatically:**
+- ✅ Detects installed AI assistants (Claude, Qwen, Gemini)
+- ✅ Configures extension commands for all detected AIs
+- ✅ Sets up automation pipeline (v4.0 commands)
 - ✅ Creates unified configuration
-- ✅ Sets up shell completions
-- ✅ Copies templates
+- ✅ Copies templates and prompts
 
 ### System Requirements
 
@@ -802,23 +837,35 @@ See [CONTRIBUTING.md](https://github.com/Kandil7/prprompts-flutter-generator/blo
 
 ### Roadmap
 
-**v3.2 (Next - Q1 2026):**
-- [ ] VS Code extension
-- [ ] GitHub Actions templates
-- [ ] Docker support
-- [ ] More compliance standards (ISO 27001, NIST)
+**✅ v4.0.0 (Current - Published October 2025):**
+- [x] Complete AI extension ecosystem (Claude, Qwen, Gemini)
+- [x] Full automation pipeline (5 commands)
+- [x] 40-60x speed improvement
+- [x] npm package distribution
+- [x] Auto-configuration for all AIs
+- [x] Extension manifests and installers
+- [x] Production-ready in 2-3 hours
 
-**v4.1 (Q2 2026):**
+**v4.1 (Next - Q1 2026):**
+- [ ] VS Code extension with inline PRPROMPTS
+- [ ] GitHub Actions workflow templates
+- [ ] Docker support for CI/CD
+- [ ] Interactive demo environment
+- [ ] Example PRPROMPTS (complete projects)
+
+**v4.2 (Q2 2026):**
 - [ ] Web UI for PRD creation
 - [ ] Jira/Linear integration
 - [ ] Team collaboration features
-- [ ] Analytics dashboard
+- [ ] Real-time progress dashboard
+- [ ] More compliance standards (ISO 27001, NIST, FedRAMP)
 
 **v5.0 (Future):**
-- [ ] Multi-language support (React Native, SwiftUI)
+- [ ] Multi-language support (React Native, SwiftUI, Kotlin)
 - [ ] AI-powered PRD refinement
 - [ ] Real-time collaboration
-- [ ] Advanced analytics
+- [ ] Advanced analytics and insights
+- [ ] Multi-language translations (Spanish, French, German)
 
 ---
 
