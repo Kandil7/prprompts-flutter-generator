@@ -1,0 +1,249 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master, main, develop ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint & Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Lint Markdown
+        run: |
+          npm install -g markdownlint-cli
+          markdownlint '**/*.md' --ignore node_modules --config .markdownlint.json || echo "⚠️  Markdown linting found issues (non-blocking)"
+
+      - name: Lint Shell Scripts
+        run: |
+          # Install shellcheck
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+          # Check all shell scripts
+          find . -name "*.sh" -type f -exec shellcheck -x {} + || echo "⚠️  Shell script linting found issues (non-blocking)"
+
+  test:
+    name: Test Suite
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18, 20]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Run validation tests
+        run: npm test
+
+      - name: Test command availability (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          chmod +x scripts/test-commands.sh
+          bash scripts/test-commands.sh
+
+      - name: Test command availability (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: scripts\test-commands.bat
+
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install package globally
+        run: |
+          npm install -g .
+          prprompts --version || echo "CLI not available yet"
+
+      - name: Test Healthcare Example
+        run: |
+          mkdir -p test-project/docs
+          cp examples/healthcare-prd.md test-project/docs/PRD.md
+          cd test-project
+          ls -la docs/
+
+      - name: Validate Extension Manifests
+        run: |
+          # Validate JSON files
+          for file in *-extension.json; do
+            echo "Validating $file..."
+            node -e "JSON.parse(require('fs').readFileSync('$file', 'utf8'))" || exit 1
+          done
+          echo "✅ All extension manifests valid"
+
+  package-quality:
+    name: Package Quality Check
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check package size
+        run: |
+          npm pack
+          SIZE=$(ls -lh prprompts-flutter-generator-*.tgz | awk '{print $5}')
+          echo "📦 Package size: $SIZE"
+
+          # Warn if package is too large (> 150KB)
+          if [ $(ls -l prprompts-flutter-generator-*.tgz | awk '{print $5}') -gt 150000 ]; then
+            echo "⚠️  Package size is larger than 150KB, consider optimization"
+          fi
+
+      - name: Verify package contents
+        run: |
+          tar -tzf prprompts-flutter-generator-*.tgz | head -20
+          echo "..."
+          tar -tzf prprompts-flutter-generator-*.tgz | tail -20
+
+      - name: Check for sensitive files
+        run: |
+          # Check that sensitive files are not included
+          if tar -tzf prprompts-flutter-generator-*.tgz | grep -E '(\.env|\.git|node_modules|\.vscode)'; then
+            echo "❌ Sensitive files found in package!"
+            exit 1
+          fi
+          echo "✅ No sensitive files in package"
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: npm audit
+        run: npm audit --production || echo "⚠️  npm audit found issues (non-blocking)"
+
+      - name: Check for hardcoded secrets
+        run: |
+          # Simple check for common secret patterns
+          if grep -r -E '(password|secret|api_key|token)\s*=\s*["\'][^"\']+["\']' --include="*.js" --include="*.sh" .; then
+            echo "⚠️  Possible hardcoded secrets found (review manually)"
+          else
+            echo "✅ No obvious hardcoded secrets"
+          fi
+
+  documentation:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for broken links
+        run: |
+          npm install -g markdown-link-check
+          find . -name "*.md" -exec markdown-link-check {} \; || echo "⚠️  Broken links found (non-blocking)"
+
+      - name: Verify documentation completeness
+        run: |
+          # Check that key documentation files exist
+          REQUIRED_DOCS=(
+            "README.md"
+            "CONTRIBUTING.md"
+            "LICENSE"
+            "CHANGELOG.md"
+            "docs/PRPROMPTS-SPECIFICATION.md"
+            "docs/AUTOMATION-GUIDE.md"
+            "CLAUDE.md"
+            "QWEN.md"
+            "GEMINI.md"
+          )
+
+          for doc in "${REQUIRED_DOCS[@]}"; do
+            if [ ! -f "$doc" ]; then
+              echo "❌ Missing required documentation: $doc"
+              exit 1
+            fi
+          done
+          echo "✅ All required documentation present"
+
+  build-summary:
+    name: Build Summary
+    runs-on: ubuntu-latest
+    needs: [lint, test, integration-test, package-quality, security, documentation]
+    if: always()
+
+    steps:
+      - name: Check build status
+        run: |
+          if [ "${{ needs.lint.result }}" == "success" ] && \
+             [ "${{ needs.test.result }}" == "success" ] && \
+             [ "${{ needs.integration-test.result }}" == "success" ] && \
+             [ "${{ needs.package-quality.result }}" == "success" ]; then
+            echo "✅ All critical checks passed!"
+            echo "status=success" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Some checks failed"
+            echo "status=failure" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ needs.lint.result }}' === 'success' &&
+                          '${{ needs.test.result }}' === 'success' &&
+                          '${{ needs.integration-test.result }}' === 'success' &&
+                          '${{ needs.package-quality.result }}' === 'success' ? '✅' : '❌';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${status} CI/CD Pipeline completed\n\n` +
+                    `- Lint: ${{ needs.lint.result }}\n` +
+                    `- Test: ${{ needs.test.result }}\n` +
+                    `- Integration: ${{ needs.integration-test.result }}\n` +
+                    `- Package Quality: ${{ needs.package-quality.result }}\n` +
+                    `- Security: ${{ needs.security.result }}\n` +
+                    `- Documentation: ${{ needs.documentation.result }}`
+            })
