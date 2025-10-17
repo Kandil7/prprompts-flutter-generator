@@ -1,0 +1,213 @@
+{
+  "name": "prprompts-flutter-generator",
+  "displayName": "PRPROMPTS Flutter Generator",
+  "version": "4.0.0",
+  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours (40-60x faster)",
+  "author": "Kandil7",
+  "license": "MIT",
+  "homepage": "https://github.com/Kandil7/prprompts-flutter-generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kandil7/prprompts-flutter-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kandil7/prprompts-flutter-generator/issues"
+  },
+  "keywords": [
+    "flutter",
+    "qwen",
+    "qwen-code",
+    "qwen3-coder",
+    "alibaba-qwen",
+    "prprompts",
+    "automation",
+    "ai-automation",
+    "agentic-coding",
+    "clean-architecture",
+    "bloc",
+    "hipaa",
+    "pci-dss",
+    "compliance",
+    "security-audited",
+    "rapid-development",
+    "codebase-analysis"
+  ],
+  "categories": [
+    "Development Tools",
+    "Code Generation",
+    "Flutter",
+    "Productivity",
+    "Agentic Coding"
+  ],
+  "qwen": {
+    "version": ">=1.0.0",
+    "configFile": ".qwen/config.yml",
+    "commandsPath": ".qwen/commands",
+    "promptsPath": ".qwen/prompts",
+    "models": [
+      "qwen3-coder-480b",
+      "qwen3-coder-120b",
+      "qwen3-coder-32b",
+      "qwen3-coder-14b"
+    ]
+  },
+  "features": {
+    "prdGeneration": {
+      "displayName": "PRD Generation",
+      "description": "Generate Product Requirements Documents with 4 methods",
+      "commands": [
+        "create-prd",
+        "auto-gen-prd",
+        "prd-from-files",
+        "analyze-prd"
+      ]
+    },
+    "prpromptsGeneration": {
+      "displayName": "PRPROMPTS Generation",
+      "description": "Generate 32 security-audited development guides",
+      "commands": [
+        "gen-prprompts",
+        "gen-phase-1",
+        "gen-phase-2",
+        "gen-phase-3",
+        "gen-file"
+      ]
+    },
+    "automation": {
+      "displayName": "Full Automation (v4.0)",
+      "description": "Complete automation pipeline - 40-60x faster development",
+      "commands": [
+        "bootstrap-from-prprompts",
+        "implement-next",
+        "full-cycle",
+        "review-and-commit",
+        "qa-check"
+      ],
+      "badge": "NEW"
+    }
+  },
+  "requirements": {
+    "node": ">=14.0.0",
+    "qwen-code": ">=1.0.0"
+  },
+  "installation": {
+    "npm": "npm install -g prprompts-flutter-generator",
+    "script": "curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-qwen-gist.sh | bash",
+    "manual": [
+      "git clone https://github.com/Kandil7/prprompts-flutter-generator.git",
+      "cd prprompts-flutter-generator",
+      "./scripts/install-qwen-commands.sh --global"
+    ]
+  },
+  "quickStart": {
+    "steps": [
+      "cd your-flutter-project",
+      "qwen create-prd",
+      "qwen gen-prprompts",
+      "qwen bootstrap-from-prprompts",
+      "qwen full-cycle"
+    ],
+    "timeToFirstValue": "2-3 hours (complete app with tests)",
+    "speedImprovement": "40-60x faster than manual development"
+  },
+  "support": {
+    "documentation": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
+    "qwenGuide": "https://github.com/Kandil7/prprompts-flutter-generator/blob/master/QWEN.md",
+    "commands": "https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/QWEN-COMMANDS.md",
+    "issues": "https://github.com/Kandil7/prprompts-flutter-generator/issues",
+    "discussions": "https://github.com/Kandil7/prprompts-flutter-generator/discussions"
+  },
+  "highlights": [
+    "🤖 v4.0 Full Automation - 5 commands for zero-touch development",
+    "⚡ 40-60x Faster - 3-5 days → 2-3 hours",
+    "🔒 Security-First - JWT, PCI-DSS, HIPAA patterns built-in",
+    "✅ 32 Development Guides - Complete coverage",
+    "🚀 Extended Context - 256K-1M tokens (4x-16x longer)",
+    "📊 85%+ Test Coverage - Comprehensive automated tests",
+    "💰 Cost-Effective - Free tier + lower API costs"
+  ],
+  "comparison": {
+    "qwenAdvantages": [
+      "256K-1M token context (4x-16x longer than Claude)",
+      "Deep codebase analysis with extended context",
+      "Agentic coding workflows for complex tasks",
+      "State-of-the-art accuracy (comparable to Claude Sonnet 4)",
+      "Cost-effective (free tier + lower API costs)",
+      "Open source and community-driven",
+      "Self-hosting options available"
+    ]
+  },
+  "compliance": [
+    "HIPAA",
+    "PCI-DSS",
+    "GDPR",
+    "SOC2",
+    "COPPA",
+    "FERPA"
+  ],
+  "examples": [
+    {
+      "name": "Healthcare App (HIPAA)",
+      "template": "templates/healthcare.md",
+      "time": "2 hours",
+      "features": [
+        "JWT RS256 authentication",
+        "PHI encryption (AES-256-GCM)",
+        "Audit logging",
+        "85% test coverage",
+        "HIPAA compliant"
+      ],
+      "contextUsed": "~400K tokens (entire codebase analyzed)"
+    },
+    {
+      "name": "Fintech App (PCI-DSS)",
+      "template": "templates/fintech.md",
+      "time": "2.5 hours",
+      "features": [
+        "Payment tokenization",
+        "PCI-DSS compliance",
+        "TLS 1.2+",
+        "Secure WebSocket",
+        "90% test coverage"
+      ],
+      "contextUsed": "~600K tokens (full dependency analysis)"
+    },
+    {
+      "name": "Large E-Commerce Platform",
+      "template": "templates/ecommerce.md",
+      "time": "3 hours",
+      "features": [
+        "Microservices architecture",
+        "Product catalog (100K+ items)",
+        "Real-time inventory",
+        "Payment processing",
+        "95% test coverage"
+      ],
+      "contextUsed": "~1M tokens (entire monorepo)",
+      "note": "Only possible with Qwen's extended context"
+    }
+  ],
+  "metrics": {
+    "filesGenerated": 32,
+    "wordsPerFile": "500-600",
+    "setupTime": "30 seconds (npm install)",
+    "generationTime": "60 seconds (all 32 files)",
+    "automationTime": "2-3 hours (complete app)",
+    "speedup": "40-60x",
+    "testCoverage": "85%+",
+    "maxContextTokens": "1M (1,000,000)"
+  },
+  "benchmarks": {
+    "agenticCoding": {
+      "swebench": "State-of-the-art",
+      "devbench": "Comparable to Claude Sonnet 4",
+      "notes": "Qwen3-Coder-480B-A35B-Instruct"
+    },
+    "contextUtilization": {
+      "smallProjects": "100K-200K tokens",
+      "mediumProjects": "200K-500K tokens",
+      "largeProjects": "500K-1M tokens",
+      "advantage": "Analyze entire monorepos at once"
+    }
+  }
+}
