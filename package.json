@@ -29,16 +29,23 @@
     "url": "https://github.com/Kandil7/prprompts-flutter-generator/issues"
   },
   "homepage": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
+  "bin": {
+    "prprompts": "./bin/prprompts"
+  },
   "scripts": {
     "test": "bash ./scripts/test-validation.sh",
     "test:quick": "echo \"✅ Quick validation: Checking prompt files...\" && ls .claude/prompts/*.md | wc -l",
     "test:commands": "bash ./scripts/test-commands.sh",
     "setup": "./scripts/setup.sh",
+    "smart-install": "bash ./scripts/smart-install.sh",
     "generate": "./scripts/generate-prprompts.sh all",
     "install-claude": "./scripts/install-commands.sh --global",
     "install-qwen": "./scripts/install-qwen-commands.sh --global",
     "install-gemini": "./scripts/install-gemini-commands.sh --global",
-    "install-all": "./scripts/install-all.sh --global"
+    "install-all": "./scripts/install-all.sh --global",
+    "update": "node ./lib/updater.js update",
+    "check-updates": "node ./lib/updater.js check",
+    "postinstall": "echo '✅ PRPROMPTS installed! Run: npm run smart-install'"
   },
   "peerDependencies": {
     "@anthropic-ai/claude-code": ">=1.0.0"

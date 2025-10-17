@@ -3,10 +3,11 @@
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-2.2-success)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-3.0-success)](docs/NEW-FEATURES-V3.md)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
 [![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#security--compliance)
+[![New](https://img.shields.io/badge/NEW-Smart%20Installer-blue)](#v30-new-features)
 
 [![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://claude.ai/code)
 [![Qwen Code](https://img.shields.io/badge/Qwen-Code-orange)](QWEN.md)
@@ -27,7 +28,7 @@
 
 **Automatically generate customized PRPROMPTS files for Flutter projects with strict security patterns, Clean Architecture, and compliance-aware guidance.**
 
-**⏱️ Total Setup Time: 90 seconds** • **🎯 Zero Config Required** • **🔒 Security Audited**
+**⏱️ Total Setup Time: 60 seconds** • **🎯 Smart Auto-Installer** • **🔒 Security Audited** • **✨ NEW: Unified CLI**
 
 </div>
 
@@ -36,10 +37,109 @@
 ### **🚀 One Command. Complete Setup.**
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.sh | bash
+# Smart installer - Auto-detects everything!
+curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
+
+# Then use the unified CLI
+prprompts create      # Create PRD
+prprompts generate    # Generate all 32 files
 ```
 
-[📦 Quick Install](#installation) • [📖 Full Documentation](docs/PRPROMPTS-SPECIFICATION.md) • [⭐ Examples](#examples) • [🧪 Test It](TESTING.md)
+[📦 Quick Install](#installation) • [✨ v3.0 Features](#v30-new-features) • [📖 Documentation](docs/PRPROMPTS-SPECIFICATION.md) • [⭐ Examples](#examples)
+
+</div>
+
+---
+
+## ✨ v3.0 New Features
+
+<div align="center">
+
+**🎉 Major update with powerful installation improvements!**
+
+</div>
+
+<table>
+<tr>
+<td width="50%">
+
+### 🤖 Smart Unified Installer
+**One command to install everything**
+- Auto-detects your OS and AI assistants
+- Offers to install missing AIs
+- Installs commands for all detected AIs
+- Creates unified configuration
+- Beautiful interactive prompts
+
+</td>
+<td width="50%">
+
+### 🔧 Unified CLI (`prprompts` command)
+**Single interface for all AIs**
+```bash
+prprompts create     # Instead of claude/qwen/gemini
+prprompts generate   # Uses your preferred AI
+prprompts switch ai  # Change default AI
+prprompts doctor     # Diagnose issues
+```
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🔄 Auto-Update System
+**Stay current effortlessly**
+- One-command updates from GitHub
+- Automatic backup before update
+- Rollback capability
+- Version checking
+
+```bash
+prprompts update     # Update to latest
+```
+
+</td>
+<td width="50%">
+
+### 📦 Project Templates
+**Quick start for common projects**
+- Healthcare (HIPAA-compliant)
+- Fintech (PCI-DSS compliant)
+- E-Commerce
+- Generic apps
+
+Pre-configured with best practices!
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🐚 Shell Completions
+**Tab completion for faster workflow**
+- Bash, Zsh, Fish support
+- Command completion
+- AI name completion
+- File name completion
+
+</td>
+<td width="50%">
+
+### 🩺 Doctor Command
+**Instant diagnostics**
+```bash
+prprompts doctor
+```
+Checks Node.js, npm, Git, AIs, configs, and more!
+
+</td>
+</tr>
+</table>
+
+<div align="center">
+
+**[📖 Read Full v3.0 Feature Guide](docs/NEW-FEATURES-V3.md)**
 
 </div>
 
@@ -331,7 +431,7 @@ print('Patient record updated: ${patient.id}');
 
 ### ⚡ Quick Install (Recommended)
 
-**One command installs everything:**
+**🆕 v3.0 Smart Installer - Auto-detects everything:**
 
 <table>
 <tr>
@@ -343,6 +443,10 @@ print('Patient record updated: ${patient.id}');
 <td>
 
 ```bash
+# Smart installer (v3.0) - Recommended!
+curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
+
+# Or classic installer (v2.2)
 curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.sh | bash
 ```
 
@@ -370,7 +474,19 @@ curl -o %TEMP%\setup-prprompts.bat https://raw.githubusercontent.com/Kandil7/prp
 </tr>
 </table>
 
-**That's it!** Now run `claude create-prd` from any directory.
+**That's it!** Now run `prprompts create` or `claude create-prd` from any directory.
+
+**🆕 v3.0 Unified CLI:**
+```bash
+# Add to PATH (one-time)
+echo 'export PATH="$HOME/.prprompts/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+# Use unified commands
+prprompts create      # Create PRD with your default AI
+prprompts generate    # Generate all 32 PRPROMPTS
+prprompts doctor      # Diagnose any issues
+```
 
 ### 🔧 Manual Install (For Advanced Users)
 

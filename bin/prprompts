@@ -1,0 +1,407 @@
+#!/usr/bin/env node
+
+/**
+ * PRPROMPTS CLI Wrapper
+ * Unified interface for Claude Code, Qwen Code, and Gemini CLI
+ * Version: 3.0.0
+ */
+
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+// Configuration
+const VERSION = '3.0.0';
+const CONFIG_DIR = path.join(os.homedir(), '.prprompts');
+const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+
+// Colors
+const colors = {
+  reset: '\x1b[0m',
+  bright: '\x1b[1m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m'
+};
+
+// Helper: Colored output
+function colorize(text, color) {
+  return `${colors[color] || ''}${text}${colors.reset}`;
+}
+
+// Helper: Check if command exists
+function commandExists(cmd) {
+  try {
+    execSync(`command -v ${cmd}`, { stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Load configuration
+function loadConfig() {
+  if (!fs.existsSync(CONFIG_FILE)) {
+    return {
+      version: VERSION,
+      default_ai: 'claude',
+      ais: {
+        claude: { enabled: commandExists('claude') },
+        qwen: { enabled: commandExists('qwen') },
+        gemini: { enabled: commandExists('gemini') }
+      },
+      features: {
+        auto_update: true,
+        verbose: true
+      }
+    };
+  }
+
+  try {
+    return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+  } catch (error) {
+    console.error(colorize('Error loading config:', 'red'), error.message);
+    process.exit(1);
+  }
+}
+
+// Save configuration
+function saveConfig(config) {
+  try {
+    fs.mkdirSync(CONFIG_DIR, { recursive: true });
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
+  } catch (error) {
+    console.error(colorize('Error saving config:', 'red'), error.message);
+  }
+}
+
+// Get best available AI
+function getBestAI(config) {
+  const available = Object.entries(config.ais)
+    .filter(([_, ai]) => ai.enabled)
+    .map(([name]) => name);
+
+  if (available.length === 0) {
+    console.error(colorize('✗ No AI assistants found!', 'red'));
+    console.error(colorize('\nInstall at least one:', 'yellow'));
+    console.error('  npm install -g @anthropic-ai/claude-code');
+    console.error('  npm install -g @google/gemini-cli');
+    console.error('\nOr run: prprompts install');
+    process.exit(1);
+  }
+
+  // Return default if available, otherwise first available
+  if (available.includes(config.default_ai)) {
+    return config.default_ai;
+  }
+  return available[0];
+}
+
+// Execute AI command
+function execAI(ai, args) {
+  const command = `${ai} ${args.join(' ')}`;
+
+  try {
+    execSync(command, { stdio: 'inherit' });
+  } catch (error) {
+    process.exit(error.status || 1);
+  }
+}
+
+// Commands
+
+function showHelp() {
+  console.log(`
+${colorize('PRPROMPTS CLI', 'magenta')} ${colorize(`v${VERSION}`, 'cyan')}
+${colorize('Unified interface for Flutter PRPROMPTS generation', 'cyan')}
+
+${colorize('USAGE:', 'bright')}
+  prprompts <command> [options]
+
+${colorize('COMMANDS:', 'bright')}
+  ${colorize('init', 'green')}              Initialize PRPROMPTS in current project
+  ${colorize('create', 'green')}            Create PRD interactively (alias: create-prd)
+  ${colorize('auto', 'green')}              Auto-generate PRD from description
+  ${colorize('from-files', 'green')}        Generate PRD from existing markdown files
+  ${colorize('analyze', 'green')}           Validate and analyze PRD
+  ${colorize('generate', 'green')}          Generate all 32 PRPROMPTS (alias: gen)
+  ${colorize('gen-phase-1', 'green')}       Generate Phase 1: Core Architecture
+  ${colorize('gen-phase-2', 'green')}       Generate Phase 2: Quality & Security
+  ${colorize('gen-phase-3', 'green')}       Generate Phase 3: Demo & Learning
+  ${colorize('gen-file', 'green')} <name>   Generate single PRPROMPTS file
+
+${colorize('CONFIGURATION:', 'bright')}
+  ${colorize('config', 'green')}            Show current configuration
+  ${colorize('switch', 'green')} <ai>       Switch default AI (claude|qwen|gemini)
+  ${colorize('which', 'green')}             Show which AI will be used
+  ${colorize('doctor', 'green')}            Diagnose installation issues
+
+${colorize('MAINTENANCE:', 'bright')}
+  ${colorize('update', 'green')}            Update PRPROMPTS to latest version
+  ${colorize('version', 'green')}           Show version information
+  ${colorize('help', 'green')}              Show this help message
+
+${colorize('EXAMPLES:', 'bright')}
+  ${colorize('prprompts init', 'cyan')}              # Initialize project
+  ${colorize('prprompts create', 'cyan')}            # Create PRD interactively
+  ${colorize('prprompts generate', 'cyan')}          # Generate all PRPROMPTS
+  ${colorize('prprompts switch gemini', 'cyan')}     # Use Gemini CLI
+  ${colorize('prprompts doctor', 'cyan')}            # Check installation
+
+${colorize('DOCUMENTATION:', 'bright')}
+  https://github.com/Kandil7/prprompts-flutter-generator
+
+${colorize('SUPPORT:', 'bright')}
+  https://github.com/Kandil7/prprompts-flutter-generator/issues
+`);
+}
+
+function showVersion() {
+  const config = loadConfig();
+  const ai = getBestAI(config);
+
+  console.log(`${colorize('PRPROMPTS CLI', 'magenta')} v${VERSION}`);
+  console.log(`${colorize('Default AI:', 'cyan')} ${ai}`);
+  console.log('');
+  console.log(colorize('Installed AI assistants:', 'cyan'));
+
+  Object.entries(config.ais).forEach(([name, info]) => {
+    const status = info.enabled
+      ? colorize('✓', 'green')
+      : colorize('✗', 'red');
+    console.log(`  ${status} ${name}`);
+  });
+}
+
+function showConfig() {
+  const config = loadConfig();
+  console.log(colorize('\nCurrent Configuration:', 'cyan'));
+  console.log(JSON.stringify(config, null, 2));
+  console.log(colorize(`\nConfig file: ${CONFIG_FILE}`, 'yellow'));
+}
+
+function switchAI(newAI) {
+  const config = loadConfig();
+
+  if (!['claude', 'qwen', 'gemini'].includes(newAI)) {
+    console.error(colorize('✗ Invalid AI. Choose: claude, qwen, or gemini', 'red'));
+    process.exit(1);
+  }
+
+  if (!config.ais[newAI]?.enabled) {
+    console.error(colorize(`✗ ${newAI} is not installed`, 'red'));
+    console.error(colorize('\nInstall it first:', 'yellow'));
+    if (newAI === 'claude') {
+      console.error('  npm install -g @anthropic-ai/claude-code');
+    } else if (newAI === 'gemini') {
+      console.error('  npm install -g @google/gemini-cli');
+    } else {
+      console.error('  See: https://github.com/QwenLM/qwen-code');
+    }
+    process.exit(1);
+  }
+
+  config.default_ai = newAI;
+  saveConfig(config);
+  console.log(colorize(`✓ Default AI set to: ${newAI}`, 'green'));
+}
+
+function showWhich() {
+  const config = loadConfig();
+  const ai = getBestAI(config);
+  console.log(colorize(`Current AI: ${ai}`, 'cyan'));
+
+  // Show command that will be executed
+  const testCmd = `${ai} --version`;
+  try {
+    const version = execSync(testCmd, { encoding: 'utf8' }).trim();
+    console.log(colorize(`Version: ${version}`, 'cyan'));
+  } catch {
+    console.log(colorize('Version: unknown', 'yellow'));
+  }
+}
+
+function runDoctor() {
+  console.log(colorize('\n🔍 PRPROMPTS Installation Diagnostics\n', 'cyan'));
+
+  // Check Node.js
+  console.log(colorize('Node.js:', 'bright'));
+  try {
+    const nodeVersion = execSync('node --version', { encoding: 'utf8' }).trim();
+    console.log(colorize(`  ✓ ${nodeVersion}`, 'green'));
+  } catch {
+    console.log(colorize('  ✗ Not found', 'red'));
+  }
+
+  // Check npm
+  console.log(colorize('npm:', 'bright'));
+  try {
+    const npmVersion = execSync('npm --version', { encoding: 'utf8' }).trim();
+    console.log(colorize(`  ✓ ${npmVersion}`, 'green'));
+  } catch {
+    console.log(colorize('  ✗ Not found', 'red'));
+  }
+
+  // Check Git
+  console.log(colorize('Git:', 'bright'));
+  try {
+    const gitVersion = execSync('git --version', { encoding: 'utf8' }).trim();
+    console.log(colorize(`  ✓ ${gitVersion}`, 'green'));
+  } catch {
+    console.log(colorize('  ⚠ Not found (optional)', 'yellow'));
+  }
+
+  // Check AI assistants
+  console.log(colorize('\nAI Assistants:', 'bright'));
+
+  ['claude', 'qwen', 'gemini'].forEach(ai => {
+    if (commandExists(ai)) {
+      try {
+        const version = execSync(`${ai} --version`, { encoding: 'utf8' }).trim();
+        console.log(colorize(`  ✓ ${ai}: ${version}`, 'green'));
+
+        // Check config
+        const configPath = path.join(os.homedir(), '.config', ai);
+        if (fs.existsSync(configPath)) {
+          console.log(colorize(`    ✓ Config: ${configPath}`, 'green'));
+        } else {
+          console.log(colorize(`    ⚠ Config not found: ${configPath}`, 'yellow'));
+        }
+      } catch {
+        console.log(colorize(`  ✓ ${ai}: installed (version unknown)`, 'green'));
+      }
+    } else {
+      console.log(colorize(`  ✗ ${ai}: not installed`, 'red'));
+    }
+  });
+
+  // Check PRPROMPTS config
+  console.log(colorize('\nPRPROMPTS Configuration:', 'bright'));
+  if (fs.existsSync(CONFIG_FILE)) {
+    console.log(colorize(`  ✓ Config file: ${CONFIG_FILE}`, 'green'));
+    const config = loadConfig();
+    console.log(colorize(`  ✓ Default AI: ${config.default_ai}`, 'green'));
+  } else {
+    console.log(colorize(`  ⚠ Config not found: ${CONFIG_FILE}`, 'yellow'));
+    console.log(colorize('    Run: prprompts init', 'cyan'));
+  }
+
+  console.log('');
+}
+
+function initProject() {
+  const config = loadConfig();
+  const ai = getBestAI(config);
+
+  console.log(colorize('\n🚀 Initializing PRPROMPTS project\n', 'cyan'));
+  console.log(colorize(`Using AI: ${ai}`, 'cyan'));
+  console.log('');
+
+  // Create docs directory
+  if (!fs.existsSync('docs')) {
+    fs.mkdirSync('docs', { recursive: true });
+    console.log(colorize('✓ Created docs/ directory', 'green'));
+  }
+
+  // Check for project_description.md
+  if (!fs.existsSync('project_description.md') && !fs.existsSync('docs/PRD.md')) {
+    console.log(colorize('\n📝 No PRD found. Let\'s create one!\n', 'yellow'));
+    console.log('Choose a method:');
+    console.log('  1) Interactive wizard (10 questions)');
+    console.log('  2) Auto-generate from description');
+    console.log('  3) Skip for now');
+    console.log('');
+
+    // For now, just show instructions
+    console.log(colorize('Run one of these commands:', 'cyan'));
+    console.log(`  ${ai} create-prd       # Interactive wizard`);
+    console.log(`  ${ai} auto-gen-prd     # Auto-generate`);
+  } else {
+    console.log(colorize('✓ PRD found', 'green'));
+  }
+
+  console.log('');
+  console.log(colorize('Next steps:', 'cyan'));
+  console.log(`  1. prprompts create    # Create PRD`);
+  console.log(`  2. prprompts generate  # Generate PRPROMPTS`);
+  console.log('');
+}
+
+// Main command router
+function main() {
+  const args = process.argv.slice(2);
+  const command = args[0];
+
+  // Handle help/version/no command
+  if (!command || command === 'help' || command === '--help' || command === '-h') {
+    showHelp();
+    return;
+  }
+
+  if (command === 'version' || command === '--version' || command === '-v') {
+    showVersion();
+    return;
+  }
+
+  // Handle special commands
+  switch (command) {
+    case 'config':
+      showConfig();
+      return;
+
+    case 'switch':
+      switchAI(args[1]);
+      return;
+
+    case 'which':
+      showWhich();
+      return;
+
+    case 'doctor':
+      runDoctor();
+      return;
+
+    case 'init':
+      initProject();
+      return;
+
+    case 'update':
+      console.log(colorize('🔄 Checking for updates...', 'cyan'));
+      console.log(colorize('Feature coming soon!', 'yellow'));
+      return;
+  }
+
+  // Load config and get AI
+  const config = loadConfig();
+  const ai = getBestAI(config);
+
+  // Map user-friendly commands to AI commands
+  const commandMap = {
+    'create': 'create-prd',
+    'auto': 'auto-gen-prd',
+    'from-files': 'prd-from-files',
+    'analyze': 'analyze-prd',
+    'generate': 'gen-prprompts',
+    'gen': 'gen-prprompts',
+    'gen-phase-1': 'gen-phase-1',
+    'gen-phase-2': 'gen-phase-2',
+    'gen-phase-3': 'gen-phase-3',
+    'gen-file': 'gen-file'
+  };
+
+  const aiCommand = commandMap[command] || command;
+  const aiArgs = [aiCommand, ...args.slice(1)];
+
+  if (config.features?.verbose) {
+    console.log(colorize(`→ Using ${ai}`, 'cyan'));
+  }
+
+  execAI(ai, aiArgs);
+}
+
+// Run
+main();
