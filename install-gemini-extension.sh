@@ -96,30 +96,61 @@ echo -e "${YELLOW}🔌 Registering extension with Gemini CLI...${NC}"
 
 # Create extensions registry if it doesn't exist
 EXTENSIONS_FILE="$GEMINI_CONFIG_DIR/extensions.json"
-if [ ! -f "$EXTENSIONS_FILE" ]; then
-    echo '{"extensions": []}' > "$EXTENSIONS_FILE"
-fi
 
 # Get the absolute path to this installation
 INSTALL_PATH="$SCRIPT_DIR"
 
-# Update extensions registry
-EXTENSION_ENTRY="{\"name\":\"prprompts-flutter-generator\",\"displayName\":\"PRPROMPTS Flutter Generator\",\"version\":\"4.0.0\",\"path\":\"$INSTALL_PATH\",\"enabled\":true,\"installedAt\":\"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"}"
+# Create the extension entry using Node.js (most reliable cross-platform)
+node -e "
+const fs = require('fs');
+const path = require('path');
 
-# Check if extension is already registered
-if grep -q "prprompts-flutter-generator" "$EXTENSIONS_FILE" 2>/dev/null; then
-    # Update existing entry
-    cat "$EXTENSIONS_FILE" | jq --argjson ext "$EXTENSION_ENTRY" '.extensions = [.extensions[] | select(.name != "prprompts-flutter-generator")] + [$ext]' > "$EXTENSIONS_FILE.tmp" 2>/dev/null && mv "$EXTENSIONS_FILE.tmp" "$EXTENSIONS_FILE" || {
-        # Fallback if jq is not available
-        echo "  Note: jq not found, skipping registry update"
+const extensionsFile = process.argv[1];
+const installPath = process.argv[2];
+
+// Create or read existing extensions file
+let data = { extensions: [] };
+if (fs.existsSync(extensionsFile)) {
+    try {
+        data = JSON.parse(fs.readFileSync(extensionsFile, 'utf8'));
+    } catch (e) {
+        data = { extensions: [] };
     }
-else
-    # Add new entry
-    cat "$EXTENSIONS_FILE" | jq --argjson ext "$EXTENSION_ENTRY" '.extensions += [$ext]' > "$EXTENSIONS_FILE.tmp" 2>/dev/null && mv "$EXTENSIONS_FILE.tmp" "$EXTENSIONS_FILE" || {
-        # Fallback if jq is not available - manual JSON append
-        sed -i 's/\[\]/['"$EXTENSION_ENTRY"']/' "$EXTENSIONS_FILE" 2>/dev/null || true
+}
+
+// Remove old entry if exists
+data.extensions = data.extensions.filter(ext => ext.name !== 'prprompts-flutter-generator');
+
+// Add new entry
+data.extensions.push({
+    name: 'prprompts-flutter-generator',
+    displayName: 'PRPROMPTS Flutter Generator',
+    version: '4.0.0',
+    path: installPath,
+    enabled: true,
+    installedAt: new Date().toISOString()
+});
+
+// Write back to file
+fs.writeFileSync(extensionsFile, JSON.stringify(data, null, 2));
+console.log('Extension registered successfully');
+" "$EXTENSIONS_FILE" "$INSTALL_PATH" 2>/dev/null || {
+    # Fallback: Create simple registry entry
+    cat > "$EXTENSIONS_FILE" <<-EOF
+{
+  "extensions": [
+    {
+      "name": "prprompts-flutter-generator",
+      "displayName": "PRPROMPTS Flutter Generator",
+      "version": "4.0.0",
+      "path": "$INSTALL_PATH",
+      "enabled": true,
+      "installedAt": "$(date -u +"%Y-%m-%dT%H:%M:%SZ" 2>/dev/null || date)"
     }
-fi
+  ]
+}
+EOF
+}
 
 echo -e "${GREEN}✓ Extension registered with Gemini CLI${NC}"
 
