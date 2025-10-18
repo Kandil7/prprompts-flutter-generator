@@ -2,12 +2,13 @@ module.exports = {
   // Test environment
   testEnvironment: 'node',
 
-  // Coverage configuration
-  collectCoverage: true,
+  // Coverage configuration (disabled by default, use --coverage flag to enable)
+  collectCoverage: false,
   collectCoverageFrom: [
-    'src/**/*.js',
-    '!src/**/*.test.js',
-    '!src/**/*.spec.js',
+    'lib/**/*.js',
+    'bin/**/*.js',
+    '!**/*.test.js',
+    '!**/*.spec.js',
     '!**/node_modules/**',
     '!**/vendor/**',
   ],
@@ -41,12 +42,6 @@ module.exports = {
     '**/__tests__/**/*.js',
   ],
 
-  // Setup files
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
-
-  // Module paths
-  modulePaths: ['<rootDir>/src'],
-
   // Clear mocks between tests
   clearMocks: true,
 
@@ -55,11 +50,6 @@ module.exports = {
 
   // Test timeout
   testTimeout: 10000,
-
-  // Transform configuration (if using ES6+)
-  transform: {
-    '^.+\\.js$': 'babel-jest',
-  },
 
   // Ignore patterns
   testPathIgnorePatterns: [
@@ -71,23 +61,6 @@ module.exports = {
     '/marketing/',
   ],
 
-  // Watch plugins for interactive mode
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname',
-  ],
-
-  // Notify on completion
-  notify: true,
-  notifyMode: 'failure-change',
-
-  // Bail after first test failure (useful for CI)
-  // bail: 1,
-
   // Maximum number of concurrent workers
   maxWorkers: '50%',
-
-  // Global setup/teardown
-  // globalSetup: '<rootDir>/tests/globalSetup.js',
-  // globalTeardown: '<rootDir>/tests/globalTeardown.js',
 };
