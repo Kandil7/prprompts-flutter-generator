@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build artifacts
+dist/
+coverage/
+*.tgz
+
+# Test output
+test-output/
+
+# Generated files
+*.min.js
+*.bundle.js
+
+# Logs
+*.log
+npm-debug.log*
+
+# Examples (keep original formatting)
+examples/**/*.md
+
+# Marketing content (keep original formatting for social media)
+marketing/
+
+# Templates (keep original formatting)
+templates/**/*.md
+
+# PRPROMPTS (keep original formatting)
+.claude/prompts/**/*.md
+.qwen/prompts/**/*.md
+.gemini/prompts/**/*.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Git
+.git/
+.github/workflows/
