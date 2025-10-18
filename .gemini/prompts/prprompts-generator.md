@@ -872,25 +872,42 @@ Quality checklist:
 
 ## BEGIN GENERATION
 
-### Preparation Steps
+**IMPORTANT FOR GEMINI CLI**: You have access to file creation tools. Use them directly to create files - do NOT try to run shell commands.
 
-1. **Read PRD**: Read `docs/PRD.md` and extract YAML frontmatter
-2. **Create Folder**: Ensure `PRPROMPTS/` directory exists (create if needed)
-3. **Confirm Phase**: Confirm which phase to generate (1, 2, 3, or all)
+### Step 1: Read PRD
+First, look for and read one of these files:
+- `PRD.md` (root directory)
+- `docs/PRD.md`
+- Any `.md` file with "PRD" in the name
 
-### Generation Steps
+Extract the YAML frontmatter to understand:
+- project_name, project_type
+- platforms, auth_method
+- compliance requirements
+- team_size, state_management
 
-4. **Generate Files**: Create numbered markdown files inside `PRPROMPTS/`
-   - Use the naming convention: `01-feature_scaffold.md`, `02-responsive_layout.md`, etc.
-   - Always prefix with 2-digit numbers (01-32)
-   - All files go inside the `PRPROMPTS/` folder
-5. **Apply Customizations**: Adapt content based on PRD metadata (compliance, auth, team size, etc.)
-6. **Generate README**: Create `PRPROMPTS/README.md` as the final file
+### Step 2: Generate Files Directly
 
-### Verification
+**Use your WriteFile tool to create each file in the PRPROMPTS/ directory.**
 
-7. **Verify Structure**: Confirm all files are inside `PRPROMPTS/` folder
-8. **Show Success Message**: Display the success message with applied customizations
+Start with Phase 1 (files 01-10), then Phase 2 (11-22), then Phase 3 (23-32), then README.
+
+For each file:
+1. Create the file using WriteFile with path: `PRPROMPTS/01-feature_scaffold.md`
+2. Include all required PRP sections (FEATURE, EXAMPLES, CONSTRAINTS, VALIDATION GATES, BEST PRACTICES, REFERENCES)
+3. Make it 500-600 words with real Flutter code examples
+4. Move to the next file
+
+### File Generation Pattern
+
+```
+WriteFile: PRPROMPTS/01-feature_scaffold.md
+WriteFile: PRPROMPTS/02-responsive_layout.md
+WriteFile: PRPROMPTS/03-bloc_implementation.md
+...
+WriteFile: PRPROMPTS/32-lessons_learned_engine.md
+WriteFile: PRPROMPTS/README.md
+```
 
 ### Example File Paths
 
@@ -899,7 +916,11 @@ PRPROMPTS/01-feature_scaffold.md              ✅ Correct
 PRPROMPTS/16-security_and_compliance.md       ✅ Correct
 PRPROMPTS/32-lessons_learned_engine.md        ✅ Correct
 PRPROMPTS/README.md                           ✅ Correct
-
-01-feature_scaffold.md                        ❌ Wrong (missing PRPROMPTS/)
-docs/PRPROMPTS/01-feature_scaffold.md         ❌ Wrong (wrong location)
 ```
+
+**DO NOT** try to run commands like:
+- `mkdir PRPROMPTS` ❌
+- `gemini gen-phase-1` ❌
+- Shell commands ❌
+
+**INSTEAD** directly create files with your WriteFile tool ✅
