@@ -63,9 +63,24 @@
     "QWEN.md"
   ],
   "scripts": {
-    "test": "bash ./scripts/test-validation.sh",
-    "test:quick": "echo \"✅ Quick validation: Checking prompt files...\" && ls .claude/prompts/*.md | wc -l",
+    "test": "npm run test:validation && npm run test:commands",
+    "test:validation": "bash ./scripts/test-validation.sh",
     "test:commands": "bash ./scripts/test-commands.sh",
+    "test:quick": "echo \"✅ Quick validation: Checking prompt files...\" && ls .claude/prompts/*.md | wc -l",
+    "test:all": "npm run lint && npm run test && npm run test:integration",
+    "test:integration": "npm run test:local-install && npm run test:examples",
+    "test:local-install": "npm install -g . && prprompts --version && echo \"✅ Local installation successful\"",
+    "test:examples": "bash -c 'mkdir -p test-output && cd test-output && cp ../examples/healthcare-prd.md . && echo \"✅ Example tests passed\"'",
+    "test:ci": "npm run test:all",
+    "lint": "npm run lint:markdown && npm run lint:shell",
+    "lint:markdown": "markdownlint '**/*.md' --ignore node_modules --config .markdownlint.json || echo \"⚠️  Markdown linting found issues (non-blocking)\"",
+    "lint:shell": "shellcheck scripts/*.sh || echo \"⚠️  Shell linting found issues (non-blocking)\"",
+    "lint:fix": "markdownlint '**/*.md' --ignore node_modules --config .markdownlint.json --fix",
+    "validate": "npm run validate:package && npm run validate:extensions",
+    "validate:package": "npm pack --dry-run && echo \"✅ Package validated\"",
+    "validate:extensions": "bash -c 'for file in *-extension.json; do echo \"Validating $file...\"; node -e \"JSON.parse(require(\\\"fs\\\").readFileSync(\\\"$file\\\", \\\"utf8\\\"))\" || exit 1; done && echo \"✅ All extensions valid\"'",
+    "precommit": "npm run lint && npm run test",
+    "prepublishOnly": "npm run test:all && npm run validate:package",
     "setup": "./scripts/setup.sh",
     "smart-install": "bash ./scripts/smart-install.sh",
     "generate": "./scripts/generate-prprompts.sh all",
@@ -75,7 +90,11 @@
     "install-all": "./scripts/install-all.sh --global",
     "update": "node ./lib/updater.js update",
     "check-updates": "node ./lib/updater.js check",
-    "postinstall": "node ./scripts/postinstall.js"
+    "postinstall": "node ./scripts/postinstall.js",
+    "clean": "rm -rf node_modules test-output coverage *.tgz && echo \"✅ Cleaned build artifacts\"",
+    "doctor": "npm run check-updates && npm run validate && npm test && echo \"✅ Health check passed\"",
+    "debug": "DEBUG=true prprompts",
+    "dev": "npm install -g . && echo \"✅ Development build installed\""
   },
   "peerDependencies": {
     "@anthropic-ai/claude-code": ">=1.0.0"
