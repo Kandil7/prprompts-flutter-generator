@@ -374,7 +374,9 @@ Checks Node.js, npm, Git, AIs, configs, and more!
 **Gemini CLI Extension:**
 - 1M token context
 - 60 req/min FREE tier
+- **NEW: Slash commands in `/help`**
 - Best for MVPs
+- Native TOML command integration
 
 </td>
 <td width="50%">
@@ -642,6 +644,22 @@ bash install-gemini-extension.sh
 - 60 req/min FREE
 - No credit card
 - Google integration
+- **Slash commands** - Commands appear in `/help` output
+
+**Using Slash Commands:**
+```bash
+gemini  # Start Gemini REPL
+
+# Then use commands with / prefix:
+/help                     # See all commands
+/create-prd               # Interactive PRD wizard
+/gen-prprompts           # Generate all 32 files
+/bootstrap-from-prprompts # Complete setup (2 min)
+/full-cycle               # Auto-implement features
+/qa-check                 # Compliance audit
+```
+
+All commands tagged with `[prprompts]` in `/help` output!
 
 </td>
 </tr>
@@ -665,6 +683,76 @@ bash install-gemini-extension.sh
 ✅ **v4.0 Automation** - All 5 automation commands included
 ✅ **Complete Docs** - Full setup & usage guides
 ✅ **npm Support** - Auto-install via postinstall script
+✅ **TOML Slash Commands** - Native command integration (Gemini CLI)
+
+### TOML Slash Commands (Gemini CLI)
+
+**NEW in v4.0.0:** PRPROMPTS commands now appear directly in Gemini's `/help` output using TOML command files!
+
+**How it works:**
+- Commands are defined in `commands/*.toml` files
+- Each file has `description` and `prompt` fields
+- Commands are discoverable via `/help` in Gemini REPL
+- Tagged with `[prprompts]` for easy identification
+
+**Available Commands:**
+```bash
+/create-prd               # [prprompts] Interactive PRD creation wizard (10 questions)
+/gen-prprompts           # [prprompts] Generate all 32 PRPROMPTS files from PRD
+/bootstrap-from-prprompts # [prprompts] Complete project setup from PRPROMPTS (2 min)
+/full-cycle               # [prprompts] Auto-implement 1-10 features automatically (1-2 hours)
+/qa-check                 # [prprompts] Comprehensive compliance audit - generates QA_REPORT.md with score
+```
+
+**Installation:**
+```bash
+# Via PowerShell (Windows)
+irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/setup-gist.ps1 | iex
+
+# Or via npm
+npm install -g prprompts-flutter-generator
+```
+
+**Usage Example:**
+```bash
+# Start Gemini REPL
+gemini
+
+# See all available commands (PRPROMPTS commands will be listed!)
+/help
+
+# Create PRD interactively
+/create-prd
+
+# Generate all 32 PRPROMPTS files
+/gen-prprompts
+
+# Bootstrap entire project
+/bootstrap-from-prprompts
+
+# Auto-implement 5 features
+/full-cycle
+5
+
+# Run compliance audit
+/qa-check
+```
+
+**TOML Format Example:**
+```toml
+description = "[prprompts] Interactive PRD creation wizard (10 questions)"
+
+prompt = """
+Generate a comprehensive Product Requirements Document...
+[Full prompt instructions here]
+"""
+```
+
+**Benefits:**
+- ✅ Commands appear in `/help` alongside other extensions (like Flutter)
+- ✅ Easy discovery - users can see what's available
+- ✅ Consistent UX - same format as official Gemini extensions
+- ✅ Quick invocation - just type `/` + command name
 
 ### Quick Extension Setup
 
