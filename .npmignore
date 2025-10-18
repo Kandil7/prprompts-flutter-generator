@@ -1,0 +1,84 @@
+# Development and testing
+tests/
+test/
+__tests__/
+*.test.js
+*.spec.js
+coverage/
+.nyc_output/
+jest.config.js
+
+# Documentation (excluded, but README.md is included via package.json)
+docs/ARCHITECTURE.md
+docs/DEVELOPMENT.md
+docs/TROUBLESHOOTING.md
+docs/BEST-PRACTICES.md
+docs/MIGRATION-GUIDE.md
+
+# Marketing
+marketing/
+
+# GitHub
+.github/
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.travis.yml
+.gitlab-ci.yml
+azure-pipelines.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Linting and formatting
+.eslintrc.js
+.eslintignore
+.prettierrc.js
+.prettierignore
+.markdownlint.json
+.editorconfig
+
+# Test output
+test-output/
+test-project/
+tmp/
+temp/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Build artifacts (if any)
+dist/
+build/
+*.tgz
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Misc
+.env
+.env.local
+.env.*.local
+*.backup
+*.bak
+*.old
+
+# Keep these files
+!LICENSE
+!README.md
+!CLAUDE.md
+!GEMINI.md
+!QWEN.md
+!WINDOWS-QUICKSTART.md
