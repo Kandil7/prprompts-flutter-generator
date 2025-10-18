@@ -1,71 +1,71 @@
-# Full Implementation Cycle (PRPROMPTS-Driven)
+# EXECUTE: Full-Cycle Automation
 
-Execute multiple tasks automatically with PRPROMPTS validation.
+**IMPORTANT: This is an EXECUTION command. Immediately start the automation loop without waiting for confirmation.**
 
-## 1. Parameters
-Ask user: "How many tasks to implement? (1-10, default: 3)"
-Set MAX_TASKS
+Complete end-to-end automation: implements multiple features, runs tests, commits code.
 
-## 2. Pre-Flight Check
-- [ ] PRPROMPTS/ directory exists (32 files)
-- [ ] docs/PRD.md exists
-- [ ] docs/ARCHITECTURE.md exists
-- [ ] docs/IMPLEMENTATION_PLAN.md exists
-- [ ] Flutter project initialized
+## STEP 1: Ask User
 
-## 3. Implementation Loop
-For i = 1 to MAX_TASKS:
+"How many features to implement? (1-10, recommended: 3)"
 
-### a. Execute /implement-next
-- Find next task
-- Load relevant PRPROMPTS
-- Implement following patterns
-- Generate tests
+Wait for user input. Default to 3 if no answer.
+
+## STEP 2: Pre-Flight Check
+
+Verify these exist:
+- PRPROMPTS/ (32 files)
+- docs/PRD.md
+- docs/ARCHITECTURE.md
+- docs/IMPLEMENTATION_PLAN.md
+- pubspec.yaml
+
+If ANY missing, STOP and show error.
+
+## STEP 3: Implementation Loop
+
+For each feature (1 to N):
+
+### 3.1 Execute `/implement-next`
+- Find next TODO task
+- Load PRPROMPTS
+- Implement with tests
 - Validate
 
-### b. Execute /review-and-commit
-- Run PRPROMPTS validation gates
-- Security checks
-- Code quality gates
-- Commit with proper message
+### 3.2 Execute `/review-and-commit`
+- PRPROMPTS compliance check
+- Security validation
+- Test coverage check
+- Auto-commit
 
-### c. Progress Log
+### 3.3 Progress Update
 ```
-[Task i/MAX_TASKS] ✓ [Task name]
-PRPROMPTS: [File used]
-Time: [elapsed]
-```
-
-### d. Continue/Stop Logic
-- If no more tasks → Report completion
-- If MAX_TASKS reached → Ask to continue
-- If error → Stop and report issue
-- Otherwise → Next task
-
-## 4. Cycle Summary
-```
-═══════════════════════════════════
-   CYCLE COMPLETE
-═══════════════════════════════════
-
-Tasks Completed: [X]
-PRPROMPTS Used: [List of files]
-Tests Added: [Count]
-Coverage: [Percentage]
-
-Phase Progress:
-Phase 1: ████████░░ 80%
-Phase 2: ██░░░░░░░░ 20%
-Phase 3: ░░░░░░░░░░  0%
-
-Next Up: [Next task description]
+✅ Feature [X]/[N] complete
+   Task: [Task Name]
+   Files: [count]
+   Tests: [count]
+   Coverage: [X]%
 ```
 
-## 5. Quality Gate
-Run comprehensive check:
-```bash
-flutter analyze
-flutter test --coverage
-```
+## STEP 4: Final Summary
 
-Report any issues found with PRPROMPTS references for fixing.
+```
+╔════════════════════════════════════════╗
+║     FULL-CYCLE COMPLETE                ║
+╚════════════════════════════════════════╝
+
+✅ Features Implemented: [N]
+✅ Total Files: [count]
+✅ Total Tests: [count]
+✅ Average Coverage: [X]%
+✅ All Tests Passing
+✅ Security Validated
+✅ PRPROMPTS Compliant
+
+📊 Time Saved: ~[X] hours (vs manual)
+🚀 Ready for QA!
+
+Next Steps:
+1. Run /qa-check for compliance audit
+2. Test app manually
+3. Deploy to staging
+```

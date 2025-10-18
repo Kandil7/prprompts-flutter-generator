@@ -1,475 +1,608 @@
-# Claude Code Extension for PRPROMPTS v4.0
+# CLAUDE.md
 
-Complete guide for using PRPROMPTS Generator with Claude Code - now with full automation!
-
----
-
-## 🆕 v4.0: Full Automation
-
-**Go from PRD to production Flutter app in 2-3 hours (40-60x faster!)** with 5 automation commands:
-
-- 🚀 `/bootstrap-from-prprompts` - Complete project setup (2 min)
-- ✨ `/implement-next` - Auto-implement features (10 min each)
-- 🤖 `/full-cycle` - Implement 1-10 features automatically (1-2 hours)
-- ✅ `/review-and-commit` - Validate & commit
-- 🔍 `/qa-check` - Comprehensive compliance audit
-
-**Result:** Production-ready app with 85%+ test coverage, HIPAA/PCI-DSS compliant, zero security vulnerabilities.
-
-**Claude Advantage:** Industry-leading accuracy (9.5/10) ensures production-quality code with minimal bugs!
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ---
 
-## What is Claude Code?
+## Project Overview
 
-**Claude Code** is Anthropic's official command-line interface that brings Claude AI directly into your terminal. It provides:
+**PRPROMPTS Flutter Generator** is an npm-published CLI tool that generates 32 customized, security-audited development guides for Flutter projects. It supports three AI assistants (Claude Code, Qwen Code, Gemini CLI) through an identical extension system.
 
-- ✅ **Best Accuracy**: 9.5/10 rating - industry-leading code quality
-- ✅ **200K Token Context**: Sufficient for most projects
-- ✅ **Production-Ready**: Reliable for mission-critical applications
-- ✅ **Official Support**: Direct from Anthropic with regular updates
-- ✅ **Strong Security**: Built-in safety and security focus
-- ✅ **Excellent Reasoning**: Superior code understanding and problem-solving
-
-**Performance**: Claude Sonnet 4.5 delivers the highest accuracy for code generation, making it ideal for production applications where quality matters most.
+**Core Innovation:** v4.0 automation pipeline transforms PRD → 32 PRPROMPTS files → Working Flutter app in 2-3 hours (40-60x faster than manual).
 
 ---
 
-## Prerequisites
+## Essential Commands
 
-### 1. Install Node.js
+### Development & Testing
+```bash
+# Install dependencies
+npm install
 
-Claude Code requires Node.js 14 or higher:
+# Install locally for testing
+npm install -g .
 
-**Windows**:
-```cmd
-winget install OpenJS.NodeJS
+# Run all tests
+npm test
+
+# Run specific test suites
+npm run test:validation    # Validate prompt files exist
+npm run test:package       # Test package structure
+npm run test:commands      # Test command availability
+npm run test:bash          # Bash script tests
+
+# Lint code
+npm run lint               # Lint markdown + shell scripts
+npm run lint:fix           # Auto-fix markdown issues
+
+# Validate package before publish
+npm run validate           # Validates package.json structure
+npm pack --dry-run         # Test npm package creation
 ```
 
-**macOS**:
+### Testing Changes Locally
 ```bash
-brew install node
+# Test unified CLI
+cd /tmp/test-project
+prprompts create
+prprompts generate
+
+# Test AI-specific commands (requires AI installed)
+claude gen-prprompts
+qwen gen-prprompts
+gemini gen-prprompts
+
+# Test automation pipeline
+claude bootstrap-from-prprompts
+claude implement-next
 ```
 
-**Linux**:
+### Publishing
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
+# Update version (updates package.json, creates git tag)
+npm version patch    # 4.0.0 -> 4.0.1
+npm version minor    # 4.0.0 -> 4.1.0
 
-### 2. Install Claude Code
+# Publish to npm
+npm login
+npm publish --access public
 
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-**Verify installation**:
-```bash
-claude --version
+# Push version tag
+git push origin v4.0.1
 ```
 
 ---
 
-## Installation Methods
+## Architecture Overview
 
-Choose your preferred method:
+### System Design
 
-| Method | Time | Best For |
-|--------|------|----------|
-| **npm Install** | 30 sec | Easiest! Works everywhere |
-| **Extension Script** | 30 sec | Claude-specific setup |
-| **Smart Installer** | 30 sec | Auto-detects all AIs |
-| **Manual** | 5 min | Full control |
+```
+┌─────────────────────────────────────────────────┐
+│         PRPROMPTS Multi-AI System               │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│  User runs: prprompts create                   │
+│       ↓                                         │
+│  bin/prprompts (CLI dispatcher)                │
+│       ↓                                         │
+│  Detects AI: claude/qwen/gemini                │
+│       ↓                                         │
+│  Executes: claude create-prd                   │
+│       ↓                                         │
+│  Claude loads: ~/.config/claude/prompts/       │
+│       ↓                                         │
+│  Generates: docs/PRD.md                        │
+│       ↓                                         │
+│  User runs: prprompts generate                 │
+│       ↓                                         │
+│  Generates: PRPROMPTS/ (32 files)              │
+│       ↓                                         │
+│  [v4.0 Automation Pipeline]                    │
+│       ↓                                         │
+│  Working Flutter App                           │
+└─────────────────────────────────────────────────┘
+```
+
+### Key Components
+
+**1. CLI Entry Point (`bin/prprompts`)**
+- Unified command dispatcher for all AI assistants
+- Maps friendly commands (`create` → `create-prd`, `generate` → `gen-prprompts`)
+- Detects available AIs via `which claude`, `which qwen`, `which gemini`
+- Manages config at `~/.prprompts/config.json`
+- Routes commands to appropriate AI: `execSync(\`${ai} ${command}\`)`
+
+**2. Extension System (`.claude/`, `.qwen/`, `.gemini/`)**
+Each AI has **identical** structure:
+```
+.claude/
+├── prompts/                    # 9 PRD/PRPROMPTS generation prompts
+│   ├── generate-prd.md         # Interactive wizard (10 questions)
+│   ├── auto-generate-prd.md    # Auto from description
+│   ├── prprompts-generator.md  # All 32 files generator
+│   └── ...
+├── commands/automation/        # 5 v4.0 automation commands
+│   ├── bootstrap-from-prprompts.md
+│   ├── implement-next.md
+│   ├── full-cycle.md
+│   └── ...
+└── config.yml                  # Command registry (maps names to prompts)
+```
+
+**Why identical across AIs?** Feature parity - users choose AI by accuracy/cost/context, not features.
+
+**3. Installation Pipeline (`scripts/postinstall.js`)**
+- Runs automatically after `npm install -g prprompts-flutter-generator`
+- Detects installed AIs: `execSync('which claude')`, etc.
+- Copies prompts/commands to `~/.config/{ai}/prompts/` and `~/.config/{ai}/commands/`
+- Creates unified config at `~/.prprompts/config.json`
+
+**4. PRD Generation (4 methods)**
+- **Interactive** - 10 questions, saves to `docs/PRD.md`
+- **Auto** - Infers from `project_description.md`
+- **From Files** - Converts existing markdown docs
+- **Manual** - User edits `templates/PRD-full-template.md`
+
+**5. PRPROMPTS Generator**
+- Reads `docs/PRD.md` (YAML frontmatter + markdown)
+- Extracts metadata: `compliance: ["hipaa", "pci-dss"]`, `platforms: ["ios", "android"]`, etc.
+- Generates 32 customized files following **PRP pattern** (6 sections):
+  - FEATURE, EXAMPLES, CONSTRAINTS, VALIDATION GATES, BEST PRACTICES, REFERENCES
+- Each file is 500-600 words
+- **Critical:** File `16-security_and_compliance.md` adapts to PRD compliance requirements
+
+**6. v4.0 Automation Pipeline (`.claude/commands/automation/`)**
+Five commands that automate Flutter development:
+- `bootstrap-from-prprompts.md` - Complete project setup (Clean Architecture, security, tests)
+- `implement-next.md` - Auto-implement next feature from `IMPLEMENTATION_PLAN.md`
+- `full-cycle.md` - Orchestrates 1-10 feature implementations automatically
+- `review-and-commit.md` - Validates code against PRPROMPTS patterns + security checks
+- `qa-check.md` - Comprehensive compliance audit, generates `QA_REPORT.md`
+
+### Critical Security Patterns
+
+**PRPROMPTS enforces security-first development:**
+
+1. **JWT Verification (NOT signing)**
+   - Flutter code ONLY verifies tokens with public key (RS256)
+   - Backend signs with private key - NEVER expose in Flutter
+   - Pattern defined in `16-security_and_compliance.md`
+
+2. **PCI-DSS Compliance**
+   - NEVER store full card numbers
+   - Use tokenization (Stripe, PayPal, Braintree)
+   - Generated code includes payment provider patterns
+
+3. **HIPAA Compliance**
+   - PHI encrypted at rest (AES-256-GCM)
+   - Audit logging for all PHI access
+   - HTTPS-only, session timeouts
+
+4. **Compliance-Driven Generation**
+   - PRD metadata drives code patterns: `compliance: ["hipaa", "pci-dss", "gdpr"]`
+   - Every PRPROMPTS file references correct security patterns
+   - File `16-security_and_compliance.md` is single source of truth
 
 ---
 
-### ⚡ Method 1: npm Install (Easiest!) 🆕
+## File Organization
 
-**Install from npm registry (recommended):**
+### Core Files (What They Do)
 
+**Configuration:**
+- `package.json` - npm package config, 14 scripts, peer dependencies
+- `.claude/config.yml` - Command registry for Claude (14 commands)
+- `bin/prprompts` - CLI dispatcher (400 lines, maps commands to AIs)
+- `scripts/postinstall.js` - Auto-installs extensions for detected AIs
+
+**Prompts (9 identical files per AI):**
+- `generate-prd.md` - Interactive wizard prompt
+- `auto-generate-prd.md` - Auto-generation prompt
+- `prprompts-generator.md` - Main generator (all 32 files)
+- `phase-1-core.md`, `phase-2-quality.md`, `phase-3-demo.md` - Phase generators
+- `single-file-generator.md` - Regenerate one file
+
+**Automation Commands (5 identical files per AI):**
+- Located in `.claude/commands/automation/`, `.qwen/commands/automation/`, `.gemini/commands/automation/`
+
+**Templates:**
+- `templates/PRD-full-template.md` - Manual PRD template
+- `templates/healthcare.md`, `fintech.md`, `ecommerce.md` - Industry templates
+
+**Tests:**
+- `scripts/test-validation.sh` - Validates all 32 prompt files exist
+- `scripts/test-commands.sh` - Tests command availability
+- `tests/*.test.js` - Jest unit tests
+
+**Documentation:**
+- `ARCHITECTURE.md` - Deep dive system design (1046 lines - READ THIS)
+- `DEVELOPMENT.md` - Contributing guide (778 lines)
+- `docs/PRPROMPTS-SPECIFICATION.md` - v2.0 spec, PRP pattern
+- `docs/AUTOMATION-GUIDE.md` - v4.0 automation workflows
+- `docs/CLAUDE-USER-GUIDE.md` - User-facing extension guide
+
+---
+
+## Adding Features
+
+### Adding a New PRPROMPTS File (e.g., 33rd file)
+
+1. **Create prompt in all 3 AI directories:**
 ```bash
-# Install Claude Code if not already installed
-npm install -g @anthropic-ai/claude-code
+touch .claude/prompts/33-new-feature.md
+cp .claude/prompts/33-new-feature.md .qwen/prompts/
+cp .claude/prompts/33-new-feature.md .gemini/prompts/
+```
 
-# Install PRPROMPTS
-npm install -g prprompts-flutter-generator
+2. **Follow PRP pattern (mandatory 6 sections):**
+```markdown
+## FEATURE
+What this guide accomplishes (150-200 words)
 
-# Verify installation
+## EXAMPLES
+Real code with actual Flutter file paths (100-150 words + code)
+
+## CONSTRAINTS
+✅ DO / ❌ DON'T rules (100-150 words)
+
+## VALIDATION GATES
+Pre-commit checklist + CI/CD automation (50-100 words)
+
+## BEST PRACTICES
+Junior-friendly "Why?" explanations (100-150 words)
+
+## REFERENCES
+Official docs, compliance guides, ADRs (50 words)
+```
+
+3. **Update generator prompt:**
+```bash
+# Edit .claude/prompts/prprompts-generator.md
+# Add new file to generation loop
+vim .claude/prompts/prprompts-generator.md
+```
+
+4. **Update all config files:**
+```bash
+# If adding new command for single file generation
+vim .claude/config.yml
+vim .qwen/config.yml
+vim .gemini/config.yml
+```
+
+5. **Update docs:**
+- `README.md` - Update file count (32 → 33)
+- `docs/PRPROMPTS-SPECIFICATION.md` - Add to spec
+- `ARCHITECTURE.md` - Update component list
+
+### Adding a New Automation Command
+
+1. **Create prompt in all automation directories:**
+```bash
+touch .claude/commands/automation/new-command.md
+cp .claude/commands/automation/new-command.md .qwen/commands/automation/
+cp .claude/commands/automation/new-command.md .gemini/commands/automation/
+```
+
+2. **Register in all config.yml files:**
+```yaml
+# .claude/config.yml (repeat for .qwen, .gemini)
+new-command:
+  prompt: "commands/automation/new-command.md"
+  description: "Brief description of automation"
+```
+
+3. **Update extension manifests:**
+```json
+// claude-extension.json, qwen-extension.json, gemini-extension.json
+{
+  "commands": [
+    {
+      "name": "/new-command",
+      "description": "What it does",
+      "file": "automation/new-command.md"
+    }
+  ]
+}
+```
+
+4. **Document:**
+- `docs/AUTOMATION-GUIDE.md` - Add workflow example
+- `docs/CLAUDE-USER-GUIDE.md` - Add to command list
+- Update `QWEN.md`, `GEMINI.md` similarly
+
+### Adding Support for New AI Assistant
+
+1. **Create directory structure:**
+```bash
+mkdir -p .newai/prompts
+mkdir -p .newai/commands/automation
+```
+
+2. **Copy all prompts:**
+```bash
+cp .claude/prompts/*.md .newai/prompts/
+cp .claude/commands/automation/*.md .newai/commands/automation/
+```
+
+3. **Create config.yml:**
+```bash
+cp .claude/config.yml .newai/config.yml
+# Edit ai-specific paths if needed
+```
+
+4. **Create extension manifest:**
+```bash
+cp claude-extension.json newai-extension.json
+# Update: "ai": "newai", paths, descriptions
+```
+
+5. **Create installer:**
+```bash
+cp install-claude-extension.sh install-newai-extension.sh
+# Edit to use .newai/ and ~/.config/newai/
+```
+
+6. **Update postinstall.js:**
+```javascript
+// scripts/postinstall.js
+const AI_ASSISTANTS = ['claude', 'qwen', 'gemini', 'newai'];
+```
+
+7. **Update bin/prprompts CLI:**
+```javascript
+// bin/prprompts - Add to loadConfig()
+newai: { enabled: commandExists('newai') }
+```
+
+8. **Create user guide:**
+```bash
+cp docs/CLAUDE-USER-GUIDE.md docs/NEWAI-USER-GUIDE.md
+# Edit for NewAI specifics
+```
+
+9. **Update README.md:**
+- Add to extension comparison table
+- Update installation instructions
+- Add to "Choose Your AI Assistant" section
+
+---
+
+## Development Workflow
+
+### Making Changes
+
+1. **Create feature branch:**
+```bash
+git checkout -b feature/new-automation-command
+```
+
+2. **Make changes** (e.g., new automation command):
+```bash
+# Create in all 3 AI dirs
+vim .claude/commands/automation/new-cmd.md
+cp .claude/commands/automation/new-cmd.md .qwen/commands/automation/
+cp .claude/commands/automation/new-cmd.md .gemini/commands/automation/
+
+# Register in all configs
+vim .claude/config.yml
+vim .qwen/config.yml
+vim .gemini/config.yml
+```
+
+3. **Test locally:**
+```bash
+npm install -g .
 prprompts doctor
+claude new-cmd
 ```
 
-The postinstall script automatically:
-- ✅ Detects Claude Code
-- ✅ Configures all commands including v4.0 automation
-- ✅ Sets up prompts and templates
-- ✅ Creates unified configuration
-
-**Then use:**
+4. **Run tests:**
 ```bash
-claude create-prd
-claude gen-prprompts
-claude bootstrap-from-prprompts  # v4.0 automation!
-claude full-cycle                # Auto-implement features!
+npm test
+npm run lint
+npm run validate
 ```
 
----
-
-### ⚡ Method 2: Claude Extension Script
-
-**Install PRPROMPTS as a Claude extension:**
-
+5. **Update docs:**
 ```bash
-# Clone repository
-git clone https://github.com/Kandil7/prprompts-flutter-generator.git
-cd prprompts-flutter-generator
-
-# Run Claude extension installer
-bash install-claude-extension.sh
+vim docs/AUTOMATION-GUIDE.md
+vim CHANGELOG.md
 ```
 
-This installs PRPROMPTS as a proper Claude Code extension with:
-- Extension manifest (`extension.json`)
-- All commands registered in Claude config
-- v4.0 automation commands included
-- Optimized for production-quality output
-
----
-
-### ⚡ Method 3: Smart Installer
-
-**Auto-detects Claude + other AIs:**
-
+6. **Commit (conventional format):**
 ```bash
-# One-line install
-curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
+git add .
+git commit -m "feat(automation): add new-cmd command
+
+- Create new-cmd.md automation prompt
+- Register in config.yml for all 3 AIs
+- Update documentation
+
+🤖 Generated with Claude Code
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
 
-The smart installer:
-- Detects all installed AI assistants (Claude, Qwen, Gemini)
-- Configures commands for all detected AIs
-- Sets up unified CLI (`prprompts` command)
-- Creates optimal configuration
-
----
-
-### 🛠️ Method 4: Manual Install
+### Testing Package Locally
 
 ```bash
-# 1. Install Claude Code (if not already)
-npm install -g @anthropic-ai/claude-code
+# Build tarball
+npm pack
 
-# 2. Clone repository
-git clone https://github.com/Kandil7/prprompts-flutter-generator.git
-cd prprompts-flutter-generator
+# Install from tarball
+npm install -g ./prprompts-flutter-generator-4.0.0.tgz
 
-# 3. Copy configuration files
-mkdir -p ~/.config/claude/prompts
-mkdir -p ~/.config/claude/commands/automation
-cp .claude/prompts/*.md ~/.config/claude/prompts/
-cp .claude/commands/automation/*.md ~/.config/claude/commands/automation/
-cp .claude/config.yml ~/.config/claude/
-```
-
----
-
-## Available Commands
-
-All commands work identically across Claude/Qwen/Gemini:
-
-### PRD Commands
-```bash
-claude create-prd          # Interactive PRD wizard (10 questions)
-claude auto-gen-prd        # Auto-generate from description
-claude prd-from-files      # Generate from existing docs
-claude analyze-prd         # Validate PRD
-```
-
-### PRPROMPTS Generation
-```bash
-claude gen-prprompts       # Generate all 32 PRPROMPTS files
-claude gen-phase-1         # Phase 1: Core Architecture (10 files)
-claude gen-phase-2         # Phase 2: Quality & Security (12 files)
-claude gen-phase-3         # Phase 3: Demo & Learning (10 files)
-claude gen-file <name>     # Generate single file by name
-```
-
-### 🆕 v4.0 Automation Commands (40-60x Faster!)
-```bash
-claude bootstrap-from-prprompts  # Complete project setup (2 min)
-claude implement-next            # Auto-implement next feature (10 min)
-claude full-cycle                # Auto-implement 1-10 features (1-2 hours)
-claude review-and-commit         # Validate and commit changes
-claude qa-check                  # Comprehensive compliance audit
-```
-
----
-
-## Quick Start
-
-### 1. Navigate to Your Project
-
-```bash
-cd your-flutter-project
-```
-
-### 2. Generate PRPROMPTS
-
-```bash
-claude create-prd
-claude gen-prprompts
-```
-
-Answer 10 simple questions, then wait ~60 seconds for all 32 guides.
-
-### 3. Start Coding
-
-**Manual coding:**
-```bash
-cat PRPROMPTS/01-feature_scaffold.md
-cat PRPROMPTS/16-security_and_compliance.md
-```
-
-**🆕 OR use v4.0 automation (recommended!):**
-```bash
-# Complete project setup (2 min)
+# Test in fresh Flutter project
+cd /tmp/test-app
+flutter create .
+prprompts create
+prprompts generate
 claude bootstrap-from-prprompts
 
-# Auto-implement 10 features (1-2 hours)
-# Claude's high accuracy = production-quality code!
-claude full-cycle
-# Enter: 10
-
-# Run compliance audit
-claude qa-check
-
-# Result: Production-ready app with tests!
+# Cleanup
+npm uninstall -g prprompts-flutter-generator
+rm *.tgz
 ```
 
 ---
 
-## Verify Installation
+## Key Architectural Decisions
 
-Test your setup:
+### Why Unified CLI (`bin/prprompts`)?
+- **User convenience** - Single command instead of AI-specific syntax
+- **AI-agnostic** - Switch between Claude/Qwen/Gemini without workflow changes
+- **Command aliasing** - Friendly names (`create` → `create-prd`)
+- **Centralized config** - `~/.prprompts/config.json`
 
-```bash
-# Check if commands are available
-claude create-prd --help
+### Why Identical Prompts Across AIs?
+- **Feature parity** - All AIs have same capabilities
+- **Testing** - One test suite validates all
+- **Maintenance** - Update once, copy to others
+- **User choice** - Pick AI by accuracy/cost/context, not features
 
-# Verify config files exist
-# Windows:
-dir %USERPROFILE%\.config\claude\
+### Why PRP Pattern (6 Sections)?
+- **Consistency** - Every file has same structure
+- **Completeness** - Covers what/how/rules/checks/why/learn
+- **Junior-friendly** - "Why?" explanations in BEST PRACTICES
+- **Security-first** - CONSTRAINTS enforce correct patterns
+- **Validation** - Pre-commit checklists + CI/CD automation
 
-# macOS/Linux:
-ls -la ~/.config/claude/
-```
-
----
-
-## Claude-Specific Advantages
-
-### 1. Best Accuracy (9.5/10)
-
-Claude delivers industry-leading code quality:
-
-```bash
-# Claude generates production-ready code
-claude gen-prprompts  # Highest quality guides
-
-# Compare accuracy scores:
-# Claude:  9.5/10 ⭐⭐⭐⭐⭐
-# Qwen:    9.0/10 ⭐⭐⭐⭐
-# Gemini:  8.5/10 ⭐⭐⭐⭐
-```
-
-**What this means:**
-- Fewer bugs in generated code
-- Better adherence to best practices
-- More reliable security implementations
-- Production-ready output with minimal fixes
-
-### 2. Production-Ready Reliability
-
-Claude Code is the most reliable for mission-critical apps:
-
-```bash
-# Use cases where Claude excels:
-# ✅ Financial services (payments, banking)
-# ✅ Healthcare (HIPAA-compliant apps)
-# ✅ Enterprise SaaS (SOC2 compliance)
-# ✅ E-commerce (PCI-DSS compliance)
-# ✅ Mission-critical systems
-```
-
-### 3. Official Anthropic Support
-
-- Regular updates from Anthropic
-- Bug fixes and improvements
-- Latest model access (Sonnet 4.5, Opus 4)
-- Professional support available
-
-### 4. Strong Security Focus
-
-Claude has built-in safety and security:
-- Validates security patterns
-- Catches common vulnerabilities
-- Enforces best practices
-- HIPAA/PCI-DSS aware
-
----
-
-## Pricing & Limits
-
-### Free Tier
-- **20 messages per day**
-- Full automation access
-- All commands available
-- Community support
-
-### Claude Pro ($20/month)
-- **Unlimited messages**
-- Priority access
-- Faster responses
-- Priority support
-
-**Comparison:**
-| Feature | Free | Pro |
-|---------|------|-----|
-| Messages | 20/day | Unlimited |
-| Automation | ✅ | ✅ |
-| Commands | All 14 | All 14 |
-| Speed | Standard | Faster |
-| Support | Community | Priority |
+### Why v4.0 Automation?
+- **Speed** - 40-60x faster (3-5 days → 2-3 hours)
+- **Quality** - Follows PRPROMPTS patterns, security built-in
+- **Testing** - Auto-generates tests with 70%+ coverage
+- **Compliance** - Built-in HIPAA/PCI-DSS/GDPR validation
 
 ---
 
 ## Troubleshooting
 
-### Command not found
+### Extension Not Loading
 
 ```bash
-# Check if Claude Code is installed
-claude --version
+# Check config paths
+ls ~/.config/claude/prompts/
+ls ~/.config/claude/commands/automation/
+cat ~/.config/claude/config.yml
 
-# Reinstall if needed
-npm install -g @anthropic-ai/claude-code
-
-# Reinstall PRPROMPTS commands
-./scripts/install-commands.sh --global
-```
-
-### Authentication issues
-
-```bash
-# Check API key
-echo $ANTHROPIC_API_KEY
-
-# Set API key (if needed)
-export ANTHROPIC_API_KEY="your-key-here"
-```
-
-### Config not found
-
-```bash
-# Windows:
-dir %USERPROFILE%\.config\claude\
-
-# macOS/Linux:
-ls -la ~/.config/claude/
-
-# Reinstall if missing
+# Reinstall extension
 bash install-claude-extension.sh
+prprompts doctor
 ```
 
-### PRD generation fails
+### Command Not Found
 
 ```bash
-# Ensure PRD exists
-ls docs/PRD.md
+# Check PATH
+which prprompts
+echo $PATH
 
-# Create PRD first
-claude create-prd
+# Reinstall globally
+npm install -g prprompts-flutter-generator
+```
 
-# Then generate PRPROMPTS
-claude gen-prprompts
+### Tests Failing
+
+```bash
+# Clean reinstall
+rm -rf node_modules
+npm install
+npm test
+
+# Individual tests
+npm run test:validation
+npm run test:package
 ```
 
 ---
 
-## Comparison: Claude vs Qwen vs Gemini
+## Important Conventions
 
-| Feature | Claude Code | Qwen Code | Gemini CLI |
-|---------|-------------|-----------|------------|
-| **Accuracy** | **9.5/10** ⭐ | 9.0/10 | 8.5/10 |
-| **Context** | 200K tokens | 256K-1M | 1M tokens |
-| **Free Tier** | 20 msgs/day | Self-host | 60 req/min |
-| **Cost (Pro)** | $20/month | Lower | FREE |
-| **Best For** | Production | Large codebases | Free tier |
-| **Reliability** | **Highest** ⭐ | High | High |
-| **Support** | **Official** ⭐ | Community | Community |
-| **Security** | **Strongest** ⭐ | Good | Good |
+### Code Style
 
-**When to use Claude:**
-- ✅ Production applications
-- ✅ High-stakes projects
-- ✅ Enterprise clients
-- ✅ Financial/Healthcare apps
-- ✅ Mission-critical systems
-- ✅ When accuracy matters most
+**JavaScript:**
+- ES6+ (async/await, arrow functions, const/let)
+- Always try/catch async operations
+- JSDoc for public functions
 
-**Full Comparison**: See [docs/AI-COMPARISON.md](docs/AI-COMPARISON.md)
+**Shell Scripts:**
+- Shebang: `#!/bin/bash`
+- Error handling: `set -e`
+- Quote all variables: `"$var"`
 
----
+**Markdown:**
+- ATX headers (`#` not `===`)
+- Unordered lists: `-`
+- Always specify language in code blocks
 
-## Documentation
+### Commit Messages
 
-- **[Command Reference](docs/CLAUDE-COMMANDS.md)** - Full command list
-- **[AI Comparison](docs/AI-COMPARISON.md)** - Claude vs Qwen vs Gemini
-- **[PRD Guide](docs/PRD-GUIDE.md)** - How to create PRDs
-- **[PRPROMPTS Spec](docs/PRPROMPTS-SPECIFICATION.md)** - v2.0 specification
-- **[Automation Guide](docs/AUTOMATION-GUIDE.md)** - v4.0 workflows
+Format: `<type>(<scope>): <subject>`
 
----
+Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 
-## Support
+Example:
+```
+feat(automation): add qa-check compliance audit
 
-- 🐛 [Report Issue](https://github.com/Kandil7/prprompts-flutter-generator/issues)
-- 💬 [Discussions](https://github.com/Kandil7/prprompts-flutter-generator/discussions)
-- 📖 [Full README](README.md)
-- 🔧 [Claude Code](https://claude.ai/code)
-- 🏢 [Anthropic](https://www.anthropic.com)
+- Create qa-check.md automation prompt
+- Add architecture/security/test validation
+- Generate QA_REPORT.md with score
 
----
+🤖 Generated with Claude Code
 
-## Why Use Claude Code?
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
 
-✅ **Best Accuracy** - 9.5/10 industry-leading code quality
-✅ **Production-Ready** - Reliable for mission-critical apps
-✅ **Official Support** - Direct from Anthropic
-✅ **Strong Security** - Built-in safety & compliance focus
-✅ **Excellent Reasoning** - Superior problem-solving
-✅ **Regular Updates** - Latest models & features
-✅ **Professional Tier** - Unlimited messages for $20/month
+### Documentation Updates
 
-**Perfect for:**
-- 🏢 **Enterprises** - Consistent security patterns
-- 🏥 **Healthcare** - HIPAA-compliant apps
-- 🏦 **Finance** - PCI-DSS payment systems
-- 🚀 **Startups** - Investor-ready MVP
-- 👨‍💻 **Agencies** - Deliver with confidence
-- 🎯 **Any Production App** - When quality matters
+When adding features, update:
+1. `README.md` - User-facing description
+2. `CHANGELOG.md` - Version history
+3. Relevant doc in `docs/`
+4. `ARCHITECTURE.md` - If architecture changes
+5. This file - If developer workflow changes
 
 ---
 
-<div align="center">
+## Additional Resources
 
-**Made with ❤️ for Flutter developers**
+**For Developers:**
+- `ARCHITECTURE.md` - System design deep dive (MUST READ - 1046 lines)
+- `DEVELOPMENT.md` - Contributing guidelines (778 lines)
+- `docs/PRPROMPTS-SPECIFICATION.md` - v2.0 spec, PRP pattern
+- `docs/API.md` - All commands and options
 
-[🚀 Quick Start](#quick-start) •
-[📦 Install](#installation-methods) •
-[📝 Create PRD](#quick-start) •
-[🔧 Commands](#available-commands) •
-[💬 Support](https://github.com/Kandil7/prprompts-flutter-generator/issues)
+**For Users:**
+- `docs/CLAUDE-USER-GUIDE.md` - Extension user guide
+- `README.md` - Main project documentation
+- `docs/AUTOMATION-GUIDE.md` - v4.0 workflows
+- `WINDOWS-QUICKSTART.md` - Windows installation
 
-**Powered by** [Claude Code](https://claude.ai/code) by [Anthropic](https://www.anthropic.com) | **Built for** [Flutter](https://flutter.dev)
+**For Security:**
+- `docs/BEST-PRACTICES.md` - Security patterns, compliance
+- `SECURITY.md` - Vulnerability reporting
+- `examples/*-app-example.md` - Industry-specific compliance examples
 
-</div>
+---
+
+## Summary
+
+**This project's architecture:**
+
+1. **Multi-AI extension system** - Identical prompts/commands for Claude/Qwen/Gemini
+2. **Unified CLI dispatcher** - `bin/prprompts` routes to appropriate AI
+3. **Postinstall automation** - Auto-configures detected AIs
+4. **PRD → PRPROMPTS → Code** - Complete automation pipeline
+5. **Security-first** - Compliance patterns (HIPAA/PCI-DSS/GDPR) built into every layer
+
+**When working on this codebase:**
+- Update **all 3 AI directories** when changing prompts
+- Follow **PRP pattern** (6 sections) for PRPROMPTS files
+- Use **conventional commits** (`feat:`, `fix:`, etc.)
+- Test with `npm install -g .` before committing
+- Read `ARCHITECTURE.md` for system design understanding
+
+**Key insight:** This tool transforms a PRD into 32 security-audited guides that then auto-generate production-ready Flutter code. The magic is in the PRD metadata → prompt customization → code generation pipeline.

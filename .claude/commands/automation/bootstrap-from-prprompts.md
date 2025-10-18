@@ -1,32 +1,64 @@
-# Bootstrap Project from PRPROMPTS
+# EXECUTE: Bootstrap Project from PRPROMPTS
 
-Fully automated project setup using generated PRPROMPTS as guidance.
+**IMPORTANT: This is an EXECUTION command. Immediately perform all steps below without waiting for confirmation.**
 
-## Prerequisites Check
-1. Verify PRPROMPTS exists: Check `PRPROMPTS/` directory (should have 32 .md files)
-2. Verify PRD exists: Check `docs/PRD.md`
-3. Verify Flutter project initialized: Check `pubspec.yaml`
+---
 
-If any missing, exit with error message.
+## STEP 1: Prerequisites Check
 
-## Execution Steps
+First, check if required files exist:
 
-### 1. Analyze Generated PRPROMPTS
-Read and understand project context from:
-- @docs/PRD.md - Core requirements, features, compliance
-- @PRPROMPTS/01-feature_scaffold.md - Architecture patterns
-- @PRPROMPTS/03-bloc_implementation.md - State management approach
-- @PRPROMPTS/04-api_integration.md - API and auth patterns
-- @PRPROMPTS/06-design_system.md - Theme and design standards
-- @PRPROMPTS/16-security_and_compliance.md - Security requirements
+```bash
+# Check for PRPROMPTS directory
+ls PRPROMPTS/
 
-### 2. Run /init
-- Generate CLAUDE.md with full project context
-- Include references to key PRPROMPTS files
-- Add project metadata from PRD
+# Check for PRD
+ls docs/PRD.md
 
-### 3. Generate Architecture Document
-Create `docs/ARCHITECTURE.md` based on @PRPROMPTS/01-feature_scaffold.md:
+# Check for Flutter project
+ls pubspec.yaml
+```
+
+If ANY file is missing, STOP and show error:
+```
+❌ Error: Missing required files.
+
+Required:
+- PRPROMPTS/ directory (with 32 .md files)
+- docs/PRD.md
+- pubspec.yaml
+
+Please run:
+1. qwen create-prd
+2. qwen gen-prprompts
+
+Then try bootstrap again.
+```
+
+---
+
+## STEP 2: Read Project Context
+
+NOW read and analyze these files:
+
+1. **Read docs/PRD.md** - Extract:
+   - Project name, type, compliance
+   - Platforms, auth method
+   - Features list
+   - Team composition
+
+2. **Read PRPROMPTS files** - Understand:
+   - @PRPROMPTS/01-feature_scaffold.md - Architecture patterns
+   - @PRPROMPTS/03-bloc_implementation.md - State management
+   - @PRPROMPTS/04-api_integration.md - API integration
+   - @PRPROMPTS/06-design_system.md - Design system
+   - @PRPROMPTS/16-security_and_compliance.md - Security patterns
+
+---
+
+## STEP 3: Create Architecture Document
+
+NOW create `docs/ARCHITECTURE.md` with this content:
 
 ```markdown
 # Architecture Document

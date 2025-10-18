@@ -1,73 +1,66 @@
-# Implement Next Task (PRPROMPTS-Guided)
+# EXECUTE: Implement Next Feature
 
-Automatically implement the next task following PRPROMPTS best practices.
+**IMPORTANT: This is an EXECUTION command. Immediately start implementing without waiting for confirmation.**
 
-## 1. Find Current Task
-- Read @docs/IMPLEMENTATION_PLAN.md
-- Find task marked "CURRENT" or first "TODO"
-- Exit if no tasks remain
+Auto-implement the next pending task from IMPLEMENTATION_PLAN.md with tests and validation.
 
-## 2. Load Context
-- Read @docs/PRD.md for feature requirements
-- Read @docs/ARCHITECTURE.md for patterns
-- Identify relevant PRPROMPTS file from task reference
-- Read the specific PRPROMPTS file for guidance
+## STEP 1: Find Next Task
 
-Example:
-- Task references @PRPROMPTS/03-bloc_implementation.md
-- Load that file for BLoC patterns, examples, constraints
+Read `docs/IMPLEMENTATION_PLAN.md` and find the first task marked `[TODO]`.
 
-## 3. Implement Following PRPROMPTS
-Using the referenced PRPROMPTS file:
-- Follow EXAMPLES section for code patterns
-- Respect CONSTRAINTS (DO/DON'T rules)
-- Implement validation gates from file
-- Apply best practices explained
-
-## 4. Generate Tests
-Based on @PRPROMPTS/05-testing_strategy.md:
-- Create unit tests for business logic
-- Create widget tests for UI
-- Follow testing patterns from PRPROMPTS
-
-## 5. Run Tests
-```bash
-flutter test
+If no TODO tasks found:
 ```
-If failures: Fix and re-run until passing
+✅ All tasks complete!
 
-## 6. Security Check
-If task involves:
-- Authentication → verify against @PRPROMPTS/16-security_and_compliance.md
-- Data storage → check encryption requirements
-- API calls → verify JWT patterns (RS256, public key only)
-- Payment → verify PCI-DSS compliance
+Run /qa-check for final compliance audit.
+```
 
-## 7. Code Quality
-Run analyzer:
+## STEP 2: Load Relevant PRPROMPTS
+
+Based on the task, read these PRPROMPTS files:
+- @PRPROMPTS/01-feature_scaffold.md
+- @PRPROMPTS/03-bloc_implementation.md
+- @PRPROMPTS/04-api_integration.md
+- @PRPROMPTS/16-security_and_compliance.md
+- @[task-specific PRPROMPTS]
+
+## STEP 3: Implement Feature
+
+NOW create the files following PRPROMPTS patterns:
+
+1. **Domain Layer** (entities, repositories, usecases)
+2. **Data Layer** (models, repositories, datasources)
+3. **Presentation Layer** (BLoC, pages, widgets)
+
+## STEP 4: Generate Tests
+
+Create comprehensive tests:
+- Unit tests (70%+ coverage)
+- Widget tests
+- BLoC tests
+- Integration tests if needed
+
+## STEP 5: Validate
+
+Run validation:
 ```bash
 flutter analyze
-```
-Fix all errors and warnings
-
-## 8. Update Documentation
-- Mark current task DONE ✓ in IMPLEMENTATION_PLAN.md
-- Mark next task as CURRENT
-- Add code comments referencing PRPROMPTS sections
-
-## 9. Stage Changes
-```bash
-git add [files related to this task]
+dart format lib/ test/
+flutter test
 ```
 
-## 10. Report
-Print:
-```
-✓ Task completed: [Task name]
-✓ PRPROMPTS followed: [File name]
-✓ Tests: X passing
-✓ Files changed: [list]
-✓ Next task: [Task name]
+## STEP 6: Update Implementation Plan
 
-Ready to commit? Say 'commit' to proceed.
+Mark task as `[DONE]` in IMPLEMENTATION_PLAN.md.
+
+## STEP 7: Show Summary
+
+```
+✅ Feature Implemented: [Feature Name]
+
+Files Created: [count]
+Tests Created: [count]
+Test Coverage: [X]%
+
+Next: Run /implement-next for next feature or /review-and-commit to commit changes.
 ```
