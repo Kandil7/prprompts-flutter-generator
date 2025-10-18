@@ -91,6 +91,46 @@ echo -e "${YELLOW}📦 Installing extension manifest...${NC}"
 cp "$SCRIPT_DIR/gemini-extension.json" "$GEMINI_CONFIG_DIR/extension.json"
 echo -e "${GREEN}✓ Extension manifest installed${NC}"
 
+# Register extension with Gemini CLI
+echo -e "${YELLOW}🔌 Registering extension with Gemini CLI...${NC}"
+
+# Create extensions registry if it doesn't exist
+EXTENSIONS_FILE="$GEMINI_CONFIG_DIR/extensions.json"
+if [ ! -f "$EXTENSIONS_FILE" ]; then
+    echo '{"extensions": []}' > "$EXTENSIONS_FILE"
+fi
+
+# Get the absolute path to this installation
+INSTALL_PATH="$SCRIPT_DIR"
+
+# Update extensions registry
+EXTENSION_ENTRY="{\"name\":\"prprompts-flutter-generator\",\"displayName\":\"PRPROMPTS Flutter Generator\",\"version\":\"4.0.0\",\"path\":\"$INSTALL_PATH\",\"enabled\":true,\"installedAt\":\"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"}"
+
+# Check if extension is already registered
+if grep -q "prprompts-flutter-generator" "$EXTENSIONS_FILE" 2>/dev/null; then
+    # Update existing entry
+    cat "$EXTENSIONS_FILE" | jq --argjson ext "$EXTENSION_ENTRY" '.extensions = [.extensions[] | select(.name != "prprompts-flutter-generator")] + [$ext]' > "$EXTENSIONS_FILE.tmp" 2>/dev/null && mv "$EXTENSIONS_FILE.tmp" "$EXTENSIONS_FILE" || {
+        # Fallback if jq is not available
+        echo "  Note: jq not found, skipping registry update"
+    }
+else
+    # Add new entry
+    cat "$EXTENSIONS_FILE" | jq --argjson ext "$EXTENSION_ENTRY" '.extensions += [$ext]' > "$EXTENSIONS_FILE.tmp" 2>/dev/null && mv "$EXTENSIONS_FILE.tmp" "$EXTENSIONS_FILE" || {
+        # Fallback if jq is not available - manual JSON append
+        sed -i 's/\[\]/['"$EXTENSION_ENTRY"']/' "$EXTENSIONS_FILE" 2>/dev/null || true
+    }
+fi
+
+echo -e "${GREEN}✓ Extension registered with Gemini CLI${NC}"
+
+# Try to enable extension via Gemini CLI if command exists
+if command -v gemini &> /dev/null; then
+    if gemini extension list &> /dev/null 2>&1; then
+        gemini extension enable prprompts-flutter-generator &> /dev/null 2>&1 || true
+        echo -e "${GREEN}✓ Extension enabled in Gemini CLI${NC}"
+    fi
+fi
+
 echo ""
 echo -e "${GREEN}╔═══════════════════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║                                                           ║${NC}"
@@ -145,6 +185,17 @@ echo -e "${GREEN}✨ You're ready to go! Start with:${NC} ${YELLOW}gemini create
 echo ""
 echo -e "${BLUE}📖 Documentation:${NC} https://github.com/Kandil7/prprompts-flutter-generator/blob/master/GEMINI.md"
 echo -e "${BLUE}💬 Support:${NC} https://github.com/Kandil7/prprompts-flutter-generator/issues"
+echo ""
+
+# Show extension status
+echo -e "${BLUE}🔌 Extension Status:${NC}"
+if [ -f "$EXTENSIONS_FILE" ]; then
+    echo -e "${GREEN}✓ Registered in Gemini CLI extensions registry${NC}"
+    echo "  View all extensions: ${YELLOW}gemini extension list${NC} (if supported)"
+    echo "  Extension path: ${INSTALL_PATH}"
+else
+    echo -e "${YELLOW}⚠ Extension registry not available${NC}"
+fi
 echo ""
 
 # Show Gemini-specific advantages
