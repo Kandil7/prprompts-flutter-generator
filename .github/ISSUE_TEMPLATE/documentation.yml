@@ -1,0 +1,191 @@
+name: Documentation Improvement
+description: Suggest improvements to documentation
+title: "[Docs]: "
+labels: ["documentation", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve PRPROMPTS documentation! Clear docs make the project accessible to everyone.
+
+        Before submitting:
+        - Check the [existing documentation](https://github.com/Kandil7/prprompts-flutter-generator/tree/master/docs)
+        - Search for [existing documentation issues](https://github.com/Kandil7/prprompts-flutter-generator/issues?q=is%3Aissue+label%3Adocumentation)
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation needs improvement?
+      options:
+        - README.md
+        - Troubleshooting Guide
+        - Best Practices Guide
+        - Architecture Documentation
+        - Migration Guide
+        - Contributing Guidelines
+        - Code of Conduct
+        - Example Projects
+        - API Documentation
+        - CLI Command Documentation
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue with Current Documentation
+      description: What's wrong, missing, or unclear in the current documentation?
+      placeholder: |
+        The TROUBLESHOOTING.md doesn't cover Windows-specific path issues when installing extensions.
+        Many Windows users encounter backslash vs forward slash problems but there's no guidance.
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Location
+      description: Where is this documentation (or where should it be)?
+      placeholder: |
+        File: docs/TROUBLESHOOTING.md
+        Section: "Extension Installation Problems"
+
+        Or: Should be added as new section in README.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Suggested Improvement
+      description: How should the documentation be improved?
+      placeholder: |
+        Add a new subsection "Windows Path Issues" under "Extension Installation Problems":
+
+        ### Windows Path Issues
+
+        **Symptoms:**
+        ```
+        Error: Cannot find path '.claude\prompts\'
+        ```
+
+        **Solution:**
+        Use forward slashes or double backslashes in Windows paths...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Impact
+      description: How does this affect users?
+      options:
+        - Low - Minor typo or formatting
+        - Medium - Unclear explanation, could confuse some users
+        - High - Missing critical information, blocks users
+        - Critical - Incorrect information that could cause problems
+    validations:
+      required: true
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Affected Audience
+      description: Who is affected by this documentation issue?
+      options:
+        - All users
+        - Beginners
+        - Advanced users
+        - Contributors
+        - Windows users
+        - macOS users
+        - Linux users
+        - Specific industry (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples or References
+      description: Provide examples of good documentation, screenshots, or references.
+      placeholder: |
+        Good example from another project:
+        https://example.com/docs
+
+        Screenshot of confusing section:
+        [attach screenshot]
+
+        Reference documentation:
+        https://official-docs.com
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: doc-areas
+    attributes:
+      label: Specific Areas to Improve
+      description: Check all that apply
+      options:
+        - label: Add missing information
+        - label: Clarify existing content
+        - label: Fix typos or grammar
+        - label: Add code examples
+        - label: Add screenshots or diagrams
+        - label: Improve organization/structure
+        - label: Add troubleshooting section
+        - label: Add best practices
+        - label: Update outdated information
+        - label: Add cross-references
+        - label: Improve accessibility
+
+  - type: textarea
+    id: proposed-content
+    attributes:
+      label: Proposed Content (Optional)
+      description: If you have draft content, paste it here.
+      placeholder: |
+        ## Windows Path Configuration
+
+        When working with PRPROMPTS on Windows, you may encounter path-related issues...
+
+        ```bash
+        # Correct
+        prprompts generate --output-dir ./my-project/prompts
+
+        # Incorrect (backslashes)
+        prprompts generate --output-dir .\my-project\prompts
+        ```
+      render: markdown
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you like to contribute to this documentation improvement?
+      options:
+        - label: I can write this documentation
+          required: false
+        - label: I can review documentation PRs
+          required: false
+        - label: I can provide screenshots or examples
+          required: false
+        - label: I can test the updated documentation
+          required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm the following
+      options:
+        - label: I have searched for [existing documentation issues](https://github.com/Kandil7/prprompts-flutter-generator/issues?q=is%3Aissue+label%3Adocumentation)
+          required: true
+        - label: I have checked the current documentation to verify this is an issue
+          required: true
+        - label: I have provided a clear description of the problem and suggested improvement
+          required: true

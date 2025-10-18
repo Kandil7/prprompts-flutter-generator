@@ -1,0 +1,143 @@
+name: Bug Report
+description: Report a bug or issue with PRPROMPTS
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out this form as completely as possible.
+
+        Before submitting, please:
+        - Check the [Troubleshooting Guide](https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/TROUBLESHOOTING.md)
+        - Search [existing issues](https://github.com/Kandil7/prprompts-flutter-generator/issues) to avoid duplicates
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: |
+        PRPROMPTS generation fails when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Run `prprompts create`
+        2. Enter project details
+        3. Run `prprompts generate`
+        4. Error occurs at step 15/32
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen.
+      placeholder: All 32 PRPROMPTS should be generated successfully
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened.
+      placeholder: Generation stopped at 15/32 with error
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: What OS are you using?
+      placeholder: e.g., macOS 14.2, Windows 11, Ubuntu 22.04
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version
+      description: Output of `node --version`
+      placeholder: e.g., v20.10.0
+    validations:
+      required: true
+
+  - type: input
+    id: npm-version
+    attributes:
+      label: npm Version
+      description: Output of `npm --version`
+      placeholder: e.g., 10.2.0
+    validations:
+      required: true
+
+  - type: input
+    id: prprompts-version
+    attributes:
+      label: PRPROMPTS Version
+      description: Output of `prprompts --version`
+      placeholder: e.g., 4.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ai-platform
+    attributes:
+      label: AI Platform (if applicable)
+      description: Which AI assistant are you using?
+      options:
+        - Not applicable
+        - Claude Code
+        - Qwen Code
+        - Gemini CLI
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-output
+    attributes:
+      label: Error Output
+      description: Paste any error messages or logs here.
+      placeholder: |
+        Error: Cannot read property 'compliance' of undefined
+        at generatePRPROMPT (/path/to/file.js:123)
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here.
+      placeholder: |
+        - This happens only with healthcare PRDs
+        - Works fine with e-commerce PRDs
+        - Started after upgrading from v3.1
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm the following before submitting
+      options:
+        - label: I have checked the [Troubleshooting Guide](https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/TROUBLESHOOTING.md)
+          required: true
+        - label: I have searched for [existing issues](https://github.com/Kandil7/prprompts-flutter-generator/issues)
+          required: true
+        - label: I have provided all required information above
+          required: true
+        - label: I am using Node.js 18.x or 20.x
+          required: false
