@@ -98,8 +98,12 @@
     "QWEN.md"
   ],
   "scripts": {
-    "test": "npm run test:validation && npm run test:commands",
-    "test:validation": "bash ./scripts/test-validation.sh",
+    "test": "jest",
+    "test:jest": "jest --coverage",
+    "test:validation": "jest tests/validation.test.js",
+    "test:package": "jest tests/package.test.js",
+    "test:prompts": "jest tests/prompts.test.js",
+    "test:bash": "bash ./scripts/test-validation.sh && bash ./scripts/test-commands.sh",
     "test:commands": "bash ./scripts/test-commands.sh",
     "test:quick": "echo \"✅ Quick validation: Checking prompt files...\" && ls .claude/prompts/*.md | wc -l",
     "test:integration-suite": "bash ./scripts/test-integration.sh",
@@ -140,7 +144,10 @@
     "@anthropic-ai/claude-code": ">=1.0.0"
   },
   "optionalDependencies": {
-    "@qwenlm/qwen-code": ">=1.0.0",
-    "@google/gemini-cli": ">=1.0.0"
+    "@google/gemini-cli": ">=1.0.0",
+    "@qwenlm/qwen-code": ">=1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
   }
 }
