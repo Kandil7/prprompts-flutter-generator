@@ -1,927 +1,919 @@
-# PRPROMPTS Generator - Troubleshooting Guide
+# PRPROMPTS Troubleshooting Guide
 
-Common issues and solutions for the PRD-to-PRPROMPTS Generator.
+This guide helps you diagnose and fix common issues with PRPROMPTS v4.0.
+
+---
 
 ## Table of Contents
 
 - [Installation Issues](#installation-issues)
-- [Command Not Found Errors](#command-not-found-errors)
-- [PRD Generation Problems](#prd-generation-problems)
+- [PRD Creation Problems](#prd-creation-problems)
 - [PRPROMPTS Generation Issues](#prprompts-generation-issues)
+- [Extension Installation Problems](#extension-installation-problems)
+- [Automation Command Issues](#automation-command-issues)
+- [Performance Problems](#performance-problems)
 - [Platform-Specific Issues](#platform-specific-issues)
-- [Performance Issues](#performance-issues)
-- [AI Assistant Issues](#ai-assistant-issues)
-- [Common Error Messages](#common-error-messages)
+- [Getting Help](#getting-help)
 
 ---
 
 ## Installation Issues
 
-### Issue: Claude Code not installed
+### Issue: `npm install -g prprompts-flutter-generator` fails
 
-**Error:**
+**Symptoms:**
 ```
-bash: claude: command not found
+npm ERR! code EACCES
+npm ERR! syscall access
+npm ERR! path /usr/local/lib/node_modules
+npm ERR! Error: EACCES: permission denied
 ```
 
-**Solution:**
+**Solutions:**
 
+**Option 1 (Recommended): Use nvm (Node Version Manager)**
 ```bash
-# Install Claude Code globally
-npm install -g @anthropic-ai/claude-code
+# Install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 
-# Verify installation
-claude --version
+# Install Node.js
+nvm install 20
+nvm use 20
+
+# Install PRPROMPTS
+npm install -g prprompts-flutter-generator
 ```
 
-**Alternative (if npm install fails):**
-
+**Option 2: Use sudo (not recommended)**
 ```bash
-# macOS/Linux - Install Node.js first
-brew install node  # macOS
-# or
-sudo apt install nodejs npm  # Ubuntu/Debian
+sudo npm install -g prprompts-flutter-generator
+```
 
-# Windows - Download Node.js from https://nodejs.org
+**Option 3: Change npm global directory**
+```bash
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
 
-# Then install Claude Code
-npm install -g @anthropic-ai/claude-code
+npm install -g prprompts-flutter-generator
 ```
 
 ---
 
-### Issue: Commands not found after installation
+### Issue: Wrong Node.js version
 
-**Error:**
+**Symptoms:**
 ```
-claude create-prd: command not found
-```
-
-**Diagnosis:**
-
-```bash
-# Check if config directory exists
-ls ~/.config/claude/prompts/  # macOS/Linux
-dir %USERPROFILE%\.config\claude\prompts\  # Windows
-
-# Check config file
-cat ~/.config/claude/config.yml  # macOS/Linux
-type %USERPROFILE%\.config\claude\config.yml  # Windows
+Error: The engine "node" is incompatible with this module
 ```
 
 **Solution:**
-
 ```bash
-# Re-run installer
-cd prprompts-flutter-generator
+# Check current version
+node --version
 
-# Linux/macOS
-./scripts/install-commands.sh --global
+# Install Node.js 18 or 20
+nvm install 20
+nvm use 20
 
-# Windows (Batch)
-scripts\install-commands.bat --global
+# Verify
+node --version  # Should show v20.x.x
 
-# Windows (PowerShell)
-powershell -ExecutionPolicy Bypass -File .\scripts\install-commands.ps1 --global
-
-# Verify files were copied
-ls ~/.config/claude/prompts/  # Should show all .md files
+# Reinstall PRPROMPTS
+npm install -g prprompts-flutter-generator
 ```
 
 ---
 
-### Issue: Permission denied
+### Issue: Command not found after installation
 
-**Error:**
-```
-mkdir: cannot create directory '~/.config/claude': Permission denied
+**Symptoms:**
+```bash
+prprompts --version
+# zsh: command not found: prprompts
 ```
 
 **Solution:**
 
+**Check installation location:**
 ```bash
-# Check directory ownership
-ls -la ~/.config/
-
-# Fix permissions
-sudo chown -R $USER:$USER ~/.config/claude
-
-# Or use sudo for installation (not recommended)
-sudo ./scripts/install-commands.sh --global
+npm list -g --depth=0 | grep prprompts
 ```
 
----
-
-## Command Not Found Errors
-
-### Issue: `claude` command not in PATH
-
-**Error:**
-```
-zsh: command not found: claude
-```
-
-**Solution:**
-
+**If installed, add to PATH:**
 ```bash
-# Find npm global bin directory
-npm bin -g
-
-# Add to PATH in ~/.bashrc or ~/.zshrc
+# For bash
 echo 'export PATH="$(npm bin -g):$PATH"' >> ~/.bashrc
 source ~/.bashrc
 
-# Or for zsh
+# For zsh
 echo 'export PATH="$(npm bin -g):$PATH"' >> ~/.zshrc
 source ~/.zshrc
-```
-
----
-
-### Issue: Aliases not working
-
-**Error:**
-```
-bash: prp-gen: command not found
-```
-
-**Solution:**
-
-```bash
-# Check if aliases are loaded
-type prp-gen
-
-# Load aliases manually
-source scripts/prp-aliases.sh
-
-# Or add to ~/.bashrc permanently
-echo "source $(pwd)/scripts/prp-aliases.sh" >> ~/.bashrc
-source ~/.bashrc
 
 # Verify
-alias | grep prp
+which prprompts
+prprompts --version
 ```
 
 ---
 
-## PRD Generation Problems
+## PRD Creation Problems
 
-### Issue: Auto-generate PRD fails with "No description found"
-
-**Error:**
-```
-Error: Could not find project_description.md
-```
-
-**Solution:**
-
-```bash
-# Check if file exists
-ls project_description.md
-
-# If missing, create it
-cat > project_description.md << 'EOF'
-# My Project
-
-Brief description of the project.
-
-## Features
-1. Feature 1
-2. Feature 2
-EOF
-
-# Re-run
-claude auto-gen-prd
-```
-
----
-
-### Issue: PRD validation fails
-
-**Error:**
-```
-Error: PRD missing required YAML frontmatter
-```
-
-**Solution:**
-
-```bash
-# Check PRD structure
-head -20 docs/PRD.md
-
-# Ensure YAML frontmatter exists
-cat > docs/PRD.md << 'EOF'
----
-project_name: "MyApp"
-project_type: "healthcare"
-platforms: ["ios", "android"]
-compliance: ["hipaa"]
----
-
-# MyApp PRD
-...
-EOF
-```
-
-**Required YAML Fields:**
-- `project_name`
-- `project_type`
-- `platforms`
-- `compliance` (can be empty array)
-
----
-
-### Issue: Interactive PRD creation stuck
+### Issue: Interactive wizard hangs or freezes
 
 **Symptoms:**
-- Prompt hangs after question
-- No response after entering text
+- `prprompts create` starts but doesn't show prompts
+- Cursor blinks but nothing happens
 
-**Solution:**
+**Solutions:**
 
+**1. Check terminal compatibility:**
 ```bash
-# Check Claude Code connection
-claude --version
+# Try with basic input
+echo "test" | prprompts create
+```
 
-# Restart Claude Code
-# (Usually press Ctrl+C and retry)
+**2. Use auto mode instead:**
+```bash
+prprompts auto
+```
 
-# If persistent, use alternative method
-./scripts/auto-gen-prd.sh
+**3. Create PRD manually:**
+```bash
+mkdir -p docs
+prprompts manual
+```
+
+**4. Update terminal:**
+```bash
+# macOS: Update Terminal.app or use iTerm2
+# Windows: Use Windows Terminal instead of CMD
+# Linux: Update your terminal emulator
 ```
 
 ---
 
-### Issue: PRD from files doesn't read my files
+### Issue: PRD file not created
 
-**Error:**
+**Symptoms:**
 ```
-Error: Could not read file: docs/requirements.md
-```
-
-**Diagnosis:**
-
-```bash
-# Check file exists and is readable
-ls -la docs/requirements.md
-
-# Check file encoding (should be UTF-8)
-file docs/requirements.md
+✓ PRD created successfully
+# But docs/PRD.md doesn't exist
 ```
 
 **Solution:**
 
+**Check current directory:**
 ```bash
-# Convert to UTF-8 if needed
-iconv -f ISO-8859-1 -t UTF-8 docs/requirements.md > docs/requirements-utf8.md
+pwd
+ls -la
 
-# Use absolute paths if relative paths fail
-claude prd-from-files
-# Then enter: /full/path/to/docs/requirements.md
+# PRD should be in current directory
+ls docs/PRD.md
+```
 
-# Or check permissions
-chmod 644 docs/requirements.md
+**If missing, check permissions:**
+```bash
+# Check write permissions
+ls -ld .
+mkdir -p docs
+touch docs/test.txt
+```
+
+**Create manually if needed:**
+```bash
+mkdir -p docs
+nano docs/PRD.md
+# Or use prprompts manual
 ```
 
 ---
 
 ## PRPROMPTS Generation Issues
 
-### Issue: PRPROMPTS generation fails with "PRD not found"
+### Issue: `prprompts generate` fails with "PRD not found"
 
-**Error:**
+**Symptoms:**
 ```
-Error: docs/PRD.md not found. Please create a PRD first.
+Error: PRD file not found at docs/PRD.md
 ```
 
-**Solution:**
+**Solutions:**
 
+**1. Verify PRD location:**
 ```bash
 # Check if PRD exists
-ls docs/PRD.md
+ls -la docs/PRD.md
 
-# If missing, create one
-claude create-prd
-# or
-claude auto-gen-prd
+# If not, create one
+prprompts create
+```
 
-# Verify PRD is valid
+**2. Specify custom PRD location:**
+```bash
+prprompts generate --prd-path ./custom/path/PRD.md
+```
+
+**3. Use example PRD:**
+```bash
+# Copy example PRD
+cp node_modules/prprompts-flutter-generator/examples/healthcare-prd.md docs/PRD.md
+
+# Generate
+prprompts generate
+```
+
+---
+
+### Issue: Only some PRPROMPTS files are generated
+
+**Symptoms:**
+```
+✓ Generated 15/32 PRPROMPTS
+✗ 17 files failed to generate
+```
+
+**Solutions:**
+
+**1. Check disk space:**
+```bash
+df -h .
+```
+
+**2. Check file permissions:**
+```bash
+ls -la .claude/prompts/
+chmod -R u+w .claude/
+```
+
+**3. Regenerate with verbose output:**
+```bash
+DEBUG=true prprompts generate
+```
+
+**4. Clear and regenerate:**
+```bash
+rm -rf .claude/prompts/prprompts/
+prprompts generate
+```
+
+---
+
+## Extension Installation Problems
+
+### Issue: Extension not found by AI assistant
+
+**Symptoms:**
+- Commands like `/prp-bootstrap` not recognized
+- AI says "I don't have access to that command"
+
+**Solutions:**
+
+**For Claude Code:**
+```bash
+# Check if extension installed
+ls ~/.config/claude/prompts/prprompts/
+ls ~/.config/claude/commands/
+
+# If missing, reinstall
+bash install-claude-extension.sh
+
+# Verify
+ls ~/.config/claude/commands/ | grep prp
+```
+
+**For Qwen Code:**
+```bash
+# Check installation
+ls ~/.qwen/prompts/prprompts/
+
+# Reinstall if needed
+bash install-qwen-extension.sh
+```
+
+**For Gemini CLI:**
+```bash
+# Check installation
+ls ~/.gemini/prompts/prprompts/
+
+# Reinstall if needed
+bash install-gemini-extension.sh
+```
+
+---
+
+### Issue: Permission denied during extension installation
+
+**Symptoms:**
+```
+bash: ./install-claude-extension.sh: Permission denied
+```
+
+**Solution:**
+```bash
+# Make executable
+chmod +x install-claude-extension.sh
+chmod +x install-qwen-extension.sh
+chmod +x install-gemini-extension.sh
+
+# Run
+bash install-claude-extension.sh
+```
+
+---
+
+### Issue: Extension installed but commands still not working
+
+**Symptoms:**
+- Extension files exist
+- Commands still not recognized
+
+**Solutions:**
+
+**1. Restart AI assistant:**
+- Close and reopen Claude Code/Qwen Code/Gemini CLI
+
+**2. Check command format:**
+```
+# Correct
+/prp-bootstrap-from-prprompts
+
+# Incorrect
+prp-bootstrap  (missing /)
+/prp bootstrap  (extra space)
+```
+
+**3. Verify prompt files:**
+```bash
+# Check content of prompt files
+cat ~/.config/claude/prompts/prprompts/automation/bootstrap-from-prprompts.md
+```
+
+**4. Manual command registration:**
+```bash
+# For Claude Code, check commands.json
+cat ~/.config/claude/commands/prp-bootstrap.json
+```
+
+---
+
+## Automation Command Issues
+
+### Issue: `/prp-bootstrap` creates incomplete project
+
+**Symptoms:**
+- Some folders missing
+- Dependencies not added
+- Tests not created
+
+**Solutions:**
+
+**1. Check PRD quality:**
+```bash
+# Make sure PRD has all required sections
 cat docs/PRD.md
+
+# Should include:
+# - Project Overview
+# - Features
+# - Technical Requirements
+# - Compliance needs
+```
+
+**2. Re-run with explicit instructions:**
+```
+/prp-bootstrap-from-prprompts
+
+Create complete Flutter project with:
+- Clean Architecture
+- BLoC state management
+- All 32 PRPROMPTS implemented
+- Test infrastructure
+- [Your specific requirements]
+```
+
+**3. Run generate again:**
+```bash
+# Ensure all PRPROMPTS are present
+prprompts validate
+prprompts generate
 ```
 
 ---
 
-### Issue: Generated files have missing content
+### Issue: `/prp-full-cycle` produces errors
 
 **Symptoms:**
-- Files generated but very short
-- Missing EXAMPLES or CONSTRAINTS sections
-
-**Diagnosis:**
-
-```bash
-# Check file sizes
-ls -lh PRPROMPTS/
-
-# Files should be 500-600 words (~3-5 KB each)
-# If files are < 1 KB, something went wrong
+```
+Error: Feature implementation failed
+Dependency conflicts
+Test failures
 ```
 
-**Solution:**
+**Solutions:**
 
-```bash
-# Regenerate with verbose mode
-claude gen-prprompts --verbose
+**1. Check existing code:**
+- Make sure base architecture exists
+- Verify dependencies are installed
+- Check for naming conflicts
 
-# Or regenerate specific files
-claude gen-file security_and_compliance
+**2. Be more specific:**
+```
+# Too vague
+/prp-full-cycle Add user authentication
 
-# Check PRD has all required fields
-grep -A 10 "^---" docs/PRD.md
+# Better
+/prp-full-cycle Create user authentication feature with:
+- Email/password login
+- OAuth (Google, Apple)
+- JWT token management
+- Secure storage
+- BLoC state management
+- Unit + widget + integration tests
+```
+
+**3. Run in stages:**
+```
+# Stage 1: Models and repositories
+/prp-implement-next Focus on domain and data layers for authentication
+
+# Stage 2: Business logic
+/prp-implement-next Add BLoC for authentication
+
+# Stage 3: UI
+/prp-implement-next Create authentication UI screens
+
+# Stage 4: Tests
+/prp-implement-next Add comprehensive tests
 ```
 
 ---
 
-### Issue: Files not customized for my PRD
+## Performance Problems
 
-**Symptoms:**
-- Generic examples instead of project-specific
-- No compliance-specific content despite YAML field
+### Issue: Slow PRD creation
 
 **Solution:**
-
 ```bash
-# Verify PRD YAML frontmatter
-head -30 docs/PRD.md
+# Use faster creation methods
 
-# Ensure compliance field is set
-# WRONG:
-compliance: ""
+# Option 1: Auto mode (AI-generated)
+prprompts auto  # Faster than interactive
 
-# CORRECT:
-compliance: ["hipaa", "gdpr"]
+# Option 2: From existing docs
+prprompts from-files --dir ./requirements/
 
-# Regenerate after fixing PRD
-claude gen-prprompts
+# Option 3: Manual (instant)
+prprompts manual
 ```
 
 ---
 
-### Issue: Generation hangs or times out
+### Issue: Slow PRPROMPTS generation
 
 **Symptoms:**
-- Command runs but never completes
-- "Generating..." message for > 5 minutes
+- `prprompts generate` takes >30 seconds
 
-**Solution:**
+**Solutions:**
 
+**1. Check disk I/O:**
 ```bash
-# Check Claude Code status
-claude --version
+# Monitor disk usage
+iostat 1
 
-# Try generating by phase instead
-claude gen-phase-1  # Should take ~30 seconds
-claude gen-phase-2
-claude gen-phase-3
-
-# Check rate limits (if using API)
-# Wait 60 seconds and retry
-
-# Or use Qwen/Gemini as fallback
-qwen gen-prprompts
+# Check for slow disk
+sudo smartctl -a /dev/sda
 ```
+
+**2. Use SSD if available:**
+```bash
+# Move project to SSD
+mv project /path/to/ssd/
+```
+
+**3. Disable antivirus temporarily:**
+- Some antivirus software slows file creation
+
+---
+
+### Issue: AI automation commands are slow
+
+**Symptoms:**
+- `/prp-bootstrap` takes >20 minutes
+- `/prp-full-cycle` times out
+
+**Solutions:**
+
+**1. Use faster AI model:**
+- Gemini CLI (fastest for prototyping)
+- Qwen Code (balanced)
+- Claude Code (highest quality but slower)
+
+**2. Break down large features:**
+```
+# Instead of one large command
+/prp-full-cycle Build complete e-commerce platform
+
+# Use multiple smaller commands
+/prp-full-cycle Build product catalog
+/prp-full-cycle Build shopping cart
+/prp-full-cycle Build checkout
+```
+
+**3. Check internet connection:**
+- AI commands require internet
+- Slow connection = slow responses
 
 ---
 
 ## Platform-Specific Issues
 
-### Windows-Specific
+### Windows Issues
 
-#### Issue: Batch script doesn't run
-
-**Error:**
-```
-'scripts\install-commands.bat' is not recognized as an internal or external command
-```
-
-**Solution:**
-
-```cmd
-REM Use full path
-cd K:\tools\cli-tools\prprompts-flutter-generator
-scripts\install-commands.bat --global
-
-REM Or use PowerShell
-powershell -ExecutionPolicy Bypass -File .\scripts\install-commands.ps1 --global
-
-REM Or use Git Bash
-bash ./scripts/install-commands.sh --global
-```
-
----
-
-#### Issue: PowerShell execution policy blocked
-
-**Error:**
-```
-File cannot be loaded because running scripts is disabled on this system
-```
-
-**Solution:**
-
-```powershell
-# Bypass execution policy for this session
-powershell -ExecutionPolicy Bypass -File .\scripts\install-commands.ps1 --global
-
-# Or change policy (requires admin)
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
----
-
-#### Issue: Path with spaces
-
-**Error:**
-```
-The system cannot find the path specified.
-```
-
-**Solution:**
-
-```cmd
-REM Use quotes around paths
-cd "C:\Users\My Name\projects\prprompts-flutter-generator"
-scripts\install-commands.bat --global
-
-REM Or use short path
-cd C:\Users\MYNAME~1\projects\PRPROM~1
-```
-
----
-
-### macOS-Specific
-
-#### Issue: Permission denied on scripts
-
-**Error:**
-```
-zsh: permission denied: ./scripts/install-commands.sh
-```
-
-**Solution:**
-
-```bash
-# Make scripts executable
-chmod +x scripts/*.sh
-
-# Or run with bash
-bash ./scripts/install-commands.sh --global
-```
-
----
-
-#### Issue: macOS blocks unsigned script
-
-**Error:**
-```
-"install-commands.sh" cannot be opened because it is from an unidentified developer
-```
-
-**Solution:**
-
-```bash
-# Remove quarantine attribute
-xattr -d com.apple.quarantine scripts/install-commands.sh
-
-# Or allow in System Preferences
-# System Preferences > Security & Privacy > General > "Allow anyway"
-```
-
----
-
-### Linux-Specific
-
-#### Issue: Missing dependencies
-
-**Error:**
-```
-bash: curl: command not found
-```
-
-**Solution:**
-
-```bash
-# Ubuntu/Debian
-sudo apt update
-sudo apt install curl git nodejs npm
-
-# Fedora/RHEL
-sudo dnf install curl git nodejs npm
-
-# Arch
-sudo pacman -S curl git nodejs npm
-```
-
----
-
-## Performance Issues
-
-### Issue: Generation takes too long (> 5 minutes)
-
-**Causes:**
-- Slow network connection
-- API rate limiting
-- Large PRD file
-
-**Solution:**
-
-```bash
-# 1. Generate by phase to identify bottleneck
-time claude gen-phase-1  # Should be ~30 seconds
-time claude gen-phase-2
-time claude gen-phase-3
-
-# 2. Use faster AI model
-gemini gen-prprompts  # Gemini is faster, free tier
-
-# 3. Check network
-ping claude.ai
-
-# 4. Simplify PRD if it's very long (> 10 pages)
-```
-
----
-
-### Issue: High memory usage
+#### Issue: Scripts not working on Windows
 
 **Symptoms:**
-- System slowdown during generation
-- Out of memory errors
+```
+'bash' is not recognized as an internal or external command
+```
 
-**Solution:**
+**Solutions:**
 
+**Option 1: Use Windows equivalents**
+```cmd
+REM Instead of bash scripts
+scripts\test-commands.bat
+scripts\test-integration.bat
+```
+
+**Option 2: Install Git Bash**
 ```bash
-# Generate files one by one
-for file in feature_scaffold responsive_layout bloc_implementation; do
-  claude gen-file $file
-done
+# Download from https://git-scm.com/download/win
+# Then use Git Bash terminal
 
-# Or use lighter AI model
-qwen gen-prprompts  # Uses less memory
+bash scripts/test-commands.sh
+```
 
-# Close other applications
-# Increase Node.js memory limit
-export NODE_OPTIONS="--max-old-space-size=4096"
-claude gen-prprompts
+**Option 3: Use WSL (Windows Subsystem for Linux)**
+```bash
+wsl --install
+# Then use Linux commands normally
 ```
 
 ---
 
-## AI Assistant Issues
+#### Issue: Path issues on Windows
 
-### Claude Code Issues
-
-#### Issue: Rate limit exceeded
-
-**Error:**
+**Symptoms:**
 ```
-Error: Rate limit exceeded. Please try again in 60 seconds.
+Error: Cannot find path '.claude\prompts\'
 ```
 
 **Solution:**
+```javascript
+// PRPROMPTS handles this automatically, but if you see issues:
 
-```bash
-# Wait 60 seconds
-sleep 60
+// Use platform-agnostic paths
+const path = require('path');
+const promptPath = path.join(process.env.HOME, '.claude', 'prompts');
 
-# Or use Qwen/Gemini as alternative
-qwen gen-prprompts
-gemini gen-prprompts
-
-# Or upgrade Claude plan for higher limits
+// Or specify Windows path explicitly
+const windowsPath = 'C:\\Users\\YourName\\.claude\\prompts';
 ```
 
 ---
 
-#### Issue: Context limit exceeded
+### macOS Issues
 
-**Error:**
+#### Issue: Permission errors on macOS Catalina+
+
+**Symptoms:**
 ```
-Error: Input too long. Please reduce PRD size.
+Operation not permitted
 ```
 
 **Solution:**
-
 ```bash
-# Check PRD size
-wc -l docs/PRD.md
+# Grant Full Disk Access to Terminal
+# System Preferences → Security & Privacy → Privacy → Full Disk Access
+# Add Terminal.app or iTerm2
 
-# If > 1000 lines, split into phases
-claude gen-phase-1
-# Review and approve
-claude gen-phase-2
-# Review and approve
-claude gen-phase-3
+# Or use specific permissions
+chmod +x install-claude-extension.sh
+sudo chmod +x /usr/local/bin/prprompts
 ```
 
 ---
 
-### Qwen Code Issues
+### Linux Issues
 
-#### Issue: Qwen commands not found
+#### Issue: Different shell configurations
 
-**Error:**
-```
-qwen: command not found
-```
-
-**Solution:**
-
-```bash
-# Install Qwen Code first
-# See QWEN.md for installation
-
-# Or install commands
-./scripts/install-qwen-commands.sh --global
-```
-
----
-
-### Gemini CLI Issues
-
-#### Issue: Gemini authentication fails
-
-**Error:**
-```
-Error: Not authenticated. Please run 'gemini auth login'
-```
+**Symptoms:**
+- Commands work in bash but not zsh
+- PATH not set correctly
 
 **Solution:**
-
 ```bash
-# Authenticate Gemini CLI
-gemini auth login
+# Add to both .bashrc and .zshrc
+echo 'export PATH="$(npm bin -g):$PATH"' >> ~/.bashrc
+echo 'export PATH="$(npm bin -g):$PATH"' >> ~/.zshrc
 
-# Follow browser prompt to authenticate
-
-# Verify
-gemini auth status
-
-# Then retry
-gemini gen-prprompts
+# Reload
+source ~/.bashrc
+source ~/.zshrc
 ```
 
 ---
 
 ## Common Error Messages
 
-### Error: "YAML parsing failed"
+### Error: "ENOENT: no such file or directory"
 
-**Cause:** Invalid YAML syntax in PRD frontmatter
-
-**Solution:**
-
-```bash
-# Check YAML syntax
-head -30 docs/PRD.md
-
-# Common issues:
-# 1. Missing quotes around strings with special chars
-project_name: MyApp: The Best  # ❌ WRONG
-project_name: "MyApp: The Best"  # ✅ CORRECT
-
-# 2. Wrong array syntax
-platforms: ios, android  # ❌ WRONG
-platforms: ["ios", "android"]  # ✅ CORRECT
-
-# 3. Inconsistent indentation
-compliance:
-  - hipaa  # ❌ WRONG (mixed spaces/tabs)
-compliance:
-  - hipaa  # ✅ CORRECT (2 spaces)
-```
-
----
-
-### Error: "Command not registered in config.yml"
-
-**Cause:** Prompt file not registered in Claude Code config
+**Cause:** Missing file or directory
 
 **Solution:**
-
 ```bash
-# Check config.yml
-cat ~/.config/claude/config.yml
+# Check what file is missing
+ls -la
 
-# Should contain:
-prompts:
-  create-prd:
-    file: "prompts/generate-prd.md"
-    description: "Interactive PRD creation wizard"
+# Create missing directories
+mkdir -p docs .claude/prompts/prprompts
 
-# Re-run installer to fix
-./scripts/install-commands.sh --global
+# Verify structure
+tree -L 2
 ```
 
 ---
 
-### Error: "File already exists"
+### Error: "Module not found"
 
-**Cause:** PRPROMPTS directory already exists
+**Cause:** Missing npm dependencies
 
 **Solution:**
-
 ```bash
-# Option 1: Backup and regenerate
-mv PRPROMPTS PRPROMPTS.backup
-claude gen-prprompts
+# Reinstall dependencies
+npm install -g prprompts-flutter-generator
 
-# Option 2: Force overwrite (if supported)
-claude gen-prprompts --force
-
-# Option 3: Manually delete
-rm -rf PRPROMPTS
-claude gen-prprompts
+# Or install locally
+cd /path/to/prprompts-flutter-generator
+npm install
+npm link
 ```
 
 ---
 
-### Error: "Network error"
+### Error: "Command failed with exit code 1"
 
-**Cause:** Cannot connect to Claude AI API
+**Cause:** General command failure
 
 **Solution:**
-
 ```bash
-# Check internet connection
-ping claude.ai
+# Run with debug output
+DEBUG=true prprompts create
+DEBUG=true prprompts generate
 
-# Check Claude Code status
-claude --version
-
-# Try with different network
-# (switch from WiFi to mobile hotspot)
-
-# Or use offline mode with local model (if available)
-qwen gen-prprompts  # If running Qwen locally
+# Check logs
+cat ~/.prprompts/logs/error.log
 ```
 
 ---
 
-## Getting More Help
+## Debugging Tips
 
-### Collect Diagnostic Information
+### Enable Debug Mode
 
 ```bash
-# System info
-uname -a  # macOS/Linux
-systeminfo  # Windows
+# Set debug environment variable
+export DEBUG=true
 
-# Node.js version
-node --version
-npm --version
+# Run commands
+prprompts create
+prprompts generate
 
-# Claude Code version
-claude --version
+# Check verbose output
+```
 
-# Check installation
-ls ~/.config/claude/prompts/
-cat ~/.config/claude/config.yml
+### Check Logs
 
-# Check PRD
-cat docs/PRD.md
+```bash
+# PRPROMPTS logs (if available)
+cat ~/.prprompts/logs/prprompts.log
 
-# Check error logs (if available)
-cat ~/.claude/logs/error.log
+# npm logs
+cat ~/.npm/_logs/*.log
+
+# System logs
+# macOS
+log show --predicate 'process == "node"' --last 1h
+
+# Linux
+journalctl -u node --since "1 hour ago"
+```
+
+### Verify Installation
+
+```bash
+# Check PRPROMPTS version
+prprompts --version
+
+# Check Node.js version
+node --version  # Should be 18 or 20
+
+# Check npm version
+npm --version  # Should be 9+
+
+# Check global packages
+npm list -g --depth=0 | grep prprompts
+
+# Check where installed
+which prprompts
+ls -la $(which prprompts)
+```
+
+### Test Commands
+
+```bash
+# Test basic commands
+prprompts --help
+prprompts --version
+
+# Test PRD creation
+mkdir test-prprompts
+cd test-prprompts
+prprompts create
+
+# Test generation
+prprompts generate
+
+# Validate
+prprompts validate
 ```
 
 ---
 
-### Enable Verbose Mode
+## Getting Help
 
-```bash
-# Run with verbose output
-claude gen-prprompts --verbose
+### Before Asking for Help
 
-# Or with debug
-export DEBUG=claude:*
-claude gen-prprompts
-```
+1. **Check this guide** - Most issues are covered here
+2. **Search existing issues** - Someone may have had the same problem
+3. **Update to latest version** - Bug may be fixed
+4. **Try with clean install** - Eliminate local issues
 
----
+### Where to Get Help
 
-### Report an Issue
+#### GitHub Issues
+**Best for:** Bug reports, feature requests
+**URL:** https://github.com/Kandil7/prprompts-flutter-generator/issues
 
-If you've tried the solutions above and still have issues:
-
-1. **GitHub Issues:** [github.com/Kandil7/prprompts-flutter-generator/issues](https://github.com/Kandil7/prprompts-flutter-generator/issues)
-
-2. **Include in your report:**
-   - Operating system and version
-   - Node.js version (`node --version`)
-   - Claude Code version (`claude --version`)
-   - Command you ran
-   - Full error message
-   - PRD.md (if relevant)
-   - Output of diagnostic commands above
-
-3. **Template:**
-
+**Template:**
 ```markdown
-## Environment
-- OS: macOS 13.2
-- Node.js: v18.16.0
-- Claude Code: v1.5.0
+**Description:**
+Clear description of the problem
 
-## Command
-```bash
-claude gen-prprompts
+**Steps to Reproduce:**
+1. Step 1
+2. Step 2
+3. Step 3
+
+**Expected Behavior:**
+What should happen
+
+**Actual Behavior:**
+What actually happens
+
+**Environment:**
+- OS: [Windows 11/macOS 14/Ubuntu 22.04]
+- Node.js version: [v20.10.0]
+- PRPROMPTS version: [4.0.0]
+- AI Assistant: [Claude Code/Qwen Code/Gemini CLI]
+
+**Error Output:**
+```
+Paste error messages here
 ```
 
-## Error
-```
-Error: YAML parsing failed
-Line 5: unexpected token
+**Additional Context:**
+Any other relevant information
 ```
 
-## PRD.md (first 30 lines)
-```yaml
----
-project_name: MyApp
-...
-```
+#### GitHub Discussions
+**Best for:** Questions, ideas, general discussion
+**URL:** https://github.com/Kandil7/prprompts-flutter-generator/discussions
 
-## What I've tried
-- Reinstalled Claude Code
-- Checked YAML syntax
-- ...
-```
-
----
-
-## Quick Troubleshooting Checklist
-
-```bash
-# 1. Verify installation
-claude --version  # Should show version number
-ls ~/.config/claude/prompts/  # Should show .md files
-
-# 2. Verify PRD
-ls docs/PRD.md  # Should exist
-head -30 docs/PRD.md  # Should have YAML frontmatter
-
-# 3. Test simple command
-claude create-prd --help  # Should show help text
-
-# 4. Regenerate config
-./scripts/install-commands.sh --global
-
-# 5. Try alternative
-qwen gen-prprompts  # Or gemini gen-prprompts
-
-# 6. Check logs
-cat ~/.claude/logs/error.log  # If exists
-```
+#### Documentation
+**Best for:** Learning how to use PRPROMPTS
+**Files:** README.md, DEVELOPMENT.md, ARCHITECTURE.md
 
 ---
 
-## Related Documentation
+## Quick Fixes Checklist
 
-- [Usage Guide](USAGE.md) - How to use the generator
-- [Customization Guide](CUSTOMIZATION.md) - Customize for your needs
-- [API Reference](API.md) - Command reference
-- [Windows Guide](../WINDOWS.md) - Windows-specific instructions
-- [Qwen Guide](../QWEN.md) - Qwen Code setup
-- [Gemini Guide](../GEMINI.md) - Gemini CLI setup
+If you're having issues, try this checklist:
+
+- [ ] Node.js version 18 or 20?
+- [ ] npm version 9 or higher?
+- [ ] Latest PRPROMPTS version installed?
+- [ ] In correct directory?
+- [ ] PRD file exists at docs/PRD.md?
+- [ ] Permissions correct?
+- [ ] Extensions installed?
+- [ ] AI assistant restarted?
+- [ ] Internet connection working?
+- [ ] Sufficient disk space?
+- [ ] No antivirus blocking?
+- [ ] Tried with debug mode?
+- [ ] Read error messages carefully?
 
 ---
 
-## FAQ
+## Advanced Troubleshooting
 
-**Q: Can I use this without Claude Code?**
-
-A: Yes! You can use Qwen Code or Gemini CLI. See [QWEN.md](../QWEN.md) and [GEMINI.md](../GEMINI.md).
-
-**Q: Can I run this offline?**
-
-A: Partially. You can use locally-hosted Qwen Code for offline generation. Claude Code requires internet connection.
-
-**Q: Does this work with Flutter 2.x?**
-
-A: Generator is designed for Flutter 3.24+, but you can manually edit templates for Flutter 2.x compatibility.
-
-**Q: Can I use this for React Native/SwiftUI/Jetpack Compose?**
-
-A: Not directly. The generator is Flutter-specific, but you can fork and customize for other frameworks.
-
-**Q: How do I update to latest version?**
+### Clean Reinstall
 
 ```bash
-cd prprompts-flutter-generator
-git pull origin master
-./scripts/install-commands.sh --global
+# 1. Uninstall
+npm uninstall -g prprompts-flutter-generator
+
+# 2. Clear npm cache
+npm cache clean --force
+
+# 3. Clear global modules
+rm -rf ~/.npm
+
+# 4. Reinstall
+npm install -g prprompts-flutter-generator
+
+# 5. Verify
+prprompts --version
+npm run doctor  # Run health check
+```
+
+### Reset Extensions
+
+```bash
+# Backup first
+cp -r ~/.config/claude ~/.config/claude.backup
+
+# Remove old extensions
+rm -rf ~/.config/claude/prompts/prprompts
+rm -rf ~/.config/claude/commands/prp-*
+
+# Reinstall
+bash install-claude-extension.sh
+
+# Restart Claude Code
+```
+
+### Doctor Command
+
+```bash
+# Run health check
+npm run doctor
+
+# This checks:
+# - Node.js version
+# - npm version
+# - Installation integrity
+# - Extension status
+# - File permissions
+# - Configuration validity
 ```
 
 ---
 
-**Still stuck? [Open an issue](https://github.com/Kandil7/prprompts-flutter-generator/issues) with details!**
+## Still Having Issues?
+
+If you've tried everything and still have problems:
+
+1. **Create minimal reproduction:**
+   ```bash
+   mkdir prprompts-test
+   cd prprompts-test
+   prprompts create
+   # Document each step where it fails
+   ```
+
+2. **Collect information:**
+   ```bash
+   prprompts --version > debug-info.txt
+   node --version >> debug-info.txt
+   npm --version >> debug-info.txt
+   uname -a >> debug-info.txt  # Or: ver (Windows)
+   ```
+
+3. **Open GitHub issue** with:
+   - Clear problem description
+   - Steps to reproduce
+   - Error messages
+   - debug-info.txt contents
+   - What you've tried
+
+We're here to help! 🚀
+
+---
+
+**Last Updated:** 2025-01-18
+**PRPROMPTS Version:** 4.0.0
