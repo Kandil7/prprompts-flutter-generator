@@ -66,6 +66,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Create Gemini config directory if it doesn't exist
 echo -e "${YELLOW}📁 Setting up Gemini configuration...${NC}"
 mkdir -p "$GEMINI_CONFIG_DIR/prompts"
+mkdir -p "$GEMINI_CONFIG_DIR/commands"
 mkdir -p "$GEMINI_CONFIG_DIR/commands/automation"
 echo -e "${GREEN}✓ Created config directories${NC}"
 
@@ -74,6 +75,17 @@ echo -e "${YELLOW}📋 Installing prompts...${NC}"
 cp -r "$SCRIPT_DIR/.gemini/prompts/"* "$GEMINI_CONFIG_DIR/prompts/" 2>/dev/null || true
 PROMPT_COUNT=$(find "$GEMINI_CONFIG_DIR/prompts/" -type f -name "*.md" | wc -l)
 echo -e "${GREEN}✓ Installed ${PROMPT_COUNT} prompt files${NC}"
+
+# Copy slash commands (root level)
+echo -e "${YELLOW}⚡ Installing slash commands...${NC}"
+# Copy root-level command files (not subdirectories)
+for cmd_file in "$SCRIPT_DIR/.gemini/commands/"*.md; do
+    if [ -f "$cmd_file" ]; then
+        cp "$cmd_file" "$GEMINI_CONFIG_DIR/commands/" 2>/dev/null || true
+    fi
+done
+SLASH_COUNT=$(find "$GEMINI_CONFIG_DIR/commands/" -maxdepth 1 -type f -name "*.md" | wc -l)
+echo -e "${GREEN}✓ Installed ${SLASH_COUNT} slash commands${NC}"
 
 # Copy automation commands
 echo -e "${YELLOW}🤖 Installing v4.0 automation commands...${NC}"
@@ -124,27 +136,28 @@ echo -e "${GREEN}╚════════════════════
 echo ""
 
 # Show installed commands
-echo -e "${BLUE}📚 Available Commands:${NC}"
+echo -e "${BLUE}📚 Available Slash Commands:${NC}"
+echo -e "${BLUE}(All commands also available via: gemini then /help)${NC}"
 echo ""
 echo -e "${YELLOW}PRD Generation:${NC}"
-echo "  gemini create-prd          # Interactive PRD wizard"
-echo "  gemini auto-gen-prd        # Auto-generate from description"
-echo "  gemini prd-from-files      # Generate from existing docs"
-echo "  gemini analyze-prd         # Validate PRD"
+echo "  /create-prd                # Interactive PRD wizard"
+echo "  /analyze-prd               # Validate PRD"
+echo "  auto-gen-prd               # Auto-generate from description"
+echo "  prd-from-files             # Generate from existing docs"
 echo ""
 echo -e "${YELLOW}PRPROMPTS Generation:${NC}"
-echo "  gemini gen-prprompts       # Generate all 32 files"
-echo "  gemini gen-phase-1         # Phase 1: Core Architecture"
-echo "  gemini gen-phase-2         # Phase 2: Quality & Security"
-echo "  gemini gen-phase-3         # Phase 3: Demo & Learning"
-echo "  gemini gen-file <name>     # Single file"
+echo "  /gen-prprompts             # Generate all 32 files"
+echo "  gen-phase-1                # Phase 1: Core Architecture"
+echo "  gen-phase-2                # Phase 2: Quality & Security"
+echo "  gen-phase-3                # Phase 3: Demo & Learning"
+echo "  gen-file <name>            # Single file"
 echo ""
 echo -e "${YELLOW}🆕 v4.0 Automation (40-60x faster!):${NC}"
-echo "  gemini bootstrap-from-prprompts  # Complete setup (2 min)"
-echo "  gemini implement-next            # Auto-implement feature (10 min)"
-echo "  gemini full-cycle                # Implement 1-10 features (1-2 hours)"
-echo "  gemini review-and-commit         # Validate & commit"
-echo "  gemini qa-check                  # Compliance audit"
+echo "  /bootstrap-from-prprompts  # Complete setup (2 min)"
+echo "  /implement-next            # Auto-implement feature (10 min)"
+echo "  /full-cycle                # Implement 1-10 features (1-2 hours)"
+echo "  /review-and-commit         # Validate & commit"
+echo "  /qa-check                  # Compliance audit"
 echo ""
 
 echo -e "${BLUE}🚀 Quick Start:${NC}"
