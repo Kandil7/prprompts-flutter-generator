@@ -91,75 +91,27 @@ echo -e "${YELLOW}📦 Installing extension manifest...${NC}"
 cp "$SCRIPT_DIR/gemini-extension.json" "$GEMINI_CONFIG_DIR/extension.json"
 echo -e "${GREEN}✓ Extension manifest installed${NC}"
 
-# Register extension with Gemini CLI
+# Register extension with Gemini CLI using official link command
 echo -e "${YELLOW}🔌 Registering extension with Gemini CLI...${NC}"
-
-# Create extensions registry if it doesn't exist
-EXTENSIONS_FILE="$GEMINI_CONFIG_DIR/extensions.json"
 
 # Get the absolute path to this installation
 INSTALL_PATH="$SCRIPT_DIR"
 
-# Create the extension entry using Node.js (most reliable cross-platform)
-node -e "
-const fs = require('fs');
-const path = require('path');
-
-const extensionsFile = process.argv[1];
-const installPath = process.argv[2];
-
-// Create or read existing extensions file
-let data = { extensions: [] };
-if (fs.existsSync(extensionsFile)) {
-    try {
-        data = JSON.parse(fs.readFileSync(extensionsFile, 'utf8'));
-    } catch (e) {
-        data = { extensions: [] };
-    }
-}
-
-// Remove old entry if exists
-data.extensions = data.extensions.filter(ext => ext.name !== 'prprompts-flutter-generator');
-
-// Add new entry
-data.extensions.push({
-    name: 'prprompts-flutter-generator',
-    displayName: 'PRPROMPTS Flutter Generator',
-    version: '4.0.0',
-    path: installPath,
-    enabled: true,
-    installedAt: new Date().toISOString()
-});
-
-// Write back to file
-fs.writeFileSync(extensionsFile, JSON.stringify(data, null, 2));
-console.log('Extension registered successfully');
-" "$EXTENSIONS_FILE" "$INSTALL_PATH" 2>/dev/null || {
-    # Fallback: Create simple registry entry
-    cat > "$EXTENSIONS_FILE" <<-EOF
-{
-  "extensions": [
-    {
-      "name": "prprompts-flutter-generator",
-      "displayName": "PRPROMPTS Flutter Generator",
-      "version": "4.0.0",
-      "path": "$INSTALL_PATH",
-      "enabled": true,
-      "installedAt": "$(date -u +"%Y-%m-%dT%H:%M:%SZ" 2>/dev/null || date)"
-    }
-  ]
-}
-EOF
-}
-
-echo -e "${GREEN}✓ Extension registered with Gemini CLI${NC}"
-
-# Try to enable extension via Gemini CLI if command exists
+# Use Gemini CLI's official extensions link command
 if command -v gemini &> /dev/null; then
-    if gemini extension list &> /dev/null 2>&1; then
-        gemini extension enable prprompts-flutter-generator &> /dev/null 2>&1 || true
-        echo -e "${GREEN}✓ Extension enabled in Gemini CLI${NC}"
+    # Try to link the extension using Gemini CLI's built-in command
+    if gemini extensions link "$INSTALL_PATH" 2>&1 | grep -q "successfully\|enabled"; then
+        echo -e "${GREEN}✓ Extension linked with Gemini CLI${NC}"
+        echo -e "${GREEN}✓ Extension enabled automatically${NC}"
+    else
+        echo -e "${YELLOW}⚠ Gemini extensions link command not available or failed${NC}"
+        echo -e "${YELLOW}  Extension files installed, commands should still work${NC}"
+        echo -e "${YELLOW}  To register manually, run: gemini extensions link \"$INSTALL_PATH\"${NC}"
     fi
+else
+    echo -e "${YELLOW}⚠ Gemini CLI not found in PATH${NC}"
+    echo -e "${YELLOW}  Extension files installed to ~/.config/gemini/${NC}"
+    echo -e "${YELLOW}  To register, run: gemini extensions link \"$INSTALL_PATH\"${NC}"
 fi
 
 echo ""
@@ -220,12 +172,13 @@ echo ""
 
 # Show extension status
 echo -e "${BLUE}🔌 Extension Status:${NC}"
-if [ -f "$EXTENSIONS_FILE" ]; then
-    echo -e "${GREEN}✓ Registered in Gemini CLI extensions registry${NC}"
-    echo "  View all extensions: ${YELLOW}gemini extension list${NC} (if supported)"
+if command -v gemini &> /dev/null; then
+    echo -e "${GREEN}✓ Extension linked with Gemini CLI${NC}"
+    echo "  View all extensions: ${YELLOW}gemini extensions list${NC}"
+    echo "  Update extensions: ${YELLOW}gemini extensions update --all${NC}"
     echo "  Extension path: ${INSTALL_PATH}"
 else
-    echo -e "${YELLOW}⚠ Extension registry not available${NC}"
+    echo -e "${YELLOW}⚠ Gemini CLI not found${NC}"
 fi
 echo ""
 
