@@ -99,14 +99,15 @@ INSTALL_PATH="$SCRIPT_DIR"
 
 # Use Gemini CLI's official extensions link command
 if command -v gemini &> /dev/null; then
-    # Try to link the extension using Gemini CLI's built-in command
-    if gemini extensions link "$INSTALL_PATH" 2>&1 | grep -q "successfully\|enabled"; then
+    # Try to link the extension using Gemini CLI's built-in command with auto-confirmation
+    echo -e "${BLUE}  Note: Extension linking requires confirmation for security${NC}"
+    if echo "Y" | gemini extensions link "$INSTALL_PATH" 2>&1 | grep -q "successfully\|enabled"; then
         echo -e "${GREEN}✓ Extension linked with Gemini CLI${NC}"
         echo -e "${GREEN}✓ Extension enabled automatically${NC}"
     else
-        echo -e "${YELLOW}⚠ Gemini extensions link command not available or failed${NC}"
-        echo -e "${YELLOW}  Extension files installed, commands should still work${NC}"
-        echo -e "${YELLOW}  To register manually, run: gemini extensions link \"$INSTALL_PATH\"${NC}"
+        echo -e "${YELLOW}⚠ Auto-link failed. Trying manual link...${NC}"
+        echo -e "${YELLOW}  Run: gemini extensions link \"$INSTALL_PATH\"${NC}"
+        echo -e "${YELLOW}  Then confirm with 'Y' when prompted${NC}"
     fi
 else
     echo -e "${YELLOW}⚠ Gemini CLI not found in PATH${NC}"
