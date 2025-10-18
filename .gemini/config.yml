@@ -5,63 +5,82 @@
 commands:
   # PRD Creation Commands
   create-prd:
-    prompt: "prompts/generate-prd.md"
-    description: "Interactive PRD creation wizard (10 questions)"
+    file: "commands/create-prd.md"
+    description: "[prprompts] Interactive PRD creation wizard (10 questions)"
+    category: "PRD Generation"
 
   auto-gen-prd:
     prompt: "prompts/auto-generate-prd.md"
     description: "Auto-generate PRD from description (zero interaction)"
+    category: "PRD Generation"
 
   prd-from-files:
     prompt: "prompts/generate-prd-from-files.md"
     description: "Generate PRD from existing markdown files (optional input)"
+    category: "PRD Generation"
 
   # PRD Analysis
   analyze-prd:
-    prompt: "prompts/analyze-prd.md"
-    description: "Validate and analyze PRD, show customizations"
+    file: "commands/analyze-prd.md"
+    description: "[prprompts] Validate and analyze PRD, show customizations"
+    category: "PRD Generation"
 
   # PRPROMPTS Generation Commands
   gen-prprompts:
-    prompt: "prompts/prprompts-generator.md"
-    description: "Generate all 32 PRPROMPTS files from PRD"
+    file: "commands/gen-prprompts.md"
+    description: "[prprompts] Generate all 32 PRPROMPTS files from PRD"
+    category: "PRPROMPTS Generation"
 
   gen-phase-1:
     prompt: "prompts/phase-1-core.md"
     description: "Generate Phase 1: Core Architecture (10 files)"
+    category: "PRPROMPTS Generation"
 
   gen-phase-2:
     prompt: "prompts/phase-2-quality.md"
     description: "Generate Phase 2: Quality & Security (12 files)"
+    category: "PRPROMPTS Generation"
 
   gen-phase-3:
     prompt: "prompts/phase-3-demo.md"
     description: "Generate Phase 3: Demo & Learning (10 files)"
+    category: "PRPROMPTS Generation"
 
   gen-file:
     prompt: "prompts/single-file-generator.md"
     description: "Generate a single PRPROMPTS file by name"
+    category: "PRPROMPTS Generation"
 
   # v4.0 Automation Commands (Full AI-Powered Development Pipeline)
   bootstrap-from-prprompts:
-    prompt: "commands/automation/bootstrap-from-prprompts.md"
-    description: "🚀 Complete project setup from PRPROMPTS (2 min) - Clean Architecture, security, tests"
+    file: "commands/bootstrap-from-prprompts.md"
+    description: "🚀 [prprompts] Complete project setup from PRPROMPTS (2 min) - Clean Architecture, security, tests"
+    category: "Automation"
+    badge: "NEW"
 
   implement-next:
-    prompt: "commands/automation/implement-next.md"
-    description: "✨ Auto-implement next feature from IMPLEMENTATION_PLAN.md (10 min) - with tests & validation"
+    file: "commands/implement-next.md"
+    description: "✨ [prprompts] Auto-implement next feature from IMPLEMENTATION_PLAN.md (10 min) - with tests & validation"
+    category: "Automation"
+    badge: "NEW"
 
   full-cycle:
-    prompt: "commands/automation/full-cycle.md"
-    description: "🤖 Auto-implement 1-10 features automatically (1-2 hours) - complete automation loop"
+    file: "commands/full-cycle.md"
+    description: "🤖 [prprompts] Auto-implement 1-10 features automatically (1-2 hours) - complete automation loop"
+    category: "Automation"
+    badge: "NEW"
 
   review-and-commit:
-    prompt: "commands/automation/review-and-commit.md"
-    description: "✅ Validate and commit changes - PRPROMPTS compliance, security checks, tests"
+    file: "commands/review-and-commit.md"
+    description: "✅ [prprompts] Validate and commit changes - PRPROMPTS compliance, security checks, tests"
+    category: "Automation"
+    badge: "NEW"
 
   qa-check:
-    prompt: "commands/automation/qa-check.md"
-    description: "🔍 Comprehensive compliance audit - generates QA_REPORT.md with score"
+    file: "commands/qa-check.md"
+    description: "🔍 [prprompts] Comprehensive compliance audit - generates QA_REPORT.md with score"
+    category: "Automation"
+    badge: "NEW"
 
 # Project Settings
 project:
