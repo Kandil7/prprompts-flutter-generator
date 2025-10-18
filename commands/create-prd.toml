@@ -1,0 +1,125 @@
+# PRPROMPTS Flutter Generator - Create PRD Command
+# This command will be invoked via: /create-prd (or /prprompts:create-prd in case of collisions)
+
+description = "[prprompts] Interactive PRD creation wizard (10 questions)"
+
+prompt = """
+Generate a comprehensive Product Requirements Document (PRD) for a Flutter application through an interactive wizard.
+
+## Step 1: Gather Information
+
+Ask the user these 10 questions (one at a time for better UX):
+
+1. **Project Name**: What's the app called?
+
+2. **Project Type**: What category best describes your app?
+   - healthcare (patient apps, telemedicine, medical records)
+   - fintech (payments, banking, investments)
+   - education (learning platforms, student management)
+   - logistics (delivery, tracking, fleet management)
+   - ecommerce (shopping, marketplace)
+   - saas (business tools, productivity)
+   - generic (other)
+
+3. **Compliance Requirements**: Any regulatory requirements?
+   - HIPAA, PCI-DSS, GDPR, SOX, COPPA, FERPA, FDA, or None
+
+4. **Platforms**: Which platforms? (iOS, Android, Web, Windows, macOS, Linux)
+
+5. **Authentication**: How do users sign in?
+   - JWT, OAuth2, Firebase, Auth0, or Custom
+
+6. **Architecture**:
+   - Offline support needed? (Yes/No)
+   - Real-time updates needed? (Yes/No)
+
+7. **Sensitive Data**: What sensitive data is handled?
+   - PHI, PII, Payment data, Financial data, Biometric data, or None
+
+8. **Team**:
+   - Team size? (small: 1-5, medium: 6-15, large: 16+)
+   - How many junior developers?
+
+9. **Demo Frequency**: How often will you demo to stakeholders?
+   - None, Weekly, Biweekly, or Monthly
+
+10. **Features**: List 3-7 main features (brief descriptions)
+
+## Step 2: Generate PRD with YAML Frontmatter
+
+Create a comprehensive PRD file with:
+
+### YAML Frontmatter
+Include all these sections:
+- Project metadata (name, version, dates)
+- Classification (type, compliance, platforms)
+- Authentication & security (auth method, JWT config if applicable, sensitive data, encryption)
+- Architecture (offline, real-time, state management, backend type)
+- Features (with complexity and requirements)
+- Team composition (mobile, backend, QA, design, security)
+- Performance targets
+- Testing requirements
+- Deployment & demo configuration
+- Business context
+- PRPROMPTS customization config
+
+### Document Body
+After the YAML frontmatter, generate these sections:
+
+1. **Executive Summary** (2-3 paragraphs)
+2. **Product Vision** (problem, vision, metrics)
+3. **Target Users** (personas with needs and pain points)
+4. **Core Features** (detailed with user stories, acceptance criteria, technical requirements)
+5. **Non-Functional Requirements**
+6. **Compliance Details** (if applicable)
+7. **User Flows**
+8. **Data Model**
+9. **API Specifications**
+10. **Technical Architecture**
+11. **Testing Strategy**
+12. **Deployment Plan**
+13. **Timeline & Milestones**
+14. **Risk Assessment**
+15. **Success Metrics**
+
+## Step 3: Save and Validate
+
+Save the PRD to `docs/PRD.md`
+
+Validate:
+- YAML frontmatter is valid
+- All required keys present
+- Compliance sections match frontmatter
+- Features detailed with user stories
+- Timeline is realistic
+
+## Step 4: Show Summary
+
+After generating, show the user:
+
+```
+✅ Generated PRD at docs/PRD.md (2,847 words)
+
+Your PRD includes:
+- Project Type: [type]
+- Compliance: [list]
+- Platforms: [list]
+- Features: [count]
+- Timeline: [duration]
+
+Key Customizations:
+- [Customization 1 based on project type]
+- [Customization 2 based on compliance]
+- [Customization 3 based on team]
+
+Next steps:
+1. Review PRD: cat docs/PRD.md
+2. Analyze PRD: /analyze-prd
+3. Generate PRPROMPTS: /gen-prprompts
+4. Bootstrap project: /bootstrap-from-prprompts
+
+Ready to generate PRPROMPTS? (y/n)
+```
+
+This PRD will be used to generate 32 customized PRPROMPTS development guides.
+"""

@@ -1,0 +1,133 @@
+# PRPROMPTS Flutter Generator - Generate PRPROMPTS Command
+# This command will be invoked via: /gen-prprompts (or /prprompts:gen-prprompts in case of collisions)
+
+description = "[prprompts] Generate all 32 PRPROMPTS files from PRD"
+
+prompt = """
+Generate all 32 security-audited PRPROMPTS development guide files from the PRD. Each file is a 500-600 word structured prompt with Flutter code examples, best practices, and compliance patterns.
+
+## Step 1: Read PRD
+
+First, look for and read one of these files:
+- `PRD.md` (root directory)
+- `docs/PRD.md`
+
+Extract the YAML frontmatter to understand project requirements.
+
+## Step 2: Create PRPROMPTS Directory
+
+Use your file creation tools to create the `PRPROMPTS/` directory if it doesn't exist.
+
+## Step 3: Generate Files in 3 Phases
+
+**IMPORTANT**: Use your WriteFile tool to create each file directly. Do NOT try to run shell commands.
+
+### Phase 1: Core Architecture (Files 01-10)
+
+Generate these files with 500-600 words each:
+
+1. `01-feature_scaffold.md` - Feature structure & organization
+2. `02-state_management.md` - BLoC patterns & events
+3. `03-data_layer.md` - Repositories & data sources
+4. `04-models.md` - Entity & DTO classes with JSON serialization
+5. `05-api_client.md` - HTTP client (Dio) configuration & interceptors
+6. `06-navigation.md` - Routing (GoRouter) & deep links
+7. `07-dependency_injection.md` - GetIt/Injectable setup
+8. `08-error_handling.md` - Error boundaries & exception handling
+9. `09-authentication.md` - JWT/OAuth2 flows based on PRD
+10. `10-local_storage.md` - Hive/SQLite patterns
+
+### Phase 2: Quality & Security (Files 11-22)
+
+11. `11-testing_strategy.md` - Test structure & organization
+12. `12-widget_testing.md` - Widget test patterns
+13. `13-integration_testing.md` - E2E test flows
+14. `14-security_patterns.md` - Encryption & validation
+15. `15-compliance_checklist.md` - Regulatory requirements from PRD
+16. `16-logging_monitoring.md` - Analytics & error tracking
+17. `17-performance.md` - Optimization techniques
+18. `18-accessibility.md` - A11y compliance (WCAG)
+19. `19-offline_sync.md` - Offline-first patterns (if PRD requires)
+20. `20-real_time.md` - WebSocket/SSE (if PRD requires)
+21. `21-ci_cd.md` - GitHub Actions/Codemagic
+22. `22-code_review.md` - PR review checklist
+
+### Phase 3: Demo & Learning (Files 23-32)
+
+23. `23-demo_mode.md` - Demo environment setup (if PRD has demo_frequency)
+24. `24-synthetic_data.md` - Realistic test data generators
+25. `25-api_mocking.md` - Mock server patterns
+26. `26-theme_config.md` - Material 3 theming
+27. `27-l10n.md` - Internationalization (i18n)
+28. `28-responsive_design.md` - Adaptive layouts
+29. `29-animations.md` - Hero & implicit animations
+30. `30-onboarding.md` - Welcome flows & tutorials
+31. `31-subagent_guide.md` - AI automation patterns (for AI assistants)
+32. `32-junior_dev_guide.md` - Mentorship content (if PRD has junior devs)
+
+### Phase 4: README
+
+Create `PRPROMPTS/README.md` with:
+- Implementation order (Phase 1 → 2 → 3)
+- Quick reference table of all files
+- How to use PRPROMPTS with AI assistants
+- Customizations applied from PRD
+
+## File Structure (PRP Pattern)
+
+Each PRPROMPTS file must include these sections:
+
+1. **FEATURE** - Clear description with Flutter context (100-150 words)
+2. **EXAMPLES** - 3-5 code examples (200-300 lines total)
+3. **CONSTRAINTS** - Security, performance, compliance rules (100 words)
+4. **VALIDATION GATES** - Automated checks before proceeding (50 words)
+5. **BEST PRACTICES** - Industry standards & patterns (100 words)
+6. **REFERENCES** - Official docs & resources (links)
+
+## Customization Based on PRD
+
+Apply these customizations automatically:
+
+- **HIPAA Compliance** → Add PHI encryption, audit logging, access controls
+- **PCI-DSS Compliance** → Payment tokenization, secure card handling
+- **JWT Auth** → RS256 tokens, refresh flows, secure storage
+- **Offline Support** → Offline-first patterns, sync strategies
+- **Real-time** → WebSocket reconnection, optimistic updates
+- **Junior Developers** → Extra explanations, step-by-step guides
+- **Weekly Demos** → Demo mode setup, synthetic data generation
+
+## Progress Reporting
+
+After completing each phase, show:
+```
+✓ Phase 1: Core Architecture (10 files) - 42 seconds
+  Generated: 01-feature_scaffold.md through 10-local_storage.md
+```
+
+## Final Summary
+
+After all files generated, show:
+
+```
+📦 Generated 32 files in PRPROMPTS/ (18,427 words total)
+
+Customizations Applied:
+✓ [List customizations based on PRD]
+✓ [Security patterns]
+✓ [Team-specific guidance]
+
+File Breakdown:
+- Phase 1 (Core): 10 files
+- Phase 2 (Quality): 12 files
+- Phase 3 (Demo): 10 files
+- README: 1 file
+
+Next Steps:
+1. Review: cat PRPROMPTS/README.md
+2. Bootstrap: /bootstrap-from-prprompts (sets up architecture in 2 min)
+3. Implement: /full-cycle (auto-implements features in 1-2 hours)
+4. QA: /qa-check (compliance audit)
+
+Ready to bootstrap project? (y/n)
+```
+"""

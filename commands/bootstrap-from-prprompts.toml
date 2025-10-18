@@ -1,0 +1,213 @@
+# PRPROMPTS Flutter Generator - Bootstrap Command
+# This command will be invoked via: /bootstrap-from-prprompts (or /prprompts:bootstrap-from-prprompts)
+
+description = "🚀 [prprompts] Complete project setup from PRPROMPTS (2 min)"
+
+prompt = """
+🚀 **v4.0 Automation** - Complete project setup from PRPROMPTS in ~2 minutes. Sets up Clean Architecture structure, security patterns, state management, dependency injection, and comprehensive test infrastructure.
+
+## Prerequisites Check
+
+First, verify:
+- PRPROMPTS directory exists with 32 files
+- Flutter SDK installed (`flutter --version`)
+- Git repository initialized
+
+## Phase 1: Project Structure (Clean Architecture)
+
+Create this directory structure:
+
+```
+lib/
+├── core/
+│   ├── di/           # Dependency injection (GetIt)
+│   ├── error/        # Custom exceptions & failures
+│   ├── network/      # API client (Dio)
+│   ├── storage/      # Local storage (Hive)
+│   └── utils/        # Shared utilities
+├── features/
+│   └── auth/
+│       ├── data/
+│       │   ├── datasources/    # Remote & local data sources
+│       │   ├── models/         # DTOs with JSON serialization
+│       │   └── repositories/   # Repository implementations
+│       ├── domain/
+│       │   ├── entities/       # Business objects
+│       │   ├── repositories/   # Repository interfaces
+│       │   └── usecases/       # Business logic
+│       └── presentation/
+│           ├── bloc/           # BLoC (events, states, bloc)
+│           ├── pages/          # Screen widgets
+│           └── widgets/        # Reusable UI components
+└── main.dart
+```
+
+## Phase 2: Core Infrastructure
+
+Consult these PRPROMPTS files:
+- `05-api_client.md` → Create Dio client with interceptors
+- `07-dependency_injection.md` → Set up GetIt
+- `08-error_handling.md` → Create custom exceptions
+- `10-local_storage.md` → Initialize Hive
+- `06-navigation.md` → Configure GoRouter
+
+Create approximately 15-20 core files:
+- `lib/core/di/injection.dart` - GetIt configuration
+- `lib/core/network/api_client.dart` - Dio setup with auth, logging, retry interceptors
+- `lib/core/error/exceptions.dart` - ServerException, CacheException, etc.
+- `lib/core/error/failures.dart` - ServerFailure, CacheFailure (for Either pattern)
+- `lib/core/storage/storage_service.dart` - Hive wrapper
+- `lib/core/utils/logger.dart` - Logging configuration
+
+## Phase 3: Authentication Feature (Reference Implementation)
+
+Consult these PRPROMPTS files:
+- `01-feature_scaffold.md` → Feature structure
+- `02-state_management.md` → BLoC patterns
+- `03-data_layer.md` → Repository pattern
+- `09-authentication.md` → Auth flows (JWT/OAuth2 based on PRD)
+- `14-security_patterns.md` → Secure token storage
+
+Create approximately 25-30 auth feature files following Clean Architecture:
+
+**Data Layer:**
+- Models with freezed/json_serializable
+- Remote data source (API calls)
+- Local data source (token storage)
+- Repository implementation
+
+**Domain Layer:**
+- User entity
+- Auth repository interface
+- Login, Logout, RefreshToken use cases
+
+**Presentation Layer:**
+- AuthBloc with events (LoginRequested, LogoutRequested, etc.)
+- AuthState (Initial, Loading, Authenticated, Unauthenticated, Error)
+- LoginPage, SignupPage widgets
+
+## Phase 4: Testing Infrastructure
+
+Consult:
+- `11-testing_strategy.md`
+- `12-widget_testing.md`
+- `13-integration_testing.md`
+
+Create test structure:
+```
+test/
+├── core/
+│   └── network/
+│       └── api_client_test.dart
+├── features/
+│   └── auth/
+│       ├── data/
+│       │   └── repositories/
+│       │       └── auth_repository_impl_test.dart
+│       ├── domain/
+│       │   └── usecases/
+│       │       └── login_test.dart
+│       └── presentation/
+│           └── bloc/
+│               └── auth_bloc_test.dart
+└── test_helpers/
+    └── mock_data.dart
+```
+
+Create approximately 12-15 test files with basic test cases.
+
+## Phase 5: Configuration Files
+
+Create/update:
+- `analysis_options.yaml` - Strict linting rules
+- `pubspec.yaml` - Add dependencies (bloc, dio, hive, get_it, freezed, etc.)
+- `.env.example` - Environment variables template
+- `README.md` - Update with project structure
+
+## Phase 6: Run Initial Setup
+
+Execute:
+1. `flutter pub get`
+2. `flutter pub run build_runner build` (for freezed/json_serializable)
+3. `flutter test` (verify tests pass)
+4. `flutter analyze` (verify no issues)
+
+## Progress Reporting
+
+Show progress after each phase:
+```
+Phase 1: Project Structure ✓
+  Created 8 directories
+
+Phase 2: Core Infrastructure ✓
+  Created 15 core files
+  - Dependency injection
+  - API client
+  - Error handling
+  - Local storage
+  - Navigation
+  - Logging
+
+Phase 3: Authentication Feature ✓
+  Created 28 files
+  - 8 data layer files
+  - 6 domain layer files
+  - 14 presentation layer files
+
+Phase 4: Testing Infrastructure ✓
+  Created 15 test files
+  - Unit tests for repositories
+  - Unit tests for use cases
+  - BLoC tests
+  - Widget tests
+
+Phase 5: Configuration ✓
+  Updated configuration files
+  Added 25 dependencies
+
+Phase 6: Initial Build ✓
+  ✓ flutter pub get
+  ✓ build_runner
+  ✓ All tests passing (42 tests)
+  ✓ Zero analysis issues
+```
+
+## Final Summary
+
+```
+📦 Bootstrap Complete! (1 min 47 sec)
+
+Generated:
+- 147 Dart files (12,843 lines)
+- 52 test files (4,291 lines)
+- 85%+ test coverage setup
+- Clean Architecture structure
+- Security patterns from PRD
+
+Customizations Applied:
+- [Auth method from PRD: JWT RS256]
+- [Compliance: HIPAA patterns added]
+- [Offline support: Hive caching configured]
+- [Real-time: WebSocket client ready]
+
+Next Steps:
+1. Run app: flutter run
+2. Implement features: /implement-next
+3. Auto-implement all: /full-cycle
+4. QA check: /qa-check
+
+Ready to implement first feature? (y/n)
+```
+
+## Important Notes
+
+- All code must follow PRPROMPTS patterns exactly
+- Use BLoC for state management
+- Follow Clean Architecture strictly (no layer violations)
+- Include comprehensive error handling
+- Add logging to all critical paths
+- Implement offline-first if PRD requires it
+- Include security patterns from PRD (encryption, JWT, etc.)
+
+Time estimate: 90-120 seconds for full bootstrap.
+"""

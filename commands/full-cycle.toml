@@ -1,0 +1,241 @@
+# PRPROMPTS Flutter Generator - Full Cycle Automation
+# This command will be invoked via: /full-cycle (or /prprompts:full-cycle)
+
+description = "🤖 [prprompts] Auto-implement 1-10 features automatically (1-2 hours)"
+
+prompt = """
+🤖 **v4.0 Full Automation** - Auto-implement 1-10 features in a single session (1-2 hours). The ultimate automation command - complete hands-free development.
+
+## Prerequisites
+
+Verify:
+- Bootstrap completed (`/bootstrap-from-prprompts`)
+- IMPLEMENTATION_PLAN.md exists
+- Git repository initialized
+- All tests passing
+
+## Step 1: Analyze Implementation Plan
+
+Read `IMPLEMENTATION_PLAN.md` to:
+- Identify total features
+- Count completed vs pending
+- Resolve feature dependencies
+- Calculate time estimate
+
+Ask user: "Found X pending features. How many would you like to implement? (1-10)"
+
+## Step 2: Validate Dependencies
+
+For each feature to implement:
+- Check if dependencies are completed
+- Reorder if needed to respect dependencies
+- Warn user if dependencies missing
+
+## Step 3: Automation Loop
+
+For each feature in order:
+
+### 3.1 Feature Analysis
+- Read feature requirements from IMPLEMENTATION_PLAN.md
+- Identify complexity (LOW/MEDIUM/HIGH/CRITICAL)
+- Estimate time (5-25 minutes based on complexity)
+- List required PRPROMPTS files
+
+### 3.2 Consult PRPROMPTS
+Reference these guides:
+- `01-feature_scaffold.md` - Structure
+- `02-state_management.md` - BLoC patterns
+- `03-data_layer.md` - Repository implementation
+- `04-models.md` - DTOs and entities
+- `11-testing_strategy.md` - Test structure
+- `14-security_patterns.md` - Security requirements
+- Plus feature-specific guides
+
+### 3.3 Implementation
+Generate complete feature following Clean Architecture:
+
+**Data Layer:**
+- Model class (DTO with JSON serialization)
+- Entity class (domain model)
+- Remote data source interface & implementation
+- Local data source interface & implementation
+- Repository implementation
+
+**Domain Layer:**
+- Entity (if different from model)
+- Repository interface
+- Use cases (Get, Create, Update, Delete as needed)
+
+**Presentation Layer:**
+- BLoC (events, states, bloc)
+- Pages (list, details, form)
+- Widgets (cards, list items)
+
+**Files per complexity:**
+- LOW: 12-15 files
+- MEDIUM: 18-25 files
+- HIGH: 25-35 files
+- CRITICAL: 35-50 files
+
+### 3.4 Testing
+Generate tests for each layer:
+- Repository unit tests (12+ test cases)
+- Use case unit tests (16+ test cases)
+- BLoC unit tests (20+ test cases)
+- Widget tests for all screens (15+ test cases)
+- Integration test flow (1 comprehensive flow)
+
+### 3.5 Validation
+Run automated checks:
+```bash
+flutter analyze          # Must show 0 issues
+flutter test            # All tests must pass
+# Security scan (check for vulnerabilities)
+# Coverage check (must be ≥85%)
+```
+
+### 3.6 Git Commit
+If validation passes:
+- Generate descriptive commit message
+- Include feature summary, files changed, test coverage, security notes
+- Commit with Co-Authored-By: Claude/Gemini
+
+### 3.7 Update Plan
+Mark feature as complete in IMPLEMENTATION_PLAN.md
+
+### 3.8 Progress Report
+Show after each feature:
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feature X/Y: [Feature Name] ([COMPLEXITY])
+
+🔍 Consulting PRPROMPTS...
+✓ 02-state_management.md
+✓ 03-data_layer.md
+✓ 14-security_patterns.md
+
+🚀 Implementing...
+✓ Data layer (23 files)
+✓ Domain layer (8 use cases)
+✓ Presentation layer (6 screens)
+✓ Tests (69 test cases, 87.3% coverage)
+
+✅ Validation passed
+✓ flutter analyze (0 issues)
+✓ flutter test (69 passed)
+✓ Security scan (0 vulnerabilities)
+
+📦 Committing...
+✓ Git commit: "feat: implement [feature name]"
+
+⏱️  Feature X complete: 14 min 23 sec
+```
+
+## Step 4: Final Summary
+
+After all features complete:
+
+```
+🎉 Full Cycle Complete!
+
+⏱️  Total Time: 56 min 12 sec (estimated: 57 min)
+
+📊 Metrics:
+- Features Implemented: 4
+- Files Generated: 100 files (11,247 lines)
+- Tests Generated: 331 tests (87.1% avg coverage)
+- Git Commits: 4
+- Security Issues: 0
+- Compliance: [PRD compliance] ✓
+
+📝 Automation Report: AUTOMATION_REPORT.md
+
+Quality Metrics:
+- Test Coverage: 87.1% (target: 85%)
+- Static Analysis: 0 issues
+- Security Vulnerabilities: 0
+- Compliance Checks: All passed
+
+Next Steps:
+1. Review code: git log --oneline -4
+2. Run app: flutter run
+3. QA check: /qa-check
+4. Deploy: Ready for staging!
+
+Continue with remaining X features? (y/n)
+```
+
+## Step 5: Generate Automation Report
+
+Create `AUTOMATION_REPORT.md`:
+
+```markdown
+# Automation Report - 2025-01-15
+
+## Summary
+- Duration: 56 min 12 sec
+- Features: 4/7 (57%)
+- Files: 100 (11,247 lines)
+- Tests: 331 (87.1% coverage)
+- Commits: 4
+- Success Rate: 100%
+
+## Features Implemented
+
+### 1. [Feature Name] (14 min)
+- Complexity: HIGH
+- Files: 23 (2,847 lines)
+- Tests: 69 (87.3% coverage)
+- Commit: abc1234
+
+[... for each feature ...]
+
+## Quality Metrics
+- Test Coverage: 87.1%
+- Static Analysis: 0 issues
+- Security: 0 vulnerabilities
+- Compliance: ✓
+
+## Time Breakdown
+- Implementation: 42 min (75%)
+- Testing: 8 min (14%)
+- Validation: 4 min (7%)
+- Commits: 2 min (4%)
+
+## Next Steps
+- Manual testing
+- QA audit: /qa-check
+- Deploy to staging
+- Implement remaining 3 features
+```
+
+## Safety Features
+
+- Dependency resolution (implements in correct order)
+- Validation gates (tests must pass)
+- Automatic rollback if feature fails
+- Progress saved (can resume if interrupted)
+- Git safety (creates branch before starting)
+
+## Error Handling
+
+If a feature fails:
+1. Show detailed error message
+2. Keep previous features (no rollback all)
+3. Save progress to AUTOMATION_PROGRESS.json
+4. Suggest fixes or offer to retry
+
+## Performance Targets
+
+| Features | Time Est | Actual Avg | Files | Tests |
+|----------|----------|------------|-------|-------|
+| 1 | 10 min | 9-12 min | 15-25 | 40-70 |
+| 3 | 30 min | 28-35 min | 45-75 | 120-210 |
+| 5 | 50 min | 47-58 min | 75-125 | 200-350 |
+| 10 | 100 min | 95-115 min | 150-250 | 400-700 |
+
+**Result:** Production-ready app with 85%+ test coverage, zero security issues, full compliance.
+
+**Speedup:** 40-60x faster than manual development (3-5 days → 1.5-2 hours)
+"""

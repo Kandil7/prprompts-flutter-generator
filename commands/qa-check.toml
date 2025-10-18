@@ -1,0 +1,279 @@
+# PRPROMPTS Flutter Generator - QA Check Command
+# This command will be invoked via: /qa-check (or /prprompts:qa-check)
+
+description = "🔍 [prprompts] Comprehensive compliance audit - generates QA_REPORT.md with score"
+
+prompt = """
+🔍 **v4.0 Automation** - Complete quality assurance and compliance audit. Generates detailed `QA_REPORT.md` with scores, findings, and recommendations.
+
+## Audit Categories (100 points total)
+
+Perform comprehensive audit across 8 categories:
+
+### 1. Architecture Compliance (15 points)
+
+Check:
+- Clean Architecture structure (data/domain/presentation separation)
+- Feature modules properly organized
+- Dependency flow correct (presentation → domain → data)
+- No circular dependencies
+- Repository pattern implemented
+- Use case single responsibility
+- No layer violations (presentation importing data directly)
+
+Score based on violations found.
+
+### 2. Code Quality (15 points)
+
+Run:
+```bash
+flutter analyze
+```
+
+Check:
+- Static analysis errors (must be 0)
+- Warnings (acceptable: ≤5)
+- Code formatting (`dart format --set-exit-if-changed`)
+- Cyclomatic complexity (average <10, max <20)
+- Duplicate code detection
+- Naming conventions
+- Code comments coverage (target: 80%)
+
+### 3. Testing (20 points)
+
+Run:
+```bash
+flutter test --coverage
+```
+
+Analyze:
+- Overall coverage (target: ≥85%)
+- Unit test coverage per feature
+- Widget test coverage
+- Integration test coverage
+- Test naming conventions (Arrange-Act-Assert)
+- Mock usage appropriateness
+- Test isolation
+
+Breakdown by feature/module.
+
+### 4. Security (20 points)
+
+Audit:
+- Dependency vulnerabilities (check pubspec.lock)
+- Hardcoded secrets/API keys scan
+- PHI/PII encryption implementation (if applicable)
+- Token storage security (secure_storage usage)
+- JWT implementation (if applicable)
+- Certificate pinning (if configured)
+- Biometric auth security
+- Input validation on forms
+- SQL injection prevention
+- XSS prevention (HTML sanitization)
+- Authentication flows
+- Authorization checks (RBAC)
+- Session management
+
+### 5. Compliance (15 points)
+
+Based on PRD compliance requirements, check:
+
+**HIPAA (if applicable):**
+- Access Controls (§164.312(a)(1))
+- Audit Controls (§164.312(b))
+- Integrity Controls (§164.312(c)(1))
+- Transmission Security (§164.312(e)(1))
+- PHI encryption at rest & in transit
+- Audit logging
+- Minimum necessary access
+- 6-year log retention
+
+**PCI-DSS (if applicable):**
+- Secure network
+- Cardholder data protection
+- Vulnerability management
+- Access controls
+- Network monitoring
+- Information security policy
+
+**GDPR (if applicable):**
+- Data subject rights
+- Consent management
+- Privacy by design
+- Data protection impact assessments
+
+### 6. Performance (5 points)
+
+Measure:
+- Cold start time (target: <2s)
+- Frame rate (target: 60fps, no jank)
+- Memory usage (reasonable for app type)
+- Network efficiency (request caching)
+- App size (APK/IPA)
+- Build time (release build)
+
+### 7. Accessibility (5 points)
+
+Check:
+- Semantic labels on interactive widgets
+- Screen reader compatibility (TalkBack/VoiceOver)
+- Color contrast ratio (≥4.5:1)
+- Font scaling support (up to 200%)
+- Keyboard navigation
+- Focus management
+
+### 8. Documentation (5 points)
+
+Review:
+- README.md completeness
+- API documentation (dartdoc coverage)
+- Architecture diagrams
+- Deployment guides
+- Code comment coverage
+
+## Scoring & Grading
+
+Calculate overall score (0-100):
+
+| Score | Grade | Status |
+|-------|-------|--------|
+| 95-100 | A+ | Excellent - Production ready |
+| 90-94 | A | Great - Minor improvements |
+| 85-89 | B+ | Good - Some work needed |
+| 80-84 | B | Acceptable - Several issues |
+| 75-79 | C+ | Fair - Significant work |
+| 70-74 | C | Passing - Major improvements |
+| <70 | F | Failing - Not production ready |
+
+## Generate QA Report
+
+Create `QA_REPORT.md`:
+
+```markdown
+# QA Report - [Date]
+
+Project: [Name from PRD]
+Compliance: [List from PRD]
+
+## Executive Summary
+
+**Overall Score: 91/100 (Grade: A)**
+
+🎯 Production Ready with Minor Improvements
+
+## Category Scores
+
+1. Architecture Compliance: 14/15 (93%) [▓▓▓▓▓▓▓▓▓░]
+2. Code Quality: 14/15 (93%) [▓▓▓▓▓▓▓▓▓░]
+3. Testing: 18/20 (90%) [▓▓▓▓▓▓▓▓▓░]
+4. Security: 18/20 (90%) [▓▓▓▓▓▓▓▓▓░]
+5. Compliance: 14/15 (93%) [▓▓▓▓▓▓▓▓▓░]
+6. Performance: 5/5 (100%) [▓▓▓▓▓▓▓▓▓▓]
+7. Accessibility: 4/5 (80%) [▓▓▓▓▓▓▓▓░░]
+8. Documentation: 4/5 (80%) [▓▓▓▓▓▓▓▓░░]
+
+## Detailed Findings
+
+### Critical Issues (0)
+None found.
+
+### Warnings (5)
+1. 2 presentation files importing data layer directly
+2. Medical records feature test coverage: 82.7% (target: 85%)
+3. 2 medium dependency vulnerabilities
+4. Missing HIPAA sanction policy documentation
+5. Code comment coverage: 67% (target: 80%)
+
+### Recommendations
+1. Fix layer violations in presentation files
+2. Add tests to medical records feature (+2.3%)
+3. Update dependencies: http, intl
+4. Document sanction policy in docs/COMPLIANCE.md
+5. Add code comments to public APIs
+6. Complete keyboard navigation for 2 screens
+
+## Compliance Matrix
+
+[For each compliance framework, show checklist with ✓ or ⚠]
+
+## Metrics
+
+- **Test Coverage:** 87.3%
+- **Static Analysis:** 0 errors, 2 warnings
+- **Security Issues:** 0 critical, 0 high, 2 medium
+- **Performance:** Cold start 1.8s, 60fps
+- **Accessibility:** 80% compliant
+
+## Trend Analysis
+
+[Compare with previous audits if any]
+
+## Action Items (Priority Order)
+
+1. **HIGH**: Fix layer architecture violations (2 files)
+2. **MEDIUM**: Update vulnerable dependencies
+3. **MEDIUM**: Increase test coverage (+2.3%)
+4. **LOW**: Add code comments
+5. **LOW**: Document compliance policies
+
+## Next Steps
+
+- [ ] Fix warnings (est. 2 hours)
+- [ ] Re-run `/qa-check` to verify
+- [ ] Deploy to staging
+- [ ] Schedule production deployment
+```
+
+## Display Summary to User
+
+Show in terminal:
+
+```
+🔍 QA Audit Complete!
+
+🎯 Overall Score: 91/100 (Grade: A)
+
+📊 Category Breakdown:
+  1. Architecture: 93%  [▓▓▓▓▓▓▓▓▓░]
+  2. Code Quality: 93%  [▓▓▓▓▓▓▓▓▓░]
+  3. Testing: 90%       [▓▓▓▓▓▓▓▓▓░]
+  4. Security: 90%      [▓▓▓▓▓▓▓▓▓░]
+  5. Compliance: 93%    [▓▓▓▓▓▓▓▓▓░]
+  6. Performance: 100%  [▓▓▓▓▓▓▓▓▓▓]
+  7. Accessibility: 80% [▓▓▓▓▓▓▓▓░░]
+  8. Documentation: 80% [▓▓▓▓▓▓▓▓░░]
+
+🔴 Critical Issues: 0
+🟡 Warnings: 5
+
+✅ Production Ready with Minor Improvements
+
+📝 Full Report: QA_REPORT.md
+
+Top Recommendations:
+1. Fix 2 layer architecture violations
+2. Update 2 vulnerable dependencies
+3. Add 2.3% more test coverage
+
+Next: Fix warnings and re-run /qa-check
+```
+
+## Options
+
+Support these flags:
+- `--framework <name>` - Focus on specific compliance (hipaa, pci-dss, gdpr)
+- `--category <name>` - Audit specific category only
+- `--verbose` - Include detailed explanations
+- `--compare <previous-report>` - Compare with previous audit
+
+## Important Notes
+
+- Be thorough but fair in scoring
+- Provide actionable recommendations
+- Include file/line references for issues
+- Calculate realistic time estimates for fixes
+- Compare against industry standards
+- Consider project context (MVP vs enterprise)
+
+This comprehensive audit ensures production readiness and compliance.
+"""
