@@ -1,7 +1,7 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "4.0.0",
-  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours (40-60x faster)",
+  "version": "4.1.0",
+  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours (40-60x faster). Now with API validation, rate limiting, interactive mode, and command history!",
   "keywords": [
     "flutter",
     "flutter-cli",
@@ -107,6 +107,8 @@
     "test:package": "jest tests/package.test.js",
     "test:prompts": "jest tests/prompts.test.js",
     "test:bash": "bash ./scripts/test-validation.sh && bash ./scripts/test-commands.sh",
+    "test:windows": "powershell -ExecutionPolicy Bypass -File ./scripts/test-validation.ps1 && powershell -ExecutionPolicy Bypass -File ./scripts/test-commands.ps1",
+    "test:windows:bat": "./scripts/test-validation.bat && ./scripts/test-commands.bat",
     "test:commands": "bash ./scripts/test-commands.sh",
     "test:quick": "echo \"✅ Quick validation: Checking prompt files...\" && ls .claude/prompts/*.md | wc -l",
     "test:integration-suite": "bash ./scripts/test-integration.sh",
@@ -141,7 +143,13 @@
     "clean": "rm -rf node_modules test-output coverage *.tgz && echo \"✅ Cleaned build artifacts\"",
     "doctor": "npm run check-updates && npm run validate && npm test && echo \"✅ Health check passed\"",
     "debug": "DEBUG=true prprompts",
-    "dev": "npm install -g . && echo \"✅ Development build installed\""
+    "dev": "npm install -g . && echo \"✅ Development build installed\"",
+    "auto:status": "node ./lib/automation-manager.js status",
+    "auto:validate": "node ./lib/automation-validator.js",
+    "auto:bootstrap": "node ./lib/automation-manager.js bootstrap",
+    "auto:implement": "node ./lib/automation-manager.js implement",
+    "auto:test": "node ./lib/automation-manager.js test",
+    "auto:reset": "node ./lib/automation-manager.js reset"
   },
   "peerDependencies": {
     "@anthropic-ai/claude-code": ">=1.0.0"

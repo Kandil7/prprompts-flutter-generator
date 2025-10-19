@@ -1,919 +1,775 @@
 # PRPROMPTS Troubleshooting Guide
 
-This guide helps you diagnose and fix common issues with PRPROMPTS v4.0.
+> **Comprehensive solutions to common issues and errors - v4.0**
 
 ---
 
 ## Table of Contents
 
-- [Installation Issues](#installation-issues)
-- [PRD Creation Problems](#prd-creation-problems)
-- [PRPROMPTS Generation Issues](#prprompts-generation-issues)
-- [Extension Installation Problems](#extension-installation-problems)
-- [Automation Command Issues](#automation-command-issues)
-- [Performance Problems](#performance-problems)
-- [Platform-Specific Issues](#platform-specific-issues)
-- [Getting Help](#getting-help)
+1. [Installation Issues](#installation-issues)
+2. [AI Configuration Problems](#ai-configuration-problems)
+3. [API Key Errors](#api-key-errors)
+4. [Command Execution Errors](#command-execution-errors)
+5. [File and Permission Issues](#file-and-permission-issues)
+6. [Network and Timeout Problems](#network-and-timeout-problems)
+7. [Windows-Specific Issues](#windows-specific-issues)
+8. [Rate Limiting and Quotas](#rate-limiting-and-quotas)
+9. [Configuration Problems](#configuration-problems)
+10. [Diagnostic Tools](#diagnostic-tools)
 
 ---
 
 ## Installation Issues
 
-### Issue: `npm install -g prprompts-flutter-generator` fails
+### npm install fails
 
-**Symptoms:**
-```
-npm ERR! code EACCES
-npm ERR! syscall access
-npm ERR! path /usr/local/lib/node_modules
-npm ERR! Error: EACCES: permission denied
-```
+**Problem:** `npm install -g prprompts-flutter-generator` fails with permission errors.
 
-**Solutions:**
+**Solution:**
 
-**Option 1 (Recommended): Use nvm (Node Version Manager)**
+**Linux/macOS:**
 ```bash
-# Install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-
-# Install Node.js
-nvm install 20
-nvm use 20
-
-# Install PRPROMPTS
+# Option 1: Use npm prefix (Recommended)
+npm config set prefix ~/.npm-global
+export PATH=~/.npm-global/bin:$PATH
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
 npm install -g prprompts-flutter-generator
-```
 
-**Option 2: Use sudo (not recommended)**
-```bash
+# Option 2: Use nvm (Best practice)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install node
+npm install -g prprompts-flutter-generator
+
+# Option 3: Use sudo (Not recommended)
 sudo npm install -g prprompts-flutter-generator
 ```
 
-**Option 3: Change npm global directory**
-```bash
-mkdir ~/.npm-global
-npm config set prefix '~/.npm-global'
-echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
-source ~/.bashrc
+**Windows:**
+```powershell
+# Run PowerShell as Administrator
+npm install -g prprompts-flutter-generator
 
+# Or set npm prefix
+npm config set prefix "%APPDATA%\npm"
 npm install -g prprompts-flutter-generator
 ```
 
----
+### Postinstall script fails
 
-### Issue: Wrong Node.js version
-
-**Symptoms:**
-```
-Error: The engine "node" is incompatible with this module
-```
+**Problem:** Installation succeeds but postinstall script fails.
 
 **Solution:**
 ```bash
-# Check current version
-node --version
+# Skip postinstall and run manually
+SKIP_POSTINSTALL=1 npm install -g prprompts-flutter-generator
 
-# Install Node.js 18 or 20
-nvm install 20
-nvm use 20
+# Then run setup manually
+prprompts doctor
+node ~/.npm-global/lib/node_modules/prprompts-flutter-generator/scripts/postinstall.js
+```
 
-# Verify
-node --version  # Should show v20.x.x
+### Command not found after installation
 
-# Reinstall PRPROMPTS
+**Problem:** `prprompts: command not found` after successful installation.
+
+**Solution:**
+```bash
+# Check npm bin directory
+npm bin -g
+
+# Add to PATH (Linux/macOS)
+export PATH=$(npm bin -g):$PATH
+echo 'export PATH=$(npm bin -g):$PATH' >> ~/.bashrc
+source ~/.bashrc
+
+# Windows: Add to PATH via System Properties
+# Path: %AppData%\npm
+```
+
+---
+
+## AI Configuration Problems
+
+### No AI assistants detected
+
+**Problem:** `✗ No AI assistants found!`
+
+**Solution:**
+
+Install at least one AI assistant:
+
+```bash
+# Claude Code (Anthropic)
+npm install -g @anthropic-ai/claude-code
+export ANTHROPIC_API_KEY="your-api-key"
+
+# Qwen Code (Alibaba)
+npm install -g @qwenlm/qwen-code
+export DASHSCOPE_API_KEY="your-api-key"
+
+# Gemini CLI (Google)
+npm install -g @google/gemini-cli
+export GOOGLE_API_KEY="your-api-key"
+```
+
+### AI command not recognized
+
+**Problem:** `Command 'create-prd' not recognized by claude`
+
+**Solution:**
+```bash
+# Reinstall extensions
+prprompts doctor
+
+# Manual reinstall for specific AI
+bash install-claude-extension.sh
+bash install-qwen-extension.sh
+bash install-gemini-extension.sh
+
+# Check AI config directory
+ls ~/.config/claude/prompts/
+ls ~/.config/qwen/prompts/
+ls ~/.config/gemini/prompts/
+```
+
+### Wrong AI being used
+
+**Problem:** Commands run with wrong AI assistant.
+
+**Solution:**
+```bash
+# Check current default
+prprompts which
+
+# Switch default AI
+prprompts switch claude
+prprompts switch qwen
+prprompts switch gemini
+
+# Use environment variable
+export PRPROMPTS_DEFAULT_AI=claude
+```
+
+---
+
+## API Key Errors
+
+### API key not configured
+
+**Problem:** `✗ Error: API key issue detected`
+
+**Solution for each AI:**
+
+**Claude Code:**
+```bash
+# Get key from: https://console.anthropic.com/settings/keys
+export ANTHROPIC_API_KEY="sk-ant-..."
+
+# Or add to ~/.bashrc or ~/.zshrc
+echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**Qwen Code:**
+```bash
+# Get key from: https://dashscope.aliyun.com/
+export DASHSCOPE_API_KEY="sk-..."
+
+# Or add to profile
+echo 'export DASHSCOPE_API_KEY="sk-..."' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**Gemini CLI:**
+```bash
+# Get key from: https://aistudio.google.com/app/apikey
+export GOOGLE_API_KEY="AIza..."
+
+# Or add to profile
+echo 'export GOOGLE_API_KEY="AIza..."' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**Windows PowerShell:**
+```powershell
+# Set environment variables permanently
+[Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-ant-...", "User")
+[Environment]::SetEnvironmentVariable("DASHSCOPE_API_KEY", "sk-...", "User")
+[Environment]::SetEnvironmentVariable("GOOGLE_API_KEY", "AIza...", "User")
+
+# Restart PowerShell after setting
+```
+
+### Invalid API key
+
+**Problem:** Authentication fails with valid-looking key.
+
+**Solution:**
+```bash
+# Test API key directly
+curl -H "x-api-key: $ANTHROPIC_API_KEY" \
+  https://api.anthropic.com/v1/messages \
+  -H "anthropic-version: 2023-06-01"
+
+# Check for extra spaces or quotes
+echo "$ANTHROPIC_API_KEY" | cat -A
+
+# Regenerate key if needed
+# Visit respective console to regenerate
+```
+
+---
+
+## Command Execution Errors
+
+### Command times out
+
+**Problem:** `✗ Error: Command timed out after 120 seconds`
+
+**Solution:**
+```bash
+# Increase timeout via environment variable
+export PRPROMPTS_TIMEOUT=300000  # 5 minutes in milliseconds
+
+# Or configure retries
+export PRPROMPTS_RETRY_COUNT=5
+
+# For specific command
+PRPROMPTS_TIMEOUT=600000 prprompts generate
+```
+
+### Command fails with exit code 127
+
+**Problem:** `✗ Error: Command 'gen-prprompts' not recognized`
+
+**Solution:**
+```bash
+# Check available commands
+prprompts help
+
+# Use correct command name
+prprompts generate    # not gen-prprompts
+prprompts create      # not create-prd
+
+# If commands missing, reinstall
+npm uninstall -g prprompts-flutter-generator
 npm install -g prprompts-flutter-generator
 ```
 
----
+### Retry attempts keep failing
 
-### Issue: Command not found after installation
-
-**Symptoms:**
-```bash
-prprompts --version
-# zsh: command not found: prprompts
-```
+**Problem:** All retry attempts fail consistently.
 
 **Solution:**
-
-**Check installation location:**
 ```bash
-npm list -g --depth=0 | grep prprompts
-```
+# Disable retries for debugging
+export PRPROMPTS_RETRY_COUNT=1
 
-**If installed, add to PATH:**
-```bash
-# For bash
-echo 'export PATH="$(npm bin -g):$PATH"' >> ~/.bashrc
-source ~/.bashrc
+# Run with verbose mode
+export PRPROMPTS_VERBOSE=true
+prprompts create
 
-# For zsh
-echo 'export PATH="$(npm bin -g):$PATH"' >> ~/.zshrc
-source ~/.zshrc
-
-# Verify
-which prprompts
-prprompts --version
+# Check network/firewall
+ping api.anthropic.com
+ping aistudio.googleapis.com
 ```
 
 ---
 
-## PRD Creation Problems
+## File and Permission Issues
 
-### Issue: Interactive wizard hangs or freezes
+### Cannot write to config directory
 
-**Symptoms:**
-- `prprompts create` starts but doesn't show prompts
-- Cursor blinks but nothing happens
+**Problem:** `Error: EACCES: permission denied`
 
-**Solutions:**
-
-**1. Check terminal compatibility:**
+**Solution:**
 ```bash
-# Try with basic input
-echo "test" | prprompts create
+# Fix permissions (Linux/macOS)
+mkdir -p ~/.prprompts ~/.config/claude ~/.config/qwen ~/.config/gemini
+chmod 755 ~/.prprompts ~/.config/claude ~/.config/qwen ~/.config/gemini
+
+# Windows: Run as Administrator or fix permissions
+icacls "%USERPROFILE%\.prprompts" /grant "%USERNAME%:F"
+icacls "%USERPROFILE%\.config" /grant "%USERNAME%:F"
 ```
 
-**2. Use auto mode instead:**
+### PRD.md not found
+
+**Problem:** `Missing required files: docs/PRD.md`
+
+**Solution:**
 ```bash
+# Create PRD first
+prprompts create
+
+# Or create manually
+mkdir -p docs
+cp templates/PRD-full-template.md docs/PRD.md
+# Edit docs/PRD.md with your project details
+
+# Or use auto-generation
 prprompts auto
 ```
 
-**3. Create PRD manually:**
-```bash
-mkdir -p docs
-prprompts manual
-```
+### PRPROMPTS directory missing
 
-**4. Update terminal:**
-```bash
-# macOS: Update Terminal.app or use iTerm2
-# Windows: Use Windows Terminal instead of CMD
-# Linux: Update your terminal emulator
-```
-
----
-
-### Issue: PRD file not created
-
-**Symptoms:**
-```
-✓ PRD created successfully
-# But docs/PRD.md doesn't exist
-```
+**Problem:** `PRPROMPTS/ directory not found`
 
 **Solution:**
-
-**Check current directory:**
 ```bash
-pwd
-ls -la
+# Generate PRPROMPTS files
+prprompts generate
 
-# PRD should be in current directory
+# Or check if in correct directory
+ls PRPROMPTS/
+pwd  # Should be in Flutter project root
+
+# Ensure PRD exists first
 ls docs/PRD.md
 ```
 
-**If missing, check permissions:**
+---
+
+## Network and Timeout Problems
+
+### Connection timeout to AI services
+
+**Problem:** Network timeouts when calling AI APIs.
+
+**Solution:**
 ```bash
-# Check write permissions
-ls -ld .
-mkdir -p docs
-touch docs/test.txt
+# Check connectivity
+ping api.anthropic.com
+curl -I https://api.anthropic.com
+
+# Use proxy if needed
+export HTTP_PROXY=http://proxy.company.com:8080
+export HTTPS_PROXY=http://proxy.company.com:8080
+
+# Increase timeout
+export PRPROMPTS_TIMEOUT=300000  # 5 minutes
 ```
 
-**Create manually if needed:**
+### SSL certificate errors
+
+**Problem:** `unable to verify the first certificate`
+
+**Solution:**
 ```bash
-mkdir -p docs
-nano docs/PRD.md
-# Or use prprompts manual
+# Temporary (not recommended for production)
+export NODE_TLS_REJECT_UNAUTHORIZED=0
+
+# Better: Update certificates
+npm config set cafile /path/to/ca-bundle.crt
+
+# Or update Node.js/npm
+npm install -g npm@latest
+nvm install node --latest
 ```
 
 ---
 
-## PRPROMPTS Generation Issues
+## Windows-Specific Issues
 
-### Issue: `prprompts generate` fails with "PRD not found"
+### Scripts disabled on Windows
 
-**Symptoms:**
-```
-Error: PRD file not found at docs/PRD.md
-```
+**Problem:** `cannot be loaded because running scripts is disabled`
 
-**Solutions:**
+**Solution:**
+```powershell
+# Run PowerShell as Administrator
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
-**1. Verify PRD location:**
-```bash
-# Check if PRD exists
-ls -la docs/PRD.md
-
-# If not, create one
-prprompts create
+# Or for current session only
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 ```
 
-**2. Specify custom PRD location:**
-```bash
-prprompts generate --prd-path ./custom/path/PRD.md
-```
+### Path separators causing issues
 
-**3. Use example PRD:**
-```bash
-# Copy example PRD
-cp node_modules/prprompts-flutter-generator/examples/healthcare-prd.md docs/PRD.md
+**Problem:** Commands fail with path errors on Windows.
 
-# Generate
+**Solution:**
+```powershell
+# Use forward slashes or escaped backslashes
+prprompts generate --path "C:/Users/name/project"
+# or
+prprompts generate --path "C:\\Users\\name\\project"
+
+# Use relative paths when possible
+cd C:\Users\name\project
 prprompts generate
 ```
 
----
+### Git Bash compatibility
 
-### Issue: Only some PRPROMPTS files are generated
-
-**Symptoms:**
-```
-✓ Generated 15/32 PRPROMPTS
-✗ 17 files failed to generate
-```
-
-**Solutions:**
-
-**1. Check disk space:**
-```bash
-df -h .
-```
-
-**2. Check file permissions:**
-```bash
-ls -la .claude/prompts/
-chmod -R u+w .claude/
-```
-
-**3. Regenerate with verbose output:**
-```bash
-DEBUG=true prprompts generate
-```
-
-**4. Clear and regenerate:**
-```bash
-rm -rf .claude/prompts/prprompts/
-prprompts generate
-```
-
----
-
-## Extension Installation Problems
-
-### Issue: Extension not found by AI assistant
-
-**Symptoms:**
-- Commands like `/prp-bootstrap` not recognized
-- AI says "I don't have access to that command"
-
-**Solutions:**
-
-**For Claude Code:**
-```bash
-# Check if extension installed
-ls ~/.config/claude/prompts/prprompts/
-ls ~/.config/claude/commands/
-
-# If missing, reinstall
-bash install-claude-extension.sh
-
-# Verify
-ls ~/.config/claude/commands/ | grep prp
-```
-
-**For Qwen Code:**
-```bash
-# Check installation
-ls ~/.qwen/prompts/prprompts/
-
-# Reinstall if needed
-bash install-qwen-extension.sh
-```
-
-**For Gemini CLI:**
-```bash
-# Check installation
-ls ~/.gemini/prompts/prprompts/
-
-# Reinstall if needed
-bash install-gemini-extension.sh
-```
-
----
-
-### Issue: Permission denied during extension installation
-
-**Symptoms:**
-```
-bash: ./install-claude-extension.sh: Permission denied
-```
+**Problem:** Commands fail in Git Bash on Windows.
 
 **Solution:**
 ```bash
-# Make executable
-chmod +x install-claude-extension.sh
-chmod +x install-qwen-extension.sh
-chmod +x install-gemini-extension.sh
+# Use winpty for interactive commands
+winpty prprompts create
 
-# Run
-bash install-claude-extension.sh
+# Or use PowerShell/CMD instead
+powershell -Command "prprompts create"
+
+# Or use WSL (Windows Subsystem for Linux)
+wsl prprompts create
 ```
 
 ---
 
-### Issue: Extension installed but commands still not working
+## Rate Limiting and Quotas
 
-**Symptoms:**
-- Extension files exist
-- Commands still not recognized
+### Rate limit exceeded
 
-**Solutions:**
+**Problem:** `429 Too Many Requests` or rate limit errors.
 
-**1. Restart AI assistant:**
-- Close and reopen Claude Code/Qwen Code/Gemini CLI
+**Solution:**
 
-**2. Check command format:**
-```
-# Correct
-/prp-bootstrap-from-prprompts
-
-# Incorrect
-prp-bootstrap  (missing /)
-/prp bootstrap  (extra space)
-```
-
-**3. Verify prompt files:**
+**For Claude:**
 ```bash
-# Check content of prompt files
-cat ~/.config/claude/prompts/prprompts/automation/bootstrap-from-prprompts.md
+# Check your plan limits at:
+# https://console.anthropic.com/settings/limits
+
+# Add delays between requests
+export PRPROMPTS_RATE_DELAY=1000  # 1 second between requests
+
+# Upgrade to higher tier if needed
 ```
 
-**4. Manual command registration:**
+**For Gemini (Free tier):**
 ```bash
-# For Claude Code, check commands.json
-cat ~/.config/claude/commands/prp-bootstrap.json
+# Free tier: 60 requests/minute, 1M tokens/day
+# Add automatic rate limiting
+export PRPROMPTS_RATE_LIMIT=50  # Stay under limit
+
+# Or use Gemini Pro for higher limits
 ```
 
----
-
-## Automation Command Issues
-
-### Issue: `/prp-bootstrap` creates incomplete project
-
-**Symptoms:**
-- Some folders missing
-- Dependencies not added
-- Tests not created
-
-**Solutions:**
-
-**1. Check PRD quality:**
+**For Qwen:**
 ```bash
-# Make sure PRD has all required sections
-cat docs/PRD.md
-
-# Should include:
-# - Project Overview
-# - Features
-# - Technical Requirements
-# - Compliance needs
+# Check limits at: https://dashscope.aliyun.com/
+# Default: 100 requests/minute
+# Upgrade plan if needed
 ```
 
-**2. Re-run with explicit instructions:**
-```
-/prp-bootstrap-from-prprompts
+### Context length exceeded
 
-Create complete Flutter project with:
-- Clean Architecture
-- BLoC state management
-- All 32 PRPROMPTS implemented
-- Test infrastructure
-- [Your specific requirements]
-```
-
-**3. Run generate again:**
-```bash
-# Ensure all PRPROMPTS are present
-prprompts validate
-prprompts generate
-```
-
----
-
-### Issue: `/prp-full-cycle` produces errors
-
-**Symptoms:**
-```
-Error: Feature implementation failed
-Dependency conflicts
-Test failures
-```
-
-**Solutions:**
-
-**1. Check existing code:**
-- Make sure base architecture exists
-- Verify dependencies are installed
-- Check for naming conflicts
-
-**2. Be more specific:**
-```
-# Too vague
-/prp-full-cycle Add user authentication
-
-# Better
-/prp-full-cycle Create user authentication feature with:
-- Email/password login
-- OAuth (Google, Apple)
-- JWT token management
-- Secure storage
-- BLoC state management
-- Unit + widget + integration tests
-```
-
-**3. Run in stages:**
-```
-# Stage 1: Models and repositories
-/prp-implement-next Focus on domain and data layers for authentication
-
-# Stage 2: Business logic
-/prp-implement-next Add BLoC for authentication
-
-# Stage 3: UI
-/prp-implement-next Create authentication UI screens
-
-# Stage 4: Tests
-/prp-implement-next Add comprehensive tests
-```
-
----
-
-## Performance Problems
-
-### Issue: Slow PRD creation
+**Problem:** `Context length (X tokens) exceeds maximum`
 
 **Solution:**
 ```bash
-# Use faster creation methods
+# Reduce file sizes or split generation
+prprompts gen-phase-1
+prprompts gen-phase-2
+prprompts gen-phase-3
 
-# Option 1: Auto mode (AI-generated)
-prprompts auto  # Faster than interactive
+# Or use AI with larger context
+prprompts switch gemini  # 1M tokens
+prprompts switch qwen    # 256K-1M tokens
 
-# Option 2: From existing docs
-prprompts from-files --dir ./requirements/
-
-# Option 3: Manual (instant)
-prprompts manual
+# Or generate fewer files at once
+prprompts gen-file 01-feature_scaffold
 ```
 
 ---
 
-### Issue: Slow PRPROMPTS generation
+## Configuration Problems
 
-**Symptoms:**
-- `prprompts generate` takes >30 seconds
+### Invalid configuration file
 
-**Solutions:**
-
-**1. Check disk I/O:**
-```bash
-# Monitor disk usage
-iostat 1
-
-# Check for slow disk
-sudo smartctl -a /dev/sda
-```
-
-**2. Use SSD if available:**
-```bash
-# Move project to SSD
-mv project /path/to/ssd/
-```
-
-**3. Disable antivirus temporarily:**
-- Some antivirus software slows file creation
-
----
-
-### Issue: AI automation commands are slow
-
-**Symptoms:**
-- `/prp-bootstrap` takes >20 minutes
-- `/prp-full-cycle` times out
-
-**Solutions:**
-
-**1. Use faster AI model:**
-- Gemini CLI (fastest for prototyping)
-- Qwen Code (balanced)
-- Claude Code (highest quality but slower)
-
-**2. Break down large features:**
-```
-# Instead of one large command
-/prp-full-cycle Build complete e-commerce platform
-
-# Use multiple smaller commands
-/prp-full-cycle Build product catalog
-/prp-full-cycle Build shopping cart
-/prp-full-cycle Build checkout
-```
-
-**3. Check internet connection:**
-- AI commands require internet
-- Slow connection = slow responses
-
----
-
-## Platform-Specific Issues
-
-### Windows Issues
-
-#### Issue: Scripts not working on Windows
-
-**Symptoms:**
-```
-'bash' is not recognized as an internal or external command
-```
-
-**Solutions:**
-
-**Option 1: Use Windows equivalents**
-```cmd
-REM Instead of bash scripts
-scripts\test-commands.bat
-scripts\test-integration.bat
-```
-
-**Option 2: Install Git Bash**
-```bash
-# Download from https://git-scm.com/download/win
-# Then use Git Bash terminal
-
-bash scripts/test-commands.sh
-```
-
-**Option 3: Use WSL (Windows Subsystem for Linux)**
-```bash
-wsl --install
-# Then use Linux commands normally
-```
-
----
-
-#### Issue: Path issues on Windows
-
-**Symptoms:**
-```
-Error: Cannot find path '.claude\prompts\'
-```
-
-**Solution:**
-```javascript
-// PRPROMPTS handles this automatically, but if you see issues:
-
-// Use platform-agnostic paths
-const path = require('path');
-const promptPath = path.join(process.env.HOME, '.claude', 'prompts');
-
-// Or specify Windows path explicitly
-const windowsPath = 'C:\\Users\\YourName\\.claude\\prompts';
-```
-
----
-
-### macOS Issues
-
-#### Issue: Permission errors on macOS Catalina+
-
-**Symptoms:**
-```
-Operation not permitted
-```
+**Problem:** `Error loading config: Unexpected token`
 
 **Solution:**
 ```bash
-# Grant Full Disk Access to Terminal
-# System Preferences → Security & Privacy → Privacy → Full Disk Access
-# Add Terminal.app or iTerm2
+# Backup and reset config
+mv ~/.prprompts/config.json ~/.prprompts/config.backup.json
 
-# Or use specific permissions
-chmod +x install-claude-extension.sh
-sudo chmod +x /usr/local/bin/prprompts
+# Regenerate config
+prprompts doctor
+
+# Or fix JSON manually
+cat ~/.prprompts/config.json | python -m json.tool
+# Fix any JSON syntax errors
+
+# Or reset completely
+rm -rf ~/.prprompts
+prprompts init
 ```
 
----
+### Config not persisting
 
-### Linux Issues
-
-#### Issue: Different shell configurations
-
-**Symptoms:**
-- Commands work in bash but not zsh
-- PATH not set correctly
+**Problem:** Settings reset after each run.
 
 **Solution:**
 ```bash
-# Add to both .bashrc and .zshrc
-echo 'export PATH="$(npm bin -g):$PATH"' >> ~/.bashrc
-echo 'export PATH="$(npm bin -g):$PATH"' >> ~/.zshrc
+# Check file permissions
+ls -la ~/.prprompts/config.json
 
-# Reload
-source ~/.bashrc
-source ~/.zshrc
+# Fix permissions
+chmod 644 ~/.prprompts/config.json
+
+# Ensure directory exists
+mkdir -p ~/.prprompts
+
+# Check if being overwritten
+cat ~/.prprompts/config.json
 ```
 
----
+### Configuration warnings on startup
 
-## Common Error Messages
-
-### Error: "ENOENT: no such file or directory"
-
-**Cause:** Missing file or directory
+**Problem:** `⚠ Configuration warnings: Invalid version format`
 
 **Solution:**
 ```bash
-# Check what file is missing
-ls -la
+# Update config version
+prprompts config
 
-# Create missing directories
-mkdir -p docs .claude/prompts/prprompts
+# Edit manually
+nano ~/.prprompts/config.json
+# Set version to "4.0.0"
 
-# Verify structure
-tree -L 2
+# Suppress warnings
+export PRPROMPTS_VERBOSE=false
 ```
 
 ---
 
-### Error: "Module not found"
+## Diagnostic Tools
 
-**Cause:** Missing npm dependencies
+### Run comprehensive diagnostics
 
-**Solution:**
 ```bash
-# Reinstall dependencies
-npm install -g prprompts-flutter-generator
+# Built-in doctor command
+prprompts doctor
 
-# Or install locally
-cd /path/to/prprompts-flutter-generator
-npm install
-npm link
+# Manual checks
+echo "=== System Information ==="
+echo "Node version: $(node --version)"
+echo "npm version: $(npm --version)"
+echo "OS: $(uname -a)"
+echo ""
+
+echo "=== AI Assistants ==="
+echo "Claude: $(which claude || echo 'Not installed')"
+echo "Qwen: $(which qwen || echo 'Not installed')"
+echo "Gemini: $(which gemini || echo 'Not installed')"
+echo ""
+
+echo "=== Environment Variables ==="
+env | grep -E "(ANTHROPIC|DASHSCOPE|GOOGLE|PRPROMPTS)" || echo "None set"
+echo ""
+
+echo "=== Config Files ==="
+ls -la ~/.prprompts/ 2>/dev/null || echo "~/.prprompts not found"
+ls -la ~/.config/claude/prompts/ 2>/dev/null | head -5 || echo "Claude prompts not found"
+ls -la ~/.config/qwen/prompts/ 2>/dev/null | head -5 || echo "Qwen prompts not found"
+ls -la ~/.config/gemini/prompts/ 2>/dev/null | head -5 || echo "Gemini prompts not found"
 ```
 
----
-
-### Error: "Command failed with exit code 1"
-
-**Cause:** General command failure
-
-**Solution:**
-```bash
-# Run with debug output
-DEBUG=true prprompts create
-DEBUG=true prprompts generate
-
-# Check logs
-cat ~/.prprompts/logs/error.log
-```
-
----
-
-## Debugging Tips
-
-### Enable Debug Mode
+### Enable debug mode
 
 ```bash
-# Set debug environment variable
+# Verbose output
+export PRPROMPTS_VERBOSE=true
 export DEBUG=true
 
-# Run commands
-prprompts create
+# Log to file
+prprompts create 2>&1 | tee prprompts-debug.log
+
+# With timestamps
+prprompts generate 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee debug.log
+```
+
+### Test individual components
+
+```bash
+# Test CLI wrapper
+node $(npm root -g)/prprompts-flutter-generator/bin/prprompts help
+
+# Test AI commands directly
+claude create-prd
+qwen gen-prprompts
+gemini analyze-prd
+
+# Test postinstall
+node $(npm root -g)/prprompts-flutter-generator/scripts/postinstall.js
+
+# Run tests
+cd $(npm root -g)/prprompts-flutter-generator
+npm test
+```
+
+---
+
+## Automation Issues
+
+### Bootstrap command fails
+
+**Problem:** `/bootstrap-from-prprompts` fails
+
+**Solution:**
+```bash
+# Ensure PRPROMPTS exist first
+ls PRPROMPTS/*.md | wc -l  # Should be 32
+
+# Regenerate if needed
 prprompts generate
 
-# Check verbose output
+# Check Flutter project
+flutter doctor
+flutter pub get
+
+# Run bootstrap
+claude
+/bootstrap-from-prprompts
 ```
 
-### Check Logs
+### Full-cycle automation stuck
 
+**Problem:** `/full-cycle` command hangs
+
+**Solution:**
 ```bash
-# PRPROMPTS logs (if available)
-cat ~/.prprompts/logs/prprompts.log
+# Reduce number of features
+/full-cycle
+3  # Start with fewer features
 
-# npm logs
-cat ~/.npm/_logs/*.log
+# Check IMPLEMENTATION_PLAN.md exists
+ls docs/IMPLEMENTATION_PLAN.md
 
-# System logs
-# macOS
-log show --predicate 'process == "node"' --last 1h
-
-# Linux
-journalctl -u node --since "1 hour ago"
-```
-
-### Verify Installation
-
-```bash
-# Check PRPROMPTS version
-prprompts --version
-
-# Check Node.js version
-node --version  # Should be 18 or 20
-
-# Check npm version
-npm --version  # Should be 9+
-
-# Check global packages
-npm list -g --depth=0 | grep prprompts
-
-# Check where installed
-which prprompts
-ls -la $(which prprompts)
-```
-
-### Test Commands
-
-```bash
-# Test basic commands
-prprompts --help
-prprompts --version
-
-# Test PRD creation
-mkdir test-prprompts
-cd test-prprompts
-prprompts create
-
-# Test generation
-prprompts generate
-
-# Validate
-prprompts validate
+# Monitor progress
+tail -f *.log
 ```
 
 ---
 
 ## Getting Help
 
-### Before Asking for Help
+### Community Support
 
-1. **Check this guide** - Most issues are covered here
-2. **Search existing issues** - Someone may have had the same problem
-3. **Update to latest version** - Bug may be fixed
-4. **Try with clean install** - Eliminate local issues
+1. **GitHub Issues:** [Report bugs](https://github.com/Kandil7/prprompts-flutter-generator/issues)
+2. **Discussions:** [Ask questions](https://github.com/Kandil7/prprompts-flutter-generator/discussions)
+3. **Stack Overflow:** Tag with `prprompts`
 
-### Where to Get Help
+### Reporting Bugs
 
-#### GitHub Issues
-**Best for:** Bug reports, feature requests
-**URL:** https://github.com/Kandil7/prprompts-flutter-generator/issues
-
-**Template:**
-```markdown
-**Description:**
-Clear description of the problem
-
-**Steps to Reproduce:**
-1. Step 1
-2. Step 2
-3. Step 3
-
-**Expected Behavior:**
-What should happen
-
-**Actual Behavior:**
-What actually happens
-
-**Environment:**
-- OS: [Windows 11/macOS 14/Ubuntu 22.04]
-- Node.js version: [v20.10.0]
-- PRPROMPTS version: [4.0.0]
-- AI Assistant: [Claude Code/Qwen Code/Gemini CLI]
-
-**Error Output:**
-```
-Paste error messages here
-```
-
-**Additional Context:**
-Any other relevant information
-```
-
-#### GitHub Discussions
-**Best for:** Questions, ideas, general discussion
-**URL:** https://github.com/Kandil7/prprompts-flutter-generator/discussions
-
-#### Documentation
-**Best for:** Learning how to use PRPROMPTS
-**Files:** README.md, DEVELOPMENT.md, ARCHITECTURE.md
-
----
-
-## Quick Fixes Checklist
-
-If you're having issues, try this checklist:
-
-- [ ] Node.js version 18 or 20?
-- [ ] npm version 9 or higher?
-- [ ] Latest PRPROMPTS version installed?
-- [ ] In correct directory?
-- [ ] PRD file exists at docs/PRD.md?
-- [ ] Permissions correct?
-- [ ] Extensions installed?
-- [ ] AI assistant restarted?
-- [ ] Internet connection working?
-- [ ] Sufficient disk space?
-- [ ] No antivirus blocking?
-- [ ] Tried with debug mode?
-- [ ] Read error messages carefully?
-
----
-
-## Advanced Troubleshooting
-
-### Clean Reinstall
+When reporting issues, include:
 
 ```bash
-# 1. Uninstall
-npm uninstall -g prprompts-flutter-generator
+# Generate diagnostic report
+prprompts doctor > diagnostic.txt
+node --version >> diagnostic.txt
+npm --version >> diagnostic.txt
+echo "OS: $(uname -a)" >> diagnostic.txt
 
-# 2. Clear npm cache
-npm cache clean --force
-
-# 3. Clear global modules
-rm -rf ~/.npm
-
-# 4. Reinstall
-npm install -g prprompts-flutter-generator
-
-# 5. Verify
-prprompts --version
-npm run doctor  # Run health check
+# Include:
+# - Complete error messages
+# - Steps to reproduce
+# - Expected vs actual behavior
+# - diagnostic.txt file
 ```
 
-### Reset Extensions
+### Quick Fix Script
+
+Create `fix-prprompts.sh`:
 
 ```bash
-# Backup first
-cp -r ~/.config/claude ~/.config/claude.backup
+#!/bin/bash
+echo "PRPROMPTS Quick Fix Script v4.0"
+echo "================================"
 
-# Remove old extensions
-rm -rf ~/.config/claude/prompts/prprompts
-rm -rf ~/.config/claude/commands/prp-*
+# Backup current config
+if [ -d ~/.prprompts ]; then
+  cp -r ~/.prprompts ~/.prprompts.backup.$(date +%Y%m%d)
+  echo "✓ Config backed up"
+fi
 
 # Reinstall
-bash install-claude-extension.sh
+npm uninstall -g prprompts-flutter-generator
+npm cache clean --force
+npm install -g prprompts-flutter-generator
+echo "✓ Package reinstalled"
 
-# Restart Claude Code
+# Reset configuration
+rm -rf ~/.prprompts
+mkdir -p ~/.prprompts
+
+# Clear AI configs
+for ai in claude qwen gemini; do
+  if [ -d ~/.config/$ai ]; then
+    rm -rf ~/.config/$ai/prompts
+    rm -rf ~/.config/$ai/commands
+    echo "✓ Cleared $ai config"
+  fi
+done
+
+# Run postinstall
+node $(npm root -g)/prprompts-flutter-generator/scripts/postinstall.js
+echo "✓ Postinstall complete"
+
+# Diagnostic
+prprompts doctor
+
+echo ""
+echo "Fix complete! Try: prprompts create"
 ```
 
-### Doctor Command
-
+Make executable and run:
 ```bash
-# Run health check
-npm run doctor
-
-# This checks:
-# - Node.js version
-# - npm version
-# - Installation integrity
-# - Extension status
-# - File permissions
-# - Configuration validity
+chmod +x fix-prprompts.sh
+./fix-prprompts.sh
 ```
 
 ---
 
-## Still Having Issues?
+## Environment Variables Reference
 
-If you've tried everything and still have problems:
-
-1. **Create minimal reproduction:**
-   ```bash
-   mkdir prprompts-test
-   cd prprompts-test
-   prprompts create
-   # Document each step where it fails
-   ```
-
-2. **Collect information:**
-   ```bash
-   prprompts --version > debug-info.txt
-   node --version >> debug-info.txt
-   npm --version >> debug-info.txt
-   uname -a >> debug-info.txt  # Or: ver (Windows)
-   ```
-
-3. **Open GitHub issue** with:
-   - Clear problem description
-   - Steps to reproduce
-   - Error messages
-   - debug-info.txt contents
-   - What you've tried
-
-We're here to help! 🚀
+| Variable | Description | Default | Example |
+|----------|-------------|---------|---------|
+| `PRPROMPTS_DEFAULT_AI` | Default AI assistant | claude | `export PRPROMPTS_DEFAULT_AI=gemini` |
+| `PRPROMPTS_VERBOSE` | Verbose output | true | `export PRPROMPTS_VERBOSE=false` |
+| `PRPROMPTS_TIMEOUT` | Command timeout (ms) | 120000 | `export PRPROMPTS_TIMEOUT=300000` |
+| `PRPROMPTS_RETRY_COUNT` | Number of retries | 3 | `export PRPROMPTS_RETRY_COUNT=5` |
+| `PRPROMPTS_AUTO_UPDATE` | Auto-update enabled | true | `export PRPROMPTS_AUTO_UPDATE=false` |
+| `PRPROMPTS_TELEMETRY` | Telemetry enabled | false | `export PRPROMPTS_TELEMETRY=true` |
+| `PRPROMPTS_RATE_DELAY` | Delay between API calls (ms) | 0 | `export PRPROMPTS_RATE_DELAY=1000` |
+| `PRPROMPTS_RATE_LIMIT` | Max requests per minute | unlimited | `export PRPROMPTS_RATE_LIMIT=50` |
+| `SKIP_POSTINSTALL` | Skip postinstall script | false | `export SKIP_POSTINSTALL=1` |
+| `CI` | CI environment detection | false | `export CI=true` |
+| `ANTHROPIC_API_KEY` | Claude API key | - | `export ANTHROPIC_API_KEY="sk-ant-..."` |
+| `DASHSCOPE_API_KEY` | Qwen API key | - | `export DASHSCOPE_API_KEY="sk-..."` |
+| `GOOGLE_API_KEY` | Gemini API key | - | `export GOOGLE_API_KEY="AIza..."` |
 
 ---
 
-**Last Updated:** 2025-01-18
-**PRPROMPTS Version:** 4.0.0
+## FAQ
+
+**Q: Can I use multiple AI assistants?**
+A: Yes! Install all three and switch between them with `prprompts switch <ai>`.
+
+**Q: How do I update to the latest version?**
+A: Run `npm update -g prprompts-flutter-generator`.
+
+**Q: Can I customize the prompts?**
+A: Yes, edit files in `~/.config/{ai}/prompts/` and `~/.config/{ai}/commands/`.
+
+**Q: Is my API key secure?**
+A: API keys are stored as environment variables and never saved to disk by PRPROMPTS.
+
+**Q: Can I use this offline?**
+A: No, AI assistants require internet connection to their APIs.
+
+**Q: Why do I get "command not found"?**
+A: Ensure npm's global bin directory is in your PATH. Run `npm bin -g` to find it.
+
+**Q: Can I use with existing Flutter projects?**
+A: Yes! Run `prprompts init` in any Flutter project directory.
+
+**Q: How much do the AI services cost?**
+A: Claude (~$3/million tokens), Gemini (free tier available), Qwen (~$1/million tokens).
+
+---
+
+*Last updated: v4.0.0*
+*For latest updates, visit: https://github.com/Kandil7/prprompts-flutter-generator*

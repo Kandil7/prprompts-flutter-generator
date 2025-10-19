@@ -3,7 +3,8 @@
 /**
  * PRPROMPTS CLI Wrapper
  * Unified interface for Claude Code, Qwen Code, and Gemini CLI
- * Version: 3.0.0
+ * Version: 4.1.0
+ * Enhanced with API validation, rate limiting, interactive mode, progress indicators, and command history
  */
 
 const { execSync } = require('child_process');
@@ -12,7 +13,7 @@ const path = require('path');
 const os = require('os');
 
 // Configuration
-const VERSION = '3.0.0';
+const VERSION = '4.1.0';
 const CONFIG_DIR = path.join(os.homedir(), '.prprompts');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
@@ -43,39 +44,133 @@ function commandExists(cmd) {
   }
 }
 
-// Load configuration
+// Load configuration with environment variable support
 function loadConfig() {
-  if (!fs.existsSync(CONFIG_FILE)) {
-    return {
-      version: VERSION,
-      default_ai: 'claude',
-      ais: {
-        claude: { enabled: commandExists('claude') },
-        qwen: { enabled: commandExists('qwen') },
-        gemini: { enabled: commandExists('gemini') }
-      },
-      features: {
-        auto_update: true,
-        verbose: true
-      }
-    };
+  // Start with defaults
+  let config = {
+    version: VERSION,
+    default_ai: process.env.PRPROMPTS_DEFAULT_AI || 'claude',
+    ais: {
+      claude: { enabled: commandExists('claude') },
+      qwen: { enabled: commandExists('qwen') },
+      gemini: { enabled: commandExists('gemini') }
+    },
+    features: {
+      auto_update: process.env.PRPROMPTS_AUTO_UPDATE !== 'false',
+      verbose: process.env.PRPROMPTS_VERBOSE !== 'false',
+      telemetry: process.env.PRPROMPTS_TELEMETRY === 'true'
+    }
+  };
+
+  // Load from file if exists
+  if (fs.existsSync(CONFIG_FILE)) {
+    try {
+      const fileConfig = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+
+      // Merge file config with defaults, env vars take precedence
+      config = {
+        ...fileConfig,
+        version: VERSION,
+        default_ai: process.env.PRPROMPTS_DEFAULT_AI || fileConfig.default_ai || config.default_ai,
+        features: {
+          ...fileConfig.features,
+          auto_update: process.env.PRPROMPTS_AUTO_UPDATE !== undefined ?
+            process.env.PRPROMPTS_AUTO_UPDATE !== 'false' :
+            fileConfig.features?.auto_update,
+          verbose: process.env.PRPROMPTS_VERBOSE !== undefined ?
+            process.env.PRPROMPTS_VERBOSE !== 'false' :
+            fileConfig.features?.verbose,
+          telemetry: process.env.PRPROMPTS_TELEMETRY !== undefined ?
+            process.env.PRPROMPTS_TELEMETRY === 'true' :
+            fileConfig.features?.telemetry
+        }
+      };
+    } catch (error) {
+      console.error(colorize('Error loading config:', 'red'), error.message);
+      // Return defaults on error instead of exiting
+      return config;
+    }
   }
 
-  try {
-    return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
-  } catch (error) {
-    console.error(colorize('Error loading config:', 'red'), error.message);
-    process.exit(1);
+  // Apply timeout and retry settings from env
+  if (process.env.PRPROMPTS_TIMEOUT) {
+    config.timeout = parseInt(process.env.PRPROMPTS_TIMEOUT, 10);
   }
+  if (process.env.PRPROMPTS_RETRY_COUNT) {
+    config.retryCount = parseInt(process.env.PRPROMPTS_RETRY_COUNT, 10);
+  }
+
+  return config;
+}
+
+// Validate configuration
+function validateConfig(config) {
+  const errors = [];
+  const warnings = [];
+
+  // Check version format
+  if (!config.version || !/^\d+\.\d+\.\d+/.test(config.version)) {
+    warnings.push('Invalid version format in config');
+  }
+
+  // Check default AI is valid
+  const validAIs = ['claude', 'qwen', 'gemini'];
+  if (config.default_ai && !validAIs.includes(config.default_ai)) {
+    errors.push(`Invalid default_ai: ${config.default_ai}. Must be one of: ${validAIs.join(', ')}`);
+  }
+
+  // Check that at least one AI is enabled
+  const enabledAIs = Object.entries(config.ais || {})
+    .filter(([_, ai]) => ai.enabled)
+    .map(([name]) => name);
+
+  if (enabledAIs.length === 0) {
+    errors.push('No AI assistants are enabled. Please install at least one.');
+  }
+
+  // Check that default AI is enabled
+  if (config.default_ai && config.ais[config.default_ai] && !config.ais[config.default_ai].enabled) {
+    warnings.push(`Default AI '${config.default_ai}' is not enabled. Will use first available AI.`);
+  }
+
+  // Validate timeout and retry settings
+  if (config.timeout && (config.timeout < 1000 || config.timeout > 600000)) {
+    warnings.push('Timeout should be between 1000ms and 600000ms (10 minutes)');
+  }
+
+  if (config.retryCount && (config.retryCount < 1 || config.retryCount > 10)) {
+    warnings.push('Retry count should be between 1 and 10');
+  }
+
+  // Check features
+  if (config.features) {
+    const validFeatures = ['auto_update', 'verbose', 'telemetry'];
+    const unknownFeatures = Object.keys(config.features).filter(f => !validFeatures.includes(f));
+    if (unknownFeatures.length > 0) {
+      warnings.push(`Unknown features in config: ${unknownFeatures.join(', ')}`);
+    }
+  }
+
+  return { errors, warnings, isValid: errors.length === 0 };
 }
 
 // Save configuration
 function saveConfig(config) {
   try {
+    // Validate before saving
+    const validation = validateConfig(config);
+    if (!validation.isValid) {
+      console.error(colorize('✗ Configuration errors:', 'red'));
+      validation.errors.forEach(e => console.error(`  - ${e}`));
+      return false;
+    }
+
     fs.mkdirSync(CONFIG_DIR, { recursive: true });
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
+    return true;
   } catch (error) {
     console.error(colorize('Error saving config:', 'red'), error.message);
+    return false;
   }
 }
 
@@ -101,16 +196,87 @@ function getBestAI(config) {
   return available[0];
 }
 
-// Execute AI command
-function execAI(ai, args) {
+// Execute AI command with retry logic and better error handling
+function execAI(ai, args, config = null) {
   const command = `${ai} ${args.join(' ')}`;
+  const cfg = config || loadConfig();
+  const timeout = cfg.timeout || 120000; // 2 minutes default timeout
+  const retries = cfg.retryCount || 3;
 
-  try {
-    execSync(command, { stdio: 'inherit' });
-  } catch (error) {
-    process.exit(error.status || 1);
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      if (attempt > 1) {
+        console.log(colorize(`\nRetry attempt ${attempt}/${retries}...`, 'yellow'));
+      }
+
+      execSync(command, {
+        stdio: 'inherit',
+        timeout: timeout,
+        windowsHide: true
+      });
+      return; // Success - exit function
+    } catch (error) {
+      const isLastAttempt = attempt === retries;
+
+      // Handle specific error cases
+      if (error.code === 'ENOENT') {
+        console.error(colorize(`\n✗ Error: AI command '${ai}' not found`, 'red'));
+        console.error(colorize('Please ensure the AI is properly installed:', 'yellow'));
+        console.error(`  npm install -g @anthropic-ai/claude-code  (for Claude)`);
+        console.error(`  npm install -g @qwenlm/qwen-code         (for Qwen)`);
+        console.error(`  npm install -g @google/gemini-cli        (for Gemini)`);
+        process.exit(1);
+      } else if (error.signal === 'SIGTERM' || error.code === 'ETIMEDOUT') {
+        console.error(colorize(`\n✗ Error: Command timed out after ${timeout/1000} seconds`, 'red'));
+        if (!isLastAttempt) {
+          console.log(colorize('Retrying...', 'yellow'));
+          continue;
+        }
+      } else if (error.status === 127) {
+        console.error(colorize(`\n✗ Error: Command '${args[0]}' not recognized by ${ai}`, 'red'));
+        console.error(colorize('Available commands: create, generate, analyze, etc.', 'yellow'));
+        console.error(colorize('Run "prprompts help" for full command list', 'cyan'));
+        process.exit(1);
+      } else if (error.message && error.message.includes('API')) {
+        console.error(colorize(`\n✗ Error: API key issue detected`, 'red'));
+        console.error(colorize('Please check your API key configuration:', 'yellow'));
+        console.error(`  ${ai === 'claude' ? 'ANTHROPIC_API_KEY' : ai === 'gemini' ? 'GOOGLE_API_KEY' : 'DASHSCOPE_API_KEY'}`);
+        if (!isLastAttempt) {
+          continue;
+        }
+      } else {
+        // Generic error
+        console.error(colorize(`\n✗ Error executing ${ai} command`, 'red'));
+        if (error.message) {
+          console.error(colorize(`Details: ${error.message}`, 'yellow'));
+        }
+        if (!isLastAttempt) {
+          continue;
+        }
+      }
+
+      if (isLastAttempt) {
+        console.error(colorize('\nAll retry attempts failed.', 'red'));
+        console.error(colorize('For help, visit: https://github.com/Kandil7/prprompts-flutter-generator/issues', 'cyan'));
+        process.exit(error.status || 1);
+      }
+    }
   }
 }
+
+// Import automation modules
+const AutomationManager = require('../lib/automation-manager');
+const AutomationValidator = require('../lib/automation-validator');
+
+// Import v4.1.0 enhancement modules
+const APIKeyValidator = require('../lib/api-key-validator');
+const RateLimiter = require('../lib/rate-limiter');
+const InteractiveMode = require('../lib/interactive-mode');
+const { createProgressBar, createSpinner } = require('../lib/progress-indicator');
+const CommandHistory = require('../lib/command-history');
+
+// Initialize command history
+const commandHistory = new CommandHistory();
 
 // Commands
 
@@ -139,6 +305,22 @@ ${colorize('CONFIGURATION:', 'bright')}
   ${colorize('switch', 'green')} <ai>       Switch default AI (claude|qwen|gemini)
   ${colorize('which', 'green')}             Show which AI will be used
   ${colorize('doctor', 'green')}            Diagnose installation issues
+
+${colorize('AUTOMATION:', 'bright')}
+  ${colorize('auto-status', 'green')}       Show automation progress
+  ${colorize('auto-validate', 'green')}     Validate code quality & compliance
+  ${colorize('auto-bootstrap', 'green')}    Bootstrap project structure
+  ${colorize('auto-implement', 'green')} N  Implement N features automatically
+  ${colorize('auto-test', 'green')}         Run tests with coverage
+  ${colorize('auto-reset', 'green')}        Reset automation state
+
+${colorize('NEW FEATURES (v4.1.0):', 'bright')}
+  ${colorize('interactive', 'green')}       Start interactive mode (menu-driven)
+  ${colorize('validate-keys', 'green')}     Validate API keys for all AIs
+  ${colorize('setup-keys', 'green')}        Interactive API key setup
+  ${colorize('rate-status', 'green')}       Check API rate limit status
+  ${colorize('history', 'green')}           Browse command history
+  ${colorize('history-search', 'green')}    Search command history
 
 ${colorize('MAINTENANCE:', 'bright')}
   ${colorize('update', 'green')}            Update PRPROMPTS to latest version
@@ -336,6 +518,29 @@ function main() {
   const args = process.argv.slice(2);
   const command = args[0];
 
+  // Validate config on startup (unless showing help/version)
+  if (command && command !== 'help' && command !== '--help' && command !== '-h' &&
+      command !== 'version' && command !== '--version' && command !== '-v') {
+    const config = loadConfig();
+    const validation = validateConfig(config);
+
+    // Show warnings if any
+    if (validation.warnings.length > 0 && config.features?.verbose !== false) {
+      console.log(colorize('⚠ Configuration warnings:', 'yellow'));
+      validation.warnings.forEach(w => console.log(colorize(`  - ${w}`, 'yellow')));
+      console.log('');
+    }
+
+    // Exit on errors
+    if (!validation.isValid) {
+      console.error(colorize('✗ Configuration errors:', 'red'));
+      validation.errors.forEach(e => console.error(colorize(`  - ${e}`, 'red')));
+      console.error('');
+      console.error(colorize('Run "prprompts doctor" to diagnose issues', 'cyan'));
+      process.exit(1);
+    }
+  }
+
   // Handle help/version/no command
   if (!command || command === 'help' || command === '--help' || command === '-h') {
     showHelp();
@@ -373,11 +578,116 @@ function main() {
       console.log(colorize('🔄 Checking for updates...', 'cyan'));
       console.log(colorize('Feature coming soon!', 'yellow'));
       return;
+
+    // Automation commands
+    case 'auto-status':
+      const statusManager = new AutomationManager();
+      statusManager.generateReport();
+      return;
+
+    case 'auto-validate':
+      const validator = new AutomationValidator();
+      validator.validate().then(results => {
+        validator.generateReport();
+        process.exit(results.passed ? 0 : 1);
+      });
+      return;
+
+    case 'auto-bootstrap':
+      const bootstrapManager = new AutomationManager();
+      bootstrapManager.startBootstrap().then(result => {
+        if (result.success) {
+          console.log(colorize('✅ Bootstrap complete!', 'green'));
+        } else {
+          console.log(colorize('❌ Bootstrap failed:', 'red'), result.errors);
+          process.exit(1);
+        }
+      });
+      return;
+
+    case 'auto-implement':
+      const count = parseInt(args[1]) || 1;
+      const implementManager = new AutomationManager();
+      implementManager.executeImplementation(count).then(result => {
+        console.log(colorize(`✅ Implemented ${result.tasksCompleted} tasks`, 'green'));
+      });
+      return;
+
+    case 'auto-test':
+      const testManager = new AutomationManager();
+      testManager.runTests().then(() => {
+        console.log(colorize('✅ Tests complete', 'green'));
+      });
+      return;
+
+    case 'auto-reset':
+      const resetManager = new AutomationManager();
+      resetManager.reset();
+      console.log(colorize('✅ Automation state reset', 'green'));
+      return;
+
+    // New v4.1.0 commands
+    case 'interactive':
+      const interactive = new InteractiveMode();
+      interactive.start().catch(console.error);
+      return;
+
+    case 'validate-keys':
+      const keyValidator = new APIKeyValidator();
+      keyValidator.validateAll().then(results => {
+        console.log('\n📊 API Key Validation Results:\n');
+        for (const [ai, result] of Object.entries(results)) {
+          if (result.skipped) {
+            console.log(`⏭️  ${ai}: Skipped (not installed)`);
+          } else if (result.valid) {
+            console.log(colorize(`✅ ${ai}: Valid`, 'green'));
+          } else {
+            console.log(colorize(`❌ ${ai}: ${result.error}`, 'red'));
+          }
+        }
+      });
+      return;
+
+    case 'setup-keys':
+      const setupValidator = new APIKeyValidator();
+      const setupAI = args[1];
+      if (setupAI) {
+        setupValidator.setupAPIKey(setupAI).then(() => {
+          console.log('Setup complete');
+        });
+      } else {
+        console.log('Please specify an AI: setup-keys claude|qwen|gemini');
+      }
+      return;
+
+    case 'rate-status':
+      const rateLimiter = new RateLimiter();
+      rateLimiter.displayUsage();
+      return;
+
+    case 'history':
+      commandHistory.browseHistory().then(() => {
+        process.exit(0);
+      });
+      return;
+
+    case 'history-search':
+      const searchQuery = args.slice(1).join(' ');
+      const searchResults = commandHistory.searchHistory(searchQuery);
+      console.log(`\n🔍 Search results for "${searchQuery}":\n`);
+      searchResults.slice(0, 20).forEach(cmd => {
+        console.log(`  ${cmd}`);
+      });
+      return;
   }
 
   // Load config and get AI
   const config = loadConfig();
   const ai = getBestAI(config);
+
+  // Track command in history
+  const fullCommand = `prprompts ${process.argv.slice(2).join(' ')}`;
+  commandHistory.addCommand(fullCommand, { project: path.basename(process.cwd()) });
 
   // Map user-friendly commands to AI commands
   const commandMap = {
@@ -400,7 +710,7 @@ function main() {
     console.log(colorize(`→ Using ${ai}`, 'cyan'));
   }
 
-  execAI(ai, aiArgs);
+  execAI(ai, aiArgs, config);
 }
 
 // Run
