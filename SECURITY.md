@@ -194,6 +194,183 @@ await secureStorage.write(
 // ❌ await prefs.setString('token', token);
 ```
 
+
+### 6. API Key Management
+
+PRPROMPTS integrates with AI provider CLIs (Claude Code, Qwen Code, Gemini CLI) that require API keys for authentication.
+
+#### Getting API Keys
+
+**Claude Code (Anthropic):**
+- Console: https://console.anthropic.com/settings/keys
+- Documentation: https://docs.anthropic.com/claude/docs
+- Authentication: Uses `~/.config/claude/config.json` or `ANTHROPIC_API_KEY` environment variable
+
+**Qwen Code (Alibaba Cloud):**
+- Console: https://dashscope.aliyun.com/
+- Documentation: https://help.aliyun.com/zh/dashscope/
+- Authentication: Uses `~/.config/qwen/config.json` or `DASHSCOPE_API_KEY` environment variable
+
+**Gemini CLI (Google):**
+- Console: https://aistudio.google.com/app/apikey
+- Documentation: https://ai.google.dev/gemini-api/docs
+- Authentication: Uses `~/.config/gemini/config.json` or `GOOGLE_API_KEY` environment variable
+
+#### Secure API Key Storage
+
+**✅ Best Practices:**
+
+1. **Use Environment Variables** (recommended for development):
+   ```bash
+   # Copy the template
+   cp .env.example .env
+
+   # Add your keys
+   ANTHROPIC_API_KEY=sk-ant-api03-xxxxx
+   GOOGLE_API_KEY=AIzaSyxxxxx
+   DASHSCOPE_API_KEY=sk-xxxxx
+   ```
+
+2. **Use CLI Authentication** (alternative):
+   ```bash
+   # Authenticate via CLI (stores in ~/.config/{ai}/config.json)
+   claude auth login
+   qwen auth login
+   gemini auth login
+   ```
+
+3. **Use Secret Management Systems** (production):
+   - AWS Secrets Manager
+   - Azure Key Vault
+   - Google Secret Manager
+   - HashiCorp Vault
+   - 1Password CLI / Bitwarden CLI
+
+4. **Separate Keys by Environment**:
+   ```bash
+   # Development
+   ANTHROPIC_API_KEY=sk-ant-api03-dev-xxxxx
+
+   # Production (use secret manager, not .env)
+   ANTHROPIC_API_KEY=sk-ant-api03-prod-xxxxx
+   ```
+
+**❌ Never Do This:**
+
+1. **Don't commit API keys to version control**:
+   ```bash
+   # ❌ BAD - hardcoded in code
+   const apiKey = "sk-ant-api03-xxxxx";
+
+   # ❌ BAD - committed .env file
+   git add .env
+
+   # ✅ GOOD - use .env.example template
+   git add .env.example
+   ```
+
+2. **Don't expose keys in logs or errors**:
+   ```javascript
+   // ❌ BAD
+   console.log(`Using API key: ${process.env.ANTHROPIC_API_KEY}`);
+
+   // ✅ GOOD
+   console.log(`API key configured: ${!!process.env.ANTHROPIC_API_KEY}`);
+   ```
+
+3. **Don't share keys in issues, PRs, or chat**:
+   - If you need to share logs, redact API keys first
+   - Use `[REDACTED]` or `sk-ant-***` placeholders
+
+4. **Don't use production keys in development**:
+   - Create separate keys for dev, staging, and production
+   - Use minimal permissions for each environment
+
+#### Key Rotation
+
+**Recommended Schedule:**
+- **Development keys**: Rotate every 90 days
+- **Production keys**: Rotate every 30-60 days
+- **Compromised keys**: Revoke immediately
+
+**Rotation Process:**
+```bash
+# 1. Generate new key in provider console
+# 2. Update environment variables
+# 3. Test with new key
+# 4. Revoke old key
+# 5. Update documentation
+```
+
+#### Incident Response: Leaked API Key
+
+If you accidentally commit an API key to version control:
+
+**🚨 Immediate Actions (within 5 minutes):**
+
+1. **Revoke the key immediately** in the provider console:
+   - Claude: https://console.anthropic.com/settings/keys
+   - Gemini: https://aistudio.google.com/app/apikey
+   - Qwen: https://dashscope.aliyun.com/
+
+2. **Generate a new key** and update your `.env` file
+
+3. **Test** that the new key works:
+   ```bash
+   prprompts doctor
+   claude --version
+   ```
+
+**🔧 Cleanup Actions (within 1 hour):**
+
+4. **Remove the key from git history**:
+   ```bash
+   # Using git-filter-repo (recommended)
+   git filter-repo --invert-paths --path .env
+
+   # Or using BFG Repo-Cleaner
+   bfg --replace-text passwords.txt
+
+   # Force push (if working alone)
+   git push origin --force --all
+   ```
+
+5. **Notify your team** if the repository is shared
+
+6. **Check provider logs** for unauthorized usage
+
+7. **Update incident log** with details for future reference
+
+**📝 Prevention:**
+
+- Enable pre-commit hooks to detect secrets:
+  ```bash
+  npm install --save-dev @commitlint/cli
+  # Add to .git/hooks/pre-commit
+  ```
+- Use tools like `git-secrets`, `truffleHog`, or `detect-secrets`
+- Review `.gitignore` to ensure `.env` is excluded (already configured)
+
+#### Monitoring API Usage
+
+**Detect Anomalies:**
+- Monitor API usage in provider consoles
+- Set up billing alerts for unexpected usage spikes
+- Review access logs regularly
+
+**Signs of Compromised Keys:**
+- Unexpected API calls from unknown IPs
+- Usage spikes at unusual times
+- Quota exceeded errors
+- Billing anomalies
+
+**If you suspect compromise:**
+1. Revoke the key immediately
+2. Generate new key
+3. Review provider access logs
+4. Check git history for leaks
+5. Audit all systems using that key
+
 ---
 
 ## Known Security Considerations

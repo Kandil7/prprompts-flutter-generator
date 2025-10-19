@@ -71,6 +71,9 @@
     "url": "https://github.com/Kandil7/prprompts-flutter-generator/issues"
   },
   "homepage": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "preferGlobal": true,
   "bin": {
     "prprompts": "bin/prprompts"

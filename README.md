@@ -69,6 +69,73 @@ curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/
 
 ---
 
+## 🔑 Configure AI Providers
+
+PRPROMPTS works with three AI assistants. Choose one (or install all for flexibility):
+
+<div align="center">
+
+| AI Provider | Installation | Authentication |
+|-------------|--------------|----------------|
+| **Claude Code** | `npm install -g @anthropic-ai/claude-code` | [Get API Key](https://console.anthropic.com/settings/keys) |
+| **Qwen Code** | `npm install -g @qwenlm/qwen-code` | [Get API Key](https://dashscope.aliyun.com/) |
+| **Gemini CLI** | `npm install -g @google/gemini-cli` | [Get API Key](https://aistudio.google.com/app/apikey) |
+
+</div>
+
+### Quick Setup
+
+**1. Install an AI CLI** (pick one or install all):
+
+```bash
+# Option 1: Claude Code (by Anthropic)
+npm install -g @anthropic-ai/claude-code
+
+# Option 2: Qwen Code (by Alibaba Cloud)
+npm install -g @qwenlm/qwen-code
+
+# Option 3: Gemini CLI (by Google)
+npm install -g @google/gemini-cli
+```
+
+**2. Configure API Keys**:
+
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Edit .env and add your API key(s):
+# ANTHROPIC_API_KEY=sk-ant-api03-xxxxx
+# DASHSCOPE_API_KEY=sk-xxxxx
+# GOOGLE_API_KEY=AIzaSyxxxxx
+```
+
+Or authenticate via CLI:
+
+```bash
+claude auth login   # For Claude
+qwen auth login     # For Qwen
+gemini auth login   # For Gemini
+```
+
+**3. Verify Setup**:
+
+```bash
+# Check AI CLI is working
+claude --version  # or qwen --version, or gemini --version
+
+# Verify PRPROMPTS can detect it
+prprompts doctor
+
+# Test with a command
+prprompts --version
+```
+
+**🔒 Security:** See [`.env.example`](.env.example) for detailed API key setup and [SECURITY.md](SECURITY.md#api-key-management) for best practices on API key management, rotation, and incident response.
+
+
+---
+
 ## 🤖 v4.0: Full Automation (NEW!)
 
 <div align="center">
