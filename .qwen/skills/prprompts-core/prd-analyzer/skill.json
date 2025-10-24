@@ -1,0 +1,115 @@
+{
+  "id": "prd-analyzer",
+  "name": "PRD Analyzer",
+  "version": "1.0.0",
+  "category": "prprompts-core",
+  "description": "Analyze and validate PRD for completeness, metadata correctness, and compliance requirements",
+  "author": "PRPROMPTS Team",
+  "icon": "🔍",
+  "tags": ["prd", "validation", "analysis", "quality-check"],
+
+  "inputs": {
+    "required": {
+      "prd_path": {
+        "type": "string",
+        "description": "Path to PRD file (typically docs/PRD.md)",
+        "default": "docs/PRD.md",
+        "validation": "^docs/.*\\.md$"
+      }
+    },
+    "optional": {
+      "strict_mode": {
+        "type": "boolean",
+        "description": "Enable strict validation (fail on warnings)",
+        "default": false
+      },
+      "check_examples": {
+        "type": "boolean",
+        "description": "Validate that PRD includes concrete examples",
+        "default": true
+      }
+    }
+  },
+
+  "outputs": {
+    "valid": {
+      "type": "boolean",
+      "description": "Whether PRD is valid"
+    },
+    "score": {
+      "type": "number",
+      "description": "Quality score (0-100)"
+    },
+    "errors": {
+      "type": "array",
+      "description": "List of validation errors"
+    },
+    "warnings": {
+      "type": "array",
+      "description": "List of potential issues"
+    },
+    "suggestions": {
+      "type": "array",
+      "description": "Improvement suggestions"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Extracted PRD metadata"
+    }
+  },
+
+  "config": {
+    "interactive": false,
+    "timeout": 30000,
+    "retryable": true,
+    "maxRetries": 2,
+    "cacheable": true,
+    "cacheDuration": 600
+  },
+
+  "dependencies": [],
+
+  "requirements": {
+    "flutter": false,
+    "projectInitialized": false,
+    "prdExists": true,
+    "prpromptsGenerated": false,
+    "gitRepo": false
+  },
+
+  "examples": [
+    {
+      "description": "Analyze PRD in default location",
+      "command": "@claude use skill prprompts-core/prd-analyzer",
+      "expectedOutput": "PRD analysis with score and validation results"
+    },
+    {
+      "description": "Strict validation mode",
+      "command": "@claude use skill prprompts-core/prd-analyzer --strict_mode true",
+      "expectedOutput": "Fails if any warnings found"
+    },
+    {
+      "description": "Analyze custom PRD location",
+      "command": "@claude use skill prprompts-core/prd-analyzer --prd_path docs/custom-prd.md",
+      "expectedOutput": "Analysis of custom PRD file"
+    }
+  ],
+
+  "cicd": {
+    "testable": true,
+    "mockInputs": {
+      "prd_path": "tests/fixtures/sample-prd.md",
+      "strict_mode": false
+    },
+    "expectedOutputs": {
+      "valid": true,
+      "score": 80,
+      "errors": []
+    },
+    "fixtures": [
+      "tests/fixtures/sample-prd.md",
+      "tests/fixtures/invalid-prd.md",
+      "tests/fixtures/incomplete-prd.md"
+    ]
+  }
+}
