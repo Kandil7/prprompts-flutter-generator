@@ -158,6 +158,49 @@ function installQwenSkills() {
   }
 }
 
+function installGeminiSkills() {
+  if (!commandExists('gemini')) {
+    return false;
+  }
+
+  log('\nInstalling Gemini CLI Skills...', 'blue');
+
+  try {
+    const scriptPath = path.join(__dirname, 'install-gemini-skills.sh');
+
+    if (!fs.existsSync(scriptPath)) {
+      log('  ⚠️  Gemini skills installer not found, skipping', 'yellow');
+      return false;
+    }
+
+    // Run installation script
+    if (os.platform() === 'win32') {
+      // On Windows, use bash if available
+      if (commandExists('bash')) {
+        execSync(`bash "${scriptPath}"`, { stdio: 'inherit' });
+      } else {
+        // Use PowerShell script instead
+        const psScriptPath = path.join(__dirname, 'install-gemini-skills.ps1');
+        if (fs.existsSync(psScriptPath)) {
+          execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, { stdio: 'inherit' });
+        } else {
+          log('  ⚠️  No Windows installer found, skipping', 'yellow');
+          return false;
+        }
+      }
+    } else {
+      // macOS/Linux
+      execSync(`bash "${scriptPath}"`, { stdio: 'inherit' });
+    }
+
+    log('\n✓ Gemini CLI Skills installed successfully!', 'green');
+    return true;
+  } catch (error) {
+    log(`  ⚠️  Failed to install Gemini skills: ${error.message}`, 'yellow');
+    return false;
+  }
+}
+
 function createPRPROMPTSConfig() {
   const home = os.homedir();
   const prpromptsDir = path.join(home, '.prprompts');
@@ -177,7 +220,8 @@ function createPRPROMPTSConfig() {
       auto_update: true,
       telemetry: false,
       verbose: true,
-      qwen_skills: false
+      qwen_skills: false,
+      gemini_skills: false
     }
   };
 
@@ -240,16 +284,20 @@ function main() {
   // Install Qwen Code Skills (if Qwen is detected)
   const qwenSkillsInstalled = installQwenSkills();
 
+  // Install Gemini CLI Skills (if Gemini is detected)
+  const geminiSkillsInstalled = installGeminiSkills();
+
   // Create unified config
   createPRPROMPTSConfig();
 
-  // Update config with Qwen skills status
-  if (qwenSkillsInstalled) {
+  // Update config with skills status
+  if (qwenSkillsInstalled || geminiSkillsInstalled) {
     const home = os.homedir();
     const configFile = path.join(home, '.prprompts', 'config.json');
     try {
       const config = JSON.parse(fs.readFileSync(configFile, 'utf8'));
-      config.features.qwen_skills = true;
+      if (qwenSkillsInstalled) config.features.qwen_skills = true;
+      if (geminiSkillsInstalled) config.features.gemini_skills = true;
       fs.writeFileSync(configFile, JSON.stringify(config, null, 2));
     } catch (error) {
       // Ignore config update errors
@@ -267,6 +315,10 @@ function main() {
     log('✓ Installed Qwen Code Skills (8 slash commands)', 'green');
   }
 
+  if (geminiSkillsInstalled) {
+    log('✓ Installed Gemini CLI Skills (8 slash commands)', 'green');
+  }
+
   log('\nAvailable commands:', 'blue');
 
   installedAIs.forEach(ai => {
@@ -279,6 +331,14 @@ function main() {
     log('   /skills/automation/flutter-bootstrapper', 'cyan');
     log('   /skills/automation/code-reviewer', 'cyan');
     log('   /skills/automation/qa-auditor', 'cyan');
+    log('   + 5 more automation skills...', 'cyan');
+  }
+
+  if (geminiSkillsInstalled) {
+    log('\n Gemini CLI Skills (slash commands with colon separator):', 'blue');
+    log('   /skills:automation:flutter-bootstrapper', 'cyan');
+    log('   /skills:automation:code-reviewer', 'cyan');
+    log('   /skills:automation:qa-auditor', 'cyan');
     log('   + 5 more automation skills...', 'cyan');
   }
 

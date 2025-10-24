@@ -1,0 +1,720 @@
+description = "Generate or regenerate a single PRPROMPTS file by number or name"
+
+prompt = """
+
+## Smart Defaults (from skill.json)
+
+**Required Inputs:**
+- prd_path: Path to validated PRD file (default: "docs/PRD.md")
+- file_number: File number to generate (1-32)
+
+**Optional Inputs (use defaults if not specified):**
+- output_dir: Output directory for PRPROMPTS file (default: "PRPROMPTS")
+- overwrite: Overwrite if file exists (default: true)
+
+**Interactive Prompt Strategy:**
+Ask user for input ONLY if:
+1. Required input has no default value
+2. User explicitly wants to override a default
+
+For each input, prompt with format:
+  "input_name? (press Enter for default_value)": 
+
+
+## Gemini CLI Specific Features
+
+**1. Inline Arguments Support:**
+If user provides arguments inline, parse them:
+  Example: /skills:automation:code-reviewer {{args}}
+  If args = "security lib/features/auth":
+    - review_type = "security"
+    - target_path = "lib/features/auth"
+
+**2. 1M Token Context Utilization:**
+You have access to Gemini's 1M token context window:
+- Load entire codebase for comprehensive analysis
+- Process massive PRDs (up to 400 pages of requirements)
+- Analyze all 32 PRPROMPTS files simultaneously
+- Cross-reference patterns across the entire project
+- No need to ask "should I read more files?" - just load everything
+
+**3. Free Tier Optimization:**
+Gemini offers industry-leading free tier:
+- 60 requests/minute
+- 1,000 requests/day
+- No credit card required
+
+Optimize usage by:
+- Batching related operations in single requests
+- Using full 1M context to avoid multiple round-trips
+- Caching analysis results for reuse
+
+**4. ReAct Loop Integration:**
+Leverage Gemini's ReAct (Reason and Act) agent mode:
+- Break complex tasks into reasoning steps
+- Execute actions based on reasoning
+- Iterate until task completion
+- Especially useful for multi-file operations
+
+
+# Single File Generator Skill - Execution Prompt
+
+## Context
+You are executing the **single-file-generator** skill. This skill generates or regenerates a single PRPROMPTS file by number (1-32), useful for updating specific files after PRD changes or fixing individual guides.
+
+## Inputs
+- **prd_path**: {{inputs.prd_path || "docs/PRD.md"}}
+- **file_number**: {{inputs.file_number}} (1-32)
+- **output_dir**: {{inputs.output_dir || "PRPROMPTS"}}
+- **overwrite**: {{inputs.overwrite || true}}
+
+---
+
+## File Number Reference (1-32)
+
+### Phase 1: Core (1-10)
+1. `01-project_overview.md` - Project summary and goals
+2. `02-architecture_overview.md` - Clean Architecture structure
+3. `03-folder_structure.md` - Project organization
+4. `04-state_management.md` - State management (BLoC/Riverpod/Provider)
+5. `05-navigation_and_routing.md` - Navigation setup
+6. `06-api_integration.md` - REST API integration
+7. `07-data_models.md` - Data classes and entities
+8. `08-dependency_injection.md` - GetIt/Injectable setup
+9. `09-error_handling.md` - Error handling patterns
+10. `10-features_implementation.md` - Feature development guide
+
+### Phase 2: Quality (11-22)
+11. `11-testing_strategy.md` - Test architecture
+12. `12-unit_testing.md` - Unit test patterns
+13. `13-widget_testing.md` - Widget test guide
+14. `14-integration_testing.md` - E2E testing
+15. `15-code_quality.md` - Linting and static analysis
+16. `16-security_and_compliance.md` - Security patterns & compliance
+17. `17-performance_optimization.md` - Performance guide
+18. `18-accessibility.md` - Accessibility (a11y) implementation
+19. `19-localization.md` - Internationalization (i18n)
+20. `20-logging_and_monitoring.md` - Observability
+21. `21-offline_support.md` - Offline-first patterns
+22. `22-data_persistence.md` - Local storage (SQLite, Hive)
+
+### Phase 3: Demo (23-32)
+23. `23-demo_preparation.md` - Demo setup
+24. `24-user_flows.md` - User journey demos
+25. `25-presentation_mode.md` - Presentation features
+26. `26-build_configuration.md` - Build variants (dev, staging, prod)
+27. `27-deployment_pipeline.md` - CI/CD setup
+28. `28-app_store_preparation.md` - Store listings (App Store, Play Store)
+29. `29-beta_testing.md` - TestFlight/Play Console beta
+30. `30-analytics_and_tracking.md` - Analytics integration
+31. `31-documentation.md` - User documentation
+32. `32-maintenance_and_updates.md` - Post-launch maintenance
+
+---
+
+## Task: Generate Single PRPROMPTS File
+
+### Step 1: Validate File Number
+
+Check {{inputs.file_number}}:
+- Must be integer between 1 and 32
+- If < 1 or > 32 → Return error
+
+```json
+{
+  "error": "Invalid file number",
+  "received": {{inputs.file_number}},
+  "valid_range": "1-32",
+  "suggestion": "Choose a number from 1 (project_overview) to 32 (maintenance)"
+}
+```
+
+---
+
+### Step 2: Load and Parse PRD
+
+**Actions:**
+1. Read PRD from {{inputs.prd_path}}
+2. Parse YAML frontmatter
+3. Extract all metadata for customization
+
+**Required Metadata:**
+- `project_name`: string
+- `project_type`: healthcare|fintech|ecommerce|productivity|social|education
+- `platforms`: array of ios|android|web
+- `compliance`: array of hipaa|pci-dss|gdpr|coppa|ferpa|soc2
+- `auth_method`: jwt|oauth2|firebase|custom
+- `state_management`: bloc|riverpod|provider|getx
+- `architecture`: clean_architecture|mvvm|mvc
+
+**Error Handling:**
+- PRD not found → Return error
+- Invalid YAML → Return error
+- Missing required metadata → Add warnings, use defaults
+
+---
+
+### Step 3: Determine File Details
+
+Based on {{inputs.file_number}}, set:
+
+```json
+{
+  "file_number": {{inputs.file_number}},
+  "file_name": "{number}-{slug}.md",
+  "title": "Human Readable Title",
+  "category": "Architecture" | "Testing" | "Security" | "Deployment" | etc.,
+  "phase": 1 | 2 | 3,
+  "prerequisites": ["Files that should exist before this one"],
+  "related_files": ["Files that work with this one"]
+}
+```
+
+**Examples:**
+
+**File 16 (Security):**
+```json
+{
+  "file_number": 16,
+  "file_name": "16-security_and_compliance.md",
+  "title": "Security & Compliance",
+  "category": "Security",
+  "phase": 2,
+  "prerequisites": ["02-architecture_overview.md", "07-data_models.md"],
+  "related_files": ["11-testing_strategy.md", "20-logging_and_monitoring.md"]
+}
+```
+
+**File 4 (State Management):**
+```json
+{
+  "file_number": 4,
+  "file_name": "04-state_management.md",
+  "title": "State Management",
+  "category": "Architecture",
+  "phase": 1,
+  "prerequisites": ["02-architecture_overview.md"],
+  "related_files": ["05-navigation_and_routing.md", "10-features_implementation.md"]
+}
+```
+
+---
+
+### Step 4: Generate File Content (PRP Pattern)
+
+Every file follows **PRP Pattern** (6 sections):
+
+```markdown
+# {File Number}: {Title}
+
+> **Phase {phase}**: {Phase Name}
+> **Category**: {category}
+> **Prerequisites**: {prerequisites}
+
+---
+
+## FEATURE
+
+### What This Guide Accomplishes
+
+{150-200 words explaining what this file teaches}
+
+**Key Objectives:**
+- Objective 1 (customized to PRD project_type)
+- Objective 2
+- Objective 3
+
+**Why This Matters:**
+{Explain importance in context of PRD project_type}
+
+### Integration Points
+- **Depends on**: {prerequisites}
+- **Used by**: {related_files}
+- **Integrates with**: {related systems}
+
+---
+
+## EXAMPLES
+
+### Example 1: {Feature} - {Project Type} Context
+
+{Provide real Flutter code examples}
+
+**File: `lib/features/{feature}/.../{file}.dart`**
+
+```dart
+// Code customized to PRD metadata:
+// - Uses state_management from PRD
+// - Includes auth_method patterns
+// - Applies compliance requirements
+// - Platform-specific implementations
+```
+
+### Example 2: {Scenario}
+
+{Another example showing different use case}
+
+---
+
+## CONSTRAINTS
+
+### ✅ DO
+- Follow {architecture} pattern from PRD
+- Use {state_management} for state
+- Apply {compliance} security patterns
+- Test with minimum 70% coverage
+- {File-specific DOs}
+
+### ❌ DON'T
+- Mix presentation and business logic
+- Store sensitive data without encryption
+- Skip error handling
+- {File-specific DON'Ts}
+- {Compliance-specific DON'Ts}
+
+---
+
+## VALIDATION GATES
+
+### Pre-Commit Checklist
+- [ ] All tests passing (`flutter test`)
+- [ ] No linting errors (`flutter analyze`)
+- [ ] Code coverage > 70%
+- [ ] {File-specific checks}
+- [ ] {Compliance-specific checks}
+
+### CI/CD Automation
+```yaml
+# GitHub Actions / GitLab CI
+name: Validate {Feature}
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+      - run: flutter test test/{feature}_test.dart
+      - run: flutter analyze
+```
+
+---
+
+## BEST PRACTICES
+
+### For Junior Developers
+
+**Why {Pattern from this file}?**
+{Plain English explanation of why this pattern matters}
+
+**Common Mistakes:**
+- ❌ Mistake 1: {What juniors often do wrong}
+  - ✅ Solution: {How to do it right}
+
+**Quick Wins:**
+- Start with {simple approach}
+- Then add {advanced feature}
+
+### For Senior Developers
+
+**Architecture Decisions:**
+- {File-specific ADRs}
+- {Trade-offs and alternatives}
+
+**Performance Considerations:**
+- {Optimization tips specific to this file}
+
+---
+
+## REFERENCES
+
+- [Flutter Official Docs]({relevant_flutter_docs})
+- [{State Management} Documentation]({link_based_on_prd})
+- [{Compliance} Compliance Guide]({link_if_applicable})
+- **ADR-{N}**: {Architectural Decision Record}
+- **Related Files**: {links_to_related_prprompts}
+```
+
+---
+
+### Step 5: Apply PRD-Specific Customizations
+
+#### A. Project Type Customizations
+
+**If project_type == "healthcare":**
+- Add HIPAA compliance examples
+- Include PHI encryption patterns
+- Add audit logging requirements
+- Mention BAA requirements
+
+**If project_type == "fintech":**
+- Add PCI-DSS compliance examples
+- Include payment tokenization (NEVER store cards!)
+- Add fraud detection patterns
+- Mention SOC2 requirements
+
+**If project_type == "ecommerce":**
+- Add payment provider integration (Stripe, PayPal)
+- Include cart persistence
+- Add inventory management examples
+
+#### B. Compliance Customizations (Especially File 16)
+
+**If compliance includes "hipaa":**
+```markdown
+## HIPAA Compliance Patterns
+
+### PHI Encryption (Required)
+```dart
+import 'package:encrypt/encrypt.dart';
+
+class PHIEncryptionService {
+  static final _key = Key.fromSecureRandom(32);
+  static final _encrypter = Encrypter(AES(_key, mode: AESMode.gcm));
+
+  static String encryptPHI(String phi) {
+    final encrypted = _encrypter.encrypt(phi, iv: IV.fromLength(16));
+    return encrypted.base64;
+  }
+
+  static String decryptPHI(String encryptedPHI) {
+    final encrypted = Encrypted.fromBase64(encryptedPHI);
+    return _encrypter.decrypt(encrypted, iv: IV.fromLength(16));
+  }
+}
+```
+
+### Audit Logging (Required)
+```dart
+class AuditLogger {
+  static void logPHIAccess({
+    required String userId,
+    required String action,
+    required String patientId,
+  }) {
+    auditLog.record({
+      'timestamp': DateTime.now().toIso8601String(),
+      'user_id': userId,
+      'action': action,
+      'patient_id': patientId,
+      'ip_address': getClientIP(),
+    });
+  }
+}
+```
+
+### Session Timeout (Required - 15 minutes)
+```dart
+class SessionManager {
+  static const timeout = Duration(minutes: 15);
+
+  static void startSession() {
+    _lastActivity = DateTime.now();
+    _timer = Timer.periodic(Duration(minutes: 1), checkTimeout);
+  }
+
+  static void checkTimeout(Timer timer) {
+    if (DateTime.now().difference(_lastActivity) > timeout) {
+      logout();
+    }
+  }
+}
+```
+```
+
+**If compliance includes "pci-dss":**
+```markdown
+## PCI-DSS Compliance Patterns
+
+### ❌ NEVER Store Payment Cards
+```dart
+// ❌ WRONG - Security violation!
+class Payment {
+  final String cardNumber;  // NEVER!
+  final String cvv;          // NEVER!
+  final String expiry;       // NEVER!
+}
+
+// ✅ CORRECT - Use tokenization
+class Payment {
+  final String paymentToken;      // From Stripe/PayPal
+  final String last4;             // Only last 4 digits
+  final String cardBrand;         // "Visa", "Mastercard"
+  final PaymentProvider provider; // Stripe, PayPal, etc.
+}
+```
+
+### Use Payment Provider Tokenization
+```dart
+// Stripe example
+import 'package:stripe_sdk/stripe_sdk.dart';
+
+class PaymentService {
+  static Future<String> createPaymentToken(CardDetails card) async {
+    final paymentMethod = await Stripe.instance.createPaymentMethod(
+      params: PaymentMethodParams.card(
+        paymentMethodData: PaymentMethodData(
+          billingDetails: billingDetails,
+        ),
+      ),
+    );
+
+    // Store only the token, NEVER the card
+    return paymentMethod.id;
+  }
+}
+```
+```
+
+#### C. State Management Customizations
+
+**If state_management == "bloc":**
+```dart
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+// BLoC implementation
+class FeatureBloc extends Bloc<FeatureEvent, FeatureState> {
+  FeatureBloc() : super(FeatureInitial()) {
+    on<LoadData>(_onLoadData);
+  }
+
+  Future<void> _onLoadData(LoadData event, Emitter<FeatureState> emit) async {
+    emit(FeatureLoading());
+    try {
+      final data = await repository.fetchData();
+      emit(FeatureLoaded(data));
+    } catch (e) {
+      emit(FeatureError(e.toString()));
+    }
+  }
+}
+```
+
+**If state_management == "riverpod":**
+```dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Riverpod implementation
+final featureProvider = StateNotifierProvider<FeatureNotifier, FeatureState>(
+  (ref) => FeatureNotifier(ref.read(repositoryProvider)),
+);
+
+class FeatureNotifier extends StateNotifier<FeatureState> {
+  FeatureNotifier(this._repository) : super(const FeatureState.initial());
+
+  final Repository _repository;
+
+  Future<void> loadData() async {
+    state = const FeatureState.loading();
+    try {
+      final data = await _repository.fetchData();
+      state = FeatureState.loaded(data);
+    } catch (e) {
+      state = FeatureState.error(e.toString());
+    }
+  }
+}
+```
+
+#### D. Authentication Customizations
+
+**If auth_method == "jwt":**
+```dart
+// JWT Verification (NEVER signing in Flutter!)
+class JWTService {
+  static bool verifyToken(String token, String publicKey) {
+    try {
+      final jwt = JWT.verify(token, RSAPublicKey(publicKey));
+      return jwt.payload['exp'] > DateTime.now().millisecondsSinceEpoch / 1000;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // ❌ NEVER do this in Flutter!
+  // static String signToken(Map<String, dynamic> payload) { ... }
+}
+```
+
+**If auth_method == "oauth2":**
+```dart
+import 'package:flutter_appauth/flutter_appauth.dart';
+
+class OAuth2Service {
+  static final _appAuth = FlutterAppAuth();
+
+  static Future<TokenResponse> authorize() async {
+    return await _appAuth.authorizeAndExchangeCode(
+      AuthorizationTokenRequest(
+        'client-id',
+        'redirect-url',
+        serviceConfiguration: AuthorizationServiceConfiguration(
+          authorizationEndpoint: 'https://auth.example.com/authorize',
+          tokenEndpoint: 'https://auth.example.com/token',
+        ),
+        scopes: ['openid', 'profile', 'email'],
+      ),
+    );
+  }
+}
+```
+
+---
+
+### Step 6: File-Specific Content
+
+Generate content specific to {{inputs.file_number}}:
+
+#### Special File: 16 (Security & Compliance)
+- **MOST IMPORTANT FILE** - Heavily customized by PRD
+- Include ALL compliance patterns from PRD
+- Add security checklists
+- Include penetration testing guidelines
+
+#### Special File: 4 (State Management)
+- Must match PRD's state_management choice
+- Provide complete BLoC/Riverpod/Provider examples
+- Include testing patterns for chosen state management
+
+#### Special File: 11-14 (Testing)
+- Target 70%+ code coverage
+- Provide mock/stub examples
+- Include CI/CD integration
+
+#### Special File: 27 (Deployment Pipeline)
+- Platform-specific CI/CD (GitHub Actions, GitLab CI, Bitrise)
+- Automated testing in pipeline
+- Environment management (dev/staging/prod)
+
+---
+
+### Step 7: Write File
+
+**Output Path:**
+```
+{{inputs.output_dir}}/{file_number}-{file_slug}.md
+```
+
+**Check Overwrite:**
+- If file exists and overwrite == true → Overwrite with message
+- If file exists and overwrite == false → Skip with warning
+- If file doesn't exist → Create new
+
+---
+
+### Step 8: Return Results
+
+```json
+{
+  "file_generated": "PRPROMPTS/16-security_and_compliance.md",
+  "file_name": "16-security_and_compliance.md",
+  "file_number": 16,
+  "action": "regenerated" | "created" | "skipped",
+  "customizations_applied": {
+    "project_type": "healthcare",
+    "compliance": ["hipaa", "gdpr"],
+    "state_management": "bloc",
+    "auth_method": "jwt",
+    "platforms": ["ios", "android"]
+  },
+  "warnings": [],
+  "next_steps": [
+    "Review generated file",
+    "Update related files if needed",
+    "Run tests to verify"
+  ]
+}
+```
+
+---
+
+## Common Use Cases
+
+### Use Case 1: Updated PRD Compliance
+**Scenario:** Added HIPAA compliance to PRD after generating files
+
+**Command:**
+```
+@claude use skill single-file-generator --file_number 16
+```
+
+**Result:** File 16 regenerated with HIPAA patterns
+
+---
+
+### Use Case 2: Fix Specific File
+**Scenario:** File 4 (state management) has errors
+
+**Command:**
+```
+@claude use skill single-file-generator --file_number 4
+```
+
+**Result:** Fresh file 4 generated
+
+---
+
+### Use Case 3: Generate Missing File
+**Scenario:** Deleted file 23 by accident
+
+**Command:**
+```
+@claude use skill single-file-generator --file_number 23
+```
+
+**Result:** File 23 recreated
+
+---
+
+## Error Handling
+
+### Error: Invalid File Number
+```json
+{
+  "error": "File number out of range",
+  "received": 35,
+  "valid_range": "1-32",
+  "suggestion": "Valid numbers: 1-32. See file list above."
+}
+```
+
+### Error: PRD Not Found
+```json
+{
+  "error": "PRD file not found",
+  "path": "{{inputs.prd_path}}",
+  "suggestion": "Run prd-creator skill first"
+}
+```
+
+---
+
+## Performance
+
+**Target Time:** < 10 seconds per file
+**Max Time:** 15 seconds
+
+Factors affecting speed:
+- File complexity (File 16 is most complex)
+- PRD metadata parsing
+- Compliance pattern application
+
+---
+
+## Next Steps Recommendation
+
+After regenerating a file:
+
+```
+✅ File {{inputs.file_number}} regenerated!
+
+Next steps:
+1. Review: cat PRPROMPTS/{file_name}
+2. Update code following new patterns
+3. Run tests: flutter test
+4. Commit: git add PRPROMPTS/{file_name}
+```
+
+"""

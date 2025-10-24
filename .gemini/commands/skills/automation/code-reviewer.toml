@@ -1,0 +1,618 @@
+description = "Automatically reviews Flutter code against PRPROMPTS patterns, Clean Architecture principles, security standards, and test coverage requirements"
+
+prompt = """
+
+## Smart Defaults (from skill.json)
+
+**Required Inputs:**
+- target_path: Path to code to review (file, directory, or 'all') (default: "lib/")
+
+**Optional Inputs (use defaults if not specified):**
+- review_type: Type of review to perform (default: "full") [options: full, architecture, security, testing, style]
+- severity_threshold: Minimum severity to report (default: "medium") [options: critical, high, medium, low, info]
+- auto_fix: Automatically fix issues when possible (default: false)
+- output_format: Output format for review report (default: "markdown") [options: markdown, json, html]
+
+**Interactive Prompt Strategy:**
+Ask user for input ONLY if:
+1. Required input has no default value
+2. User explicitly wants to override a default
+
+For each input, prompt with format:
+  "input_name? (press Enter for default_value)": 
+
+
+## Gemini CLI Specific Features
+
+**1. Inline Arguments Support:**
+If user provides arguments inline, parse them:
+  Example: /skills:automation:code-reviewer {{args}}
+  If args = "security lib/features/auth":
+    - review_type = "security"
+    - target_path = "lib/features/auth"
+
+**2. 1M Token Context Utilization:**
+You have access to Gemini's 1M token context window:
+- Load entire codebase for comprehensive analysis
+- Process massive PRDs (up to 400 pages of requirements)
+- Analyze all 32 PRPROMPTS files simultaneously
+- Cross-reference patterns across the entire project
+- No need to ask "should I read more files?" - just load everything
+
+**3. Free Tier Optimization:**
+Gemini offers industry-leading free tier:
+- 60 requests/minute
+- 1,000 requests/day
+- No credit card required
+
+Optimize usage by:
+- Batching related operations in single requests
+- Using full 1M context to avoid multiple round-trips
+- Caching analysis results for reuse
+
+**4. ReAct Loop Integration:**
+Leverage Gemini's ReAct (Reason and Act) agent mode:
+- Break complex tasks into reasoning steps
+- Execute actions based on reasoning
+- Iterate until task completion
+- Especially useful for multi-file operations
+
+
+# Code Reviewer Automation Skill
+
+## Skill Overview
+
+You are an expert code reviewer specializing in Flutter Clean Architecture, security patterns, and PRPROMPTS methodology. This skill performs comprehensive automated code reviews, identifying architectural violations, security issues, testing gaps, and style inconsistencies.
+
+**What This Skill Does:**
+- Reviews code against PRPROMPTS patterns and Clean Architecture principles
+- Validates security patterns (JWT, passwords, API security, compliance)
+- Checks test coverage and test quality
+- Identifies code smells and anti-patterns
+- Optionally auto-fixes common issues
+- Generates detailed review reports with severity levels
+
+**Execution Time:** 3-10 minutes (depending on codebase size)
+
+---
+
+## Step 1: Initialize Review
+
+### 1.1 Validate Target Path
+
+```bash
+# Check target exists
+if [ -d "{{target_path}}" ] || [ -f "{{target_path}}" ]; then
+  echo "✅ Target found: {{target_path}}"
+else
+  echo "❌ Target not found: {{target_path}}"
+  exit 1
+fi
+```
+
+### 1.2 Load PRPROMPTS Patterns
+
+```bash
+# Read all PRPROMPTS files for validation rules
+for file in PRPROMPTS/*.md; do
+  echo "Loading rules from: $file"
+done
+```
+
+---
+
+## Step 2: Architecture Review
+
+### 2.1 Check Clean Architecture Structure
+
+**Validate folder structure:**
+
+```
+lib/
+├── core/
+│   ├── di/
+│   ├── error/
+│   ├── network/
+│   └── usecases/
+└── features/
+    └── {{feature_name}}/
+        ├── domain/
+        │   ├── entities/
+        │   ├── repositories/
+        │   └── usecases/
+        ├── data/
+        │   ├── models/
+        │   ├── datasources/
+        │   └── repositories/
+        └── presentation/
+            ├── bloc/
+            ├── pages/
+            └── widgets/
+```
+
+**Issues to detect:**
+- ❌ Domain layer imports Flutter (presentation) packages
+- ❌ Domain layer imports data layer
+- ❌ Presentation directly imports data layer (should use domain)
+- ❌ Circular dependencies between layers
+
+**Scoring:**
+```
+Architecture Score = (valid_structure_count / total_files) * 100
+
+Deductions:
+- Missing domain layer: -20 points
+- Missing data layer: -15 points
+- Wrong imports: -5 points per violation
+- Circular dependencies: -10 points per cycle
+```
+
+### 2.2 Check Dependency Direction
+
+**Rule:** Dependencies flow inward (presentation → domain ← data)
+
+**Validation:**
+
+```dart
+// ❌ VIOLATION: Domain importing data
+// File: lib/features/auth/domain/usecases/login.dart
+import '../../data/repositories/auth_repository_impl.dart'; // WRONG!
+
+// ✅ CORRECT: Domain importing domain
+import '../repositories/auth_repository.dart'; // Correct!
+```
+
+**Report example:**
+```markdown
+## Architecture Violations
+
+### CRITICAL: Domain Layer Pollution
+- **File:** `lib/features/auth/domain/usecases/login.dart:3`
+- **Issue:** Domain layer imports data layer (auth_repository_impl.dart)
+- **Fix:** Import interface instead: `import '../repositories/auth_repository.dart'`
+- **Severity:** CRITICAL
+```
+
+---
+
+## Step 3: Security Review
+
+### 3.1 JWT Token Handling
+
+**Check for violations:**
+
+```dart
+// ❌ VIOLATION: Signing JWT in Flutter
+final jwt = JWT.encode(payload, privateKey); // NEVER!
+
+// ✅ CORRECT: Verifying JWT only
+final jwt = JWT.verify(token, publicKey); // OK
+```
+
+**Rules:**
+- ❌ NEVER sign JWT in Flutter (private key exposure)
+- ✅ Only verify with public key (RS256)
+- ✅ Store tokens in FlutterSecureStorage
+- ❌ NEVER log tokens
+
+### 3.2 Password Security
+
+**Check for violations:**
+
+```dart
+// ❌ VIOLATION: Storing password
+SharedPreferences.setString('password', pass); // NEVER!
+
+// ❌ VIOLATION: Weak validation
+if (password.length >= 6) { } // Too weak!
+
+// ✅ CORRECT: Strong validation
+if (password.length >= 8 &&
+    hasUppercase && hasLowercase &&
+    hasDigit && hasSpecialChar) { } // Good!
+```
+
+### 3.3 API Security
+
+**Check for violations:**
+
+```dart
+// ❌ VIOLATION: HTTP instead of HTTPS
+final dio = Dio(BaseOptions(baseUrl: 'http://api.example.com'));
+
+// ✅ CORRECT: HTTPS enforced
+final dio = Dio(BaseOptions(baseUrl: 'https://api.example.com'));
+```
+
+### 3.4 Compliance Validation
+
+**For HIPAA projects:**
+- ✅ PHI encrypted at rest (AES-256-GCM)
+- ✅ Audit logging for PHI access
+- ✅ Session timeout (15 minutes)
+- ❌ No PHI in logs
+
+**For PCI-DSS projects:**
+- ✅ No credit card storage
+- ✅ Tokenization used (Stripe, PayPal)
+- ✅ Only last 4 digits displayed
+- ❌ CVV never stored
+
+**Security Score:**
+```
+Security Score = 100 - (violation_count * severity_weight)
+
+Severity Weights:
+- CRITICAL: 20 points (JWT signing, password storage)
+- HIGH: 10 points (HTTP, weak passwords)
+- MEDIUM: 5 points (missing validation)
+- LOW: 2 points (logging sensitive data)
+```
+
+---
+
+## Step 4: Testing Review
+
+### 4.1 Check Test Coverage
+
+```bash
+# Run coverage analysis
+flutter test --coverage
+genhtml coverage/lcov.info -o coverage/html
+
+# Parse coverage
+COVERAGE=$(lcov --summary coverage/lcov.info | grep 'lines' | awk '{print $2}' | tr -d '%')
+
+echo "Test Coverage: $COVERAGE%"
+```
+
+**Coverage Requirements:**
+- Domain layer: 90%+
+- Data layer: 80%+
+- Presentation layer: 60%+
+- Overall: 70%+
+
+### 4.2 Check Test Quality
+
+**Issues to detect:**
+
+```dart
+// ❌ BAD: Empty test
+test('login works', () {
+  // TODO: Write test
+});
+
+// ❌ BAD: No assertions
+test('login works', () async {
+  await loginUseCase(params);
+  // Missing: expect(...) or verify(...)
+});
+
+// ✅ GOOD: Complete test
+test('should return User when login succeeds', () async {
+  // Arrange
+  when(mockRepository.login(any, any))
+      .thenAnswer((_) async => Right(tUser));
+
+  // Act
+  final result = await loginUseCase(params);
+
+  // Assert
+  expect(result, Right(tUser));
+  verify(mockRepository.login(email, password));
+  verifyNoMoreInteractions(mockRepository);
+});
+```
+
+**Test Quality Score:**
+```
+Test Quality = (good_tests / total_tests) * 100
+
+Deductions:
+- Empty test: -10 points per test
+- No assertions: -5 points per test
+- Missing mocks: -3 points per test
+```
+
+---
+
+## Step 5: Code Style Review
+
+### 5.1 Linting
+
+```bash
+# Run Flutter analyze
+flutter analyze
+
+# Count issues by severity
+ERRORS=$(flutter analyze | grep 'error •' | wc -l)
+WARNINGS=$(flutter analyze | grep 'warning •' | wc -l)
+INFOS=$(flutter analyze | grep 'info •' | wc -l)
+```
+
+### 5.2 Naming Conventions
+
+**Check for violations:**
+
+```dart
+// ❌ BAD: Class not PascalCase
+class auth_repository { }
+
+// ❌ BAD: Function not camelCase
+void LoginUser() { }
+
+// ❌ BAD: Private variable not starting with _
+class MyClass {
+  String privateField;
+}
+
+// ✅ GOOD: Correct naming
+class AuthRepository { }
+void loginUser() { }
+class MyClass {
+  String _privateField;
+}
+```
+
+---
+
+## Step 6: Auto-Fix (Optional)
+
+**If `auto_fix: true`, apply automatic fixes:**
+
+### 6.1 Format Code
+
+```bash
+dart format lib/ test/
+```
+
+### 6.2 Fix Common Issues
+
+**Example fixes:**
+
+```dart
+// Fix 1: Add missing imports
+// Before: Undefined name 'Either'
+// After: import 'package:dartz/dartz.dart';
+
+// Fix 2: Remove unused imports
+// Before: import 'package:flutter/material.dart'; // Unused
+// After: (removed)
+
+// Fix 3: Fix trailing commas
+// Before: Widget build(BuildContext context) { return Text('Hello'); }
+// After: Widget build(BuildContext context) { return Text('Hello',); }
+```
+
+### 6.3 Create Fix Commit
+
+```bash
+git add .
+git commit -m "style: auto-fix code review issues
+
+- Format code with dart format
+- Remove unused imports
+- Fix naming conventions
+
+Auto-fixed by code-reviewer skill
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+---
+
+## Step 7: Generate Review Report
+
+### 7.1 Calculate Overall Score
+
+```
+Overall Score = (
+  Architecture Score * 0.30 +
+  Security Score * 0.30 +
+  Test Coverage * 0.25 +
+  Code Style Score * 0.15
+)
+
+Letter Grade:
+- A: 90-100
+- B: 80-89
+- C: 70-79
+- D: 60-69
+- F: 0-59
+```
+
+### 7.2 Create Report
+
+**Markdown Report:**
+
+```markdown
+# Code Review Report
+
+**Date:** {{date}}
+**Target:** {{target_path}}
+**Review Type:** {{review_type}}
+
+---
+
+## Overall Score: {{score}}/100 ({{grade}})
+
+### Scores by Category
+
+| Category | Score | Grade | Status |
+|----------|-------|-------|--------|
+| Architecture | {{arch_score}}/100 | {{arch_grade}} | {{arch_status}} |
+| Security | {{sec_score}}/100 | {{sec_grade}} | {{sec_status}} |
+| Testing | {{test_score}}/100 | {{test_grade}} | {{test_status}} |
+| Code Style | {{style_score}}/100 | {{style_grade}} | {{style_status}} |
+
+---
+
+## Issues Found: {{total_issues}}
+
+### By Severity
+
+- 🔴 **CRITICAL:** {{critical_count}} issues
+- 🟠 **HIGH:** {{high_count}} issues
+- 🟡 **MEDIUM:** {{medium_count}} issues
+- 🔵 **LOW:** {{low_count}} issues
+- ⚪ **INFO:** {{info_count}} issues
+
+---
+
+## Critical Issues ({{critical_count}})
+
+### 1. JWT Private Key Exposure
+- **File:** `lib/core/auth/jwt_signer.dart:15`
+- **Severity:** 🔴 CRITICAL
+- **Issue:** Signing JWT in Flutter exposes private key
+- **Code:**
+  ```dart
+  final jwt = JWT.encode(payload, privateKey); // Line 15
+  ```
+- **Fix:** Remove JWT signing. Verify tokens only:
+  ```dart
+  final jwt = JWT.verify(token, publicKey);
+  ```
+- **Impact:** Security vulnerability - attackers can forge tokens
+- **PRPROMPTS Reference:** `16-security_and_compliance.md` (Lines 145-160)
+
+### 2. Password Stored in SharedPreferences
+- **File:** `lib/features/auth/data/datasources/auth_local_data_source.dart:42`
+- **Severity:** 🔴 CRITICAL
+- **Issue:** Storing password in plain text
+- **Code:**
+  ```dart
+  prefs.setString('password', password); // Line 42
+  ```
+- **Fix:** NEVER store passwords. Store JWT tokens in FlutterSecureStorage:
+  ```dart
+  await secureStorage.write(key: 'access_token', value: token);
+  ```
+- **Impact:** Credential theft vulnerability
+- **PRPROMPTS Reference:** `08-authentication_and_authorization.md` (Lines 89-105)
+
+---
+
+## High Issues ({{high_count}})
+
+### 1. Domain Layer Importing Data Layer
+- **File:** `lib/features/auth/domain/usecases/login.dart:3`
+- **Severity:** 🟠 HIGH
+- **Issue:** Domain layer should not import data layer
+- **Code:**
+  ```dart
+  import '../../data/repositories/auth_repository_impl.dart'; // Line 3
+  ```
+- **Fix:** Import interface instead:
+  ```dart
+  import '../repositories/auth_repository.dart';
+  ```
+- **Impact:** Violates Clean Architecture dependency rule
+- **PRPROMPTS Reference:** `01-clean_architecture_overview.md` (Lines 67-85)
+
+---
+
+## Medium Issues ({{medium_count}})
+
+### 1. Test Coverage Below Target
+- **File:** `test/features/auth/`
+- **Severity:** 🟡 MEDIUM
+- **Issue:** Auth feature has 62% coverage (target: 70%)
+- **Missing Tests:**
+  - `lib/features/auth/domain/usecases/logout.dart` (0% coverage)
+  - `lib/features/auth/data/datasources/auth_local_data_source.dart` (45% coverage)
+- **Fix:** Add tests for uncovered code
+- **Impact:** Bugs may not be caught before production
+
+---
+
+## Recommendations
+
+### Immediate Actions (Critical/High Issues)
+
+1. **Remove JWT signing** from `lib/core/auth/jwt_signer.dart`
+2. **Remove password storage** from `auth_local_data_source.dart`
+3. **Fix domain layer imports** in `login.dart`
+
+### Short-term Actions (Medium Issues)
+
+4. **Increase test coverage** to 70%+:
+   - Add tests for `logout.dart` use case
+   - Add tests for `auth_local_data_source.dart`
+
+5. **Fix code style** issues:
+   - Run `dart format lib/ test/`
+   - Remove 12 unused imports
+
+### Long-term Improvements
+
+6. **Add integration tests** for complete auth flow
+7. **Implement CI/CD checks** to prevent regressions
+8. **Document security patterns** in team wiki
+
+---
+
+## Auto-Fixes Applied: {{auto_fix_count}}
+
+{{#if auto_fixes_applied}}
+✅ The following issues were automatically fixed:
+
+1. **Formatted code** with `dart format`
+2. **Removed unused imports** (12 files)
+3. **Fixed trailing commas** (45 locations)
+
+**Commit:** {{fix_commit_hash}}
+{{/if}}
+
+---
+
+## Summary
+
+{{#if score >= 90}}
+✅ **Excellent!** Code quality is very high. Minor improvements suggested.
+{{else if score >= 80}}
+👍 **Good!** Code is production-ready with some improvements needed.
+{{else if score >= 70}}
+⚠️ **Acceptable** but needs attention. Address high-priority issues.
+{{else if score >= 60}}
+🚨 **Needs Work!** Multiple critical issues. Not production-ready.
+{{else}}
+🔴 **Critical!** Major architectural and security issues. Refactor required.
+{{/if}}
+
+**Review completed in:** {{execution_time}}
+
+---
+
+**Generated by:** Code Reviewer Skill v1.0.0
+**Date:** {{timestamp}}
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+```
+
+---
+
+## Skill Completion
+
+```markdown
+✅ Code Review Complete!
+
+**Results:**
+- Overall Score: {{score}}/100
+- Issues Found: {{issues_count}}
+- Auto-Fixes: {{auto_fix_count}}
+- Report: {{report_path}}
+
+**Next Steps:**
+1. Review report: `cat {{report_path}}`
+2. Fix critical issues
+3. Re-run review: `@claude use skill automation/code-reviewer`
+```
+
+---
+
+**End of Skill Execution**
+
+"""

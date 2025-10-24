@@ -1,0 +1,914 @@
+description = "Bootstrap complete Flutter project with Clean Architecture, security, and test infrastructure"
+
+prompt = """
+
+## Smart Defaults (from skill.json)
+
+**Required Inputs:**
+- prd_path: Path to PRD file (default: "docs/PRD.md")
+
+**Optional Inputs (use defaults if not specified):**
+- prprompts_dir: Directory with PRPROMPTS files (default: "PRPROMPTS")
+- dry_run: Preview without making changes (default: false)
+
+**Interactive Prompt Strategy:**
+Ask user for input ONLY if:
+1. Required input has no default value
+2. User explicitly wants to override a default
+
+For each input, prompt with format:
+  "input_name? (press Enter for default_value)": 
+
+
+## Gemini CLI Specific Features
+
+**1. Inline Arguments Support:**
+If user provides arguments inline, parse them:
+  Example: /skills:automation:code-reviewer {{args}}
+  If args = "security lib/features/auth":
+    - review_type = "security"
+    - target_path = "lib/features/auth"
+
+**2. 1M Token Context Utilization:**
+You have access to Gemini's 1M token context window:
+- Load entire codebase for comprehensive analysis
+- Process massive PRDs (up to 400 pages of requirements)
+- Analyze all 32 PRPROMPTS files simultaneously
+- Cross-reference patterns across the entire project
+- No need to ask "should I read more files?" - just load everything
+
+**3. Free Tier Optimization:**
+Gemini offers industry-leading free tier:
+- 60 requests/minute
+- 1,000 requests/day
+- No credit card required
+
+Optimize usage by:
+- Batching related operations in single requests
+- Using full 1M context to avoid multiple round-trips
+- Caching analysis results for reuse
+
+**4. ReAct Loop Integration:**
+Leverage Gemini's ReAct (Reason and Act) agent mode:
+- Break complex tasks into reasoning steps
+- Execute actions based on reasoning
+- Iterate until task completion
+- Especially useful for multi-file operations
+
+
+# Flutter Bootstrapper Skill - Execution Prompt
+
+## Context
+You are executing the **flutter-bootstrapper** skill. This skill bootstraps a complete Flutter project with Clean Architecture, security infrastructure, test framework, and implementation plan.
+
+**This is the most important automation skill** - it sets up the entire project structure in minutes instead of hours.
+
+## Inputs
+- **prd_path**: {{inputs.prd_path || "docs/PRD.md"}}
+- **prprompts_dir**: {{inputs.prprompts_dir || "PRPROMPTS"}}
+- **dry_run**: {{inputs.dry_run || false}}
+
+---
+
+## Prerequisites Check
+
+Before starting, verify:
+
+1. ✅ Flutter project initialized (`flutter create` has been run)
+2. ✅ PRD exists at {{inputs.prd_path}}
+3. ✅ PRPROMPTS files exist (32 files in {{inputs.prprompts_dir}}/)
+4. ✅ Git repository initialized
+5. ✅ Working in project root directory
+
+**If any prerequisite fails:**
+```json
+{
+  "error": "Prerequisites not met",
+  "missing": ["flutter_project"],
+  "suggestions": [
+    "Run: flutter create .",
+    "Run: @claude use skill prprompts-generator"
+  ]
+}
+```
+
+---
+
+## Task: Bootstrap Flutter Project
+
+### Phase 1: Clean Architecture Structure
+
+#### Step 1.1: Create Folder Structure [30+ folders]
+
+```bash
+# Create Clean Architecture layers
+mkdir -p lib/{core,features}
+
+# Core layer
+mkdir -p lib/core/{constants,errors,network,usecases,utils}
+mkdir -p lib/core/widgets/{buttons,inputs,cards,dialogs}
+
+# Features layer (example: auth feature)
+mkdir -p lib/features/auth/{data,domain,presentation}
+mkdir -p lib/features/auth/data/{datasources,models,repositories}
+mkdir -p lib/features/auth/domain/{entities,repositories,usecases}
+mkdir -p lib/features/auth/presentation/{bloc,pages,widgets}
+
+# Test structure (mirrors lib/)
+mkdir -p test/{core,features}
+mkdir -p test/features/auth/{data,domain,presentation}
+
+# Documentation
+mkdir -p docs/{architecture,adr,api}
+
+# Scripts
+mkdir -p scripts/{setup,deployment,testing}
+```
+
+**Folders to create for each feature in PRD:**
+- For each feature mentioned in PRD → Create feature directory
+- Example: If PRD has "User Management", "Task Management"
+  - `lib/features/user_management/`
+  - `lib/features/task_management/`
+
+---
+
+#### Step 1.2: Setup Dependencies [pubspec.yaml]
+
+**Read PRD metadata to determine dependencies:**
+
+From PRD:
+- `state_management: "bloc"` → Add flutter_bloc
+- `auth_method: "jwt"` → Add dart_jsonwebtoken
+- `platforms: ["ios", "android", "web"]` → Configure for all platforms
+- `compliance: ["hipaa"]` → Add encrypt package
+
+**Generate pubspec.yaml:**
+
+```yaml
+name: {{project_name_from_prd}}
+description: {{project_description_from_prd}}
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management (from PRD)
+  {{#if state_management == "bloc"}}
+  flutter_bloc: ^8.1.3
+  equatable: ^2.0.5
+  {{/if}}
+
+  {{#if state_management == "riverpod"}}
+  flutter_riverpod: ^2.4.0
+  {{/if}}
+
+  # HTTP & API
+  dio: ^5.3.3
+  retrofit: ^4.0.3
+  json_annotation: ^4.8.1
+
+  # Dependency Injection
+  get_it: ^7.6.4
+  injectable: ^2.3.2
+
+  # Storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.2.2
+
+  # Security (if compliance in PRD)
+  {{#if compliance includes "hipaa" or "pci-dss"}}
+  encrypt: ^5.0.3
+  crypto: ^3.0.3
+  {{/if}}
+
+  # Authentication (from PRD auth_method)
+  {{#if auth_method == "jwt"}}
+  dart_jsonwebtoken: ^2.12.1
+  {{/if}}
+
+  {{#if auth_method == "firebase"}}
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  {{/if}}
+
+  # Utils
+  intl: ^0.18.1
+  logger: ^2.0.2+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.1
+
+  # Testing
+  mockito: ^5.4.4
+  bloc_test: ^9.1.5
+
+  # Code Generation
+  build_runner: ^2.4.6
+  injectable_generator: ^2.4.1
+  json_serializable: ^6.7.1
+  retrofit_generator: ^8.0.4
+  hive_generator: ^2.0.1
+```
+
+**Run:**
+```bash
+flutter pub get
+```
+
+---
+
+#### Step 1.3: Create Design System [lib/core/]
+
+**Generate core files:**
+
+**File: `lib/core/constants/app_colors.dart`**
+```dart
+import 'package:flutter/material.dart';
+
+class AppColors {
+  // Primary colors (customize to PRD brand if specified)
+  static const primary = Color(0xFF2196F3);
+  static const primaryDark = Color(0xFF1976D2);
+  static const primaryLight = Color(0xFFBBDEFB);
+
+  // Semantic colors
+  static const success = Color(0xFF4CAF50);
+  static const error = Color(0xFFF44336);
+  static const warning = Color(0xFFFF9800);
+  static const info = Color(0xFF2196F3);
+
+  // Neutral colors
+  static const background = Color(0xFFFAFAFA);
+  static const surface = Color(0xFFFFFFFF);
+  static const textPrimary = Color(0xFF212121);
+  static const textSecondary = Color(0xFF757575);
+}
+```
+
+**File: `lib/core/constants/app_text_styles.dart`**
+```dart
+import 'package:flutter/material.dart';
+import 'app_colors.dart';
+
+class AppTextStyles {
+  static const h1 = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
+
+  static const h2 = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
+
+  static const body1 = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textPrimary,
+  );
+
+  static const body2 = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textSecondary,
+  );
+}
+```
+
+---
+
+#### Step 1.4: Setup Security Infrastructure
+
+**From PRD compliance requirements:**
+
+**If compliance includes "hipaa":**
+
+**File: `lib/core/security/phi_encryption.dart`**
+```dart
+import 'package:encrypt/encrypt.dart';
+
+/// HIPAA-compliant PHI encryption
+/// Encrypts all Protected Health Information at rest
+class PHIEncryption {
+  static final _key = Key.fromSecureRandom(32); // AES-256
+  static final _iv = IV.fromLength(16);
+  static final _encrypter = Encrypter(AES(_key, mode: AESMode.gcm));
+
+  /// Encrypt PHI data
+  static String encrypt(String phi) {
+    final encrypted = _encrypter.encrypt(phi, iv: _iv);
+    return encrypted.base64;
+  }
+
+  /// Decrypt PHI data
+  static String decrypt(String encryptedPHI) {
+    final encrypted = Encrypted.fromBase64(encryptedPHI);
+    return _encrypter.decrypt(encrypted, iv: _iv);
+  }
+}
+```
+
+**File: `lib/core/security/audit_logger.dart`**
+```dart
+/// HIPAA audit logging for PHI access
+class AuditLogger {
+  static void logPHIAccess({
+    required String userId,
+    required String action,
+    required String resourceId,
+  }) {
+    final entry = {
+      'timestamp': DateTime.now().toIso8601String(),
+      'user_id': userId,
+      'action': action,
+      'resource_id': resourceId,
+      'ip_address': _getIPAddress(),
+    };
+
+    // Log to secure storage
+    _writeToAuditLog(entry);
+  }
+}
+```
+
+**If auth_method == "jwt":**
+
+**File: `lib/core/security/jwt_service.dart`**
+```dart
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+
+/// JWT verification service
+/// IMPORTANT: Flutter ONLY verifies tokens, NEVER signs them!
+class JWTService {
+  /// Verify JWT token with public key
+  static bool verifyToken(String token, String publicKey) {
+    try {
+      final jwt = JWT.verify(token, RSAPublicKey(publicKey));
+
+      // Check expiration
+      final exp = jwt.payload['exp'] as int;
+      final now = DateTime.now().millisecondsSinceEpoch / 1000;
+
+      return exp > now;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Extract claims from verified token
+  static Map<String, dynamic>? getClaims(String token) {
+    try {
+      final jwt = JWT.decode(token);
+      return jwt.payload as Map<String, dynamic>;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // ❌ NEVER implement token signing in Flutter!
+  // Signing should ONLY happen on the backend with private key
+}
+```
+
+---
+
+#### Step 1.5: Create Test Infrastructure
+
+**File: `test/helpers/test_helpers.dart`**
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+/// Test helpers and utilities
+class TestHelpers {
+  /// Pump widget with material app wrapper
+  static Future<void> pumpTestWidget(
+    WidgetTester tester,
+    Widget widget,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: widget,
+      ),
+    );
+  }
+}
+
+/// Mock classes for testing
+class MockRepository extends Mock implements Repository {}
+class MockUseCase extends Mock implements UseCase {}
+```
+
+**File: `test/fixtures/fixture_reader.dart`**
+```dart
+import 'dart:io';
+
+/// Read JSON fixtures for testing
+String fixture(String name) {
+  return File('test/fixtures/$name').readAsStringSync();
+}
+```
+
+---
+
+### Phase 2: Feature Implementation Setup
+
+#### Step 2.1: Generate Implementation Plan
+
+**Create:** `docs/IMPLEMENTATION_PLAN.md`
+
+**Content:**
+```markdown
+# Implementation Plan
+
+## Project: {{project_name_from_prd}}
+
+Generated: {{current_date}}
+
+---
+
+## Phase 1: Foundation [Week 1]
+
+### Task 1.1: Authentication Setup [TODO]
+**Priority:** High
+**Estimated Time:** 8 hours
+**Files to Create:**
+- `lib/features/auth/domain/entities/user.dart`
+- `lib/features/auth/domain/usecases/login_usecase.dart`
+- `lib/features/auth/data/models/user_model.dart`
+- `lib/features/auth/presentation/bloc/auth_bloc.dart`
+
+**Acceptance Criteria:**
+- [ ] User can log in with email/password
+- [ ] JWT token stored securely
+- [ ] Auto-logout on token expiration
+- [ ] Unit tests with 70%+ coverage
+
+**PRPROMPTS References:**
+- Follow: `06-api_integration.md`
+- Follow: `16-security_and_compliance.md`
+- Follow: `04-state_management.md`
+
+---
+
+### Task 1.2: [Next Feature] [TODO]
+...
+
+---
+
+## Phase 2: Core Features [Week 2-3]
+{{Generate tasks for each feature from PRD}}
+
+---
+
+## Phase 3: Testing & Security [Week 4]
+...
+
+---
+
+## Timeline Summary
+
+| Phase | Duration | Completion |
+|-------|----------|------------|
+| Phase 1: Foundation | Week 1 | 0% |
+| Phase 2: Core Features | Week 2-3 | 0% |
+| Phase 3: Testing | Week 4 | 0% |
+| Phase 4: Polish | Week 5 | 0% |
+
+**Estimated Total:** 4-5 weeks
+```
+
+---
+
+#### Step 2.2: Generate Architecture Documentation
+
+**Create:** `docs/architecture/ARCHITECTURE.md`
+
+**Content:**
+```markdown
+# Architecture Documentation
+
+## Overview
+
+This project follows **Clean Architecture** with 3 layers:
+
+### 1. Domain Layer (Business Logic)
+- **Entities**: Pure Dart classes representing business objects
+- **Use Cases**: Business logic operations
+- **Repositories (interfaces)**: Abstract contracts
+
+**Rules:**
+- NO Flutter dependencies
+- NO external package dependencies
+- Pure Dart only
+
+### 2. Data Layer
+- **Models**: Data representations (extends entities)
+- **Data Sources**: API clients, local storage
+- **Repositories (implementations)**: Implement domain interfaces
+
+**Rules:**
+- Can use external packages (Dio, Hive, etc.)
+- Implements domain repository interfaces
+- Handles data conversion
+
+### 3. Presentation Layer
+- **BLoC/Cubit**: State management
+- **Pages**: Screen widgets
+- **Widgets**: Reusable UI components
+
+**Rules:**
+- Uses Flutter
+- Depends on domain layer ONLY
+- UI logic separated from business logic
+
+## Dependency Flow
+
+```
+Presentation ──depends on──> Domain <──implements── Data
+```
+
+## Example: Login Feature
+
+```
+lib/features/auth/
+├── domain/
+│   ├── entities/
+│   │   └── user.dart          # Pure Dart class
+│   ├── repositories/
+│   │   └── auth_repository.dart  # Abstract interface
+│   └── usecases/
+│       └── login_usecase.dart    # Business logic
+├── data/
+│   ├── models/
+│   │   └── user_model.dart      # Extends User entity
+│   ├── datasources/
+│   │   └── auth_remote_datasource.dart  # API calls
+│   └── repositories/
+│       └── auth_repository_impl.dart  # Implements interface
+└── presentation/
+    ├── bloc/
+    │   └── auth_bloc.dart       # {{state_management}}
+    ├── pages/
+    │   └── login_page.dart      # Screen
+    └── widgets/
+        └── login_form.dart      # Form widget
+```
+
+## State Management: {{state_management_from_prd}}
+
+{{If BLoC: Show BLoC pattern}}
+{{If Riverpod: Show Riverpod pattern}}
+
+## Testing Strategy
+
+- **Unit Tests**: Domain layer (70%+ coverage target)
+- **Widget Tests**: Presentation layer
+- **Integration Tests**: End-to-end flows
+
+See: `PRPROMPTS/11-testing_strategy.md`
+```
+
+---
+
+### Phase 3: Final Setup
+
+#### Step 3.1: Configure Analysis Options
+
+**Create:** `analysis_options.yaml`
+
+```yaml
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+
+  errors:
+    invalid_annotation_target: ignore
+
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
+linter:
+  rules:
+    - always_declare_return_types
+    - avoid_print
+    - prefer_const_constructors
+    - prefer_final_fields
+    - use_key_in_widget_constructors
+    - require_trailing_commas
+```
+
+---
+
+#### Step 3.2: Generate README
+
+**Create:** `README.md`
+
+```markdown
+# {{project_name_from_prd}}
+
+{{project_description_from_prd}}
+
+## Getting Started
+
+### Prerequisites
+- Flutter 3.24+
+- Dart 3.0+
+
+### Installation
+
+```bash
+# Install dependencies
+flutter pub get
+
+# Run code generation
+flutter pub run build_runner build
+
+# Run app
+flutter run
+```
+
+### Testing
+
+```bash
+# Run all tests
+flutter test
+
+# Run with coverage
+flutter test --coverage
+```
+
+## Architecture
+
+This project follows Clean Architecture. See `docs/architecture/ARCHITECTURE.md`.
+
+## Implementation Plan
+
+See `docs/IMPLEMENTATION_PLAN.md` for development roadmap.
+
+## Security & Compliance
+
+{{if compliance}}
+**Compliance:** {{compliance_list_from_prd}}
+
+See `PRPROMPTS/16-security_and_compliance.md` for security patterns.
+{{/if}}
+
+## License
+
+{{license_from_prd || "MIT"}}
+```
+
+---
+
+#### Step 3.3: Setup Flutter Flavors (Optional)
+
+**Check if PRD specifies multiple environments:**
+
+If PRD metadata includes `environments: ["dev", "staging", "production"]`, setup Flutter flavors automatically.
+
+**Create:** `lib/core/config/flavor_config.dart`
+
+```dart
+/// Flavor configuration for multi-environment support
+enum Flavor {
+  dev,
+  staging,
+  production,
+}
+
+class FlavorConfig {
+  final Flavor flavor;
+  final String apiBaseUrl;
+  final bool enableAnalytics;
+  final bool enableLogging;
+  final String appName;
+
+  const FlavorConfig({
+    required this.flavor,
+    required this.apiBaseUrl,
+    required this.enableAnalytics,
+    required this.enableLogging,
+    required this.appName,
+  });
+
+  static FlavorConfig? _instance;
+
+  static FlavorConfig get instance {
+    assert(_instance != null, 'FlavorConfig not initialized');
+    return _instance!;
+  }
+
+  static void initialize(FlavorConfig config) {
+    _instance = config;
+  }
+
+  bool get isDev => flavor == Flavor.dev;
+  bool get isStaging => flavor == Flavor.staging;
+  bool get isProduction => flavor == Flavor.production;
+}
+```
+
+**Create:** `lib/main_common.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'core/config/flavor_config.dart';
+
+void mainCommon(FlavorConfig config) {
+  FlavorConfig.initialize(config);
+  runApp(MyApp(config: config));
+}
+
+class MyApp extends StatelessWidget {
+  final FlavorConfig config;
+
+  const MyApp({Key? key, required this.config}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: config.appName,
+      debugShowCheckedModeBanner: !config.isProduction,
+      home: Container(), // Replace with your home page
+    );
+  }
+}
+```
+
+**Create:** `lib/main_dev.dart`, `lib/main_staging.dart`, `lib/main_production.dart`
+
+```dart
+// lib/main_dev.dart
+import 'package:flutter/material.dart';
+import 'main_common.dart';
+import 'core/config/flavor_config.dart';
+
+void main() {
+  const environment = FlavorConfig(
+    flavor: Flavor.dev,
+    apiBaseUrl: '{{dev_api_url_from_prd}}',
+    enableAnalytics: false,
+    enableLogging: true,
+    appName: '{{project_name}} Dev',
+  );
+
+  mainCommon(environment);
+}
+```
+
+**Update:** `android/app/build.gradle`
+
+Add productFlavors configuration:
+
+```gradle
+android {
+    // ... existing configuration ...
+
+    flavorDimensions "environment"
+
+    productFlavors {
+        dev {
+            dimension "environment"
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "{{project_name}} Dev"
+        }
+
+        staging {
+            dimension "environment"
+            applicationIdSuffix ".staging"
+            resValue "string", "app_name", "{{project_name}} Staging"
+        }
+
+        production {
+            dimension "environment"
+            resValue "string", "app_name", "{{project_name}}"
+        }
+    }
+}
+```
+
+**Create:** `scripts/build-dev.sh`, `scripts/build-staging.sh`, `scripts/build-production.sh`
+
+```bash
+#!/bin/bash
+# scripts/build-dev.sh
+
+echo "Building Dev flavor..."
+flutter build apk --flavor dev -t lib/main_dev.dart --debug
+echo "✅ Dev build complete"
+```
+
+**Create:** `.vscode/launch.json`
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dev Flavor",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "args": ["--flavor", "dev"]
+    },
+    {
+      "name": "Staging Flavor",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": ["--flavor", "staging"]
+    },
+    {
+      "name": "Production Flavor",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": ["--flavor", "production"]
+    }
+  ]
+}
+```
+
+**Note:** For complete flavor setup including iOS configuration, run:
+```bash
+@claude use skill development-workflow/flutter-flavors
+```
+
+---
+
+### Step 4: Summary & Output
+
+**Return Results:**
+
+```json
+{
+  "status": "success",
+  "folders_created": 35,
+  "files_generated": 120,
+  "structure": {
+    "clean_architecture": true,
+    "features": ["auth", "user_management", ...],
+    "security_setup": {{compliance}},
+    "test_infrastructure": true
+  },
+  "architecture_docs": [
+    "docs/architecture/ARCHITECTURE.md",
+    "docs/IMPLEMENTATION_PLAN.md",
+    "README.md"
+  ],
+  "implementation_plan": "docs/IMPLEMENTATION_PLAN.md",
+  "next_steps": [
+    "Review IMPLEMENTATION_PLAN.md",
+    "Start with Task 1.1 (highest priority)",
+    "Follow PRPROMPTS guides for each feature",
+    "Run: @claude use skill automation/implement-next"
+  ]
+}
+```
+
+---
+
+## Success Criteria
+
+Bootstrap succeeds if:
+- ✅ Clean Architecture structure created (lib/core, lib/features)
+- ✅ All dependencies installed (pubspec.yaml)
+- ✅ Security infrastructure setup (if compliance in PRD)
+- ✅ Test infrastructure created
+- ✅ Implementation plan generated
+- ✅ Architecture documentation created
+- ✅ No Flutter errors (`flutter analyze` passes)
+
+---
+
+## Time Estimates
+
+| Phase | Time |
+|-------|------|
+| Folder structure | 10s |
+| Dependencies | 30s |
+| Core files | 20s |
+| Security setup | 15s |
+| Documentation | 20s |
+| **Total** | **~2 minutes** |
+
+**Compare to manual:** 4-6 hours → **40-60x faster!**
+
+"""

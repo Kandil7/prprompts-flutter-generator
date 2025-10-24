@@ -1,0 +1,1035 @@
+description = "Comprehensive Flutter flavors configuration for multi-environment development (dev, staging, production)"
+
+prompt = """
+
+## Smart Defaults (from skill.json)
+
+**Required Inputs:**
+- environments: List of environments (e.g., ['dev', 'staging', 'production']) (default: "dev,staging,production")
+
+**Optional Inputs (use defaults if not specified):**
+- app_name_suffix: Add environment suffix to app name (e.g., 'MyApp Dev') (default: true)
+- bundle_id_suffix: Add environment suffix to bundle ID (e.g., 'com.example.app.dev') (default: true)
+- custom_icons: Generate flavor-specific app icons (default: false)
+- environment_config: Environment-specific configuration (API URLs, feature flags, etc.) (default: {"dev":{"api_url":"https://dev-api.example.com","enable_analytics":false,"enable_logging":true},"staging":{"api_url":"https://staging-api.example.com","enable_analytics":true,"enable_logging":true},"production":{"api_url":"https://api.example.com","enable_analytics":true,"enable_logging":false}})
+
+**Interactive Prompt Strategy:**
+Ask user for input ONLY if:
+1. Required input has no default value
+2. User explicitly wants to override a default
+
+For each input, prompt with format:
+  "input_name? (press Enter for default_value)": 
+
+
+## Gemini CLI Specific Features
+
+**1. Inline Arguments Support:**
+If user provides arguments inline, parse them:
+  Example: /skills:automation:code-reviewer {{args}}
+  If args = "security lib/features/auth":
+    - review_type = "security"
+    - target_path = "lib/features/auth"
+
+**2. 1M Token Context Utilization:**
+You have access to Gemini's 1M token context window:
+- Load entire codebase for comprehensive analysis
+- Process massive PRDs (up to 400 pages of requirements)
+- Analyze all 32 PRPROMPTS files simultaneously
+- Cross-reference patterns across the entire project
+- No need to ask "should I read more files?" - just load everything
+
+**3. Free Tier Optimization:**
+Gemini offers industry-leading free tier:
+- 60 requests/minute
+- 1,000 requests/day
+- No credit card required
+
+Optimize usage by:
+- Batching related operations in single requests
+- Using full 1M context to avoid multiple round-trips
+- Caching analysis results for reuse
+
+**4. ReAct Loop Integration:**
+Leverage Gemini's ReAct (Reason and Act) agent mode:
+- Break complex tasks into reasoning steps
+- Execute actions based on reasoning
+- Iterate until task completion
+- Especially useful for multi-file operations
+
+
+# Flutter Flavors Setup Skill - Execution Prompt
+
+## Context
+You are executing the **flutter-flavors** skill. This skill sets up complete Flutter flavor configuration for multi-environment development, enabling developers to build different versions of their app (dev, staging, production) with different configurations, API endpoints, app names, and bundle identifiers.
+
+**This skill configures both iOS (Xcode schemes) and Android (build variants) simultaneously.**
+
+## Inputs
+- **environments**: {{inputs.environments || ["dev", "staging", "production"]}}
+- **app_name_suffix**: {{inputs.app_name_suffix || true}}
+- **bundle_id_suffix**: {{inputs.bundle_id_suffix || true}}
+- **custom_icons**: {{inputs.custom_icons || false}}
+- **environment_config**: {{inputs.environment_config || default_config}}
+
+---
+
+## Prerequisites Check
+
+Before starting, verify:
+
+1. ✅ Flutter project initialized (`pubspec.yaml` exists)
+2. ✅ Git repository initialized
+3. ✅ Working in project root directory
+4. ✅ iOS project exists (`ios/` directory)
+5. ✅ Android project exists (`android/` directory)
+
+**If any prerequisite fails:**
+```json
+{
+  "error": "Prerequisites not met",
+  "missing": ["flutter_project"],
+  "suggestions": [
+    "Run: flutter create .",
+    "Ensure you're in project root directory"
+  ]
+}
+```
+
+---
+
+## Task: Setup Flutter Flavors Configuration
+
+### Phase 1: Android Configuration (Build Variants)
+
+#### Step 1.1: Update android/app/build.gradle
+
+**Location**: `android/app/build.gradle`
+
+**Add productFlavors configuration** (after `defaultConfig` block):
+
+```gradle
+android {
+    // ... existing configuration ...
+
+    defaultConfig {
+        // ... existing defaults ...
+    }
+
+    flavorDimensions "environment"
+
+    productFlavors {
+        {{#each environments}}
+        {{this}} {
+            dimension "environment"
+            {{#if ../bundle_id_suffix}}
+            {{#if (ne this "production")}}
+            applicationIdSuffix ".{{this}}"
+            {{/if}}
+            {{/if}}
+            {{#if ../app_name_suffix}}
+            resValue "string", "app_name", "${project.name} {{capitalize this}}"
+            {{else}}
+            resValue "string", "app_name", "${project.name}"
+            {{/if}}
+
+            // Environment-specific configuration
+            buildConfigField "String", "API_BASE_URL", "\\"{{lookup ../environment_config this 'api_url'}}\\""
+            buildConfigField "boolean", "ENABLE_ANALYTICS", "{{lookup ../environment_config this 'enable_analytics'}}"
+            buildConfigField "boolean", "ENABLE_LOGGING", "{{lookup ../environment_config this 'enable_logging'}}"
+        }
+        {{/each}}
+    }
+
+    buildTypes {
+        debug {
+            // Debug-specific settings
+            debuggable true
+            minifyEnabled false
+        }
+        release {
+            // Release-specific settings
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug // Change for production
+        }
+    }
+}
+```
+
+**Complete example for 3 standard flavors:**
+
+```gradle
+android {
+    namespace 'com.example.myapp'
+    compileSdkVersion flutter.compileSdkVersion
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId "com.example.myapp"
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    flavorDimensions "environment"
+
+    productFlavors {
+        dev {
+            dimension "environment"
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "MyApp Dev"
+            buildConfigField "String", "API_BASE_URL", "\\"https://dev-api.example.com\\""
+            buildConfigField "boolean", "ENABLE_ANALYTICS", "false"
+            buildConfigField "boolean", "ENABLE_LOGGING", "true"
+        }
+
+        staging {
+            dimension "environment"
+            applicationIdSuffix ".staging"
+            resValue "string", "app_name", "MyApp Staging"
+            buildConfigField "String", "API_BASE_URL", "\\"https://staging-api.example.com\\""
+            buildConfigField "boolean", "ENABLE_ANALYTICS", "true"
+            buildConfigField "boolean", "ENABLE_LOGGING", "true"
+        }
+
+        production {
+            dimension "environment"
+            // No suffix for production - clean bundle ID
+            resValue "string", "app_name", "MyApp"
+            buildConfigField "String", "API_BASE_URL", "\\"https://api.example.com\\""
+            buildConfigField "boolean", "ENABLE_ANALYTICS", "true"
+            buildConfigField "boolean", "ENABLE_LOGGING", "false"
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+```
+
+---
+
+#### Step 1.2: Update android/app/src/main/AndroidManifest.xml
+
+**Update app name reference** to use flavor-specific name:
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:label="@string/app_name"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+        <!-- ... rest of manifest ... -->
+    </application>
+</manifest>
+```
+
+---
+
+#### Step 1.3: Create flavor-specific resource directories (if custom_icons = true)
+
+```bash
+# Create directories for each flavor
+mkdir -p android/app/src/dev/res/mipmap-hdpi
+mkdir -p android/app/src/dev/res/mipmap-mdpi
+mkdir -p android/app/src/dev/res/mipmap-xhdpi
+mkdir -p android/app/src/dev/res/mipmap-xxhdpi
+mkdir -p android/app/src/dev/res/mipmap-xxxhdpi
+
+# Repeat for staging and production
+mkdir -p android/app/src/staging/res/mipmap-hdpi
+mkdir -p android/app/src/staging/res/mipmap-mdpi
+mkdir -p android/app/src/staging/res/mipmap-xhdpi
+mkdir -p android/app/src/staging/res/mipmap-xxhdpi
+mkdir -p android/app/src/staging/res/mipmap-xxxhdpi
+
+mkdir -p android/app/src/production/res/mipmap-hdpi
+mkdir -p android/app/src/production/res/mipmap-mdpi
+mkdir -p android/app/src/production/res/mipmap-xhdpi
+mkdir -p android/app/src/production/res/mipmap-xxhdpi
+mkdir -p android/app/src/production/res/mipmap-xxxhdpi
+```
+
+**Create placeholder README:**
+
+```markdown
+# Flavor-Specific Icons
+
+Place your flavor-specific app icons in these directories:
+
+- `dev/res/mipmap-*/` - Development icons (add DEV badge/ribbon)
+- `staging/res/mipmap-*/` - Staging icons (add STAGING badge/ribbon)
+- `production/res/mipmap-*/` - Production icons (final polished icons)
+
+Use a tool like `flutter_launcher_icons` or manually replace ic_launcher.png files.
+```
+
+---
+
+### Phase 2: iOS Configuration (Xcode Schemes)
+
+#### Step 2.1: Create Xcode Build Configurations
+
+**This requires manual Xcode configuration, but we'll generate the commands:**
+
+**Create:** `ios/setup-flavors.sh`
+
+```bash
+#!/bin/bash
+
+# Flutter Flavors - iOS Setup Script
+# This script provides instructions for setting up Xcode schemes manually
+
+echo "=========================================="
+echo "Flutter Flavors - iOS Setup Instructions"
+echo "=========================================="
+echo ""
+echo "Follow these steps in Xcode:"
+echo ""
+echo "1. Open ios/Runner.xcworkspace in Xcode"
+echo ""
+echo "2. Create Build Configurations:"
+echo "   - Click on Runner project"
+echo "   - Select Info tab"
+echo "   - Expand 'Configurations'"
+echo "   - Duplicate Debug → Debug-dev, Debug-staging, Debug-production"
+echo "   - Duplicate Release → Release-dev, Release-staging, Release-production"
+echo ""
+echo "3. Create Schemes for each flavor:"
+echo "   - Product → Scheme → Manage Schemes"
+echo "   - Duplicate Runner scheme 3 times"
+echo "   - Rename to: dev, staging, production"
+echo ""
+echo "4. Configure each scheme:"
+echo "   - Edit Scheme → Build Configuration"
+echo "   - dev: Debug-dev (debug), Release-dev (release)"
+echo "   - staging: Debug-staging (debug), Release-staging (release)"
+echo "   - production: Debug-production (debug), Release-production (release)"
+echo ""
+echo "5. Set User-Defined Build Settings:"
+echo "   - Build Settings → + → Add User-Defined Setting"
+echo "   - PRODUCT_BUNDLE_IDENTIFIER"
+echo "     - Debug-dev/Release-dev: com.example.app.dev"
+echo "     - Debug-staging/Release-staging: com.example.app.staging"
+echo "     - Debug-production/Release-production: com.example.app"
+echo "   - DISPLAY_NAME"
+echo "     - Debug-dev/Release-dev: MyApp Dev"
+echo "     - Debug-staging/Release-staging: MyApp Staging"
+echo "     - Debug-production/Release-production: MyApp"
+echo ""
+echo "6. Update Info.plist:"
+echo "   - Bundle display name: \\$(DISPLAY_NAME)"
+echo "   - Bundle identifier: \\$(PRODUCT_BUNDLE_IDENTIFIER)"
+echo ""
+echo "=========================================="
+echo "Automated alternative:"
+echo "Run: sh ios/configure-xcode-flavors.sh"
+echo "=========================================="
+```
+
+---
+
+#### Step 2.2: Create Automated Xcode Configuration Script
+
+**Create:** `ios/configure-xcode-flavors.sh`
+
+```bash
+#!/bin/bash
+
+# Automated Xcode flavor configuration using xcodeproj Ruby gem
+# Install: gem install xcodeproj
+
+set -e
+
+echo "Configuring Xcode project for Flutter flavors..."
+
+# Check if xcodeproj gem is installed
+if ! gem list xcodeproj -i > /dev/null 2>&1; then
+    echo "Installing xcodeproj gem..."
+    gem install xcodeproj
+fi
+
+# Create Ruby script to modify Xcode project
+cat > ios/configure_project.rb << 'RUBY_SCRIPT'
+require 'xcodeproj'
+
+project_path = 'Runner.xcodeproj'
+project = Xcodeproj::Project.open(project_path)
+
+flavors = ['dev', 'staging', 'production']
+configurations = ['Debug', 'Release']
+
+# Add build configurations
+flavors.each do |flavor|
+  configurations.each do |config|
+    config_name = "#{config}-#{flavor}"
+    unless project.build_configurations.find { |c| c.name == config_name }
+      base_config = project.build_configurations.find { |c| c.name == config }
+      new_config = project.add_build_configuration(config_name, base_config.type)
+      new_config.build_settings = base_config.build_settings.dup
+    end
+  end
+end
+
+# Set flavor-specific bundle IDs
+target = project.targets.first
+flavors.each do |flavor|
+  bundle_id = flavor == 'production' ? 'com.example.app' : "com.example.app.#{flavor}"
+  app_name = flavor == 'production' ? 'MyApp' : "MyApp #{flavor.capitalize}"
+
+  configurations.each do |config|
+    config_name = "#{config}-#{flavor}"
+    target.build_configurations.each do |build_config|
+      if build_config.name == config_name
+        build_config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = bundle_id
+        build_config.build_settings['DISPLAY_NAME'] = app_name
+      end
+    end
+  end
+end
+
+project.save
+puts "✅ Xcode project configured successfully"
+RUBY_SCRIPT
+
+cd ios
+ruby configure_project.rb
+cd ..
+
+echo "✅ iOS flavor configuration complete"
+echo "ℹ️  Open ios/Runner.xcworkspace to verify schemes"
+```
+
+**Make executable:**
+```bash
+chmod +x ios/configure-xcode-flavors.sh
+```
+
+---
+
+#### Step 2.3: Update ios/Runner/Info.plist
+
+**Ensure Info.plist uses build settings:**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleDisplayName</key>
+    <string>$(DISPLAY_NAME)</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    <!-- ... rest of Info.plist ... -->
+</dict>
+</plist>
+```
+
+---
+
+### Phase 3: Flutter Environment Configuration
+
+#### Step 3.1: Create Environment Configuration Class
+
+**Create:** `lib/core/config/environment.dart`
+
+```dart
+/// Environment configuration for Flutter flavors
+///
+/// Access environment-specific values throughout the app:
+/// ```dart
+/// Environment.apiBaseUrl // Current flavor's API URL
+/// Environment.enableAnalytics // Current flavor's analytics setting
+/// ```
+class Environment {
+  /// Current flavor name (dev, staging, production)
+  static const String flavor = String.fromEnvironment(
+    'FLAVOR',
+    defaultValue: 'dev',
+  );
+
+  /// API base URL for current flavor
+  static const String apiBaseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'https://dev-api.example.com',
+  );
+
+  /// Whether analytics is enabled for current flavor
+  static const bool enableAnalytics = bool.fromEnvironment(
+    'ENABLE_ANALYTICS',
+    defaultValue: false,
+  );
+
+  /// Whether verbose logging is enabled for current flavor
+  static const bool enableLogging = bool.fromEnvironment(
+    'ENABLE_LOGGING',
+    defaultValue: true,
+  );
+
+  /// App name for current flavor
+  static const String appName = String.fromEnvironment(
+    'APP_NAME',
+    defaultValue: 'MyApp Dev',
+  );
+
+  // Flavor checks
+  static bool get isDev => flavor == 'dev';
+  static bool get isStaging => flavor == 'staging';
+  static bool get isProduction => flavor == 'production';
+
+  /// Print environment configuration (useful for debugging)
+  static void printConfig() {
+    print('=================================');
+    print('Environment Configuration');
+    print('=================================');
+    print('Flavor: $flavor');
+    print('API Base URL: $apiBaseUrl');
+    print('Analytics: ${enableAnalytics ? "Enabled" : "Disabled"}');
+    print('Logging: ${enableLogging ? "Enabled" : "Disabled"}');
+    print('App Name: $appName');
+    print('=================================');
+  }
+}
+```
+
+---
+
+#### Step 3.2: Create Flavor-Specific Entry Points
+
+**Create:** `lib/main_dev.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'main_common.dart';
+
+/// Development flavor entry point
+///
+/// Run: flutter run --flavor dev -t lib/main_dev.dart
+void main() {
+  const environment = FlavorConfig(
+    flavor: Flavor.dev,
+    apiBaseUrl: 'https://dev-api.example.com',
+    enableAnalytics: false,
+    enableLogging: true,
+    appName: 'MyApp Dev',
+  );
+
+  mainCommon(environment);
+}
+```
+
+**Create:** `lib/main_staging.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'main_common.dart';
+
+/// Staging flavor entry point
+///
+/// Run: flutter run --flavor staging -t lib/main_staging.dart
+void main() {
+  const environment = FlavorConfig(
+    flavor: Flavor.staging,
+    apiBaseUrl: 'https://staging-api.example.com',
+    enableAnalytics: true,
+    enableLogging: true,
+    appName: 'MyApp Staging',
+  );
+
+  mainCommon(environment);
+}
+```
+
+**Create:** `lib/main_production.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'main_common.dart';
+
+/// Production flavor entry point
+///
+/// Run: flutter run --flavor production -t lib/main_production.dart
+void main() {
+  const environment = FlavorConfig(
+    flavor: Flavor.production,
+    apiBaseUrl: 'https://api.example.com',
+    enableAnalytics: true,
+    enableLogging: false,
+    appName: 'MyApp',
+  );
+
+  mainCommon(environment);
+}
+```
+
+---
+
+#### Step 3.3: Create Common Main Entry Point
+
+**Create:** `lib/main_common.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
+/// Flavor enumeration
+enum Flavor {
+  dev,
+  staging,
+  production,
+}
+
+/// Flavor configuration
+class FlavorConfig {
+  final Flavor flavor;
+  final String apiBaseUrl;
+  final bool enableAnalytics;
+  final bool enableLogging;
+  final String appName;
+
+  const FlavorConfig({
+    required this.flavor,
+    required this.apiBaseUrl,
+    required this.enableAnalytics,
+    required this.enableLogging,
+    required this.appName,
+  });
+
+  /// Global access to current flavor config
+  static FlavorConfig? _instance;
+  static FlavorConfig get instance {
+    assert(_instance != null, 'FlavorConfig not initialized');
+    return _instance!;
+  }
+
+  static void initialize(FlavorConfig config) {
+    _instance = config;
+  }
+
+  // Convenience getters
+  bool get isDev => flavor == Flavor.dev;
+  bool get isStaging => flavor == Flavor.staging;
+  bool get isProduction => flavor == Flavor.production;
+}
+
+/// Common main entry point for all flavors
+void mainCommon(FlavorConfig config) {
+  // Initialize flavor config
+  FlavorConfig.initialize(config);
+
+  // Print config in debug mode
+  if (kDebugMode) {
+    debugPrint('=================================');
+    debugPrint('Flavor: ${config.flavor.name}');
+    debugPrint('API: ${config.apiBaseUrl}');
+    debugPrint('Analytics: ${config.enableAnalytics}');
+    debugPrint('Logging: ${config.enableLogging}');
+    debugPrint('=================================');
+  }
+
+  // Run app
+  runApp(MyApp(config: config));
+}
+
+/// Main app widget
+class MyApp extends StatelessWidget {
+  final FlavorConfig config;
+
+  const MyApp({Key? key, required this.config}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: config.appName,
+      debugShowCheckedModeBanner: config.isDev || config.isStaging,
+      theme: ThemeData(
+        primarySwatch: _getThemeColor(),
+        useMaterial3: true,
+      ),
+      home: HomePage(config: config),
+    );
+  }
+
+  /// Different theme colors for different flavors (visual debugging)
+  MaterialColor _getThemeColor() {
+    switch (config.flavor) {
+      case Flavor.dev:
+        return Colors.green; // Green for dev
+      case Flavor.staging:
+        return Colors.orange; // Orange for staging
+      case Flavor.production:
+        return Colors.blue; // Blue for production
+    }
+  }
+}
+
+/// Home page showing current flavor
+class HomePage extends StatelessWidget {
+  final FlavorConfig config;
+
+  const HomePage({Key? key, required this.config}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(config.appName),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _getFlavorIcon(),
+              size: 100,
+              color: Theme.of(context).primaryColor,
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Flavor: ${config.flavor.name.toUpperCase()}',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'API: ${config.apiBaseUrl}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Analytics: ${config.enableAnalytics ? "ON" : "OFF"}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Logging: ${config.enableLogging ? "ON" : "OFF"}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  IconData _getFlavorIcon() {
+    switch (config.flavor) {
+      case Flavor.dev:
+        return Icons.code;
+      case Flavor.staging:
+        return Icons.cloud_upload;
+      case Flavor.production:
+        return Icons.rocket_launch;
+    }
+  }
+}
+```
+
+---
+
+### Phase 4: Build Scripts
+
+#### Step 4.1: Create Bash Build Scripts
+
+**Create:** `scripts/build-dev.sh`
+
+```bash
+#!/bin/bash
+
+# Build Development Flavor
+echo "Building Dev flavor..."
+
+# Android
+echo "📱 Building Android Dev..."
+flutter build apk --flavor dev -t lib/main_dev.dart --debug
+
+# iOS
+echo "🍎 Building iOS Dev..."
+flutter build ios --flavor dev -t lib/main_dev.dart --debug --no-codesign
+
+echo "✅ Dev build complete"
+echo "📦 APK: build/app/outputs/flutter-apk/app-dev-debug.apk"
+```
+
+**Create:** `scripts/build-staging.sh`
+
+```bash
+#!/bin/bash
+
+# Build Staging Flavor
+echo "Building Staging flavor..."
+
+# Android
+echo "📱 Building Android Staging..."
+flutter build apk --flavor staging -t lib/main_staging.dart --release
+
+# iOS
+echo "🍎 Building iOS Staging..."
+flutter build ios --flavor staging -t lib/main_staging.dart --release --no-codesign
+
+echo "✅ Staging build complete"
+echo "📦 APK: build/app/outputs/flutter-apk/app-staging-release.apk"
+```
+
+**Create:** `scripts/build-production.sh`
+
+```bash
+#!/bin/bash
+
+# Build Production Flavor
+echo "Building Production flavor..."
+
+# Android
+echo "📱 Building Android Production..."
+flutter build apk --flavor production -t lib/main_production.dart --release
+
+# iOS
+echo "🍎 Building iOS Production..."
+flutter build ios --flavor production -t lib/main_production.dart --release --no-codesign
+
+echo "✅ Production build complete"
+echo "📦 APK: build/app/outputs/flutter-apk/app-production-release.apk"
+```
+
+**Make executable:**
+```bash
+chmod +x scripts/build-dev.sh
+chmod +x scripts/build-staging.sh
+chmod +x scripts/build-production.sh
+```
+
+---
+
+#### Step 4.2: Create Windows Build Scripts
+
+**Create:** `scripts/build-dev.bat`
+
+```batch
+@echo off
+REM Build Development Flavor
+
+echo Building Dev flavor...
+
+REM Android
+echo Building Android Dev...
+call flutter build apk --flavor dev -t lib/main_dev.dart --debug
+
+REM iOS (Windows can't build iOS, show message)
+echo iOS build requires macOS
+
+echo Dev build complete
+echo APK: build\\app\\outputs\\flutter-apk\\app-dev-debug.apk
+```
+
+**Create:** `scripts/build-staging.bat`
+
+```batch
+@echo off
+REM Build Staging Flavor
+
+echo Building Staging flavor...
+
+REM Android
+echo Building Android Staging...
+call flutter build apk --flavor staging -t lib/main_staging.dart --release
+
+REM iOS (Windows can't build iOS, show message)
+echo iOS build requires macOS
+
+echo Staging build complete
+echo APK: build\\app\\outputs\\flutter-apk\\app-staging-release.apk
+```
+
+**Create:** `scripts/build-production.bat`
+
+```batch
+@echo off
+REM Build Production Flavor
+
+echo Building Production flavor...
+
+REM Android
+echo Building Android Production...
+call flutter build apk --flavor production -t lib/main_production.dart --release
+
+REM iOS (Windows can't build iOS, show message)
+echo iOS build requires macOS
+
+echo Production build complete
+echo APK: build\\app\\outputs\\flutter-apk\\app-production-release.apk
+```
+
+---
+
+### Phase 5: VS Code Launch Configuration
+
+**Create:** `.vscode/launch.json`
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dev Flavor",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "args": [
+        "--flavor",
+        "dev"
+      ]
+    },
+    {
+      "name": "Staging Flavor",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": [
+        "--flavor",
+        "staging"
+      ]
+    },
+    {
+      "name": "Production Flavor",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": [
+        "--flavor",
+        "production"
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## Summary & Output
+
+**Return Results:**
+
+```json
+{
+  "status": "success",
+  "ios_schemes_created": {{environments.length}},
+  "android_flavors_created": {{environments.length}},
+  "entry_points_generated": [
+    {{#each environments}}
+    "lib/main_{{this}}.dart"{{#unless @last}},{{/unless}}
+    {{/each}}
+  ],
+  "build_scripts_created": [
+    {{#each environments}}
+    "scripts/build-{{this}}.sh",
+    "scripts/build-{{this}}.bat"{{#unless @last}},{{/unless}}
+    {{/each}}
+  ],
+  "environment_config_path": "lib/core/config/environment.dart",
+  "configuration_files": [
+    "android/app/build.gradle (updated)",
+    "ios/Runner/Info.plist (updated)",
+    "lib/main_common.dart (created)",
+    ".vscode/launch.json (created)"
+  ],
+  "next_steps": [
+    "Run iOS configuration: sh ios/configure-xcode-flavors.sh",
+    "Test dev flavor: flutter run --flavor dev -t lib/main_dev.dart",
+    "Test staging flavor: flutter run --flavor staging -t lib/main_staging.dart",
+    "Test production flavor: flutter run --flavor production -t lib/main_production.dart",
+    "Build release: sh scripts/build-production.sh"
+  ]
+}
+```
+
+---
+
+## Success Criteria
+
+Flavor setup succeeds if:
+- ✅ Android build.gradle has productFlavors configuration
+- ✅ iOS Info.plist uses $(DISPLAY_NAME) and $(PRODUCT_BUNDLE_IDENTIFIER)
+- ✅ All entry point files created (main_*.dart)
+- ✅ Common main created with FlavorConfig
+- ✅ Build scripts created for all flavors
+- ✅ VS Code launch configurations created
+- ✅ No Flutter errors (`flutter analyze` passes)
+
+---
+
+## Usage Examples
+
+### Run specific flavor:
+```bash
+# Development
+flutter run --flavor dev -t lib/main_dev.dart
+
+# Staging
+flutter run --flavor staging -t lib/main_staging.dart
+
+# Production
+flutter run --flavor production -t lib/main_production.dart
+```
+
+### Build specific flavor:
+```bash
+# Using build scripts
+sh scripts/build-dev.sh
+sh scripts/build-staging.sh
+sh scripts/build-production.sh
+
+# Or manually
+flutter build apk --flavor production -t lib/main_production.dart --release
+```
+
+### Access flavor config in code:
+```dart
+import 'package:myapp/main_common.dart';
+
+// Get current flavor
+final flavor = FlavorConfig.instance.flavor;
+
+// Check environment
+if (FlavorConfig.instance.isDev) {
+  print('Running in development');
+}
+
+// Use environment-specific API
+final apiUrl = FlavorConfig.instance.apiBaseUrl;
+```
+
+---
+
+## Time Estimate
+
+| Phase | Time |
+|-------|------|
+| Android configuration | 30s |
+| iOS configuration | 45s |
+| Flutter entry points | 30s |
+| Build scripts | 20s |
+| VS Code config | 10s |
+| **Total** | **~2-3 minutes** |
+
+**Compare to manual:** 2-3 hours → **40-60x faster!**
+
+"""

@@ -1,0 +1,1240 @@
+description = "Orchestrates implementation of multiple Flutter features (1-10) from IMPLEMENTATION_PLAN.md with dependency management and automatic commits"
+
+prompt = """
+
+## Smart Defaults (from skill.json)
+
+**Required Inputs:**
+- implementation_plan_path: Path to IMPLEMENTATION_PLAN.md containing all features (default: "docs/IMPLEMENTATION_PLAN.md")
+
+**Optional Inputs (use defaults if not specified):**
+- feature_count: Number of features to implement (1-10) (default: 10)
+- start_from_index: Start from feature N (0-based index, default: 0) (default: 0)
+- auto_commit: Auto-commit after each successful feature implementation (default: true)
+- stop_on_failure: Stop orchestration if a feature fails (default: false, continues) (default: false)
+- test_coverage_target: Minimum test coverage for all features (default: 70)
+- dry_run: Preview implementation plan without executing (default: false)
+
+**Interactive Prompt Strategy:**
+Ask user for input ONLY if:
+1. Required input has no default value
+2. User explicitly wants to override a default
+
+For each input, prompt with format:
+  "input_name? (press Enter for default_value)": 
+
+
+## Gemini CLI Specific Features
+
+**1. Inline Arguments Support:**
+If user provides arguments inline, parse them:
+  Example: /skills:automation:code-reviewer {{args}}
+  If args = "security lib/features/auth":
+    - review_type = "security"
+    - target_path = "lib/features/auth"
+
+**2. 1M Token Context Utilization:**
+You have access to Gemini's 1M token context window:
+- Load entire codebase for comprehensive analysis
+- Process massive PRDs (up to 400 pages of requirements)
+- Analyze all 32 PRPROMPTS files simultaneously
+- Cross-reference patterns across the entire project
+- No need to ask "should I read more files?" - just load everything
+
+**3. Free Tier Optimization:**
+Gemini offers industry-leading free tier:
+- 60 requests/minute
+- 1,000 requests/day
+- No credit card required
+
+Optimize usage by:
+- Batching related operations in single requests
+- Using full 1M context to avoid multiple round-trips
+- Caching analysis results for reuse
+
+**4. ReAct Loop Integration:**
+Leverage Gemini's ReAct (Reason and Act) agent mode:
+- Break complex tasks into reasoning steps
+- Execute actions based on reasoning
+- Iterate until task completion
+- Especially useful for multi-file operations
+
+
+# Automation Orchestrator Skill
+
+## Skill Overview
+
+You are an expert automation engineer specializing in orchestrating large-scale Flutter development workflows. This skill automates the implementation of multiple features (1-10) from `IMPLEMENTATION_PLAN.md`, managing dependencies, handling failures, and creating atomic commits for each feature.
+
+**What This Skill Does:**
+- Parses complete IMPLEMENTATION_PLAN.md with all features
+- Builds dependency graph to determine execution order
+- Implements features sequentially using feature-implementer skill
+- Handles feature dependencies (e.g., "Profile" depends on "Authentication")
+- Auto-commits each successful feature implementation
+- Provides detailed progress tracking and error recovery
+- Generates comprehensive orchestration report
+
+**Execution Time:** 5-10 minutes per feature (50-100 minutes for 10 features)
+
+---
+
+## Prerequisites
+
+Before running this skill, verify:
+
+1. **Flutter Bootstrapper Completed:**
+   ```bash
+   # Check Clean Architecture structure exists
+   test -d lib/features && test -d lib/core
+   ```
+
+2. **IMPLEMENTATION_PLAN.md Exists:**
+   ```bash
+   test -f docs/IMPLEMENTATION_PLAN.md
+   ```
+
+3. **Git Repository Clean:**
+   ```bash
+   # No uncommitted changes
+   git status --porcelain | wc -l  # Should be 0
+   ```
+
+4. **PRPROMPTS Files Present:**
+   ```bash
+   ls PRPROMPTS/*.md | wc -l  # Should be 32
+   ```
+
+**If prerequisites not met:**
+- Run `@claude use skill automation/flutter-bootstrapper` first
+- Commit any pending changes: `git add . && git commit -m "WIP: Save progress"`
+
+---
+
+## Step 1: Parse IMPLEMENTATION_PLAN.md
+
+### 1.1 Read Complete Implementation Plan
+
+```bash
+# Display full implementation plan
+cat docs/IMPLEMENTATION_PLAN.md
+```
+
+**Expected Structure:**
+
+```markdown
+# Implementation Plan
+
+## Phase 1: Core Features (Week 1-2)
+
+### Feature 1: Authentication
+**Priority:** HIGH
+**Estimated Time:** 6-8 hours
+**Dependencies:** None
+
+**Requirements:**
+- Email/password authentication
+- JWT token management
+- Session persistence
+
+**API Endpoints:**
+- POST /api/auth/login
+- POST /api/auth/register
+
+### Feature 2: User Profile
+**Priority:** HIGH
+**Estimated Time:** 4-6 hours
+**Dependencies:** Authentication
+
+**Requirements:**
+- View user profile
+- Edit profile information
+- Upload profile photo
+
+**API Endpoints:**
+- GET /api/users/me
+- PUT /api/users/me
+
+## Phase 2: Secondary Features (Week 3-4)
+
+### Feature 3: Product Catalog
+**Priority:** MEDIUM
+**Estimated Time:** 8-10 hours
+**Dependencies:** None
+
+...
+```
+
+### 1.2 Extract All Features
+
+**Parse each feature and extract:**
+
+```markdown
+# Feature Extraction Summary
+
+## Total Features Found: {{total_count}}
+
+### Feature 1: Authentication
+- **Index:** 0
+- **Priority:** HIGH
+- **Phase:** Phase 1
+- **Dependencies:** None
+- **Estimated Time:** 6-8 hours
+
+### Feature 2: User Profile
+- **Index:** 1
+- **Priority:** HIGH
+- **Phase:** Phase 1
+- **Dependencies:** ["Authentication"]
+- **Estimated Time:** 4-6 hours
+
+### Feature 3: Product Catalog
+- **Index:** 2
+- **Priority:** MEDIUM
+- **Phase:** Phase 2
+- **Dependencies:** None
+- **Estimated Time:** 8-10 hours
+
+...
+```
+
+**Validation:**
+- ✅ At least 1 feature found
+- ✅ All features have names
+- ✅ All features have priorities
+- ✅ Dependencies reference valid feature names
+
+**If validation fails:**
+```markdown
+❌ ERROR: IMPLEMENTATION_PLAN.md validation failed
+
+Issues found:
+- Feature 5 missing priority field
+- Feature 7 has invalid dependency "NonExistentFeature"
+- No features found in plan
+
+Please fix IMPLEMENTATION_PLAN.md and try again.
+```
+
+---
+
+## Step 2: Build Dependency Graph
+
+### 2.1 Analyze Feature Dependencies
+
+**Create dependency map:**
+
+```markdown
+# Dependency Graph
+
+## Independent Features (No Dependencies)
+- Feature 1: Authentication
+- Feature 3: Product Catalog
+- Feature 6: Settings
+
+## Dependent Features
+- Feature 2: User Profile
+  - Depends on: Authentication
+  - Can implement after: Feature 1 complete
+
+- Feature 4: Shopping Cart
+  - Depends on: Authentication, Product Catalog
+  - Can implement after: Features 1 & 3 complete
+
+- Feature 5: Order History
+  - Depends on: Authentication, Shopping Cart
+  - Can implement after: Features 1, 3, & 4 complete
+
+## Dependency Tree
+```
+Authentication (1)
+├── User Profile (2)
+├── Shopping Cart (4)
+│   └── Order History (5)
+└── Payment Processing (8)
+
+Product Catalog (3)
+└── Shopping Cart (4)
+    └── Order History (5)
+
+Settings (6)
+
+Notifications (7)
+```
+```
+
+### 2.2 Detect Circular Dependencies
+
+**Check for cycles:**
+
+```javascript
+// Pseudocode for cycle detection
+function detectCycle(features) {
+  visited = new Set();
+  recursionStack = new Set();
+
+  for each feature in features {
+    if (hasCycle(feature, visited, recursionStack)) {
+      return {
+        hasCycle: true,
+        cycle: [...recursionStack]
+      };
+    }
+  }
+  return { hasCycle: false };
+}
+```
+
+**If circular dependency detected:**
+
+```markdown
+❌ ERROR: Circular dependency detected!
+
+Cycle found:
+Feature 4 (Shopping Cart) → Feature 5 (Order History) → Feature 4 (Shopping Cart)
+
+This is not resolvable. Please update IMPLEMENTATION_PLAN.md to break the cycle.
+
+Suggested fix:
+- Remove "Order History" from Shopping Cart dependencies
+- Or remove "Shopping Cart" from Order History dependencies
+```
+
+**Stop orchestration** if circular dependency exists.
+
+### 2.3 Determine Execution Order
+
+**Use topological sort to order features:**
+
+```markdown
+# Execution Order (Topologically Sorted)
+
+## Implementation Sequence
+
+**Round 1 (Parallel Candidates):**
+- Feature 1: Authentication
+- Feature 3: Product Catalog
+- Feature 6: Settings
+- Feature 7: Notifications
+
+**Round 2 (After Round 1):**
+- Feature 2: User Profile (depends on: Authentication)
+- Feature 4: Shopping Cart (depends on: Authentication, Product Catalog)
+
+**Round 3 (After Round 2):**
+- Feature 5: Order History (depends on: Shopping Cart)
+
+**Round 4 (After Round 3):**
+- Feature 8: Payment Processing (depends on: Authentication, Shopping Cart)
+
+**Total Rounds:** 4
+**Sequential Execution Required:** Yes (dependencies present)
+
+**Estimated Total Time:**
+- Sequential: 55-70 hours
+- With this automation: 50-60 minutes (90%+ time savings)
+```
+
+**Apply input constraints:**
+
+```markdown
+# Applying Input Constraints
+
+**Input:**
+- feature_count: {{feature_count}}
+- start_from_index: {{start_from_index}}
+- stop_on_failure: {{stop_on_failure}}
+
+**Filtered Execution Order:**
+
+Starting from index {{start_from_index}}, implementing {{feature_count}} features:
+
+1. Feature {{X}}: {{Name}}
+2. Feature {{Y}}: {{Name}}
+...
+{{feature_count}}. Feature {{Z}}: {{Name}}
+
+**Note:** Dependencies outside this range will cause errors.
+If Feature Y depends on Feature X and X is not in range, Feature Y will fail.
+```
+
+---
+
+## Step 3: Dry Run Preview (Optional)
+
+**If `dry_run: true`, show preview and exit:**
+
+```markdown
+# Orchestration Dry Run Preview
+
+## Summary
+- Total features in plan: {{total}}
+- Features to implement: {{feature_count}}
+- Starting from index: {{start_from_index}}
+- Auto-commit: {{auto_commit}}
+- Stop on failure: {{stop_on_failure}}
+
+## Execution Plan
+
+### Feature 1: Authentication (Index 0)
+- **Priority:** HIGH
+- **Dependencies:** None
+- **Estimated Implementation Time:** 6-8 minutes
+- **Files to Create:** ~25 files
+- **Tests to Write:** ~10 test files
+- **Commit Message:** "feat(auth): implement authentication feature"
+
+### Feature 2: User Profile (Index 1)
+- **Priority:** HIGH
+- **Dependencies:** Authentication ✅ (will be implemented in Feature 1)
+- **Estimated Implementation Time:** 4-6 minutes
+- **Files to Create:** ~20 files
+- **Tests to Write:** ~8 test files
+- **Commit Message:** "feat(profile): implement user profile feature"
+
+...
+
+## Total Estimated Time: {{total_time}} minutes
+
+## Commits to Create: {{commit_count}}
+
+---
+
+**This is a DRY RUN. No files will be created or modified.**
+
+To execute this plan, run again with dry_run: false
+```
+
+**Stop execution** after showing preview.
+
+---
+
+## Step 4: Implement Features Sequentially
+
+**For each feature in execution order:**
+
+### 4.1 Prepare Feature Context
+
+```markdown
+# Implementing Feature {{index + 1}} of {{total}}
+
+## Feature: {{feature_name}}
+
+**Progress:** {{completed}}/{{total}} features complete ({{percentage}}%)
+
+**Details:**
+- Priority: {{priority}}
+- Dependencies: {{dependencies || "None"}}
+- Estimated Time: {{estimated_time}}
+
+**Starting implementation...**
+```
+
+### 4.2 Check Dependencies
+
+**Verify all dependencies have been implemented:**
+
+```markdown
+## Dependency Check
+
+Feature "{{feature_name}}" depends on:
+{{#each dependencies}}
+- {{this}}: {{#if implemented}}✅ Implemented{{else}}❌ Not yet implemented{{/if}}
+{{/each}}
+
+{{#if all_dependencies_met}}
+✅ All dependencies met. Proceeding with implementation.
+{{else}}
+❌ Missing dependencies. Cannot implement this feature yet.
+
+**Resolution:**
+{{#if in_orchestration_range}}
+- These dependencies will be implemented in earlier steps
+- This feature will be skipped and retried later
+{{else}}
+- These dependencies are outside the orchestration range
+- This feature will be marked as failed
+{{/if}}
+{{/if}}
+```
+
+**If dependencies not met:**
+- **Option A:** Skip and retry after dependencies implemented
+- **Option B:** Fail feature if dependencies outside range
+- **Option C:** Stop orchestration if `stop_on_failure: true`
+
+### 4.3 Invoke feature-implementer Skill
+
+**Call feature-implementer for current feature:**
+
+```markdown
+## Invoking feature-implementer Skill
+
+**Input Parameters:**
+- feature_name: "{{feature_name}}"
+- implementation_plan_path: "{{implementation_plan_path}}"
+- test_coverage_target: {{test_coverage_target}}
+- generate_integration_tests: {{index < 3}} (yes for first 3 features)
+
+**Expected Output:**
+- Files created: 20-30 files
+- Test coverage: {{test_coverage_target}}%+
+- Implementation time: 5-10 minutes
+
+---
+
+[Starting feature-implementer execution...]
+```
+
+**Execute feature-implementer skill:**
+
+```typescript
+// Pseudocode
+const result = await featureImplementer.execute({
+  featureName: feature.name,
+  implementationPlanPath: inputs.implementation_plan_path,
+  testCoverageTarget: inputs.test_coverage_target,
+});
+
+if (result.success) {
+  // Continue to Step 4.4
+} else {
+  // Handle failure (Step 4.6)
+}
+```
+
+### 4.4 Validate Implementation
+
+**After feature-implementer completes:**
+
+```markdown
+## Validation
+
+### 1. Flutter Analyze
+```bash
+flutter analyze
+```
+
+{{#if analyze_passed}}
+✅ No issues found
+{{else}}
+❌ {{analyze_issues_count}} issues found:
+{{#each analyze_issues}}
+- {{this.file}}:{{this.line}}: {{this.message}}
+{{/each}}
+
+**Action:** Attempting auto-fix...
+{{/if}}
+
+### 2. Run Tests
+```bash
+flutter test
+```
+
+{{#if tests_passed}}
+✅ All tests passed ({{test_count}} tests)
+{{else}}
+❌ {{failed_test_count}} tests failed:
+{{#each failed_tests}}
+- {{this.name}}: {{this.error}}
+{{/each}}
+
+**Action:** This feature will be marked as failed.
+{{/if}}
+
+### 3. Check Coverage
+```bash
+flutter test --coverage
+```
+
+**Coverage:** {{coverage}}%
+**Target:** {{test_coverage_target}}%
+
+{{#if coverage >= test_coverage_target}}
+✅ Coverage target met
+{{else}}
+⚠️  Coverage below target ({{coverage}}% < {{test_coverage_target}}%)
+**Action:** Feature will still be committed, but noted in report.
+{{/if}}
+
+### 4. Security Validation
+
+**Checking security patterns...**
+
+{{#if feature_has_auth}}
+- JWT token handling: {{jwt_check}}
+- Password security: {{password_check}}
+- Session management: {{session_check}}
+{{/if}}
+
+{{#if feature_has_payments}}
+- PCI-DSS compliance: {{pci_check}}
+- Tokenization: {{tokenization_check}}
+{{/if}}
+
+{{#if all_security_checks_passed}}
+✅ All security checks passed
+{{else}}
+❌ Security issues found (see details above)
+**Action:** Feature marked as failed. Manual review required.
+{{/if}}
+```
+
+### 4.5 Create Git Commit (If auto_commit: true)
+
+**If all validations pass and `auto_commit: true`:**
+
+```markdown
+## Creating Git Commit
+
+**Commit Message:**
+```
+feat({{feature_slug}}): implement {{feature_name}} feature
+
+- {{requirement_1}}
+- {{requirement_2}}
+- {{requirement_3}}
+
+Files created: {{files_created}}
+Tests: {{test_count}} ({{coverage}}% coverage)
+
+Dependencies: {{dependencies || "None"}}
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+**Executing commit:**
+```bash
+git add lib/features/{{feature_slug}}
+git add test/features/{{feature_slug}}
+git commit -m "{{commit_message}}"
+```
+
+{{#if commit_success}}
+✅ Commit created: {{commit_hash}}
+{{else}}
+❌ Commit failed: {{error_message}}
+**Action:** Attempting retry...
+{{/if}}
+```
+
+**Commit Strategy:**
+- ✅ Atomic commits: One commit per feature
+- ✅ Descriptive messages: What was implemented
+- ✅ Include stats: Files, tests, coverage
+- ✅ PRPROMPTS attribution: Co-Authored-By
+
+### 4.6 Handle Failures
+
+**If feature implementation fails:**
+
+```markdown
+## Feature Implementation Failed
+
+**Feature:** {{feature_name}}
+**Error:** {{error_message}}
+
+**Failure Details:**
+{{#if analyze_failed}}
+- Flutter analyze: {{analyze_issues_count}} issues
+{{/if}}
+{{#if tests_failed}}
+- Tests: {{failed_test_count}} failing
+{{/if}}
+{{#if security_failed}}
+- Security validation: {{security_issues_count}} issues
+{{/if}}
+
+**Actions Taken:**
+
+1. **Auto-fix Attempted:**
+   {{#each auto_fix_attempts}}
+   - {{this.description}}: {{this.result}}
+   {{/each}}
+
+2. **Retry Logic:**
+   {{#if retry_attempted}}
+   - Retry attempt {{retry_count}}/{{max_retries}}: {{retry_result}}
+   {{else}}
+   - No retry attempted (max retries: {{max_retries}})
+   {{/if}}
+
+3. **Failure Handling:**
+   {{#if stop_on_failure}}
+   ⛔ **STOPPING ORCHESTRATION** (stop_on_failure: true)
+
+   Remaining features will NOT be implemented:
+   {{#each remaining_features}}
+   - Feature {{this.index}}: {{this.name}}
+   {{/each}}
+
+   **To resume later:**
+   ```bash
+   @claude use skill automation/automation-orchestrator
+   # Input: start_from_index: {{next_index}}
+   ```
+   {{else}}
+   ⏭️  **CONTINUING** to next feature (stop_on_failure: false)
+
+   This failure will be noted in the orchestration report.
+   {{/if}}
+
+4. **Rollback:**
+   {{#if rollback_required}}
+   - Rolling back changes to {{feature_name}}
+   - Removing created files: {{files_to_remove}}
+   - Discarding uncommitted changes: `git checkout -- .`
+   {{else}}
+   - No rollback required (nothing committed)
+   {{/if}}
+
+**Failed Feature Saved to:** `docs/FAILED_FEATURES.md`
+
+---
+
+{{#unless stop_on_failure}}
+Continuing to next feature...
+{{/unless}}
+```
+
+### 4.7 Update Progress Tracking
+
+**After each feature (success or failure):**
+
+```markdown
+## Progress Update
+
+**Completed:** {{completed_count}}/{{total_count}} features
+
+**Status:**
+- ✅ Successful: {{success_count}}
+- ❌ Failed: {{failure_count}}
+- ⏭️  Skipped: {{skipped_count}} (dependency issues)
+
+**Progress Bar:**
+[████████████████████--------] {{percentage}}%
+
+**Time Elapsed:** {{elapsed_time}}
+**Estimated Remaining:** {{estimated_remaining_time}}
+
+**Coverage So Far:**
+- Total files: {{total_files}}
+- Total tests: {{total_tests}}
+- Average coverage: {{average_coverage}}%
+
+---
+
+{{#if more_features}}
+**Next Feature:** {{next_feature_name}}
+**Dependencies:** {{next_feature_dependencies || "None"}}
+
+Continuing in 3 seconds...
+{{else}}
+**All features processed!**
+
+Generating final orchestration report...
+{{/if}}
+```
+
+---
+
+## Step 5: Generate Orchestration Report
+
+**After all features processed:**
+
+```markdown
+# 🎉 Orchestration Complete!
+
+## Summary
+
+**Execution Time:** {{total_time}}
+**Date:** {{completion_date}}
+
+### Features Implemented: {{success_count}}/{{total_count}}
+
+✅ **Successful Features ({{success_count}}):**
+{{#each successful_features}}
+{{@index}}. {{this.name}}
+   - Files created: {{this.files_created}}
+   - Tests: {{this.test_count}} ({{this.coverage}}% coverage)
+   - Time: {{this.execution_time}}
+   - Commit: {{this.commit_hash}}
+{{/each}}
+
+{{#if failed_features}}
+❌ **Failed Features ({{failure_count}}):**
+{{#each failed_features}}
+{{@index}}. {{this.name}}
+   - Error: {{this.error_message}}
+   - Attempted fixes: {{this.auto_fix_attempts}}
+   - Retries: {{this.retry_count}}
+   - Details: See `docs/FAILED_FEATURES.md`
+{{/each}}
+{{/if}}
+
+{{#if skipped_features}}
+⏭️  **Skipped Features ({{skipped_count}}):**
+{{#each skipped_features}}
+{{@index}}. {{this.name}}
+   - Reason: {{this.skip_reason}}
+   - Missing dependencies: {{this.missing_dependencies}}
+{{/each}}
+{{/if}}
+
+## Statistics
+
+### Files Created
+- **Total:** {{total_files}}
+- **Domain Layer:** {{domain_files}}
+- **Data Layer:** {{data_files}}
+- **Presentation Layer:** {{presentation_files}}
+- **Tests:** {{test_files}}
+
+### Testing
+- **Total Tests:** {{total_tests}}
+- **Test Files:** {{test_files}}
+- **Overall Coverage:** {{overall_coverage}}%
+- **Coverage Target:** {{test_coverage_target}}%
+- **Target Met:** {{coverage_meets_target ? "✅ Yes" : "❌ No"}}
+
+### Code Quality
+- **Flutter Analyze:** {{analyze_status}}
+- **Issues Found:** {{analyze_issues_count}}
+- **All Tests Passing:** {{all_tests_passing ? "✅ Yes" : "❌ No"}}
+
+### Git Commits
+- **Commits Created:** {{commits_created}}
+- **All Pushed:** {{all_commits_pushed ? "✅ Yes" : "❌ No (run: git push)"}}
+
+### Security
+- **Security Validations:** {{security_validations_count}}
+- **Issues Found:** {{security_issues_count}}
+- **Compliance Met:** {{compliance_met ? "✅ Yes" : "⚠️  Review required"}}
+
+## Dependency Graph (Final)
+
+```
+{{dependency_tree_visualization}}
+```
+
+## Next Steps
+
+{{#if all_success}}
+### 🎊 All Features Implemented Successfully!
+
+**Recommended Actions:**
+
+1. **Review Generated Code:**
+   ```bash
+   git diff HEAD~{{commits_created}}
+   ```
+
+2. **Run Full Test Suite:**
+   ```bash
+   flutter test --coverage
+   genhtml coverage/lcov.info -o coverage/html
+   open coverage/html/index.html
+   ```
+
+3. **Manual Code Review:**
+   - Check PRPROMPTS compliance
+   - Verify security patterns
+   - Test user flows manually
+
+4. **Push to Remote:**
+   ```bash
+   git push origin {{current_branch}}
+   ```
+
+5. **Create Pull Request:**
+   - Title: "feat: implement {{success_count}} features (automated)"
+   - Description: Link to this orchestration report
+
+6. **Optional: Run QA Audit**
+   ```bash
+   @claude use skill automation/qa-auditor
+   ```
+
+{{else if some_failures}}
+### ⚠️  Some Features Failed
+
+**Immediate Actions:**
+
+1. **Review Failed Features:**
+   ```bash
+   cat docs/FAILED_FEATURES.md
+   ```
+
+2. **Fix Issues Manually:**
+   {{#each failed_features}}
+   - {{this.name}}: {{this.error_message}}
+     - See: `lib/features/{{this.slug}}/`
+     - Fix: {{this.suggested_fix}}
+   {{/each}}
+
+3. **Retry Failed Features:**
+   {{#each failed_features}}
+   ```bash
+   @claude use skill automation/feature-implementer
+   # Input: feature_name: "{{this.name}}"
+   ```
+   {{/each}}
+
+4. **Or Resume Orchestration:**
+   ```bash
+   @claude use skill automation/automation-orchestrator
+   # Input: start_from_index: {{first_failed_index}}
+   ```
+
+**Successful Features Already Committed:**
+- {{success_count}} features are ready to use
+- Commits: {{commit_list}}
+
+{{else}}
+### ❌ All Features Failed
+
+**Troubleshooting:**
+
+1. **Check Prerequisites:**
+   - Flutter bootstrapper completed?
+   - IMPLEMENTATION_PLAN.md valid?
+   - Git repository clean?
+
+2. **Review First Failure:**
+   ```bash
+   cat docs/FAILED_FEATURES.md | head -50
+   ```
+
+3. **Common Issues:**
+   - Invalid API endpoints in IMPLEMENTATION_PLAN.md
+   - Missing data models
+   - Circular dependencies
+
+4. **Get Help:**
+   - Review PRPROMPTS documentation
+   - Check examples: `cat .claude/skills/automation/feature-implementer/examples.md`
+   - Run manual implementation first to debug
+
+{{/if}}
+
+## Report Saved
+
+This report has been saved to:
+- **File:** `docs/ORCHESTRATION_REPORT_{{timestamp}}.md`
+- **Format:** Markdown (can be viewed in GitHub)
+
+---
+
+**Orchestration completed at:** {{completion_timestamp}}
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+```
+
+---
+
+## Step 6: Post-Orchestration Validation
+
+**Run final validation checks:**
+
+### 6.1 Run Flutter Analyze
+
+```bash
+flutter analyze
+```
+
+**Expected:** No issues
+
+**If issues found:**
+```markdown
+⚠️  Flutter analyze found {{issue_count}} issues after orchestration.
+
+**Action Required:**
+These issues should be fixed before merging:
+{{#each issues}}
+- {{this.file}}:{{this.line}}: {{this.message}}
+{{/each}}
+
+Run:
+```bash
+dart format lib/ test/
+flutter analyze
+```
+```
+
+### 6.2 Run Complete Test Suite
+
+```bash
+flutter test --coverage
+```
+
+**Expected:** All tests pass, coverage >= target
+
+**Report:**
+```markdown
+## Test Suite Results
+
+**Tests Run:** {{total_tests}}
+**Passed:** {{passed_tests}}
+**Failed:** {{failed_tests}}
+**Skipped:** {{skipped_tests}}
+
+**Coverage:** {{coverage}}%
+**Target:** {{test_coverage_target}}%
+
+{{#if coverage >= test_coverage_target}}
+✅ Coverage target met!
+{{else}}
+⚠️  Coverage below target. Consider adding more tests.
+{{/if}}
+
+{{#if failed_tests > 0}}
+**Failed Tests:**
+{{#each failed_test_details}}
+- {{this.name}}: {{this.error}}
+{{/each}}
+
+**Action:** Fix these tests before pushing.
+{{/if}}
+```
+
+### 6.3 Check Git Status
+
+```bash
+git status
+git log --oneline -{{commits_created}}
+```
+
+**Verify:**
+- ✅ All changes committed
+- ✅ {{commits_created}} new commits created
+- ✅ No uncommitted files
+
+**If uncommitted files:**
+```markdown
+⚠️  Uncommitted files detected:
+{{#each uncommitted_files}}
+- {{this}}
+{{/each}}
+
+**Action:** Review and commit:
+```bash
+git add .
+git commit -m "chore: cleanup after orchestration"
+```
+```
+
+---
+
+## Error Handling and Recovery
+
+### Common Errors
+
+#### Error 1: Circular Dependency
+
+**Error Message:**
+```
+❌ Circular dependency detected:
+Feature A → Feature B → Feature A
+```
+
+**Solution:**
+1. Open `docs/IMPLEMENTATION_PLAN.md`
+2. Remove one dependency to break the cycle
+3. Re-run orchestration
+
+#### Error 2: Missing Dependency
+
+**Error Message:**
+```
+❌ Feature "User Profile" depends on "Authentication" which is not in implementation range
+```
+
+**Solution:**
+- **Option A:** Include dependency in range: `start_from_index: 0`
+- **Option B:** Remove dependency from IMPLEMENTATION_PLAN.md
+- **Option C:** Implement dependency manually first
+
+#### Error 3: Git Merge Conflict
+
+**Error Message:**
+```
+❌ Git merge conflict detected when committing Feature "Shopping Cart"
+```
+
+**Solution:**
+1. **Resolve conflict:**
+   ```bash
+   git status  # See conflicting files
+   # Edit files to resolve conflicts
+   git add .
+   git commit --no-edit
+   ```
+
+2. **Resume orchestration:**
+   ```bash
+   @claude use skill automation/automation-orchestrator
+   # Input: start_from_index: {{next_feature_index}}
+   ```
+
+#### Error 4: Test Timeout
+
+**Error Message:**
+```
+❌ Tests timed out after 10 minutes for Feature "Video Processing"
+```
+
+**Solution:**
+1. Implement feature manually: `@claude use skill automation/feature-implementer`
+2. Increase timeout in feature-specific tests
+3. Skip this feature: Continue orchestration from next feature
+
+#### Error 5: Out of Memory
+
+**Error Message:**
+```
+❌ Out of memory during code generation for Feature "Large Dataset"
+```
+
+**Solution:**
+1. Implement feature in smaller chunks
+2. Optimize data models (reduce field count)
+3. Implement feature manually with streaming patterns
+
+### Recovery Strategies
+
+#### Strategy 1: Resume from Last Successful
+
+```bash
+# Check last successful commit
+git log --oneline | head -1
+
+# Resume orchestration
+@claude use skill automation/automation-orchestrator
+# Input: start_from_index: {{last_failed_index}}
+```
+
+#### Strategy 2: Manual Fix + Resume
+
+```bash
+# 1. Fix failed feature manually
+cd lib/features/{{failed_feature}}
+# Edit files...
+
+# 2. Commit fix
+git add .
+git commit -m "fix({{feature}}): manual fix after orchestration failure"
+
+# 3. Resume orchestration
+@claude use skill automation/automation-orchestrator
+# Input: start_from_index: {{next_index}}
+```
+
+#### Strategy 3: Skip Failed Feature
+
+```bash
+# Mark feature as "skipped" in IMPLEMENTATION_PLAN.md
+# Add note: "⏭️  SKIPPED: Implemented manually later"
+
+# Continue orchestration
+@claude use skill automation/automation-orchestrator
+# Input: start_from_index: {{failed_index + 1}}
+```
+
+---
+
+## Performance Optimization
+
+### Tip 1: Batch Similar Features
+
+**Group similar features together in IMPLEMENTATION_PLAN.md:**
+
+✅ **Good:**
+```markdown
+### Feature 1: User Login
+### Feature 2: User Registration
+### Feature 3: Password Reset
+(All auth features together)
+```
+
+❌ **Bad:**
+```markdown
+### Feature 1: User Login
+### Feature 2: Product Catalog
+### Feature 3: User Registration
+(Auth features scattered)
+```
+
+**Why:** Reduces context switching, faster implementation
+
+### Tip 2: Parallelize Independent Features
+
+**Although orchestrator runs sequentially, you can run multiple orchestrators:**
+
+```bash
+# Terminal 1: Implement auth features
+@claude use skill automation/automation-orchestrator
+# Input: start_from_index: 0, feature_count: 3
+
+# Terminal 2: Implement catalog features (no auth dependency)
+@claude use skill automation/automation-orchestrator
+# Input: start_from_index: 5, feature_count: 3
+```
+
+**Merge later:**
+```bash
+git checkout main
+git pull
+git merge feature/auth-features
+git merge feature/catalog-features
+```
+
+### Tip 3: Use Dry Run First
+
+**Always preview execution plan:**
+
+```bash
+@claude use skill automation/automation-orchestrator
+# Input: dry_run: true
+
+# Review plan, then execute
+@claude use skill automation/automation-orchestrator
+# Input: dry_run: false
+```
+
+**Why:** Catch dependency issues early, adjust feature count
+
+---
+
+## Skill Completion
+
+When all steps complete:
+
+```markdown
+✅ Automation Orchestration Complete!
+
+📊 Final Summary:
+- Features Implemented: {{success_count}}/{{total_count}}
+- Files Created: {{total_files}}
+- Tests Written: {{total_tests}}
+- Coverage: {{overall_coverage}}%
+- Commits: {{commits_created}}
+- Total Time: {{total_time}}
+
+{{#if all_success}}
+🎉 All features implemented successfully!
+{{else}}
+⚠️  {{failure_count}} features failed. See report for details.
+{{/if}}
+
+📝 Full Report: docs/ORCHESTRATION_REPORT_{{timestamp}}.md
+
+🚀 Ready for code review and deployment!
+```
+
+---
+
+**End of Skill Execution**
+
+"""
