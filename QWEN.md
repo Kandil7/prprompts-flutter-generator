@@ -244,6 +244,109 @@ qwen qa-check                  # Comprehensive compliance audit
 
 ---
 
+## 🎯 Qwen Code Skills (NEW!)
+
+**PRPROMPTS now includes 8 specialized skills available as global TOML slash commands!**
+
+### What Are Qwen Skills?
+
+Skills are pre-built automation workflows available as slash commands in Qwen Code. They provide:
+- 🌍 **Global availability** - Works in every Flutter project
+- 🎯 **Smart defaults** - Minimal user input required (80% reduction)
+- ⚡ **Extended context** - Qwen's 256K-1M tokens analyze entire codebases
+- 🚀 **Nested structure** - Organized: `/skills/category/name`
+
+### Available Skills (8)
+
+**Automation Skills (5):**
+- `/skills/automation/flutter-bootstrapper` - Complete project setup (2 min)
+- `/skills/automation/feature-implementer` - Single feature implementation (10-15 min)
+- `/skills/automation/automation-orchestrator` - Orchestrate 1-10 features (1-2 hours)
+- `/skills/automation/code-reviewer` - 7-step review with scoring (3-10 min)
+- `/skills/automation/qa-auditor` - Comprehensive compliance audit (10-20 min)
+
+**PRPROMPTS Core Skills (2):**
+- `/skills/prprompts-core/phase-generator` - Generate specific phase (30-60 sec)
+- `/skills/prprompts-core/single-file-generator` - Single file generation (10-20 sec)
+
+**Workflow Skills (1):**
+- `/skills/development-workflow/flutter-flavors` - Multi-environment setup (1-2 min)
+
+### Installation
+
+**Automatic (Recommended):**
+```bash
+npm install -g prprompts-flutter-generator
+# Automatically installs 8 Qwen skills if Qwen Code detected
+```
+
+**Manual:**
+```bash
+bash scripts/install-qwen-skills.sh
+# Or Windows PowerShell:
+# powershell -ExecutionPolicy Bypass -File scripts/install-qwen-skills.ps1
+```
+
+### Usage Examples
+
+```bash
+# Start Qwen Code in any Flutter project
+cd your-flutter-project
+qwen
+
+# Use skills via slash commands
+/skills/automation/flutter-bootstrapper
+# ✅ Using smart defaults
+# ⏳ Bootstrapping project...
+# ✅ Complete! 47 files created
+
+/skills/automation/code-reviewer
+# > Review type? (press Enter for 'full'): [Enter]
+# > Target path? (press Enter for 'lib/'): [Enter]
+# ✅ Using defaults: review_type='full', target_path='lib/'
+# 📊 Overall Score: 85/100 (B)
+
+/skills/automation/qa-auditor
+# > Audit type? (full): pre-production
+# > Compliance? HIPAA,PCI-DSS
+# > Generate certificate? y
+# ✅ Score: 92/100 - PASSED
+# ✅ Certificate: docs/HIPAA_CERTIFICATE_2025-10-25.pdf
+```
+
+### Smart Defaults
+
+Skills use intelligent defaults to minimize user input:
+
+**Traditional Approach:**
+```
+Enter target path: lib/
+Enter review type (full/architecture/security/testing/style): full
+Enter severity threshold (critical/high/medium/low/info): medium
+Enable auto-fix? (y/n): n
+Output format (markdown/json/html): markdown
+```
+
+**With Smart Defaults:**
+```
+Review type? (full): [Just press Enter]
+✅ Using defaults: target_path='lib/', review_type='full',
+   severity_threshold='medium', auto_fix=false, output_format='markdown'
+```
+
+**Result:** 80% reduction in required inputs!
+
+### Complete Documentation
+
+📖 **[Qwen Skills Complete Guide](docs/QWEN-SKILLS-GUIDE.md)** - Comprehensive usage guide with:
+- Detailed skill descriptions
+- Smart defaults deep dive
+- Complete workflow examples
+- Troubleshooting guide
+- Performance benchmarks
+
+---
+
 ## Quick Start
 
 ### 1. Create Your PRD
@@ -271,20 +374,36 @@ cat PRPROMPTS/01-feature_scaffold.md
 cat PRPROMPTS/16-security_and_compliance.md
 ```
 
-**🆕 OR use v4.0 automation (recommended!):**
+**🆕 OR use v4.0 automation with skills (recommended!):**
 ```bash
+# Start Qwen Code
+qwen
+
 # Complete project setup (2 min)
-qwen bootstrap-from-prprompts
+/skills/automation/flutter-bootstrapper
 
 # Auto-implement 10 features (1-2 hours)
 # Qwen's extended context analyzes entire codebase!
+/skills/automation/automation-orchestrator
+# > Feature count (1-10)? 10
+
+# Code review
+/skills/automation/code-reviewer
+
+# QA audit with HIPAA compliance
+/skills/automation/qa-auditor
+# > Audit type? pre-production
+# > Compliance? HIPAA
+# > Generate cert? y
+
+# Result: Production-ready app with 85%+ tests + HIPAA certificate!
+```
+
+**Alternative: Use traditional commands:**
+```bash
+qwen bootstrap-from-prprompts
 qwen full-cycle
-# Enter: 10
-
-# Run compliance audit
 qwen qa-check
-
-# Result: Production-ready app with tests!
 ```
 
 ---

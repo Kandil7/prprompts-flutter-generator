@@ -259,6 +259,7 @@ Multi-environment configuration (dev/staging/prod)
 
 **How Skills Work:**
 
+**Claude Code:**
 ```bash
 # Invoke any skill in Claude Code
 @claude use skill automation/code-reviewer
@@ -270,6 +271,26 @@ Multi-environment configuration (dev/staging/prod)
 # Skills execute autonomously with detailed output
 # Example output: Comprehensive review report with scoring
 ```
+
+**Qwen Code (NEW!):**
+```bash
+# Skills available as global TOML slash commands
+qwen
+
+# Use skills with smart defaults
+/skills/automation/code-reviewer
+# > Review type? (full): [Just press Enter]
+# ✅ Using defaults: review_type='full', target_path='lib/'
+
+# Complete automation workflow
+/skills/automation/flutter-bootstrapper
+/skills/automation/automation-orchestrator
+# > Feature count? 10
+/skills/automation/qa-auditor
+# > Generate cert? y
+```
+
+📖 **[Qwen Skills Complete Guide](docs/QWEN-SKILLS-GUIDE.md)** - Comprehensive usage guide with smart defaults, workflows, and examples
 
 **Key Skills Capabilities:**
 
@@ -291,7 +312,10 @@ Multi-environment configuration (dev/staging/prod)
 - Pass/fail with configurable threshold (default 75/100)
 - Certificate generation with expiration dates
 
-📖 **[Complete Skills Documentation](\.claude\skills\index.md)**
+📖 **Documentation:**
+- **[Claude Skills](\.claude\skills\index.md)** - Claude Code skills documentation
+- **[Qwen Skills](docs/QWEN-SKILLS-GUIDE.md)** - Qwen Code TOML slash commands guide (NEW!)
+- **[Qwen Setup](QWEN.md)** - Complete Qwen Code setup with skills installation
 
 ### New Automation Commands
 
