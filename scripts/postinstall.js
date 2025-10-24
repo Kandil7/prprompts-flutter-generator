@@ -115,6 +115,49 @@ function installForAI(ai, aiName) {
   return false;
 }
 
+function installQwenSkills() {
+  if (!commandExists('qwen')) {
+    return false;
+  }
+
+  log('\nInstalling Qwen Code Skills...', 'blue');
+
+  try {
+    const scriptPath = path.join(__dirname, 'install-qwen-skills.sh');
+
+    if (!fs.existsSync(scriptPath)) {
+      log('  ⚠️  Qwen skills installer not found, skipping', 'yellow');
+      return false;
+    }
+
+    // Run installation script
+    if (os.platform() === 'win32') {
+      // On Windows, use bash if available
+      if (commandExists('bash')) {
+        execSync(`bash "${scriptPath}"`, { stdio: 'inherit' });
+      } else {
+        // Use PowerShell script instead
+        const psScriptPath = path.join(__dirname, 'install-qwen-skills.ps1');
+        if (fs.existsSync(psScriptPath)) {
+          execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, { stdio: 'inherit' });
+        } else {
+          log('  ⚠️  No Windows installer found, skipping', 'yellow');
+          return false;
+        }
+      }
+    } else {
+      // macOS/Linux
+      execSync(`bash "${scriptPath}"`, { stdio: 'inherit' });
+    }
+
+    log('\n✓ Qwen Code Skills installed successfully!', 'green');
+    return true;
+  } catch (error) {
+    log(`  ⚠️  Failed to install Qwen skills: ${error.message}`, 'yellow');
+    return false;
+  }
+}
+
 function createPRPROMPTSConfig() {
   const home = os.homedir();
   const prpromptsDir = path.join(home, '.prprompts');
@@ -133,7 +176,8 @@ function createPRPROMPTSConfig() {
     features: {
       auto_update: true,
       telemetry: false,
-      verbose: true
+      verbose: true,
+      qwen_skills: false
     }
   };
 
@@ -193,8 +237,24 @@ function main() {
     }
   });
 
+  // Install Qwen Code Skills (if Qwen is detected)
+  const qwenSkillsInstalled = installQwenSkills();
+
   // Create unified config
   createPRPROMPTSConfig();
+
+  // Update config with Qwen skills status
+  if (qwenSkillsInstalled) {
+    const home = os.homedir();
+    const configFile = path.join(home, '.prprompts', 'config.json');
+    try {
+      const config = JSON.parse(fs.readFileSync(configFile, 'utf8'));
+      config.features.qwen_skills = true;
+      fs.writeFileSync(configFile, JSON.stringify(config, null, 2));
+    } catch (error) {
+      // Ignore config update errors
+    }
+  }
 
   // Summary
   log('\n========================================================', 'cyan');
@@ -202,12 +262,25 @@ function main() {
   log('========================================================\n', 'cyan');
 
   log(`✓ Configured ${successCount} AI assistant(s)`, 'green');
+
+  if (qwenSkillsInstalled) {
+    log('✓ Installed Qwen Code Skills (8 slash commands)', 'green');
+  }
+
   log('\nAvailable commands:', 'blue');
 
   installedAIs.forEach(ai => {
     log(`  ${ai.command} create-prd       - Create PRD interactively`, 'cyan');
     log(`  ${ai.command} gen-prprompts    - Generate all 32 files`, 'cyan');
   });
+
+  if (qwenSkillsInstalled) {
+    log('\n Qwen Code Skills (slash commands):', 'blue');
+    log('   /skills/automation/flutter-bootstrapper', 'cyan');
+    log('   /skills/automation/code-reviewer', 'cyan');
+    log('   /skills/automation/qa-auditor', 'cyan');
+    log('   + 5 more automation skills...', 'cyan');
+  }
 
   log('\nOr use the unified CLI:', 'blue');
   log('  prprompts create               - Create PRD', 'cyan');
