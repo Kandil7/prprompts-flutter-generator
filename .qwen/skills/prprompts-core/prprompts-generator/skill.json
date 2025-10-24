@@ -1,0 +1,112 @@
+{
+  "id": "prprompts-generator",
+  "name": "PRPROMPTS Generator",
+  "version": "1.0.0",
+  "category": "prprompts-core",
+  "description": "Generate all 32 customized PRPROMPTS files from PRD with security-audited patterns",
+  "author": "PRPROMPTS Team",
+  "icon": "📚",
+  "tags": ["prprompts", "generation", "automation", "security"],
+
+  "inputs": {
+    "required": {
+      "prd_path": {
+        "type": "string",
+        "description": "Path to validated PRD file",
+        "default": "docs/PRD.md",
+        "validation": "^docs/.*\\.md$"
+      }
+    },
+    "optional": {
+      "output_dir": {
+        "type": "string",
+        "description": "Output directory for PRPROMPTS files",
+        "default": "PRPROMPTS"
+      },
+      "phases": {
+        "type": "array",
+        "description": "Which phases to generate (1=Core, 2=Quality, 3=Demo)",
+        "default": [1, 2, 3]
+      },
+      "overwrite": {
+        "type": "boolean",
+        "description": "Overwrite existing files",
+        "default": false
+      }
+    }
+  },
+
+  "outputs": {
+    "files_generated": {
+      "type": "array",
+      "description": "List of generated PRPROMPTS files"
+    },
+    "total_files": {
+      "type": "number",
+      "description": "Total number of files generated"
+    },
+    "customizations_applied": {
+      "type": "object",
+      "description": "PRD-based customizations applied"
+    },
+    "warnings": {
+      "type": "array",
+      "description": "Any warnings during generation"
+    }
+  },
+
+  "config": {
+    "interactive": false,
+    "timeout": 90000,
+    "retryable": true,
+    "maxRetries": 2,
+    "cacheable": false,
+    "cacheDuration": 0
+  },
+
+  "dependencies": ["prd-analyzer"],
+
+  "requirements": {
+    "flutter": false,
+    "projectInitialized": false,
+    "prdExists": true,
+    "prpromptsGenerated": false,
+    "gitRepo": false
+  },
+
+  "examples": [
+    {
+      "description": "Generate all 32 PRPROMPTS files",
+      "command": "@claude use skill prprompts-core/prprompts-generator",
+      "expectedOutput": "32 customized guide files in PRPROMPTS/ directory"
+    },
+    {
+      "description": "Generate only Phase 1 (Core)",
+      "command": "@claude use skill prprompts-core/prprompts-generator --phases [1]",
+      "expectedOutput": "10 Phase 1 files generated"
+    },
+    {
+      "description": "Generate with custom output directory",
+      "command": "@claude use skill prprompts-core/prprompts-generator --output_dir guides",
+      "expectedOutput": "Files generated in guides/ directory"
+    }
+  ],
+
+  "cicd": {
+    "testable": true,
+    "mockInputs": {
+      "prd_path": "tests/fixtures/sample-prd.md",
+      "output_dir": "test-output/PRPROMPTS",
+      "overwrite": true
+    },
+    "expectedOutputs": {
+      "total_files": 32,
+      "files_generated": ["01-project_overview.md", "16-security_and_compliance.md"]
+    },
+    "fixtures": [
+      "tests/fixtures/sample-prd.md",
+      "tests/fixtures/healthcare-prd.md",
+      "tests/fixtures/fintech-prd.md"
+    ]
+  }
+}
