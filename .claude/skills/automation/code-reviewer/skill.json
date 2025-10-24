@@ -1,0 +1,115 @@
+{
+  "id": "code-reviewer",
+  "name": "Automated Code Reviewer",
+  "version": "1.0.0",
+  "category": "automation",
+  "status": "implemented",
+  "description": "Automatically reviews Flutter code against PRPROMPTS patterns, Clean Architecture principles, security standards, and test coverage requirements",
+  "author": "PRPROMPTS Team",
+  "tags": [
+    "automation",
+    "code-review",
+    "clean-architecture",
+    "security-review",
+    "test-coverage",
+    "prprompts-validation",
+    "quality-assurance"
+  ],
+  "inputs": {
+    "required": {
+      "target_path": {
+        "type": "string",
+        "description": "Path to code to review (file, directory, or 'all')",
+        "default": "lib/"
+      }
+    },
+    "optional": {
+      "review_type": {
+        "type": "string",
+        "description": "Type of review to perform",
+        "enum": ["full", "architecture", "security", "testing", "style"],
+        "default": "full"
+      },
+      "severity_threshold": {
+        "type": "string",
+        "description": "Minimum severity to report",
+        "enum": ["critical", "high", "medium", "low", "info"],
+        "default": "medium"
+      },
+      "auto_fix": {
+        "type": "boolean",
+        "description": "Automatically fix issues when possible",
+        "default": false
+      },
+      "output_format": {
+        "type": "string",
+        "description": "Output format for review report",
+        "enum": ["markdown", "json", "html"],
+        "default": "markdown"
+      }
+    }
+  },
+  "outputs": {
+    "review_score": {
+      "type": "number",
+      "description": "Overall code quality score (0-100)"
+    },
+    "issues_found": {
+      "type": "number",
+      "description": "Total number of issues found"
+    },
+    "issues_by_severity": {
+      "type": "object",
+      "description": "Count of issues by severity level"
+    },
+    "architecture_score": {
+      "type": "number",
+      "description": "Clean Architecture compliance score (0-100)"
+    },
+    "security_score": {
+      "type": "number",
+      "description": "Security patterns score (0-100)"
+    },
+    "test_coverage": {
+      "type": "number",
+      "description": "Actual test coverage percentage"
+    },
+    "auto_fixes_applied": {
+      "type": "number",
+      "description": "Number of issues automatically fixed"
+    },
+    "report_path": {
+      "type": "string",
+      "description": "Path to generated review report"
+    }
+  },
+  "dependencies": {
+    "required": ["flutter-bootstrapper"],
+    "optional": ["feature-implementer", "prprompts-generator"]
+  },
+  "config": {
+    "timeout": 300000,
+    "retryAttempts": 0,
+    "enableLogging": true,
+    "enableProgress": true
+  },
+  "validation": {
+    "pre_run": [
+      "Check target path exists",
+      "Verify PRPROMPTS files exist",
+      "Check git repository is clean (if auto_fix enabled)"
+    ],
+    "post_run": [
+      "Generate review report",
+      "Run flutter analyze if issues found",
+      "Create fix commit if auto_fix applied"
+    ]
+  },
+  "estimated_execution_time": "3-10 minutes depending on codebase size",
+  "success_criteria": [
+    "Review completed without errors",
+    "Report generated successfully",
+    "All critical issues identified",
+    "Auto-fixes applied if enabled"
+  ]
+}
