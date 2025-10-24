@@ -1,0 +1,186 @@
+{
+  "id": "automation-orchestrator",
+  "name": "Automation Orchestrator",
+  "version": "1.0.0",
+  "category": "automation",
+  "status": "implemented",
+  "description": "Orchestrates implementation of multiple Flutter features (1-10) from IMPLEMENTATION_PLAN.md with dependency management and automatic commits",
+  "author": "PRPROMPTS Team",
+  "tags": [
+    "automation",
+    "orchestration",
+    "batch-processing",
+    "multi-feature",
+    "dependency-management",
+    "auto-commit",
+    "ci-cd-ready"
+  ],
+  "inputs": {
+    "required": {
+      "implementation_plan_path": {
+        "type": "string",
+        "description": "Path to IMPLEMENTATION_PLAN.md containing all features",
+        "default": "docs/IMPLEMENTATION_PLAN.md"
+      }
+    },
+    "optional": {
+      "feature_count": {
+        "type": "number",
+        "description": "Number of features to implement (1-10)",
+        "default": 10,
+        "min": 1,
+        "max": 10
+      },
+      "start_from_index": {
+        "type": "number",
+        "description": "Start from feature N (0-based index, default: 0)",
+        "default": 0,
+        "min": 0
+      },
+      "auto_commit": {
+        "type": "boolean",
+        "description": "Auto-commit after each successful feature implementation",
+        "default": true
+      },
+      "stop_on_failure": {
+        "type": "boolean",
+        "description": "Stop orchestration if a feature fails (default: false, continues)",
+        "default": false
+      },
+      "test_coverage_target": {
+        "type": "number",
+        "description": "Minimum test coverage for all features",
+        "default": 70,
+        "min": 60,
+        "max": 100
+      },
+      "dry_run": {
+        "type": "boolean",
+        "description": "Preview implementation plan without executing",
+        "default": false
+      }
+    }
+  },
+  "outputs": {
+    "features_implemented": {
+      "type": "number",
+      "description": "Number of features successfully implemented"
+    },
+    "features_failed": {
+      "type": "number",
+      "description": "Number of features that failed"
+    },
+    "failed_features": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of failed feature names with error messages"
+    },
+    "total_files_created": {
+      "type": "number",
+      "description": "Total files created across all features"
+    },
+    "total_test_cases": {
+      "type": "number",
+      "description": "Total test cases written"
+    },
+    "overall_coverage": {
+      "type": "number",
+      "description": "Overall test coverage percentage"
+    },
+    "commits_created": {
+      "type": "number",
+      "description": "Number of git commits created"
+    },
+    "total_execution_time": {
+      "type": "string",
+      "description": "Total time taken (e.g., '45 minutes')"
+    },
+    "dependency_graph": {
+      "type": "object",
+      "description": "Map of feature dependencies resolved during orchestration"
+    }
+  },
+  "dependencies": {
+    "required": ["flutter-bootstrapper", "feature-implementer"],
+    "optional": ["prd-analyzer", "code-reviewer", "qa-auditor"]
+  },
+  "config": {
+    "timeout": 3600000,
+    "retryAttempts": 1,
+    "enableLogging": true,
+    "enableProgress": true,
+    "parallelExecution": false
+  },
+  "validation": {
+    "pre_run": [
+      "Check IMPLEMENTATION_PLAN.md exists",
+      "Verify flutter-bootstrapper has been run",
+      "Check git repository is clean (no uncommitted changes)",
+      "Validate feature dependencies are resolvable",
+      "Verify all required PRPROMPTS files exist"
+    ],
+    "post_run": [
+      "Verify all features committed successfully",
+      "Run flutter analyze on entire codebase",
+      "Run flutter test --coverage",
+      "Check overall coverage meets target",
+      "Validate no merge conflicts"
+    ]
+  },
+  "examples": [
+    {
+      "name": "Implement All Features (Auto Mode)",
+      "command": "@claude use skill automation/automation-orchestrator",
+      "description": "Implement all features from IMPLEMENTATION_PLAN.md with auto-commit",
+      "inputs": {
+        "feature_count": 10,
+        "auto_commit": true
+      }
+    },
+    {
+      "name": "Implement First 5 Features",
+      "command": "@claude use skill automation/automation-orchestrator",
+      "description": "Implement only the first 5 high-priority features",
+      "inputs": {
+        "feature_count": 5,
+        "start_from_index": 0
+      }
+    },
+    {
+      "name": "Resume from Feature 6",
+      "command": "@claude use skill automation/automation-orchestrator",
+      "description": "Continue implementation starting from feature 6 (after previous run)",
+      "inputs": {
+        "start_from_index": 5,
+        "feature_count": 5
+      }
+    },
+    {
+      "name": "Dry Run Preview",
+      "command": "@claude use skill automation/automation-orchestrator",
+      "description": "Preview implementation order without executing",
+      "inputs": {
+        "dry_run": true
+      }
+    }
+  ],
+  "documentation": {
+    "readme": "README.md",
+    "examples": "examples.md",
+    "api_reference": "https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/AUTOMATION-GUIDE.md"
+  },
+  "compatibility": {
+    "flutter": ">=3.0.0",
+    "dart": ">=3.0.0",
+    "platforms": ["ios", "android", "web", "windows", "macos", "linux"]
+  },
+  "estimated_execution_time": "5-10 minutes per feature (50-100 minutes for 10 features)",
+  "success_criteria": [
+    "All features implemented successfully",
+    "All commits pushed to repository",
+    "No flutter analyze warnings",
+    "All tests pass",
+    "Overall coverage >= target",
+    "No failed features"
+  ]
+}

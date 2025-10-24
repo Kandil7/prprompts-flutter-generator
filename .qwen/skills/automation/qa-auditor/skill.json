@@ -1,0 +1,94 @@
+{
+  "id": "qa-auditor",
+  "name": "QA Auditor",
+  "version": "1.0.0",
+  "category": "automation",
+  "status": "implemented",
+  "description": "Comprehensive QA audit for Flutter apps covering architecture, security, compliance, testing, and performance with detailed scoring and certification-ready reports",
+  "author": "PRPROMPTS Team",
+  "tags": [
+    "automation",
+    "qa-audit",
+    "compliance",
+    "security-audit",
+    "architecture-audit",
+    "certification",
+    "production-ready"
+  ],
+  "inputs": {
+    "required": {
+      "audit_type": {
+        "type": "string",
+        "description": "Type of audit to perform",
+        "enum": ["full", "pre-production", "compliance", "security"],
+        "default": "full"
+      }
+    },
+    "optional": {
+      "compliance_standards": {
+        "type": "array",
+        "description": "Compliance standards to audit against",
+        "items": { "enum": ["HIPAA", "PCI-DSS", "GDPR", "SOC2", "COPPA", "FERPA"] },
+        "default": []
+      },
+      "generate_certificate": {
+        "type": "boolean",
+        "description": "Generate compliance certificate if audit passes",
+        "default": false
+      },
+      "fail_threshold": {
+        "type": "number",
+        "description": "Minimum score to pass audit (0-100)",
+        "default": 75
+      }
+    }
+  },
+  "outputs": {
+    "overall_score": {
+      "type": "number",
+      "description": "Overall audit score (0-100)"
+    },
+    "audit_passed": {
+      "type": "boolean",
+      "description": "Whether audit passed based on threshold"
+    },
+    "architecture_score": {
+      "type": "number"
+    },
+    "security_score": {
+      "type": "number"
+    },
+    "compliance_score": {
+      "type": "number"
+    },
+    "testing_score": {
+      "type": "number"
+    },
+    "performance_score": {
+      "type": "number"
+    },
+    "critical_issues": {
+      "type": "number",
+      "description": "Count of critical issues that must be fixed"
+    },
+    "report_path": {
+      "type": "string",
+      "description": "Path to detailed audit report"
+    },
+    "certificate_path": {
+      "type": "string",
+      "description": "Path to compliance certificate (if generated)"
+    }
+  },
+  "dependencies": {
+    "required": ["flutter-bootstrapper"],
+    "optional": ["code-reviewer", "prprompts-generator"]
+  },
+  "estimated_execution_time": "10-20 minutes for full audit",
+  "success_criteria": [
+    "Audit completed without errors",
+    "Overall score >= fail_threshold",
+    "Zero critical issues",
+    "All compliance requirements met"
+  ]
+}
