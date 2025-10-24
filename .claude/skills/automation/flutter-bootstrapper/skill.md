@@ -619,6 +619,182 @@ See `PRPROMPTS/16-security_and_compliance.md` for security patterns.
 
 ---
 
+#### Step 3.3: Setup Flutter Flavors (Optional)
+
+**Check if PRD specifies multiple environments:**
+
+If PRD metadata includes `environments: ["dev", "staging", "production"]`, setup Flutter flavors automatically.
+
+**Create:** `lib/core/config/flavor_config.dart`
+
+```dart
+/// Flavor configuration for multi-environment support
+enum Flavor {
+  dev,
+  staging,
+  production,
+}
+
+class FlavorConfig {
+  final Flavor flavor;
+  final String apiBaseUrl;
+  final bool enableAnalytics;
+  final bool enableLogging;
+  final String appName;
+
+  const FlavorConfig({
+    required this.flavor,
+    required this.apiBaseUrl,
+    required this.enableAnalytics,
+    required this.enableLogging,
+    required this.appName,
+  });
+
+  static FlavorConfig? _instance;
+
+  static FlavorConfig get instance {
+    assert(_instance != null, 'FlavorConfig not initialized');
+    return _instance!;
+  }
+
+  static void initialize(FlavorConfig config) {
+    _instance = config;
+  }
+
+  bool get isDev => flavor == Flavor.dev;
+  bool get isStaging => flavor == Flavor.staging;
+  bool get isProduction => flavor == Flavor.production;
+}
+```
+
+**Create:** `lib/main_common.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'core/config/flavor_config.dart';
+
+void mainCommon(FlavorConfig config) {
+  FlavorConfig.initialize(config);
+  runApp(MyApp(config: config));
+}
+
+class MyApp extends StatelessWidget {
+  final FlavorConfig config;
+
+  const MyApp({Key? key, required this.config}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: config.appName,
+      debugShowCheckedModeBanner: !config.isProduction,
+      home: Container(), // Replace with your home page
+    );
+  }
+}
+```
+
+**Create:** `lib/main_dev.dart`, `lib/main_staging.dart`, `lib/main_production.dart`
+
+```dart
+// lib/main_dev.dart
+import 'package:flutter/material.dart';
+import 'main_common.dart';
+import 'core/config/flavor_config.dart';
+
+void main() {
+  const environment = FlavorConfig(
+    flavor: Flavor.dev,
+    apiBaseUrl: '{{dev_api_url_from_prd}}',
+    enableAnalytics: false,
+    enableLogging: true,
+    appName: '{{project_name}} Dev',
+  );
+
+  mainCommon(environment);
+}
+```
+
+**Update:** `android/app/build.gradle`
+
+Add productFlavors configuration:
+
+```gradle
+android {
+    // ... existing configuration ...
+
+    flavorDimensions "environment"
+
+    productFlavors {
+        dev {
+            dimension "environment"
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "{{project_name}} Dev"
+        }
+
+        staging {
+            dimension "environment"
+            applicationIdSuffix ".staging"
+            resValue "string", "app_name", "{{project_name}} Staging"
+        }
+
+        production {
+            dimension "environment"
+            resValue "string", "app_name", "{{project_name}}"
+        }
+    }
+}
+```
+
+**Create:** `scripts/build-dev.sh`, `scripts/build-staging.sh`, `scripts/build-production.sh`
+
+```bash
+#!/bin/bash
+# scripts/build-dev.sh
+
+echo "Building Dev flavor..."
+flutter build apk --flavor dev -t lib/main_dev.dart --debug
+echo "✅ Dev build complete"
+```
+
+**Create:** `.vscode/launch.json`
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dev Flavor",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "args": ["--flavor", "dev"]
+    },
+    {
+      "name": "Staging Flavor",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": ["--flavor", "staging"]
+    },
+    {
+      "name": "Production Flavor",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": ["--flavor", "production"]
+    }
+  ]
+}
+```
+
+**Note:** For complete flavor setup including iOS configuration, run:
+```bash
+@claude use skill development-workflow/flutter-flavors
+```
+
+---
+
 ### Step 4: Summary & Output
 
 **Return Results:**

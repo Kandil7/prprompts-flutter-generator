@@ -1,0 +1,303 @@
+name: Multi-Flavor Build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: 'Specific flavor to build (leave empty for all)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - dev
+          - staging
+          - production
+
+env:
+  FLUTTER_VERSION: '3.24.0'
+
+jobs:
+  # Job 1: Build Android APKs for all flavors
+  build-android:
+    name: Build Android (${{ matrix.flavor }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        flavor: [dev, staging, production]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Build APK (${{ matrix.flavor }})
+        run: |
+          flutter build apk \
+            --flavor ${{ matrix.flavor }} \
+            -t lib/main_${{ matrix.flavor }}.dart \
+            --release \
+            --verbose
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk-${{ matrix.flavor }}
+          path: build/app/outputs/flutter-apk/app-${{ matrix.flavor }}-release.apk
+          retention-days: 30
+
+      - name: Build App Bundle (${{ matrix.flavor }})
+        if: matrix.flavor == 'production'
+        run: |
+          flutter build appbundle \
+            --flavor ${{ matrix.flavor }} \
+            -t lib/main_${{ matrix.flavor }}.dart \
+            --release
+
+      - name: Upload App Bundle artifact
+        if: matrix.flavor == 'production'
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-bundle-${{ matrix.flavor }}
+          path: build/app/outputs/bundle/${{ matrix.flavor }}Release/app-${{ matrix.flavor }}-release.aab
+          retention-days: 30
+
+  # Job 2: Build iOS for all flavors
+  build-ios:
+    name: Build iOS (${{ matrix.flavor }})
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        flavor: [dev, staging, production]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Build iOS (${{ matrix.flavor }})
+        run: |
+          flutter build ios \
+            --flavor ${{ matrix.flavor }} \
+            -t lib/main_${{ matrix.flavor }}.dart \
+            --release \
+            --no-codesign
+
+      - name: Create IPA archive
+        run: |
+          cd build/ios/iphoneos
+          mkdir -p Payload
+          cp -R Runner.app Payload/
+          zip -r app-${{ matrix.flavor }}-release.ipa Payload
+          rm -rf Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa-${{ matrix.flavor }}
+          path: build/ios/iphoneos/app-${{ matrix.flavor }}-release.ipa
+          retention-days: 30
+
+  # Job 3: Build Web for all flavors
+  build-web:
+    name: Build Web (${{ matrix.flavor }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        flavor: [dev, staging, production]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Build Web (${{ matrix.flavor }})
+        run: |
+          flutter build web \
+            --flavor ${{ matrix.flavor }} \
+            -t lib/main_${{ matrix.flavor }}.dart \
+            --release \
+            --web-renderer canvaskit
+
+      - name: Create Web archive
+        run: |
+          cd build/web
+          zip -r ../../web-${{ matrix.flavor }}-release.zip .
+          cd ../..
+
+      - name: Upload Web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-${{ matrix.flavor }}
+          path: web-${{ matrix.flavor }}-release.zip
+          retention-days: 30
+
+  # Job 4: Run tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  # Job 5: Build summary and stats
+  build-summary:
+    name: Build Summary
+    needs: [build-android, build-ios, build-web, test]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Calculate artifact sizes
+        run: |
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifact Sizes" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Platform | Flavor | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|------|" >> $GITHUB_STEP_SUMMARY
+
+          for flavor in dev staging production; do
+            if [ -f "artifacts/android-apk-$flavor/app-$flavor-release.apk" ]; then
+              size=$(du -h "artifacts/android-apk-$flavor/app-$flavor-release.apk" | cut -f1)
+              echo "| Android APK | $flavor | $size |" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            if [ -f "artifacts/android-bundle-$flavor/app-$flavor-release.aab" ]; then
+              size=$(du -h "artifacts/android-bundle-$flavor/app-$flavor-release.aab" | cut -f1)
+              echo "| Android Bundle | $flavor | $size |" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            if [ -f "artifacts/ios-ipa-$flavor/app-$flavor-release.ipa" ]; then
+              size=$(du -h "artifacts/ios-ipa-$flavor/app-$flavor-release.ipa" | cut -f1)
+              echo "| iOS IPA | $flavor | $size |" >> $GITHUB_STEP_SUMMARY
+            fi
+
+            if [ -f "artifacts/web-$flavor/web-$flavor-release.zip" ]; then
+              size=$(du -h "artifacts/web-$flavor/web-$flavor-release.zip" | cut -f1)
+              echo "| Web | $flavor | $size |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+      - name: Job status summary
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Job Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Android Build: ${{ needs.build-android.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- iOS Build: ${{ needs.build-ios.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Web Build: ${{ needs.build-web.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Tests: ${{ needs.test.result }}" >> $GITHUB_STEP_SUMMARY
+
+  # Job 6: Deploy to Firebase App Distribution (optional)
+  deploy-firebase:
+    name: Deploy to Firebase App Distribution
+    needs: [build-android, build-ios]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+
+    strategy:
+      matrix:
+        flavor: [dev, staging]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Android APK
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk-${{ matrix.flavor }}
+          path: artifacts
+
+      - name: Deploy to Firebase App Distribution
+        if: env.FIREBASE_APP_ID != ''
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets[format('FIREBASE_APP_ID_{0}', matrix.flavor)] }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS }}
+          groups: ${{ matrix.flavor == 'dev' && 'internal-testers' || 'qa-team' }}
+          file: artifacts/app-${{ matrix.flavor }}-release.apk
+          releaseNotes: |
+            Build: ${{ github.run_number }}
+            Commit: ${{ github.sha }}
+            Flavor: ${{ matrix.flavor }}
+        env:
+          FIREBASE_APP_ID: ${{ secrets[format('FIREBASE_APP_ID_{0}', matrix.flavor)] }}

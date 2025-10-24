@@ -49,6 +49,14 @@
         "progress-tracker",
         "state-manager"
       ]
+    },
+    "development-workflow": {
+      "name": "Development Workflow",
+      "description": "Development environment and workflow configuration skills",
+      "icon": "🎨",
+      "skills": [
+        "flutter-flavors"
+      ]
     }
   },
   "workflows": {
@@ -64,6 +72,7 @@
         "prd-creator",
         "prprompts-generator",
         "flutter-bootstrapper",
+        "flutter-flavors",
         "automation-orchestrator",
         "qa-auditor"
       ]
@@ -76,6 +85,7 @@
         "prd-analyzer",
         "prprompts-generator",
         "flutter-bootstrapper",
+        "flutter-flavors",
         "compliance-checker",
         "security-validator",
         "feature-implementer",

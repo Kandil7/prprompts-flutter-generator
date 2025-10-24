@@ -20,6 +20,9 @@ curl -o docs/PRD.md https://raw.githubusercontent.com/Kandil7/prprompts-flutter-
 # 4. Bootstrap complete ERP structure
 @claude use skill automation/flutter-bootstrapper
 
+# 5. Setup multi-environment flavors (dev/staging/production)
+@claude use skill development-workflow/flutter-flavors
+
 # ✅ Complete ERP project ready!
 ```
 
@@ -176,15 +179,57 @@ curl -o docs/PRD.md https://raw.githubusercontent.com/Kandil7/prprompts-flutter-
 
 ---
 
+## 🎨 Multi-Environment Flavors
+
+### Running Different Environments
+
+```bash
+# Development - Test ERP with mock data
+flutter run --flavor dev -t lib/main_dev.dart
+
+# Staging - QA testing with real backend
+flutter run --flavor staging -t lib/main_staging.dart
+
+# Production - Live ERP system
+flutter run --flavor production -t lib/main_production.dart
+```
+
+### Building for Deployment
+
+```bash
+# Build development APK for testing
+flutter build apk --flavor dev -t lib/main_dev.dart --debug
+
+# Build staging APK for QA team
+flutter build apk --flavor staging -t lib/main_staging.dart --release
+
+# Build production app bundle for Play Store
+flutter build appbundle --flavor production -t lib/main_production.dart --release
+
+# Build production iOS for App Store
+flutter build ios --flavor production -t lib/main_production.dart --release
+```
+
+### Environment-Specific Configuration
+
+| Environment | API Endpoint | Features | Purpose |
+|-------------|--------------|----------|---------|
+| **Dev** | dev-api.erp.com | Mock data, All features unlocked, Debug logging | Development & Testing |
+| **Staging** | staging-api.erp.com | Real data, QA testing, Analytics enabled | Pre-production QA |
+| **Production** | api.erp.com | Live data, Full security, Compliance enabled | Live ERP system |
+
+---
+
 ## 📅 Development Timeline
 
 ### Week 1: Setup & Planning
 - ✅ PRD creation and validation
 - ✅ PRPROMPTS generation
 - ✅ Project bootstrapping
+- ✅ Flutter flavors setup (dev/staging/production)
 - ✅ Architecture documentation
 
-**Deliverable:** Complete project structure with implementation plan
+**Deliverable:** Complete project structure with multi-environment support and implementation plan
 
 ---
 

@@ -1,0 +1,139 @@
+{
+  "id": "flutter-flavors",
+  "name": "Flutter Flavors Setup",
+  "version": "1.0.0",
+  "category": "development-workflow",
+  "description": "Comprehensive Flutter flavors configuration for multi-environment development (dev, staging, production)",
+  "author": "PRPROMPTS Team",
+  "icon": "🎨",
+  "tags": ["flutter", "flavors", "environments", "build-variants", "xcode-schemes", "android", "ios"],
+
+  "inputs": {
+    "required": {
+      "environments": {
+        "type": "array",
+        "description": "List of environments (e.g., ['dev', 'staging', 'production'])",
+        "default": ["dev", "staging", "production"]
+      }
+    },
+    "optional": {
+      "app_name_suffix": {
+        "type": "boolean",
+        "description": "Add environment suffix to app name (e.g., 'MyApp Dev')",
+        "default": true
+      },
+      "bundle_id_suffix": {
+        "type": "boolean",
+        "description": "Add environment suffix to bundle ID (e.g., 'com.example.app.dev')",
+        "default": true
+      },
+      "custom_icons": {
+        "type": "boolean",
+        "description": "Generate flavor-specific app icons",
+        "default": false
+      },
+      "environment_config": {
+        "type": "object",
+        "description": "Environment-specific configuration (API URLs, feature flags, etc.)",
+        "default": {
+          "dev": {
+            "api_url": "https://dev-api.example.com",
+            "enable_analytics": false,
+            "enable_logging": true
+          },
+          "staging": {
+            "api_url": "https://staging-api.example.com",
+            "enable_analytics": true,
+            "enable_logging": true
+          },
+          "production": {
+            "api_url": "https://api.example.com",
+            "enable_analytics": true,
+            "enable_logging": false
+          }
+        }
+      }
+    }
+  },
+
+  "outputs": {
+    "ios_schemes_created": {
+      "type": "number",
+      "description": "Number of Xcode schemes created"
+    },
+    "android_flavors_created": {
+      "type": "number",
+      "description": "Number of Android build variants created"
+    },
+    "entry_points_generated": {
+      "type": "array",
+      "description": "List of generated entry point files (main_*.dart)"
+    },
+    "build_scripts_created": {
+      "type": "array",
+      "description": "List of generated build scripts"
+    },
+    "environment_config_path": {
+      "type": "string",
+      "description": "Path to environment configuration file"
+    }
+  },
+
+  "config": {
+    "interactive": false,
+    "timeout": 180000,
+    "retryable": true,
+    "maxRetries": 2,
+    "cacheable": false,
+    "cacheDuration": 0
+  },
+
+  "dependencies": [],
+
+  "requirements": {
+    "flutter": true,
+    "projectInitialized": true,
+    "prdExists": false,
+    "prpromptsGenerated": false,
+    "gitRepo": true
+  },
+
+  "examples": [
+    {
+      "description": "Setup standard 3 flavors (dev, staging, production)",
+      "command": "@claude use skill development-workflow/flutter-flavors",
+      "expectedOutput": "Complete flavor configuration with iOS schemes, Android variants, entry points, and build scripts"
+    },
+    {
+      "description": "Setup custom environments",
+      "command": "@claude use skill development-workflow/flutter-flavors --environments '[\"dev\", \"qa\", \"uat\", \"prod\"]'",
+      "expectedOutput": "4 flavor configurations with custom environment names"
+    },
+    {
+      "description": "Setup flavors with custom app icons",
+      "command": "@claude use skill development-workflow/flutter-flavors --custom_icons true",
+      "expectedOutput": "Flavor configuration with placeholder icon directories for each environment"
+    },
+    {
+      "description": "Setup minimal flavors (no suffixes)",
+      "command": "@claude use skill development-workflow/flutter-flavors --app_name_suffix false --bundle_id_suffix false",
+      "expectedOutput": "Flavor configuration without automatic name/ID suffixes"
+    }
+  ],
+
+  "cicd": {
+    "testable": true,
+    "mockInputs": {
+      "environments": ["dev", "staging", "production"],
+      "app_name_suffix": true,
+      "bundle_id_suffix": true,
+      "custom_icons": false
+    },
+    "expectedOutputs": {
+      "ios_schemes_created": 3,
+      "android_flavors_created": 3,
+      "entry_points_generated": ["lib/main_dev.dart", "lib/main_staging.dart", "lib/main_production.dart"]
+    },
+    "fixtures": []
+  }
+}
