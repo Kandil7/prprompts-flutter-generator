@@ -1,0 +1,3416 @@
+# Feature Implementation Automation Skill
+
+## Skill Overview
+
+You are an expert Flutter developer specializing in Clean Architecture implementation. This skill automates the complete implementation of Flutter features from specifications in `IMPLEMENTATION_PLAN.md`, following PRPROMPTS methodology with comprehensive testing and security validation.
+
+**What This Skill Does:**
+- Reads feature specifications from IMPLEMENTATION_PLAN.md
+- Implements complete Clean Architecture structure (domain/data/presentation layers)
+- Generates entities, use cases, repositories, data sources
+- Creates BLoC/Cubit state management
+- Builds UI components (screens, widgets)
+- Writes comprehensive tests (unit, widget, integration)
+- Validates security patterns and compliance requirements
+- Ensures 70%+ test coverage
+
+**Execution Time:** 3-8 minutes per feature
+
+---
+
+## Prerequisites
+
+Before running this skill, verify:
+
+1. **Flutter Project Initialized:**
+   ```bash
+   # Check Flutter project exists
+   test -f pubspec.yaml || echo "❌ Not a Flutter project"
+   ```
+
+2. **IMPLEMENTATION_PLAN.md Exists:**
+   ```bash
+   # Check implementation plan
+   test -f docs/IMPLEMENTATION_PLAN.md || echo "❌ IMPLEMENTATION_PLAN.md not found"
+   ```
+
+3. **PRPROMPTS Files Present:**
+   ```bash
+   # Check PRPROMPTS directory
+   test -d PRPROMPTS || echo "❌ PRPROMPTS directory not found"
+   ls PRPROMPTS/*.md | wc -l  # Should show 32 files
+   ```
+
+4. **Flutter Bootstrapper Completed:**
+   - Clean Architecture folder structure exists: `lib/features/`, `lib/core/`
+   - Core utilities configured (dependency injection, error handling, network)
+
+**If prerequisites not met:**
+- Run `@claude use skill automation/flutter-bootstrapper` first
+
+---
+
+## Step 1: Parse Feature Specification
+
+### 1.1 Read IMPLEMENTATION_PLAN.md
+
+**Read the entire implementation plan:**
+
+```bash
+# Display implementation plan
+cat docs/IMPLEMENTATION_PLAN.md
+```
+
+**Expected Structure:**
+```markdown
+# Implementation Plan
+
+## Phase 1: Core Features (Week 1-2)
+
+### Feature 1: Authentication
+**Priority:** HIGH
+**Estimated Time:** 6-8 hours
+**Dependencies:** None
+
+**Requirements:**
+- Email/password authentication
+- JWT token management
+- Biometric authentication (iOS/Android)
+- Session persistence
+
+**User Stories:**
+- As a user, I can register with email/password
+- As a user, I can log in with email/password
+- As a user, I can use Face ID/Touch ID to log in
+- As a user, I stay logged in after closing the app
+
+**Acceptance Criteria:**
+- [ ] User can register with valid email/password
+- [ ] User receives email verification
+- [ ] User can log in with verified credentials
+- [ ] JWT token stored securely in FlutterSecureStorage
+- [ ] Biometric auth enabled after first login
+- [ ] Session persists across app restarts
+- [ ] Login screen shows proper validation errors
+
+**Technical Details:**
+- Use firebase_auth or custom backend
+- Store JWT in FlutterSecureStorage (encrypted)
+- Use local_auth package for biometrics
+- Implement auto-logout after 30 minutes inactivity
+- Hash passwords with bcrypt (backend)
+
+**Security Requirements:**
+- NEVER store passwords in plain text
+- Use HTTPS for all auth endpoints
+- Implement rate limiting (5 attempts/15min)
+- JWT expires after 24 hours
+- Refresh token rotation
+
+**API Endpoints:**
+- POST /api/auth/register
+- POST /api/auth/login
+- POST /api/auth/refresh
+- POST /api/auth/logout
+- GET /api/auth/verify-email
+
+**Data Models:**
+```dart
+class User {
+  final String id;
+  final String email;
+  final String? displayName;
+  final String? photoUrl;
+  final bool emailVerified;
+  final DateTime createdAt;
+}
+
+class AuthTokens {
+  final String accessToken;
+  final String refreshToken;
+  final DateTime expiresAt;
+}
+```
+
+**UI Screens:**
+- LoginScreen (lib/features/auth/presentation/pages/login_screen.dart)
+- RegisterScreen (lib/features/auth/presentation/pages/register_screen.dart)
+- ForgotPasswordScreen (lib/features/auth/presentation/pages/forgot_password_screen.dart)
+
+**Tests Required:**
+- Unit tests for use cases (login, register, logout)
+- Unit tests for repositories
+- Widget tests for login/register screens
+- Integration test for complete auth flow
+```
+
+### 1.2 Extract Feature Information
+
+**Parse the feature specified in input:**
+
+From `{{feature_name}}` input, extract:
+- Feature name (e.g., "authentication")
+- Priority level
+- Requirements list
+- User stories
+- Acceptance criteria
+- Technical details
+- Security requirements
+- API endpoints
+- Data models
+- UI screens
+- Test requirements
+
+**Create a feature summary:**
+
+```markdown
+# Feature: {{feature_name}}
+
+## Key Information
+- **Priority:** [HIGH/MEDIUM/LOW]
+- **Estimated Time:** [X hours]
+- **Dependencies:** [List or None]
+
+## Requirements
+[Bulleted list from plan]
+
+## Security Requirements
+[Critical security patterns to implement]
+
+## Architecture Components
+
+### Domain Layer
+- Entities: [List entities to create]
+- Use Cases: [List use cases to create]
+- Repository Contracts: [List repository interfaces]
+
+### Data Layer
+- Models: [List data models]
+- Data Sources: [Remote/Local data sources]
+- Repository Implementations: [Concrete repositories]
+
+### Presentation Layer
+- BLoC/Cubit: [State management files]
+- Screens: [UI screens to build]
+- Widgets: [Reusable widgets]
+
+## Test Strategy
+- Unit Tests: [X files]
+- Widget Tests: [Y files]
+- Integration Tests: [Z files]
+- Target Coverage: {{test_coverage_target}}%
+```
+
+**Validation:**
+- ✅ Feature exists in IMPLEMENTATION_PLAN.md
+- ✅ All required sections present
+- ✅ Data models defined
+- ✅ API endpoints documented
+- ✅ Security requirements specified
+
+**If feature not found in plan:**
+```markdown
+❌ ERROR: Feature "{{feature_name}}" not found in IMPLEMENTATION_PLAN.md
+
+Available features:
+[List all features from plan with priorities]
+
+Please specify a valid feature name or update IMPLEMENTATION_PLAN.md.
+```
+
+---
+
+## Step 2: Implement Domain Layer
+
+The domain layer contains business logic and is independent of frameworks, UI, and external dependencies.
+
+### 2.1 Create Entities
+
+**Entities are pure Dart classes representing core business objects.**
+
+For each entity in the feature:
+
+**File:** `lib/features/{{feature_name}}/domain/entities/{{entity_name}}.dart`
+
+**Template:**
+```dart
+import 'package:equatable/equatable.dart';
+
+/// {{Entity description from plan}}
+///
+/// This entity represents {{business concept explanation}}.
+///
+/// **Business Rules:**
+/// - {{Rule 1}}
+/// - {{Rule 2}}
+///
+/// **Immutability:** This entity is immutable to ensure data consistency
+/// and prevent accidental mutations across the application.
+class {{EntityName}} extends Equatable {
+  /// {{Field description}}
+  final {{Type}} {{fieldName}};
+
+  const {{EntityName}}({
+    required this.{{fieldName}},
+    // ... other fields
+  });
+
+  @override
+  List<Object?> get props => [{{fieldName}}, /* other fields */];
+
+  @override
+  bool get stringify => true;
+
+  /// Creates a copy of this entity with updated fields
+  {{EntityName}} copyWith({
+    {{Type}}? {{fieldName}},
+    // ... other fields
+  }) {
+    return {{EntityName}}(
+      {{fieldName}}: {{fieldName}} ?? this.{{fieldName}},
+      // ... other fields
+    );
+  }
+}
+```
+
+**Example for Authentication Feature:**
+
+**File:** `lib/features/auth/domain/entities/user.dart`
+
+```dart
+import 'package:equatable/equatable.dart';
+
+/// User entity representing an authenticated user in the system.
+///
+/// This entity contains core user information after successful authentication.
+/// It is used throughout the domain layer for authorization and user-specific operations.
+///
+/// **Business Rules:**
+/// - User ID must be unique and non-empty
+/// - Email must be verified for full access
+/// - Display name is optional but recommended for UX
+///
+/// **Security Considerations:**
+/// - Password is NEVER stored in this entity (authentication backend only)
+/// - Sensitive data (email) should be handled according to GDPR/compliance
+class User extends Equatable {
+  /// Unique identifier for the user (from backend)
+  final String id;
+
+  /// User's email address (verified or unverified)
+  final String email;
+
+  /// Display name for UI (optional)
+  final String? displayName;
+
+  /// Profile photo URL (optional)
+  final String? photoUrl;
+
+  /// Whether email has been verified
+  final bool emailVerified;
+
+  /// Account creation timestamp
+  final DateTime createdAt;
+
+  const User({
+    required this.id,
+    required this.email,
+    required this.emailVerified,
+    required this.createdAt,
+    this.displayName,
+    this.photoUrl,
+  });
+
+  @override
+  List<Object?> get props => [
+        id,
+        email,
+        displayName,
+        photoUrl,
+        emailVerified,
+        createdAt,
+      ];
+
+  @override
+  bool get stringify => true;
+
+  /// Creates a copy of this user with updated fields
+  User copyWith({
+    String? id,
+    String? email,
+    String? displayName,
+    String? photoUrl,
+    bool? emailVerified,
+    DateTime? createdAt,
+  }) {
+    return User(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      displayName: displayName ?? this.displayName,
+      photoUrl: photoUrl ?? this.photoUrl,
+      emailVerified: emailVerified ?? this.emailVerified,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+}
+```
+
+**File:** `lib/features/auth/domain/entities/auth_tokens.dart`
+
+```dart
+import 'package:equatable/equatable.dart';
+
+/// Authentication tokens for session management.
+///
+/// Contains JWT access and refresh tokens for maintaining authenticated sessions.
+///
+/// **Security Rules:**
+/// - Tokens are stored in FlutterSecureStorage (encrypted)
+/// - Access token expires after 24 hours (configurable)
+/// - Refresh token rotates on each use
+/// - NEVER log tokens in production
+class AuthTokens extends Equatable {
+  /// JWT access token for API requests
+  final String accessToken;
+
+  /// JWT refresh token for obtaining new access tokens
+  final String refreshToken;
+
+  /// Expiration timestamp for access token
+  final DateTime expiresAt;
+
+  const AuthTokens({
+    required this.accessToken,
+    required this.refreshToken,
+    required this.expiresAt,
+  });
+
+  /// Whether the access token has expired
+  bool get isExpired => DateTime.now().isAfter(expiresAt);
+
+  /// Time remaining until expiration
+  Duration get timeUntilExpiration => expiresAt.difference(DateTime.now());
+
+  @override
+  List<Object?> get props => [accessToken, refreshToken, expiresAt];
+
+  @override
+  bool get stringify => true;
+
+  AuthTokens copyWith({
+    String? accessToken,
+    String? refreshToken,
+    DateTime? expiresAt,
+  }) {
+    return AuthTokens(
+      accessToken: accessToken ?? this.accessToken,
+      refreshToken: refreshToken ?? this.refreshToken,
+      expiresAt: expiresAt ?? this.expiresAt,
+    );
+  }
+}
+```
+
+### 2.2 Create Use Cases
+
+**Use cases contain single-responsibility business operations.**
+
+For each use case in the feature:
+
+**File:** `lib/features/{{feature_name}}/domain/usecases/{{use_case_name}}.dart`
+
+**Template:**
+```dart
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+
+import '../../../../core/error/failures.dart';
+import '../../../../core/usecases/usecase.dart';
+import '../entities/{{entity_name}}.dart';
+import '../repositories/{{repository_name}}.dart';
+
+/// {{Use case description}}
+///
+/// **Business Logic:**
+/// {{Explain what this use case accomplishes}}
+///
+/// **Parameters:**
+/// - {{param1}}: {{description}}
+///
+/// **Returns:**
+/// - Success: {{EntityName}} object
+/// - Failure: {{FailureType}} with error details
+///
+/// **Validation Rules:**
+/// - {{Rule 1}}
+/// - {{Rule 2}}
+class {{UseCaseName}} implements UseCase<{{ReturnType}}, {{ParamsType}}> {
+  final {{RepositoryName}} repository;
+
+  {{UseCaseName}}(this.repository);
+
+  @override
+  Future<Either<Failure, {{ReturnType}}>> call({{ParamsType}} params) async {
+    // Input validation
+    final validationResult = params.validate();
+    if (validationResult != null) {
+      return Left(ValidationFailure(validationResult));
+    }
+
+    // Call repository
+    return await repository.{{methodName}}(
+      params.{{field1}},
+      params.{{field2}},
+    );
+  }
+}
+
+/// Parameters for {{UseCaseName}}
+class {{ParamsName}} extends Equatable {
+  final {{Type}} {{fieldName}};
+
+  const {{ParamsName}}({
+    required this.{{fieldName}},
+  });
+
+  /// Validates parameters before use case execution
+  String? validate() {
+    // Validation logic
+    if ({{fieldName}}.isEmpty) {
+      return '{{FieldName}} cannot be empty';
+    }
+    return null;
+  }
+
+  @override
+  List<Object?> get props => [{{fieldName}}];
+}
+```
+
+**Example for Authentication Feature:**
+
+**File:** `lib/features/auth/domain/usecases/login_with_email.dart`
+
+```dart
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+
+import '../../../../core/error/failures.dart';
+import '../../../../core/usecases/usecase.dart';
+import '../entities/user.dart';
+import '../repositories/auth_repository.dart';
+
+/// Authenticates a user with email and password.
+///
+/// **Business Logic:**
+/// 1. Validates email format and password strength
+/// 2. Sends credentials to authentication backend
+/// 3. Stores JWT tokens securely on success
+/// 4. Returns authenticated User entity
+///
+/// **Security Considerations:**
+/// - Password is transmitted over HTTPS only
+/// - Rate limiting applied (5 attempts per 15 minutes)
+/// - Account locked after 10 failed attempts
+/// - Passwords are NEVER stored locally
+///
+/// **Error Handling:**
+/// - Invalid credentials: AuthFailure with "Invalid email or password"
+/// - Network error: NetworkFailure
+/// - Server error: ServerFailure
+/// - Account locked: AuthFailure with "Account locked, try again in X minutes"
+class LoginWithEmail implements UseCase<User, LoginParams> {
+  final AuthRepository repository;
+
+  LoginWithEmail(this.repository);
+
+  @override
+  Future<Either<Failure, User>> call(LoginParams params) async {
+    // Validate input parameters
+    final validationError = params.validate();
+    if (validationError != null) {
+      return Left(ValidationFailure(validationError));
+    }
+
+    // Attempt login via repository
+    return await repository.loginWithEmail(
+      email: params.email,
+      password: params.password,
+    );
+  }
+}
+
+/// Parameters for email/password login
+class LoginParams extends Equatable {
+  final String email;
+  final String password;
+
+  const LoginParams({
+    required this.email,
+    required this.password,
+  });
+
+  /// Validates login parameters
+  ///
+  /// **Validation Rules:**
+  /// - Email must be valid format (regex)
+  /// - Password must be at least 8 characters
+  /// - Email cannot be empty
+  /// - Password cannot be empty
+  String? validate() {
+    if (email.isEmpty) {
+      return 'Email cannot be empty';
+    }
+
+    // Email regex validation
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    if (!emailRegex.hasMatch(email)) {
+      return 'Please enter a valid email address';
+    }
+
+    if (password.isEmpty) {
+      return 'Password cannot be empty';
+    }
+
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+
+    return null; // Valid
+  }
+
+  @override
+  List<Object?> get props => [email, password];
+}
+```
+
+**File:** `lib/features/auth/domain/usecases/register_with_email.dart`
+
+```dart
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+
+import '../../../../core/error/failures.dart';
+import '../../../../core/usecases/usecase.dart';
+import '../entities/user.dart';
+import '../repositories/auth_repository.dart';
+
+/// Registers a new user with email and password.
+///
+/// **Business Logic:**
+/// 1. Validates email format and password strength
+/// 2. Checks if email already exists (via backend)
+/// 3. Creates new user account
+/// 4. Sends email verification link
+/// 5. Returns User entity (emailVerified = false)
+///
+/// **Password Requirements (PRPROMPTS Security Standard):**
+/// - Minimum 8 characters
+/// - At least 1 uppercase letter
+/// - At least 1 lowercase letter
+/// - At least 1 number
+/// - At least 1 special character
+///
+/// **Compliance:**
+/// - GDPR: User consent obtained during registration
+/// - COPPA: Age verification if required
+/// - Data minimization: Only collect necessary fields
+class RegisterWithEmail implements UseCase<User, RegisterParams> {
+  final AuthRepository repository;
+
+  RegisterWithEmail(this.repository);
+
+  @override
+  Future<Either<Failure, User>> call(RegisterParams params) async {
+    // Validate input parameters
+    final validationError = params.validate();
+    if (validationError != null) {
+      return Left(ValidationFailure(validationError));
+    }
+
+    // Attempt registration via repository
+    return await repository.registerWithEmail(
+      email: params.email,
+      password: params.password,
+      displayName: params.displayName,
+    );
+  }
+}
+
+/// Parameters for email/password registration
+class RegisterParams extends Equatable {
+  final String email;
+  final String password;
+  final String? displayName;
+
+  const RegisterParams({
+    required this.email,
+    required this.password,
+    this.displayName,
+  });
+
+  /// Validates registration parameters
+  ///
+  /// Enforces strong password policy and email format validation
+  String? validate() {
+    // Email validation
+    if (email.isEmpty) {
+      return 'Email cannot be empty';
+    }
+
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    if (!emailRegex.hasMatch(email)) {
+      return 'Please enter a valid email address';
+    }
+
+    // Password validation
+    if (password.isEmpty) {
+      return 'Password cannot be empty';
+    }
+
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+
+    // Password strength requirements
+    final hasUppercase = password.contains(RegExp(r'[A-Z]'));
+    final hasLowercase = password.contains(RegExp(r'[a-z]'));
+    final hasDigit = password.contains(RegExp(r'[0-9]'));
+    final hasSpecialChar = password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+
+    if (!hasUppercase) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!hasLowercase) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!hasDigit) {
+      return 'Password must contain at least one number';
+    }
+    if (!hasSpecialChar) {
+      return 'Password must contain at least one special character';
+    }
+
+    // Display name validation (optional)
+    if (displayName != null && displayName!.length > 50) {
+      return 'Display name must be 50 characters or less';
+    }
+
+    return null; // Valid
+  }
+
+  @override
+  List<Object?> get props => [email, password, displayName];
+}
+```
+
+**Create additional use cases:**
+- `logout.dart` - Logs out user, clears tokens
+- `get_current_user.dart` - Retrieves currently authenticated user
+- `refresh_token.dart` - Refreshes expired access token
+- `verify_email.dart` - Verifies email with token
+- `reset_password.dart` - Initiates password reset flow
+
+### 2.3 Create Repository Interface
+
+**Repository contracts define data access operations without implementation details.**
+
+**File:** `lib/features/{{feature_name}}/domain/repositories/{{repository_name}}.dart`
+
+**Template:**
+```dart
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/failures.dart';
+import '../entities/{{entity_name}}.dart';
+
+/// Abstract repository defining data operations for {{feature_name}}.
+///
+/// This interface is implemented by the data layer and used by use cases.
+/// It follows the Repository Pattern and Dependency Inversion Principle.
+///
+/// **Responsibilities:**
+/// - Define contracts for data operations
+/// - Return Either<Failure, Success> for error handling
+/// - Remain agnostic to data source (API, database, cache)
+///
+/// **Implementation:**
+/// See `lib/features/{{feature_name}}/data/repositories/{{repository_name}}_impl.dart`
+abstract class {{RepositoryName}} {
+  /// {{Method description}}
+  ///
+  /// **Parameters:**
+  /// - {{param1}}: {{description}}
+  ///
+  /// **Returns:**
+  /// - Right({{ReturnType}}): Success
+  /// - Left(Failure): Error occurred
+  ///
+  /// **Possible Failures:**
+  /// - NetworkFailure: No internet connection
+  /// - ServerFailure: Backend error
+  /// - ValidationFailure: Invalid input
+  Future<Either<Failure, {{ReturnType}}>> {{methodName}}({{params}});
+}
+```
+
+**Example for Authentication Feature:**
+
+**File:** `lib/features/auth/domain/repositories/auth_repository.dart`
+
+```dart
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/failures.dart';
+import '../entities/user.dart';
+import '../entities/auth_tokens.dart';
+
+/// Abstract repository for authentication operations.
+///
+/// Defines the contract for all authentication-related data operations.
+/// This interface is implemented by AuthRepositoryImpl in the data layer.
+///
+/// **Design Principles:**
+/// - Dependency Inversion: Domain doesn't depend on data layer
+/// - Single Responsibility: Only authentication operations
+/// - Interface Segregation: Focused, cohesive interface
+///
+/// **Error Handling:**
+/// All methods return Either<Failure, T> for explicit error handling:
+/// - Left(Failure): Operation failed with specific error type
+/// - Right(T): Operation succeeded with result
+abstract class AuthRepository {
+  /// Authenticates user with email and password.
+  ///
+  /// **Flow:**
+  /// 1. Sends credentials to backend via AuthRemoteDataSource
+  /// 2. Receives JWT tokens on success
+  /// 3. Stores tokens in FlutterSecureStorage via AuthLocalDataSource
+  /// 4. Returns User entity
+  ///
+  /// **Security:**
+  /// - Credentials sent over HTTPS only
+  /// - Password NEVER stored locally
+  /// - Tokens encrypted in secure storage
+  ///
+  /// **Possible Failures:**
+  /// - AuthFailure: Invalid credentials or account locked
+  /// - NetworkFailure: No internet connection
+  /// - ServerFailure: Backend error (500, 502, etc.)
+  Future<Either<Failure, User>> loginWithEmail({
+    required String email,
+    required String password,
+  });
+
+  /// Registers new user with email and password.
+  ///
+  /// **Flow:**
+  /// 1. Sends registration data to backend
+  /// 2. Backend creates user account and sends verification email
+  /// 3. Returns User entity with emailVerified = false
+  ///
+  /// **Possible Failures:**
+  /// - AuthFailure: Email already exists
+  /// - ValidationFailure: Invalid email or weak password
+  /// - NetworkFailure: No internet connection
+  /// - ServerFailure: Backend error
+  Future<Either<Failure, User>> registerWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  });
+
+  /// Logs out current user and clears stored tokens.
+  ///
+  /// **Flow:**
+  /// 1. Notifies backend to invalidate tokens (optional)
+  /// 2. Deletes tokens from FlutterSecureStorage
+  /// 3. Clears any cached user data
+  ///
+  /// **Note:** This should always succeed locally, even if backend call fails
+  Future<Either<Failure, void>> logout();
+
+  /// Retrieves currently authenticated user.
+  ///
+  /// **Flow:**
+  /// 1. Checks if tokens exist in secure storage
+  /// 2. Validates token expiration
+  /// 3. Fetches user profile from backend or cache
+  ///
+  /// **Possible Failures:**
+  /// - AuthFailure: No user logged in or token expired
+  /// - NetworkFailure: Cannot reach backend
+  /// - CacheFailure: Local data corrupted
+  Future<Either<Failure, User>> getCurrentUser();
+
+  /// Refreshes expired access token using refresh token.
+  ///
+  /// **Flow:**
+  /// 1. Retrieves refresh token from secure storage
+  /// 2. Exchanges refresh token for new access token
+  /// 3. Stores new tokens (refresh token may rotate)
+  ///
+  /// **Security:**
+  /// - Refresh token rotation (new refresh token on each use)
+  /// - Old refresh token immediately invalidated
+  ///
+  /// **Possible Failures:**
+  /// - AuthFailure: Refresh token invalid or expired
+  /// - NetworkFailure: Cannot reach backend
+  Future<Either<Failure, AuthTokens>> refreshAccessToken();
+
+  /// Verifies user's email address with token.
+  ///
+  /// **Flow:**
+  /// 1. Sends verification token to backend
+  /// 2. Backend marks email as verified
+  /// 3. Returns updated User entity
+  ///
+  /// **Possible Failures:**
+  /// - AuthFailure: Invalid or expired verification token
+  /// - NetworkFailure: Cannot reach backend
+  Future<Either<Failure, User>> verifyEmail(String token);
+
+  /// Initiates password reset flow.
+  ///
+  /// **Flow:**
+  /// 1. Sends password reset request to backend
+  /// 2. Backend sends reset email with token
+  /// 3. Returns success (void)
+  ///
+  /// **Security:**
+  /// - Reset token expires after 1 hour
+  /// - Email sent to registered address only
+  ///
+  /// **Possible Failures:**
+  /// - AuthFailure: Email not found
+  /// - NetworkFailure: Cannot reach backend
+  Future<Either<Failure, void>> resetPassword(String email);
+}
+```
+
+**Domain Layer Summary:**
+
+After Step 2, you should have:
+- ✅ Entities (pure business objects)
+- ✅ Use Cases (single-responsibility operations)
+- ✅ Repository Interface (data access contract)
+- ✅ All files in `lib/features/{{feature_name}}/domain/`
+
+---
+
+## Step 3: Implement Data Layer
+
+The data layer handles data retrieval from various sources (API, database, cache) and implements repository contracts.
+
+### 3.1 Create Data Models
+
+**Models are data transfer objects that convert between JSON and entities.**
+
+For each entity, create a corresponding model:
+
+**File:** `lib/features/{{feature_name}}/data/models/{{model_name}}.dart`
+
+**Template:**
+```dart
+import '../../domain/entities/{{entity_name}}.dart';
+
+/// Data model for {{EntityName}} entity.
+///
+/// Handles JSON serialization/deserialization for API communication.
+/// Extends the domain entity to inherit business logic and properties.
+///
+/// **Responsibilities:**
+/// - Convert JSON to Entity (fromJson)
+/// - Convert Entity to JSON (toJson)
+/// - Handle nullable fields from API
+/// - Provide default values when needed
+class {{ModelName}} extends {{EntityName}} {
+  const {{ModelName}}({
+    required super.{{field1}},
+    required super.{{field2}},
+    // ... other fields
+  });
+
+  /// Creates a {{ModelName}} from JSON received from API.
+  ///
+  /// **JSON Structure:**
+  /// ```json
+  /// {
+  ///   "{{jsonKey1}}": "{{value}}",
+  ///   "{{jsonKey2}}": "{{value}}"
+  /// }
+  /// ```
+  ///
+  /// **Null Handling:**
+  /// - Required fields throw if null
+  /// - Optional fields default to null
+  factory {{ModelName}}.fromJson(Map<String, dynamic> json) {
+    return {{ModelName}}(
+      {{field1}}: json['{{jsonKey1}}'] as {{Type}},
+      {{field2}}: json['{{jsonKey2}}'] as {{Type}},
+      // ... other fields
+    );
+  }
+
+  /// Converts this model to JSON for API requests.
+  ///
+  /// **Output:**
+  /// ```json
+  /// {
+  ///   "{{jsonKey1}}": "{{value}}",
+  ///   "{{jsonKey2}}": "{{value}}"
+  /// }
+  /// ```
+  Map<String, dynamic> toJson() {
+    return {
+      '{{jsonKey1}}': {{field1}},
+      '{{jsonKey2}}': {{field2}},
+      // ... other fields
+    };
+  }
+
+  /// Creates a {{ModelName}} from a {{EntityName}} entity.
+  factory {{ModelName}}.fromEntity({{EntityName}} entity) {
+    return {{ModelName}}(
+      {{field1}}: entity.{{field1}},
+      {{field2}}: entity.{{field2}},
+      // ... other fields
+    );
+  }
+}
+```
+
+**Example for Authentication Feature:**
+
+**File:** `lib/features/auth/data/models/user_model.dart`
+
+```dart
+import '../../domain/entities/user.dart';
+
+/// Data model for User entity.
+///
+/// Handles JSON serialization/deserialization for user data from API.
+///
+/// **API Response Example:**
+/// ```json
+/// {
+///   "id": "user_123456",
+///   "email": "john.doe@example.com",
+///   "display_name": "John Doe",
+///   "photo_url": "https://example.com/avatars/john.jpg",
+///   "email_verified": true,
+///   "created_at": "2024-01-15T10:30:00Z"
+/// }
+/// ```
+class UserModel extends User {
+  const UserModel({
+    required super.id,
+    required super.email,
+    required super.emailVerified,
+    required super.createdAt,
+    super.displayName,
+    super.photoUrl,
+  });
+
+  /// Creates UserModel from JSON response.
+  ///
+  /// **Field Mappings:**
+  /// - id: Required string
+  /// - email: Required string
+  /// - display_name: Optional string (snake_case from API)
+  /// - photo_url: Optional string (snake_case from API)
+  /// - email_verified: Required boolean (snake_case from API)
+  /// - created_at: Required ISO 8601 timestamp (snake_case from API)
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] as String,
+      email: json['email'] as String,
+      displayName: json['display_name'] as String?,
+      photoUrl: json['photo_url'] as String?,
+      emailVerified: json['email_verified'] as bool,
+      createdAt: DateTime.parse(json['created_at'] as String),
+    );
+  }
+
+  /// Converts UserModel to JSON for API requests.
+  ///
+  /// Used when updating user profile or sending user data to backend.
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'display_name': displayName,
+      'photo_url': photoUrl,
+      'email_verified': emailVerified,
+      'created_at': createdAt.toIso8601String(),
+    };
+  }
+
+  /// Creates UserModel from User entity.
+  ///
+  /// Useful when converting domain entities back to models for API calls.
+  factory UserModel.fromEntity(User user) {
+    return UserModel(
+      id: user.id,
+      email: user.email,
+      displayName: user.displayName,
+      photoUrl: user.photoUrl,
+      emailVerified: user.emailVerified,
+      createdAt: user.createdAt,
+    );
+  }
+}
+```
+
+**File:** `lib/features/auth/data/models/auth_tokens_model.dart`
+
+```dart
+import '../../domain/entities/auth_tokens.dart';
+
+/// Data model for AuthTokens entity.
+///
+/// Handles JSON serialization for JWT tokens from authentication API.
+///
+/// **API Response Example:**
+/// ```json
+/// {
+///   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+///   "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+///   "expires_at": "2024-01-16T10:30:00Z"
+/// }
+/// ```
+///
+/// **Security Note:**
+/// Tokens are immediately stored in FlutterSecureStorage and cleared from memory.
+class AuthTokensModel extends AuthTokens {
+  const AuthTokensModel({
+    required super.accessToken,
+    required super.refreshToken,
+    required super.expiresAt,
+  });
+
+  /// Creates AuthTokensModel from JSON response.
+  factory AuthTokensModel.fromJson(Map<String, dynamic> json) {
+    return AuthTokensModel(
+      accessToken: json['access_token'] as String,
+      refreshToken: json['refresh_token'] as String,
+      expiresAt: DateTime.parse(json['expires_at'] as String),
+    );
+  }
+
+  /// Converts to JSON for storage or API requests.
+  Map<String, dynamic> toJson() {
+    return {
+      'access_token': accessToken,
+      'refresh_token': refreshToken,
+      'expires_at': expiresAt.toIso8601String(),
+    };
+  }
+
+  /// Creates AuthTokensModel from AuthTokens entity.
+  factory AuthTokensModel.fromEntity(AuthTokens tokens) {
+    return AuthTokensModel(
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      expiresAt: tokens.expiresAt,
+    );
+  }
+}
+```
+
+### 3.2 Create Data Sources
+
+**Data sources handle direct communication with external systems (API, database).**
+
+#### 3.2.1 Remote Data Source (API)
+
+**File:** `lib/features/{{feature_name}}/data/datasources/{{feature_name}}_remote_data_source.dart`
+
+**Template:**
+```dart
+import 'package:dio/dio.dart';
+
+import '../../../../core/error/exceptions.dart';
+import '../models/{{model_name}}.dart';
+
+/// Remote data source for {{feature_name}} via REST API.
+///
+/// Handles HTTP requests to backend API endpoints.
+/// Throws exceptions on errors (converted to Failures in repository).
+///
+/// **Base URL:** Configured in lib/core/network/api_client.dart
+/// **Authentication:** Bearer token in Authorization header
+abstract class {{FeatureName}}RemoteDataSource {
+  /// {{Method description}}
+  ///
+  /// **Endpoint:** {{HTTP_METHOD}} {{/api/path}}
+  /// **Headers:** Authorization: Bearer {{token}}
+  ///
+  /// **Throws:**
+  /// - ServerException: HTTP 500/502/503
+  /// - NetworkException: No internet connection
+  /// - AuthException: Invalid credentials or token expired
+  Future<{{ModelName}}> {{methodName}}({{params}});
+}
+
+class {{FeatureName}}RemoteDataSourceImpl implements {{FeatureName}}RemoteDataSource {
+  final Dio dio;
+
+  {{FeatureName}}RemoteDataSourceImpl({required this.dio});
+
+  @override
+  Future<{{ModelName}}> {{methodName}}({{params}}) async {
+    try {
+      final response = await dio.{{httpMethod}}(
+        '{{/api/endpoint}}',
+        data: {
+          '{{key1}}': {{value1}},
+          // ... request body
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return {{ModelName}}.fromJson(response.data);
+      } else {
+        throw ServerException(
+          message: 'Unexpected status code: ${response.statusCode}',
+        );
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw NetworkException(message: 'Connection timeout');
+      } else if (e.response?.statusCode == 401 || e.response?.statusCode == 403) {
+        throw AuthException(
+          message: e.response?.data['message'] ?? 'Unauthorized',
+        );
+      } else if (e.response?.statusCode == 400) {
+        throw ValidationException(
+          message: e.response?.data['message'] ?? 'Invalid input',
+        );
+      } else if (e.response?.statusCode != null && e.response!.statusCode! >= 500) {
+        throw ServerException(
+          message: e.response?.data['message'] ?? 'Server error',
+        );
+      } else {
+        throw NetworkException(message: 'Network error: ${e.message}');
+      }
+    } catch (e) {
+      throw ServerException(message: 'Unexpected error: $e');
+    }
+  }
+}
+```
+
+**Example for Authentication Feature:**
+
+**File:** `lib/features/auth/data/datasources/auth_remote_data_source.dart`
+
+```dart
+import 'package:dio/dio.dart';
+
+import '../../../../core/error/exceptions.dart';
+import '../models/user_model.dart';
+import '../models/auth_tokens_model.dart';
+
+/// Remote data source for authentication via REST API.
+///
+/// **Base URL:** https://api.example.com/v1
+/// **Endpoints:**
+/// - POST /auth/register
+/// - POST /auth/login
+/// - POST /auth/logout
+/// - POST /auth/refresh
+/// - GET /auth/me
+/// - POST /auth/verify-email
+/// - POST /auth/reset-password
+abstract class AuthRemoteDataSource {
+  /// Authenticates user with email and password.
+  ///
+  /// **Endpoint:** POST /auth/login
+  /// **Request Body:**
+  /// ```json
+  /// {
+  ///   "email": "user@example.com",
+  ///   "password": "SecurePass123!"
+  /// }
+  /// ```
+  ///
+  /// **Response:**
+  /// ```json
+  /// {
+  ///   "user": { ...user data... },
+  ///   "tokens": { ...tokens... }
+  /// }
+  /// ```
+  ///
+  /// **Throws:**
+  /// - AuthException: Invalid credentials (401)
+  /// - ServerException: Server error (500+)
+  /// - NetworkException: Connection error
+  Future<Map<String, dynamic>> loginWithEmail({
+    required String email,
+    required String password,
+  });
+
+  /// Registers new user.
+  ///
+  /// **Endpoint:** POST /auth/register
+  Future<Map<String, dynamic>> registerWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  });
+
+  /// Logs out user (invalidates refresh token on backend).
+  ///
+  /// **Endpoint:** POST /auth/logout
+  /// **Headers:** Authorization: Bearer {{access_token}}
+  Future<void> logout(String accessToken);
+
+  /// Fetches current user profile.
+  ///
+  /// **Endpoint:** GET /auth/me
+  /// **Headers:** Authorization: Bearer {{access_token}}
+  Future<UserModel> getCurrentUser(String accessToken);
+
+  /// Refreshes access token.
+  ///
+  /// **Endpoint:** POST /auth/refresh
+  /// **Request Body:**
+  /// ```json
+  /// {
+  ///   "refresh_token": "..."
+  /// }
+  /// ```
+  Future<AuthTokensModel> refreshAccessToken(String refreshToken);
+
+  /// Verifies email with token.
+  ///
+  /// **Endpoint:** POST /auth/verify-email
+  Future<UserModel> verifyEmail(String token);
+
+  /// Initiates password reset.
+  ///
+  /// **Endpoint:** POST /auth/reset-password
+  Future<void> resetPassword(String email);
+}
+
+class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  final Dio dio;
+
+  AuthRemoteDataSourceImpl({required this.dio});
+
+  @override
+  Future<Map<String, dynamic>> loginWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await dio.post(
+        '/auth/login',
+        data: {
+          'email': email,
+          'password': password,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return {
+          'user': UserModel.fromJson(response.data['user']),
+          'tokens': AuthTokensModel.fromJson(response.data['tokens']),
+        };
+      } else {
+        throw ServerException(
+          message: 'Unexpected status code: ${response.statusCode}',
+        );
+      }
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow; // Unreachable, but required for type safety
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> registerWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) async {
+    try {
+      final response = await dio.post(
+        '/auth/register',
+        data: {
+          'email': email,
+          'password': password,
+          if (displayName != null) 'display_name': displayName,
+        },
+      );
+
+      if (response.statusCode == 201) {
+        return {
+          'user': UserModel.fromJson(response.data['user']),
+          'tokens': AuthTokensModel.fromJson(response.data['tokens']),
+        };
+      } else {
+        throw ServerException(
+          message: 'Unexpected status code: ${response.statusCode}',
+        );
+      }
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> logout(String accessToken) async {
+    try {
+      await dio.post(
+        '/auth/logout',
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+      );
+    } on DioException catch (e) {
+      // Logout can fail gracefully - local logout still proceeds
+      print('Logout request failed: ${e.message}');
+    }
+  }
+
+  @override
+  Future<UserModel> getCurrentUser(String accessToken) async {
+    try {
+      final response = await dio.get(
+        '/auth/me',
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+      );
+
+      if (response.statusCode == 200) {
+        return UserModel.fromJson(response.data);
+      } else {
+        throw ServerException(
+          message: 'Unexpected status code: ${response.statusCode}',
+        );
+      }
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AuthTokensModel> refreshAccessToken(String refreshToken) async {
+    try {
+      final response = await dio.post(
+        '/auth/refresh',
+        data: {'refresh_token': refreshToken},
+      );
+
+      if (response.statusCode == 200) {
+        return AuthTokensModel.fromJson(response.data);
+      } else {
+        throw ServerException(
+          message: 'Unexpected status code: ${response.statusCode}',
+        );
+      }
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UserModel> verifyEmail(String token) async {
+    try {
+      final response = await dio.post(
+        '/auth/verify-email',
+        data: {'token': token},
+      );
+
+      if (response.statusCode == 200) {
+        return UserModel.fromJson(response.data);
+      } else {
+        throw ServerException(
+          message: 'Unexpected status code: ${response.statusCode}',
+        );
+      }
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    try {
+      await dio.post(
+        '/auth/reset-password',
+        data: {'email': email},
+      );
+    } on DioException catch (e) {
+      _handleDioError(e);
+    }
+  }
+
+  /// Handles Dio errors and converts to custom exceptions.
+  void _handleDioError(DioException e) {
+    if (e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.receiveTimeout ||
+        e.type == DioExceptionType.sendTimeout) {
+      throw NetworkException(message: 'Connection timeout');
+    } else if (e.response?.statusCode == 401) {
+      throw AuthException(
+        message: e.response?.data['message'] ?? 'Invalid credentials',
+      );
+    } else if (e.response?.statusCode == 403) {
+      throw AuthException(
+        message: e.response?.data['message'] ?? 'Access denied',
+      );
+    } else if (e.response?.statusCode == 400) {
+      throw ValidationException(
+        message: e.response?.data['message'] ?? 'Invalid input',
+      );
+    } else if (e.response?.statusCode == 409) {
+      throw ValidationException(
+        message: e.response?.data['message'] ?? 'Email already exists',
+      );
+    } else if (e.response?.statusCode != null && e.response!.statusCode! >= 500) {
+      throw ServerException(
+        message: e.response?.data['message'] ?? 'Server error',
+      );
+    } else {
+      throw NetworkException(message: 'Network error: ${e.message}');
+    }
+  }
+}
+```
+
+#### 3.2.2 Local Data Source (Storage)
+
+**File:** `lib/features/{{feature_name}}/data/datasources/{{feature_name}}_local_data_source.dart`
+
+**Example for Authentication Feature:**
+
+**File:** `lib/features/auth/data/datasources/auth_local_data_source.dart`
+
+```dart
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
+import '../../../../core/error/exceptions.dart';
+import '../models/user_model.dart';
+import '../models/auth_tokens_model.dart';
+
+/// Local data source for authentication using secure storage.
+///
+/// **Storage:**
+/// - FlutterSecureStorage: JWT tokens (encrypted)
+/// - SharedPreferences: User profile (non-sensitive)
+///
+/// **Keys:**
+/// - 'auth_access_token': Access token
+/// - 'auth_refresh_token': Refresh token
+/// - 'auth_tokens_expiry': Token expiration timestamp
+/// - 'cached_user': User profile JSON
+abstract class AuthLocalDataSource {
+  /// Stores authentication tokens securely.
+  Future<void> cacheTokens(AuthTokensModel tokens);
+
+  /// Retrieves cached tokens.
+  ///
+  /// **Throws:**
+  /// - CacheException: Tokens not found or corrupted
+  Future<AuthTokensModel> getCachedTokens();
+
+  /// Deletes stored tokens (logout).
+  Future<void> clearTokens();
+
+  /// Stores user profile in cache.
+  Future<void> cacheUser(UserModel user);
+
+  /// Retrieves cached user profile.
+  ///
+  /// **Throws:**
+  /// - CacheException: User not found in cache
+  Future<UserModel> getCachedUser();
+
+  /// Deletes cached user profile.
+  Future<void> clearUser();
+
+  /// Checks if user is logged in (tokens exist and not expired).
+  Future<bool> isLoggedIn();
+}
+
+class AuthLocalDataSourceImpl implements AuthLocalDataSource {
+  final FlutterSecureStorage secureStorage;
+  final SharedPreferences sharedPreferences;
+
+  // Storage keys
+  static const String _accessTokenKey = 'auth_access_token';
+  static const String _refreshTokenKey = 'auth_refresh_token';
+  static const String _expiryKey = 'auth_tokens_expiry';
+  static const String _cachedUserKey = 'cached_user';
+
+  AuthLocalDataSourceImpl({
+    required this.secureStorage,
+    required this.sharedPreferences,
+  });
+
+  @override
+  Future<void> cacheTokens(AuthTokensModel tokens) async {
+    try {
+      await Future.wait([
+        secureStorage.write(key: _accessTokenKey, value: tokens.accessToken),
+        secureStorage.write(key: _refreshTokenKey, value: tokens.refreshToken),
+        secureStorage.write(
+          key: _expiryKey,
+          value: tokens.expiresAt.toIso8601String(),
+        ),
+      ]);
+    } catch (e) {
+      throw CacheException(message: 'Failed to cache tokens: $e');
+    }
+  }
+
+  @override
+  Future<AuthTokensModel> getCachedTokens() async {
+    try {
+      final accessToken = await secureStorage.read(key: _accessTokenKey);
+      final refreshToken = await secureStorage.read(key: _refreshTokenKey);
+      final expiryString = await secureStorage.read(key: _expiryKey);
+
+      if (accessToken == null || refreshToken == null || expiryString == null) {
+        throw CacheException(message: 'Tokens not found in cache');
+      }
+
+      return AuthTokensModel(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        expiresAt: DateTime.parse(expiryString),
+      );
+    } catch (e) {
+      throw CacheException(message: 'Failed to retrieve tokens: $e');
+    }
+  }
+
+  @override
+  Future<void> clearTokens() async {
+    try {
+      await Future.wait([
+        secureStorage.delete(key: _accessTokenKey),
+        secureStorage.delete(key: _refreshTokenKey),
+        secureStorage.delete(key: _expiryKey),
+      ]);
+    } catch (e) {
+      throw CacheException(message: 'Failed to clear tokens: $e');
+    }
+  }
+
+  @override
+  Future<void> cacheUser(UserModel user) async {
+    try {
+      final userJson = jsonEncode(user.toJson());
+      await sharedPreferences.setString(_cachedUserKey, userJson);
+    } catch (e) {
+      throw CacheException(message: 'Failed to cache user: $e');
+    }
+  }
+
+  @override
+  Future<UserModel> getCachedUser() async {
+    try {
+      final userJson = sharedPreferences.getString(_cachedUserKey);
+      if (userJson == null) {
+        throw CacheException(message: 'User not found in cache');
+      }
+
+      final userMap = jsonDecode(userJson) as Map<String, dynamic>;
+      return UserModel.fromJson(userMap);
+    } catch (e) {
+      throw CacheException(message: 'Failed to retrieve user: $e');
+    }
+  }
+
+  @override
+  Future<void> clearUser() async {
+    try {
+      await sharedPreferences.remove(_cachedUserKey);
+    } catch (e) {
+      throw CacheException(message: 'Failed to clear user: $e');
+    }
+  }
+
+  @override
+  Future<bool> isLoggedIn() async {
+    try {
+      final tokens = await getCachedTokens();
+      return !tokens.isExpired;
+    } catch (e) {
+      return false;
+    }
+  }
+}
+```
+
+### 3.3 Implement Repository
+
+**Repository implementation coordinates data sources and converts exceptions to failures.**
+
+**File:** `lib/features/{{feature_name}}/data/repositories/{{repository_name}}_impl.dart`
+
+**Example for Authentication Feature:**
+
+**File:** `lib/features/auth/data/repositories/auth_repository_impl.dart`
+
+```dart
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/exceptions.dart';
+import '../../../../core/error/failures.dart';
+import '../../../../core/network/network_info.dart';
+import '../../domain/entities/user.dart';
+import '../../domain/entities/auth_tokens.dart';
+import '../../domain/repositories/auth_repository.dart';
+import '../datasources/auth_remote_data_source.dart';
+import '../datasources/auth_local_data_source.dart';
+import '../models/auth_tokens_model.dart';
+
+/// Implementation of AuthRepository.
+///
+/// Coordinates remote and local data sources, handles errors, and ensures
+/// consistent behavior across authentication operations.
+///
+/// **Architecture:**
+/// - Repository Pattern: Abstracts data source details
+/// - Offline-First: Uses cached data when network unavailable
+/// - Error Handling: Converts exceptions to Either<Failure, T>
+///
+/// **Data Flow:**
+/// 1. Check network connectivity (for remote operations)
+/// 2. Attempt remote operation
+/// 3. Cache result locally on success
+/// 4. Fall back to cache on network error (when applicable)
+/// 5. Return Either<Failure, T>
+class AuthRepositoryImpl implements AuthRepository {
+  final AuthRemoteDataSource remoteDataSource;
+  final AuthLocalDataSource localDataSource;
+  final NetworkInfo networkInfo;
+
+  AuthRepositoryImpl({
+    required this.remoteDataSource,
+    required this.localDataSource,
+    required this.networkInfo,
+  });
+
+  @override
+  Future<Either<Failure, User>> loginWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    // Check network connectivity
+    if (!await networkInfo.isConnected) {
+      return const Left(NetworkFailure(message: 'No internet connection'));
+    }
+
+    try {
+      // Attempt remote login
+      final result = await remoteDataSource.loginWithEmail(
+        email: email,
+        password: password,
+      );
+
+      // Extract user and tokens
+      final user = result['user'] as User;
+      final tokens = result['tokens'] as AuthTokensModel;
+
+      // Cache tokens and user
+      await Future.wait([
+        localDataSource.cacheTokens(tokens),
+        localDataSource.cacheUser(result['user']),
+      ]);
+
+      return Right(user);
+    } on AuthException catch (e) {
+      return Left(AuthFailure(message: e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(message: e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: 'Unexpected error: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> registerWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return const Left(NetworkFailure(message: 'No internet connection'));
+    }
+
+    try {
+      final result = await remoteDataSource.registerWithEmail(
+        email: email,
+        password: password,
+        displayName: displayName,
+      );
+
+      final user = result['user'] as User;
+      final tokens = result['tokens'] as AuthTokensModel;
+
+      // Cache tokens and user
+      await Future.wait([
+        localDataSource.cacheTokens(tokens),
+        localDataSource.cacheUser(result['user']),
+      ]);
+
+      return Right(user);
+    } on AuthException catch (e) {
+      return Left(AuthFailure(message: e.message));
+    } on ValidationException catch (e) {
+      return Left(ValidationFailure(message: e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(message: e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: 'Unexpected error: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> logout() async {
+    try {
+      // Get access token for backend logout
+      final tokens = await localDataSource.getCachedTokens();
+
+      // Attempt remote logout (best effort - doesn't fail if network unavailable)
+      if (await networkInfo.isConnected) {
+        try {
+          await remoteDataSource.logout(tokens.accessToken);
+        } catch (e) {
+          // Remote logout failed - continue with local logout
+          print('Remote logout failed: $e');
+        }
+      }
+
+      // Clear local storage (always succeeds)
+      await Future.wait([
+        localDataSource.clearTokens(),
+        localDataSource.clearUser(),
+      ]);
+
+      return const Right(null);
+    } catch (e) {
+      // Logout should always succeed locally
+      return const Right(null);
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> getCurrentUser() async {
+    try {
+      // Check if tokens exist and are valid
+      final isLoggedIn = await localDataSource.isLoggedIn();
+      if (!isLoggedIn) {
+        return const Left(AuthFailure(message: 'No user logged in'));
+      }
+
+      // Try to get cached user first
+      try {
+        final cachedUser = await localDataSource.getCachedUser();
+        return Right(cachedUser);
+      } on CacheException {
+        // Cache miss - fetch from remote
+      }
+
+      // Fetch from remote if network available
+      if (await networkInfo.isConnected) {
+        final tokens = await localDataSource.getCachedTokens();
+        final user = await remoteDataSource.getCurrentUser(tokens.accessToken);
+
+        // Update cache
+        await localDataSource.cacheUser(user);
+
+        return Right(user);
+      } else {
+        return const Left(CacheFailure(message: 'User data not available offline'));
+      }
+    } on AuthException catch (e) {
+      return Left(AuthFailure(message: e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(message: e.message));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: 'Unexpected error: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthTokens>> refreshAccessToken() async {
+    if (!await networkInfo.isConnected) {
+      return const Left(NetworkFailure(message: 'No internet connection'));
+    }
+
+    try {
+      // Get current refresh token
+      final oldTokens = await localDataSource.getCachedTokens();
+
+      // Request new tokens
+      final newTokens = await remoteDataSource.refreshAccessToken(
+        oldTokens.refreshToken,
+      );
+
+      // Cache new tokens
+      await localDataSource.cacheTokens(newTokens);
+
+      return Right(newTokens);
+    } on AuthException catch (e) {
+      // Refresh token expired - user needs to log in again
+      await Future.wait([
+        localDataSource.clearTokens(),
+        localDataSource.clearUser(),
+      ]);
+      return Left(AuthFailure(message: 'Session expired. Please log in again.'));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(message: e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: 'Unexpected error: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> verifyEmail(String token) async {
+    if (!await networkInfo.isConnected) {
+      return const Left(NetworkFailure(message: 'No internet connection'));
+    }
+
+    try {
+      final user = await remoteDataSource.verifyEmail(token);
+
+      // Update cached user
+      await localDataSource.cacheUser(user);
+
+      return Right(user);
+    } on AuthException catch (e) {
+      return Left(AuthFailure(message: e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(message: e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: 'Unexpected error: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> resetPassword(String email) async {
+    if (!await networkInfo.isConnected) {
+      return const Left(NetworkFailure(message: 'No internet connection'));
+    }
+
+    try {
+      await remoteDataSource.resetPassword(email);
+      return const Right(null);
+    } on AuthException catch (e) {
+      return Left(AuthFailure(message: e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(message: e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: 'Unexpected error: $e'));
+    }
+  }
+}
+```
+
+**Data Layer Summary:**
+
+After Step 3, you should have:
+- ✅ Models (JSON serialization)
+- ✅ Remote Data Source (API communication)
+- ✅ Local Data Source (Storage)
+- ✅ Repository Implementation (orchestration)
+- ✅ All files in `lib/features/{{feature_name}}/data/`
+
+---
+
+## Step 4: Implement Presentation Layer
+
+The presentation layer handles UI and state management using BLoC pattern.
+
+### 4.1 Create BLoC/Cubit
+
+**BLoC manages UI state and handles user events.**
+
+For each screen/feature, create BLoC files:
+
+**File Structure:**
+```
+lib/features/{{feature_name}}/presentation/bloc/
+├── {{feature_name}}_bloc.dart
+├── {{feature_name}}_event.dart
+└── {{feature_name}}_state.dart
+```
+
+**Example for Authentication Feature:**
+
+**File:** `lib/features/auth/presentation/bloc/auth_event.dart`
+
+```dart
+import 'package:equatable/equatable.dart';
+
+/// Base class for all authentication events.
+abstract class AuthEvent extends Equatable {
+  const AuthEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+/// Event triggered when user attempts to log in with email/password.
+class LoginWithEmailEvent extends AuthEvent {
+  final String email;
+  final String password;
+
+  const LoginWithEmailEvent({
+    required this.email,
+    required this.password,
+  });
+
+  @override
+  List<Object?> get props => [email, password];
+}
+
+/// Event triggered when user attempts to register.
+class RegisterWithEmailEvent extends AuthEvent {
+  final String email;
+  final String password;
+  final String? displayName;
+
+  const RegisterWithEmailEvent({
+    required this.email,
+    required this.password,
+    this.displayName,
+  });
+
+  @override
+  List<Object?> get props => [email, password, displayName];
+}
+
+/// Event triggered when user logs out.
+class LogoutEvent extends AuthEvent {
+  const LogoutEvent();
+}
+
+/// Event triggered to check if user is already logged in (app startup).
+class CheckAuthStatusEvent extends AuthEvent {
+  const CheckAuthStatusEvent();
+}
+
+/// Event triggered when user requests password reset.
+class ResetPasswordEvent extends AuthEvent {
+  final String email;
+
+  const ResetPasswordEvent({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}
+
+/// Event triggered when user verifies email with token.
+class VerifyEmailEvent extends AuthEvent {
+  final String token;
+
+  const VerifyEmailEvent({required this.token});
+
+  @override
+  List<Object?> get props => [token];
+}
+```
+
+**File:** `lib/features/auth/presentation/bloc/auth_state.dart`
+
+```dart
+import 'package:equatable/equatable.dart';
+
+import '../../domain/entities/user.dart';
+
+/// Base class for all authentication states.
+abstract class AuthState extends Equatable {
+  const AuthState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+/// Initial state when app starts.
+class AuthInitial extends AuthState {
+  const AuthInitial();
+}
+
+/// State when authentication operation is in progress.
+class AuthLoading extends AuthState {
+  const AuthLoading();
+}
+
+/// State when user is authenticated.
+class Authenticated extends AuthState {
+  final User user;
+
+  const Authenticated({required this.user});
+
+  @override
+  List<Object?> get props => [user];
+}
+
+/// State when user is not authenticated.
+class Unauthenticated extends AuthState {
+  const Unauthenticated();
+}
+
+/// State when authentication operation fails.
+class AuthError extends AuthState {
+  final String message;
+
+  const AuthError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
+/// State when password reset email sent successfully.
+class PasswordResetSent extends AuthState {
+  const PasswordResetSent();
+}
+
+/// State when email verification succeeds.
+class EmailVerified extends AuthState {
+  final User user;
+
+  const EmailVerified({required this.user});
+
+  @override
+  List<Object?> get props => [user];
+}
+```
+
+**File:** `lib/features/auth/presentation/bloc/auth_bloc.dart`
+
+```dart
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../domain/usecases/login_with_email.dart';
+import '../../domain/usecases/register_with_email.dart';
+import '../../domain/usecases/logout.dart';
+import '../../domain/usecases/get_current_user.dart';
+import '../../domain/usecases/reset_password.dart';
+import '../../domain/usecases/verify_email.dart';
+import 'auth_event.dart';
+import 'auth_state.dart';
+
+/// BLoC for authentication feature.
+///
+/// Manages authentication state and handles user events.
+///
+/// **States:**
+/// - AuthInitial: App just started
+/// - AuthLoading: Operation in progress
+/// - Authenticated: User logged in
+/// - Unauthenticated: User logged out
+/// - AuthError: Error occurred
+///
+/// **Events:**
+/// - LoginWithEmailEvent: User attempts login
+/// - RegisterWithEmailEvent: User attempts registration
+/// - LogoutEvent: User logs out
+/// - CheckAuthStatusEvent: Check if user already logged in
+/// - ResetPasswordEvent: User requests password reset
+/// - VerifyEmailEvent: User verifies email
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final LoginWithEmail loginWithEmail;
+  final RegisterWithEmail registerWithEmail;
+  final Logout logout;
+  final GetCurrentUser getCurrentUser;
+  final ResetPassword resetPassword;
+  final VerifyEmail verifyEmail;
+
+  AuthBloc({
+    required this.loginWithEmail,
+    required this.registerWithEmail,
+    required this.logout,
+    required this.getCurrentUser,
+    required this.resetPassword,
+    required this.verifyEmail,
+  }) : super(const AuthInitial()) {
+    // Register event handlers
+    on<LoginWithEmailEvent>(_onLoginWithEmail);
+    on<RegisterWithEmailEvent>(_onRegisterWithEmail);
+    on<LogoutEvent>(_onLogout);
+    on<CheckAuthStatusEvent>(_onCheckAuthStatus);
+    on<ResetPasswordEvent>(_onResetPassword);
+    on<VerifyEmailEvent>(_onVerifyEmail);
+  }
+
+  /// Handles login event.
+  Future<void> _onLoginWithEmail(
+    LoginWithEmailEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    final params = LoginParams(
+      email: event.email,
+      password: event.password,
+    );
+
+    final result = await loginWithEmail(params);
+
+    result.fold(
+      (failure) => emit(AuthError(message: failure.message)),
+      (user) => emit(Authenticated(user: user)),
+    );
+  }
+
+  /// Handles registration event.
+  Future<void> _onRegisterWithEmail(
+    RegisterWithEmailEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    final params = RegisterParams(
+      email: event.email,
+      password: event.password,
+      displayName: event.displayName,
+    );
+
+    final result = await registerWithEmail(params);
+
+    result.fold(
+      (failure) => emit(AuthError(message: failure.message)),
+      (user) => emit(Authenticated(user: user)),
+    );
+  }
+
+  /// Handles logout event.
+  Future<void> _onLogout(
+    LogoutEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    final result = await logout(NoParams());
+
+    result.fold(
+      (failure) => emit(AuthError(message: failure.message)),
+      (_) => emit(const Unauthenticated()),
+    );
+  }
+
+  /// Handles check auth status event (app startup).
+  Future<void> _onCheckAuthStatus(
+    CheckAuthStatusEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    final result = await getCurrentUser(NoParams());
+
+    result.fold(
+      (failure) => emit(const Unauthenticated()),
+      (user) => emit(Authenticated(user: user)),
+    );
+  }
+
+  /// Handles password reset event.
+  Future<void> _onResetPassword(
+    ResetPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    final params = ResetPasswordParams(email: event.email);
+    final result = await resetPassword(params);
+
+    result.fold(
+      (failure) => emit(AuthError(message: failure.message)),
+      (_) => emit(const PasswordResetSent()),
+    );
+  }
+
+  /// Handles email verification event.
+  Future<void> _onVerifyEmail(
+    VerifyEmailEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    final params = VerifyEmailParams(token: event.token);
+    final result = await verifyEmail(params);
+
+    result.fold(
+      (failure) => emit(AuthError(message: failure.message)),
+      (user) => emit(EmailVerified(user: user)),
+    );
+  }
+}
+
+// Note: NoParams, ResetPasswordParams, VerifyEmailParams need to be created
+// in their respective use case files
+```
+
+### 4.2 Create UI Screens
+
+**Screens are the top-level pages users navigate to.**
+
+**File:** `lib/features/{{feature_name}}/presentation/pages/{{screen_name}}.dart`
+
+**Example for Authentication Feature:**
+
+**File:** `lib/features/auth/presentation/pages/login_screen.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/di/injection_container.dart';
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
+import '../widgets/custom_text_field.dart';
+import '../widgets/primary_button.dart';
+
+/// Login screen for email/password authentication.
+///
+/// **Features:**
+/// - Email/password input fields
+/// - Form validation
+/// - Loading indicator during authentication
+/// - Error messages
+/// - Navigation to registration and password reset
+///
+/// **Navigation:**
+/// - On successful login: Navigate to HomeScreen
+/// - "Sign Up" button: Navigate to RegisterScreen
+/// - "Forgot Password?" link: Navigate to ForgotPasswordScreen
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _onLoginPressed() {
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(
+            LoginWithEmailEvent(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+            ),
+          );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Log In'),
+      ),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          } else if (state is Authenticated) {
+            // Navigate to home screen
+            Navigator.of(context).pushReplacementNamed('/home');
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is AuthLoading;
+
+          return Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Email field
+                  CustomTextField(
+                    controller: _emailController,
+                    labelText: 'Email',
+                    keyboardType: TextInputType.emailAddress,
+                    enabled: !isLoading,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      final emailRegex = RegExp(
+                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                      );
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Password field
+                  CustomTextField(
+                    controller: _passwordController,
+                    labelText: 'Password',
+                    obscureText: _obscurePassword,
+                    enabled: !isLoading,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      if (value.length < 8) {
+                        return 'Password must be at least 8 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Forgot password link
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              Navigator.of(context).pushNamed('/forgot-password');
+                            },
+                      child: const Text('Forgot Password?'),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Login button
+                  PrimaryButton(
+                    onPressed: isLoading ? null : _onLoginPressed,
+                    isLoading: isLoading,
+                    child: const Text('Log In'),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Sign up link
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account?"),
+                      TextButton(
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                Navigator.of(context).pushNamed('/register');
+                              },
+                        child: const Text('Sign Up'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+**Create additional screens:**
+- `register_screen.dart` - User registration
+- `forgot_password_screen.dart` - Password reset initiation
+
+### 4.3 Create Reusable Widgets
+
+**Widgets are reusable UI components.**
+
+**File:** `lib/features/auth/presentation/widgets/custom_text_field.dart`
+
+```dart
+import 'package:flutter/material.dart';
+
+/// Custom text field with consistent styling.
+///
+/// **Features:**
+/// - Consistent design across app
+/// - Built-in validation
+/// - Password visibility toggle support
+/// - Disabled state styling
+class CustomTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String labelText;
+  final String? hintText;
+  final TextInputType? keyboardType;
+  final bool obscureText;
+  final bool enabled;
+  final Widget? suffixIcon;
+  final String? Function(String?)? validator;
+
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    this.hintText,
+    this.keyboardType,
+    this.obscureText = false,
+    this.enabled = true,
+    this.suffixIcon,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      enabled: enabled,
+      validator: validator,
+      decoration: InputDecoration(
+        labelText: labelText,
+        hintText: hintText,
+        suffixIcon: suffixIcon,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade200),
+        ),
+      ),
+    );
+  }
+}
+```
+
+**File:** `lib/features/auth/presentation/widgets/primary_button.dart`
+
+```dart
+import 'package:flutter/material.dart';
+
+/// Primary button with loading state support.
+///
+/// **Features:**
+/// - Loading indicator replaces text
+/// - Disabled state when loading or onPressed is null
+/// - Consistent styling
+class PrimaryButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final Widget child;
+  final bool isLoading;
+
+  const PrimaryButton({
+    super.key,
+    required this.onPressed,
+    required this.child,
+    this.isLoading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: isLoading ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: isLoading
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
+          : child,
+    );
+  }
+}
+```
+
+**Presentation Layer Summary:**
+
+After Step 4, you should have:
+- ✅ BLoC (state management)
+- ✅ Events (user actions)
+- ✅ States (UI states)
+- ✅ Screens (pages)
+- ✅ Widgets (reusable components)
+- ✅ All files in `lib/features/{{feature_name}}/presentation/`
+
+---
+
+## Step 5: Write Tests
+
+Generate comprehensive tests for all layers.
+
+### 5.1 Unit Tests for Domain Layer
+
+**Test use cases, entities, and business logic.**
+
+**File:** `test/features/{{feature_name}}/domain/usecases/{{use_case_name}}_test.dart`
+
+**Example:**
+
+**File:** `test/features/auth/domain/usecases/login_with_email_test.dart`
+
+```dart
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+
+import 'package:myapp/core/error/failures.dart';
+import 'package:myapp/features/auth/domain/entities/user.dart';
+import 'package:myapp/features/auth/domain/repositories/auth_repository.dart';
+import 'package:myapp/features/auth/domain/usecases/login_with_email.dart';
+
+import 'login_with_email_test.mocks.dart';
+
+@GenerateMocks([AuthRepository])
+void main() {
+  late LoginWithEmail usecase;
+  late MockAuthRepository mockAuthRepository;
+
+  setUp(() {
+    mockAuthRepository = MockAuthRepository();
+    usecase = LoginWithEmail(mockAuthRepository);
+  });
+
+  const tEmail = 'test@example.com';
+  const tPassword = 'SecurePass123!';
+  const tUser = User(
+    id: '123',
+    email: tEmail,
+    emailVerified: true,
+    createdAt: '2024-01-15T10:30:00Z',
+  );
+
+  test(
+    'should return User when repository login succeeds',
+    () async {
+      // arrange
+      when(mockAuthRepository.loginWithEmail(
+        email: anyNamed('email'),
+        password: anyNamed('password'),
+      )).thenAnswer((_) async => const Right(tUser));
+
+      // act
+      final result = await usecase(const LoginParams(
+        email: tEmail,
+        password: tPassword,
+      ));
+
+      // assert
+      expect(result, const Right(tUser));
+      verify(mockAuthRepository.loginWithEmail(
+        email: tEmail,
+        password: tPassword,
+      ));
+      verifyNoMoreInteractions(mockAuthRepository);
+    },
+  );
+
+  test(
+    'should return AuthFailure when credentials are invalid',
+    () async {
+      // arrange
+      const tFailure = AuthFailure(message: 'Invalid credentials');
+      when(mockAuthRepository.loginWithEmail(
+        email: anyNamed('email'),
+        password: anyNamed('password'),
+      )).thenAnswer((_) async => const Left(tFailure));
+
+      // act
+      final result = await usecase(const LoginParams(
+        email: tEmail,
+        password: tPassword,
+      ));
+
+      // assert
+      expect(result, const Left(tFailure));
+    },
+  );
+
+  test(
+    'should return ValidationFailure when email is invalid',
+    () async {
+      // arrange
+      const tInvalidEmail = 'invalid-email';
+
+      // act
+      final result = await usecase(const LoginParams(
+        email: tInvalidEmail,
+        password: tPassword,
+      ));
+
+      // assert
+      expect(result.isLeft(), true);
+      result.fold(
+        (failure) => expect(failure, isA<ValidationFailure>()),
+        (_) => fail('Should return failure'),
+      );
+      verifyZeroInteractions(mockAuthRepository);
+    },
+  );
+
+  test(
+    'should return ValidationFailure when password is too short',
+    () async {
+      // arrange
+      const tShortPassword = '1234567'; // Only 7 characters
+
+      // act
+      final result = await usecase(const LoginParams(
+        email: tEmail,
+        password: tShortPassword,
+      ));
+
+      // assert
+      expect(result.isLeft(), true);
+      result.fold(
+        (failure) => expect(failure, isA<ValidationFailure>()),
+        (_) => fail('Should return failure'),
+      );
+      verifyZeroInteractions(mockAuthRepository);
+    },
+  );
+}
+```
+
+### 5.2 Unit Tests for Data Layer
+
+**Test models, data sources, and repositories.**
+
+**File:** `test/features/{{feature_name}}/data/models/{{model_name}}_test.dart`
+
+**Example:**
+
+**File:** `test/features/auth/data/models/user_model_test.dart`
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'dart:convert';
+
+import 'package:myapp/features/auth/data/models/user_model.dart';
+import 'package:myapp/features/auth/domain/entities/user.dart';
+
+import '../../../../fixtures/fixture_reader.dart';
+
+void main() {
+  const tUserModel = UserModel(
+    id: '123',
+    email: 'test@example.com',
+    displayName: 'Test User',
+    photoUrl: 'https://example.com/photo.jpg',
+    emailVerified: true,
+    createdAt: '2024-01-15T10:30:00Z',
+  );
+
+  test('should be a subclass of User entity', () {
+    // assert
+    expect(tUserModel, isA<User>());
+  });
+
+  group('fromJson', () {
+    test('should return a valid model from JSON', () {
+      // arrange
+      final Map<String, dynamic> jsonMap = json.decode(
+        fixture('user.json'),
+      );
+
+      // act
+      final result = UserModel.fromJson(jsonMap);
+
+      // assert
+      expect(result, tUserModel);
+    });
+
+    test('should handle null optional fields', () {
+      // arrange
+      final Map<String, dynamic> jsonMap = {
+        'id': '123',
+        'email': 'test@example.com',
+        'display_name': null,
+        'photo_url': null,
+        'email_verified': true,
+        'created_at': '2024-01-15T10:30:00Z',
+      };
+
+      // act
+      final result = UserModel.fromJson(jsonMap);
+
+      // assert
+      expect(result.displayName, null);
+      expect(result.photoUrl, null);
+    });
+  });
+
+  group('toJson', () {
+    test('should return a JSON map containing proper data', () {
+      // act
+      final result = tUserModel.toJson();
+
+      // assert
+      final expectedMap = {
+        'id': '123',
+        'email': 'test@example.com',
+        'display_name': 'Test User',
+        'photo_url': 'https://example.com/photo.jpg',
+        'email_verified': true,
+        'created_at': '2024-01-15T10:30:00Z',
+      };
+      expect(result, expectedMap);
+    });
+  });
+
+  group('fromEntity', () {
+    test('should convert User entity to UserModel', () {
+      // arrange
+      const tUser = User(
+        id: '123',
+        email: 'test@example.com',
+        displayName: 'Test User',
+        photoUrl: 'https://example.com/photo.jpg',
+        emailVerified: true,
+        createdAt: '2024-01-15T10:30:00Z',
+      );
+
+      // act
+      final result = UserModel.fromEntity(tUser);
+
+      // assert
+      expect(result, tUserModel);
+    });
+  });
+}
+```
+
+### 5.3 Widget Tests for Presentation Layer
+
+**Test UI screens and widgets.**
+
+**File:** `test/features/{{feature_name}}/presentation/pages/{{screen_name}}_test.dart`
+
+**Example:**
+
+**File:** `test/features/auth/presentation/pages/login_screen_test.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+
+import 'package:myapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:myapp/features/auth/presentation/bloc/auth_state.dart';
+import 'package:myapp/features/auth/presentation/pages/login_screen.dart';
+
+import 'login_screen_test.mocks.dart';
+
+@GenerateMocks([AuthBloc])
+void main() {
+  late MockAuthBloc mockAuthBloc;
+
+  setUp(() {
+    mockAuthBloc = MockAuthBloc();
+  });
+
+  Widget createWidgetUnderTest() {
+    return MaterialApp(
+      home: BlocProvider<AuthBloc>.value(
+        value: mockAuthBloc,
+        child: const LoginScreen(),
+      ),
+    );
+  }
+
+  testWidgets('should display email and password fields', (tester) async {
+    // arrange
+    when(mockAuthBloc.state).thenReturn(const AuthInitial());
+    when(mockAuthBloc.stream).thenAnswer((_) => const Stream.empty());
+
+    // act
+    await tester.pumpWidget(createWidgetUnderTest());
+
+    // assert
+    expect(find.byType(TextField), findsNWidgets(2));
+    expect(find.text('Email'), findsOneWidget);
+    expect(find.text('Password'), findsOneWidget);
+  });
+
+  testWidgets('should display Log In button', (tester) async {
+    // arrange
+    when(mockAuthBloc.state).thenReturn(const AuthInitial());
+    when(mockAuthBloc.stream).thenAnswer((_) => const Stream.empty());
+
+    // act
+    await tester.pumpWidget(createWidgetUnderTest());
+
+    // assert
+    expect(find.widgetWithText(ElevatedButton, 'Log In'), findsOneWidget);
+  });
+
+  testWidgets('should show loading indicator when state is AuthLoading',
+      (tester) async {
+    // arrange
+    when(mockAuthBloc.state).thenReturn(const AuthLoading());
+    when(mockAuthBloc.stream).thenAnswer((_) => const Stream.empty());
+
+    // act
+    await tester.pumpWidget(createWidgetUnderTest());
+
+    // assert
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
+
+  testWidgets('should show error snackbar when state is AuthError',
+      (tester) async {
+    // arrange
+    when(mockAuthBloc.state).thenReturn(const AuthInitial());
+    when(mockAuthBloc.stream).thenAnswer(
+      (_) => Stream.value(const AuthError(message: 'Invalid credentials')),
+    );
+
+    // act
+    await tester.pumpWidget(createWidgetUnderTest());
+    await tester.pump(); // Trigger snackbar
+
+    // assert
+    expect(find.text('Invalid credentials'), findsOneWidget);
+    expect(find.byType(SnackBar), findsOneWidget);
+  });
+
+  testWidgets('should validate email format', (tester) async {
+    // arrange
+    when(mockAuthBloc.state).thenReturn(const AuthInitial());
+    when(mockAuthBloc.stream).thenAnswer((_) => const Stream.empty());
+
+    // act
+    await tester.pumpWidget(createWidgetUnderTest());
+
+    // Enter invalid email
+    await tester.enterText(find.byType(TextField).first, 'invalid-email');
+    await tester.enterText(find.byType(TextField).last, 'SecurePass123!');
+
+    // Tap login button
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Log In'));
+    await tester.pump();
+
+    // assert
+    expect(find.text('Please enter a valid email'), findsOneWidget);
+  });
+}
+```
+
+### 5.4 Integration Tests
+
+**Test complete feature flows.**
+
+**File:** `integration_test/{{feature_name}}_test.dart`
+
+**Example:**
+
+**File:** `integration_test/auth_test.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+
+import 'package:myapp/main.dart' as app;
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  group('Authentication Flow', () {
+    testWidgets('complete login flow', (tester) async {
+      // Start app
+      app.main();
+      await tester.pumpAndSettle();
+
+      // Find email and password fields
+      final emailField = find.byKey(const Key('email_field'));
+      final passwordField = find.byKey(const Key('password_field'));
+      final loginButton = find.widgetWithText(ElevatedButton, 'Log In');
+
+      // Enter credentials
+      await tester.enterText(emailField, 'test@example.com');
+      await tester.enterText(passwordField, 'SecurePass123!');
+
+      // Tap login button
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle();
+
+      // Verify navigation to home screen
+      expect(find.text('Home'), findsOneWidget);
+    });
+
+    testWidgets('complete registration flow', (tester) async {
+      // Start app
+      app.main();
+      await tester.pumpAndSettle();
+
+      // Navigate to registration
+      final signUpButton = find.text('Sign Up');
+      await tester.tap(signUpButton);
+      await tester.pumpAndSettle();
+
+      // Find registration fields
+      final emailField = find.byKey(const Key('email_field'));
+      final passwordField = find.byKey(const Key('password_field'));
+      final displayNameField = find.byKey(const Key('display_name_field'));
+      final registerButton = find.widgetWithText(ElevatedButton, 'Sign Up');
+
+      // Enter registration data
+      await tester.enterText(emailField, 'newuser@example.com');
+      await tester.enterText(passwordField, 'SecurePass123!');
+      await tester.enterText(displayNameField, 'New User');
+
+      // Tap register button
+      await tester.tap(registerButton);
+      await tester.pumpAndSettle();
+
+      // Verify success (email verification screen or home)
+      expect(find.text('Verify Your Email'), findsOneWidget);
+    });
+  });
+}
+```
+
+**Test Summary:**
+
+After Step 5, you should have:
+- ✅ Unit tests for use cases (70%+ coverage)
+- ✅ Unit tests for repositories
+- ✅ Unit tests for models
+- ✅ Widget tests for screens
+- ✅ Widget tests for widgets
+- ✅ Integration test for complete flow
+- ✅ All tests in `test/` and `integration_test/` directories
+
+---
+
+## Step 6: Validation and Security Checks
+
+### 6.1 Run Flutter Analyze
+
+```bash
+flutter analyze
+```
+
+**Fix any issues found:**
+- Linting warnings
+- Unused imports
+- Type errors
+- Dead code
+
+### 6.2 Run Tests
+
+```bash
+flutter test --coverage
+```
+
+**Verify coverage meets target:**
+```bash
+# Generate coverage report
+genhtml coverage/lcov.info -o coverage/html
+# Check coverage percentage
+lcov --summary coverage/lcov.info
+```
+
+**Expected output:**
+```
+Overall coverage rate:
+  lines......: 75.3% (1234 of 1638 lines)
+  functions..: 78.1% (345 of 442 functions)
+```
+
+**If coverage < {{test_coverage_target}}%:**
+- Write additional tests for uncovered code
+- Focus on critical paths (authentication, security)
+
+### 6.3 Security Validation
+
+**Check security patterns from PRPROMPTS files:**
+
+Read relevant PRPROMPTS files:
+```bash
+cat PRPROMPTS/16-security_and_compliance.md
+cat PRPROMPTS/08-authentication_and_authorization.md
+```
+
+**Validate:**
+
+1. **JWT Token Handling:**
+   - ✅ Tokens stored in FlutterSecureStorage (encrypted)
+   - ✅ NEVER verify JWT in Flutter (backend only)
+   - ✅ Refresh token rotation implemented
+   - ✅ Tokens cleared on logout
+
+2. **Password Security:**
+   - ✅ Passwords NEVER stored locally
+   - ✅ HTTPS used for all auth endpoints
+   - ✅ Strong password validation (8+ chars, uppercase, lowercase, digit, special)
+
+3. **Error Handling:**
+   - ✅ Generic error messages (don't reveal if email exists)
+   - ✅ Rate limiting on backend
+   - ✅ Account lockout after failed attempts
+
+4. **Compliance (if applicable):**
+   - ✅ HIPAA: PHI encrypted at rest, audit logging
+   - ✅ PCI-DSS: No card storage, tokenization used
+   - ✅ GDPR: User consent, data minimization
+
+**Security Checklist:**
+```markdown
+## Security Validation for {{feature_name}}
+
+- [ ] Sensitive data encrypted in storage
+- [ ] HTTPS enforced for all API calls
+- [ ] Passwords NEVER stored locally
+- [ ] JWT tokens stored in FlutterSecureStorage
+- [ ] Token expiration handled correctly
+- [ ] Refresh token rotation implemented
+- [ ] Error messages don't leak information
+- [ ] Input validation on all user inputs
+- [ ] No hardcoded secrets in code
+- [ ] Compliance requirements met (if applicable)
+```
+
+### 6.4 Architecture Validation
+
+**Verify Clean Architecture compliance:**
+
+```bash
+# Check folder structure
+tree lib/features/{{feature_name}}
+```
+
+**Expected structure:**
+```
+lib/features/{{feature_name}}/
+├── domain/
+│   ├── entities/
+│   ├── repositories/
+│   └── usecases/
+├── data/
+│   ├── models/
+│   ├── datasources/
+│   └── repositories/
+└── presentation/
+    ├── bloc/
+    ├── pages/
+    └── widgets/
+```
+
+**Validate dependencies:**
+- ✅ Domain layer has NO dependencies on other layers
+- ✅ Data layer depends only on domain
+- ✅ Presentation layer depends only on domain
+- ✅ No circular dependencies
+
+---
+
+## Step 7: Documentation and Summary
+
+### 7.1 Generate Feature Documentation
+
+**Create:** `docs/features/{{feature_name}}.md`
+
+**Template:**
+```markdown
+# {{FeatureName}} Feature
+
+## Overview
+
+{{Brief description of what this feature does}}
+
+## Implementation Details
+
+### Domain Layer
+- **Entities:** {{List entities}}
+- **Use Cases:** {{List use cases}}
+- **Repository Interface:** {{Repository name}}
+
+### Data Layer
+- **Models:** {{List models}}
+- **Remote Data Source:** {{API endpoints}}
+- **Local Data Source:** {{Storage keys}}
+- **Repository Implementation:** {{Implementation details}}
+
+### Presentation Layer
+- **BLoC:** {{BLoC name}}
+- **Events:** {{List events}}
+- **States:** {{List states}}
+- **Screens:** {{List screens}}
+- **Widgets:** {{List widgets}}
+
+## API Endpoints
+
+{{List all API endpoints with methods and descriptions}}
+
+## Security Considerations
+
+{{List security measures implemented}}
+
+## Tests
+
+- **Unit Tests:** {{Number}} files, {{Coverage}}% coverage
+- **Widget Tests:** {{Number}} files
+- **Integration Tests:** {{Number}} flows
+
+## Files Created
+
+{{List all files created with paths}}
+
+## Usage
+
+{{How to use this feature in the app}}
+
+## Known Issues / TODOs
+
+{{List any pending items or known issues}}
+```
+
+### 7.2 Update IMPLEMENTATION_PLAN.md
+
+**Mark feature as completed:**
+
+```markdown
+### Feature X: {{feature_name}}
+**Priority:** HIGH
+**Status:** ✅ COMPLETED
+**Completed:** {{Date}}
+**Implementation Time:** {{Actual time taken}}
+
+**Files Created:** {{Total count}}
+- Domain: {{Count}} files
+- Data: {{Count}} files
+- Presentation: {{Count}} files
+- Tests: {{Count}} files
+
+**Test Coverage:** {{Actual coverage}}%
+
+**Notes:**
+- {{Any important notes or deviations from plan}}
+```
+
+### 7.3 Create Summary Report
+
+**Output the following summary:**
+
+```markdown
+# Feature Implementation Summary: {{feature_name}}
+
+## ✅ Completion Status
+
+**Feature:** {{feature_name}}
+**Status:** Implemented and Tested
+**Implementation Time:** {{X}} minutes
+**Date:** {{Current date}}
+
+## 📊 Statistics
+
+### Files Created
+- **Domain Layer:** {{count}} files
+- **Data Layer:** {{count}} files
+- **Presentation Layer:** {{count}} files
+- **Tests:** {{count}} files
+- **Total:** {{total}} files
+
+### Lines of Code
+- **Domain:** ~{{count}} lines
+- **Data:** ~{{count}} lines
+- **Presentation:** ~{{count}} lines
+- **Tests:** ~{{count}} lines
+- **Total:** ~{{total}} lines
+
+### Test Coverage
+- **Target:** {{test_coverage_target}}%
+- **Achieved:** {{actual_coverage}}%
+- **Status:** {{✅ Met / ❌ Below Target}}
+
+## 🎯 Validation Results
+
+### Flutter Analyze
+{{Output of flutter analyze}}
+
+### Tests
+- **Unit Tests:** {{X}} passed, {{Y}} failed
+- **Widget Tests:** {{X}} passed, {{Y}} failed
+- **Integration Tests:** {{X}} passed, {{Y}} failed
+
+### Security Checks
+- [ ] JWT tokens stored securely
+- [ ] Passwords never stored locally
+- [ ] HTTPS enforced
+- [ ] Input validation implemented
+- [ ] Compliance requirements met
+
+### Architecture Compliance
+- [ ] Clean Architecture structure followed
+- [ ] Domain layer independent
+- [ ] Proper dependency direction
+- [ ] Repository Pattern implemented
+- [ ] BLoC Pattern implemented
+
+## 📁 Files Created
+
+### Domain Layer
+{{List domain files with paths}}
+
+### Data Layer
+{{List data files with paths}}
+
+### Presentation Layer
+{{List presentation files with paths}}
+
+### Tests
+{{List test files with paths}}
+
+## 🔒 Security Implementation
+
+{{List security measures implemented}}
+
+## 📝 Next Steps
+
+{{If feature is part of larger workflow, suggest next feature to implement}}
+
+## ⚠️ Issues / Warnings
+
+{{List any issues found or warnings to address}}
+
+---
+
+**Feature implementation completed successfully!** ✅
+```
+
+---
+
+## Error Handling
+
+**If any step fails:**
+
+1. **Identify the error:**
+   - Syntax error in generated code
+   - Missing dependency
+   - Invalid API endpoint
+   - Test failure
+
+2. **Fix the issue:**
+   - Correct the code
+   - Install missing package
+   - Update API configuration
+   - Fix test logic
+
+3. **Re-run validation:**
+   ```bash
+   flutter analyze
+   flutter test
+   ```
+
+4. **Document the issue:**
+   - Add to feature documentation under "Known Issues"
+   - Update IMPLEMENTATION_PLAN.md with notes
+
+5. **Continue with next step**
+
+---
+
+## Skill Completion
+
+When all steps are complete:
+
+**Output:**
+```
+✅ Feature "{{feature_name}}" implemented successfully!
+
+📊 Summary:
+- Files Created: {{total}}
+- Test Coverage: {{coverage}}%
+- Security Validated: Yes
+- Architecture Compliant: Yes
+
+🎉 Ready for code review and integration!
+```
+
+**Next Actions:**
+1. Commit changes to version control
+2. Create pull request
+3. Request code review
+4. Run CI/CD pipeline
+5. Deploy to staging environment
+
+---
+
+**End of Skill Execution**

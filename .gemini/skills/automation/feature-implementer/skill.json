@@ -1,0 +1,184 @@
+{
+  "id": "feature-implementer",
+  "name": "Feature Implementation Automation",
+  "version": "1.0.0",
+  "category": "automation",
+  "status": "implemented",
+  "description": "Automatically implements Flutter features from IMPLEMENTATION_PLAN.md following Clean Architecture patterns with comprehensive testing",
+  "author": "PRPROMPTS Team",
+  "tags": [
+    "automation",
+    "implementation",
+    "clean-architecture",
+    "bloc-pattern",
+    "testing",
+    "tdd",
+    "feature-driven"
+  ],
+  "inputs": {
+    "required": {
+      "feature_name": {
+        "type": "string",
+        "description": "Name of the feature to implement (e.g., 'authentication', 'user-profile')",
+        "example": "authentication"
+      },
+      "implementation_plan_path": {
+        "type": "string",
+        "description": "Path to IMPLEMENTATION_PLAN.md containing feature specifications",
+        "default": "docs/IMPLEMENTATION_PLAN.md"
+      }
+    },
+    "optional": {
+      "architecture_style": {
+        "type": "string",
+        "description": "Architecture pattern to follow",
+        "enum": ["clean-architecture", "clean-architecture-tdd", "feature-first"],
+        "default": "clean-architecture"
+      },
+      "state_management": {
+        "type": "string",
+        "description": "State management solution",
+        "enum": ["bloc", "riverpod", "provider", "cubit"],
+        "default": "bloc"
+      },
+      "test_coverage_target": {
+        "type": "number",
+        "description": "Minimum test coverage percentage",
+        "default": 70,
+        "min": 60,
+        "max": 100
+      },
+      "generate_integration_tests": {
+        "type": "boolean",
+        "description": "Generate integration tests in addition to unit tests",
+        "default": false
+      },
+      "dry_run": {
+        "type": "boolean",
+        "description": "Preview files to be created without writing them",
+        "default": false
+      }
+    }
+  },
+  "outputs": {
+    "feature_name": {
+      "type": "string",
+      "description": "Name of the implemented feature"
+    },
+    "files_created": {
+      "type": "number",
+      "description": "Total number of files created"
+    },
+    "domain_layer_files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of domain layer files created"
+    },
+    "data_layer_files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of data layer files created"
+    },
+    "presentation_layer_files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of presentation layer files created"
+    },
+    "tests_written": {
+      "type": "number",
+      "description": "Number of test files created"
+    },
+    "test_cases": {
+      "type": "number",
+      "description": "Total number of test cases written"
+    },
+    "coverage_achieved": {
+      "type": "number",
+      "description": "Actual test coverage percentage achieved"
+    },
+    "validation_passed": {
+      "type": "boolean",
+      "description": "Whether code passes PRPROMPTS validation rules"
+    },
+    "security_checks_passed": {
+      "type": "boolean",
+      "description": "Whether security patterns are correctly implemented"
+    },
+    "implementation_time": {
+      "type": "string",
+      "description": "Time taken to implement feature (e.g., '5 minutes')"
+    }
+  },
+  "dependencies": {
+    "required": ["flutter-bootstrapper"],
+    "optional": ["prd-analyzer", "prprompts-generator"]
+  },
+  "config": {
+    "timeout": 600000,
+    "retryAttempts": 2,
+    "enableLogging": true,
+    "enableProgress": true
+  },
+  "validation": {
+    "pre_run": [
+      "Check IMPLEMENTATION_PLAN.md exists",
+      "Verify Flutter project structure",
+      "Validate feature name format",
+      "Check required PRPROMPTS files exist"
+    ],
+    "post_run": [
+      "Run flutter analyze",
+      "Run flutter test",
+      "Verify test coverage meets target",
+      "Validate Clean Architecture structure",
+      "Check security patterns compliance"
+    ]
+  },
+  "examples": [
+    {
+      "name": "Implement Authentication Feature",
+      "command": "@claude use skill automation/feature-implementer",
+      "inputs": {
+        "feature_name": "authentication",
+        "test_coverage_target": 80
+      }
+    },
+    {
+      "name": "Implement User Profile with Integration Tests",
+      "command": "@claude use skill automation/feature-implementer",
+      "inputs": {
+        "feature_name": "user-profile",
+        "generate_integration_tests": true,
+        "test_coverage_target": 75
+      }
+    },
+    {
+      "name": "Implement Payment Processing (High Security)",
+      "command": "@claude use skill automation/feature-implementer",
+      "inputs": {
+        "feature_name": "payment-processing",
+        "test_coverage_target": 90,
+        "generate_integration_tests": true
+      }
+    }
+  ],
+  "documentation": {
+    "readme": "README.md",
+    "examples": "examples.md",
+    "api_reference": "https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/AUTOMATION-GUIDE.md"
+  },
+  "compatibility": {
+    "flutter": ">=3.0.0",
+    "dart": ">=3.0.0",
+    "platforms": ["ios", "android", "web", "windows", "macos", "linux"]
+  },
+  "estimated_execution_time": "3-8 minutes per feature",
+  "success_criteria": [
+    "All Clean Architecture layers implemented",
+    "Test coverage >= target percentage",
+    "No flutter analyze warnings",
+    "All tests pass",
+    "Security patterns validated",
+    "PRPROMPTS compliance verified"
+  ]
+}
