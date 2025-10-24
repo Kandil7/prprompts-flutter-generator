@@ -1,0 +1,113 @@
+{
+  "id": "single-file-generator",
+  "name": "Single File Generator",
+  "version": "1.0.0",
+  "category": "prprompts-core",
+  "description": "Generate or regenerate a single PRPROMPTS file by number or name",
+  "author": "PRPROMPTS Team",
+  "icon": "📄",
+  "tags": ["prprompts", "generation", "single", "regenerate"],
+
+  "inputs": {
+    "required": {
+      "prd_path": {
+        "type": "string",
+        "description": "Path to validated PRD file",
+        "default": "docs/PRD.md",
+        "validation": "^docs/.*\\.md$"
+      },
+      "file_number": {
+        "type": "number",
+        "description": "File number to generate (1-32)",
+        "validation": "^([1-9]|[12][0-9]|3[0-2])$"
+      }
+    },
+    "optional": {
+      "output_dir": {
+        "type": "string",
+        "description": "Output directory for PRPROMPTS file",
+        "default": "PRPROMPTS"
+      },
+      "overwrite": {
+        "type": "boolean",
+        "description": "Overwrite if file exists",
+        "default": true
+      }
+    }
+  },
+
+  "outputs": {
+    "file_generated": {
+      "type": "string",
+      "description": "Path to generated file"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Name of file generated"
+    },
+    "file_number": {
+      "type": "number",
+      "description": "File number (1-32)"
+    },
+    "action": {
+      "type": "string",
+      "enum": ["created", "regenerated", "skipped"],
+      "description": "What action was taken"
+    }
+  },
+
+  "config": {
+    "interactive": false,
+    "timeout": 15000,
+    "retryable": true,
+    "maxRetries": 2,
+    "cacheable": false,
+    "cacheDuration": 0
+  },
+
+  "dependencies": ["prd-analyzer"],
+
+  "requirements": {
+    "flutter": false,
+    "projectInitialized": false,
+    "prdExists": true,
+    "prpromptsGenerated": false,
+    "gitRepo": false
+  },
+
+  "examples": [
+    {
+      "description": "Regenerate security file after updating PRD compliance",
+      "command": "@claude use skill prprompts-core/single-file-generator --file_number 16",
+      "expectedOutput": "File 16-security_and_compliance.md regenerated with new compliance patterns"
+    },
+    {
+      "description": "Generate just the testing strategy file",
+      "command": "@claude use skill prprompts-core/single-file-generator --file_number 11",
+      "expectedOutput": "File 11-testing_strategy.md created"
+    },
+    {
+      "description": "Update architecture overview",
+      "command": "@claude use skill prprompts-core/single-file-generator --file_number 2",
+      "expectedOutput": "File 02-architecture_overview.md regenerated"
+    }
+  ],
+
+  "cicd": {
+    "testable": true,
+    "mockInputs": {
+      "prd_path": "tests/fixtures/sample-prd.md",
+      "file_number": 16,
+      "output_dir": "test-output/PRPROMPTS"
+    },
+    "expectedOutputs": {
+      "file_number": 16,
+      "file_name": "16-security_and_compliance.md",
+      "action": "created"
+    },
+    "fixtures": [
+      "tests/fixtures/sample-prd.md",
+      "tests/fixtures/healthcare-prd.md"
+    ]
+  }
+}
