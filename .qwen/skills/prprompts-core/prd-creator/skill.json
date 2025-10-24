@@ -1,0 +1,56 @@
+{
+  "id": "prd-creator",
+  "name": "PRD Creator",
+  "version": "1.0.0",
+  "category": "prprompts-core",
+  "description": "Interactive Product Requirements Document creation wizard with 10 guided questions",
+  "author": "PRPROMPTS Team",
+  "icon": "📝",
+  "tags": ["prd", "requirements", "documentation", "interactive"],
+  "inputs": {
+    "optional": {
+      "project_type": {
+        "type": "string",
+        "description": "Type of project (e.g., healthcare, fintech, ecommerce)",
+        "default": null
+      },
+      "compliance": {
+        "type": "array",
+        "description": "Compliance requirements (e.g., ['hipaa', 'gdpr'])",
+        "default": []
+      }
+    }
+  },
+  "outputs": {
+    "prd_path": {
+      "type": "string",
+      "description": "Path to generated PRD file",
+      "value": "docs/PRD.md"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Extracted PRD metadata for downstream skills"
+    }
+  },
+  "config": {
+    "interactive": true,
+    "timeout": 300000,
+    "retryable": false,
+    "cacheable": false
+  },
+  "dependencies": [],
+  "requirements": {
+    "flutter": false,
+    "projectInitialized": false
+  },
+  "examples": [
+    {
+      "description": "Create PRD for healthcare app",
+      "command": "@claude use skill prd-creator --project_type healthcare --compliance hipaa,gdpr"
+    },
+    {
+      "description": "Interactive PRD creation",
+      "command": "@claude use skill prd-creator"
+    }
+  ]
+}
