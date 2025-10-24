@@ -1,0 +1,100 @@
+{
+  "id": "flutter-bootstrapper",
+  "name": "Flutter Bootstrapper",
+  "version": "1.0.0",
+  "category": "automation",
+  "description": "Bootstrap complete Flutter project with Clean Architecture, security, and test infrastructure",
+  "author": "PRPROMPTS Team",
+  "icon": "🚀",
+  "tags": ["flutter", "automation", "bootstrap", "setup", "clean-architecture"],
+
+  "inputs": {
+    "required": {
+      "prd_path": {
+        "type": "string",
+        "description": "Path to PRD file",
+        "default": "docs/PRD.md"
+      }
+    },
+    "optional": {
+      "prprompts_dir": {
+        "type": "string",
+        "description": "Directory with PRPROMPTS files",
+        "default": "PRPROMPTS"
+      },
+      "dry_run": {
+        "type": "boolean",
+        "description": "Preview without making changes",
+        "default": false
+      }
+    }
+  },
+
+  "outputs": {
+    "folders_created": {
+      "type": "number",
+      "description": "Number of folders created"
+    },
+    "files_generated": {
+      "type": "number",
+      "description": "Number of files generated"
+    },
+    "architecture_docs": {
+      "type": "array",
+      "description": "Generated architecture documents"
+    },
+    "implementation_plan": {
+      "type": "string",
+      "description": "Path to implementation plan"
+    }
+  },
+
+  "config": {
+    "interactive": false,
+    "timeout": 120000,
+    "retryable": true,
+    "maxRetries": 2,
+    "cacheable": false,
+    "cacheDuration": 0
+  },
+
+  "dependencies": ["prd-analyzer", "prprompts-generator"],
+
+  "requirements": {
+    "flutter": true,
+    "projectInitialized": true,
+    "prdExists": true,
+    "prpromptsGenerated": true,
+    "gitRepo": true
+  },
+
+  "examples": [
+    {
+      "description": "Bootstrap complete Flutter project structure",
+      "command": "@claude use skill automation/flutter-bootstrapper",
+      "expectedOutput": "30+ folders, 100+ files, complete Clean Architecture setup"
+    },
+    {
+      "description": "Preview bootstrap without making changes",
+      "command": "@claude use skill automation/flutter-bootstrapper --dry_run true",
+      "expectedOutput": "Shows what would be created without executing"
+    }
+  ],
+
+  "cicd": {
+    "testable": true,
+    "mockInputs": {
+      "prd_path": "tests/fixtures/sample-prd.md",
+      "prprompts_dir": "tests/fixtures/PRPROMPTS",
+      "dry_run": true
+    },
+    "expectedOutputs": {
+      "folders_created": 30,
+      "files_generated": 100
+    },
+    "fixtures": [
+      "tests/fixtures/sample-prd.md",
+      "tests/fixtures/PRPROMPTS/"
+    ]
+  }
+}
