@@ -1,0 +1,273 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://prprompts.dev/schemas/skill-schema.json",
+  "title": "PRPROMPTS Skill Definition",
+  "description": "JSON Schema for validating Claude Code skill definitions in PRPROMPTS Flutter Generator",
+  "type": "object",
+  "required": ["id", "name", "version", "category", "description"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Unique skill identifier (kebab-case)",
+      "examples": ["prd-creator", "flutter-bootstrapper"]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 50,
+      "description": "Human-readable skill name"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version (e.g., 1.0.0)"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "prprompts-core",
+        "automation",
+        "validation",
+        "utilities",
+        "repository-meta",
+        "development-workflow"
+      ],
+      "description": "Skill category"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 200,
+      "description": "Brief description of what the skill does"
+    },
+    "author": {
+      "type": "string",
+      "default": "PRPROMPTS Team",
+      "description": "Skill author"
+    },
+    "icon": {
+      "type": "string",
+      "pattern": "^[\\p{Emoji}]$",
+      "description": "Emoji icon representing the skill",
+      "examples": ["📝", "🤖", "✅", "🛠️"]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      },
+      "minItems": 1,
+      "maxItems": 10,
+      "uniqueItems": true,
+      "description": "Searchable tags"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "$ref": "#/definitions/inputParameters"
+        },
+        "optional": {
+          "$ref": "#/definitions/inputParameters"
+        }
+      },
+      "description": "Input parameters for the skill"
+    },
+    "outputs": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z_][a-zA-Z0-9_]*$": {
+          "type": "object",
+          "required": ["type", "description"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["string", "number", "boolean", "array", "object"]
+            },
+            "description": {
+              "type": "string"
+            },
+            "enum": {
+              "type": "array",
+              "description": "Allowed values for string/number types"
+            },
+            "value": {
+              "description": "Static output value (if known)"
+            }
+          }
+        }
+      },
+      "description": "Expected outputs from the skill"
+    },
+    "config": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interactive": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether skill requires user interaction"
+        },
+        "timeout": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 600000,
+          "default": 300000,
+          "description": "Maximum execution time in milliseconds (1s - 10min)"
+        },
+        "retryable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether skill can be retried on failure"
+        },
+        "maxRetries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 3,
+          "description": "Maximum retry attempts"
+        },
+        "cacheable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether skill outputs should be cached"
+        },
+        "cacheDuration": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 86400,
+          "default": 3600,
+          "description": "Cache duration in seconds (1min - 24h)"
+        }
+      },
+      "description": "Skill execution configuration"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true,
+      "description": "Skills that must execute before this skill"
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flutter": {
+          "type": "boolean",
+          "default": false,
+          "description": "Requires Flutter installation"
+        },
+        "projectInitialized": {
+          "type": "boolean",
+          "default": false,
+          "description": "Requires Flutter project to be initialized"
+        },
+        "prdExists": {
+          "type": "boolean",
+          "default": false,
+          "description": "Requires docs/PRD.md to exist"
+        },
+        "prpromptsGenerated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Requires PRPROMPTS files to be generated"
+        },
+        "gitRepo": {
+          "type": "boolean",
+          "default": false,
+          "description": "Requires Git repository"
+        }
+      },
+      "description": "Prerequisites for skill execution"
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["description", "command"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Example description"
+          },
+          "command": {
+            "type": "string",
+            "description": "Example command to run"
+          },
+          "expectedOutput": {
+            "type": "string",
+            "description": "What user should expect to see"
+          }
+        }
+      },
+      "minItems": 1,
+      "description": "Usage examples"
+    },
+    "cicd": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "testable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether skill can be tested in CI/CD"
+        },
+        "mockInputs": {
+          "type": "object",
+          "description": "Mock inputs for testing"
+        },
+        "expectedOutputs": {
+          "type": "object",
+          "description": "Expected outputs for validation"
+        },
+        "fixtures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required test fixture files"
+        }
+      },
+      "description": "CI/CD testing configuration"
+    }
+  },
+  "definitions": {
+    "inputParameters": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z_][a-zA-Z0-9_]*$": {
+          "type": "object",
+          "required": ["type", "description"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["string", "number", "boolean", "array", "object"]
+            },
+            "description": {
+              "type": "string",
+              "minLength": 5
+            },
+            "default": {
+              "description": "Default value if not provided"
+            },
+            "validation": {
+              "type": "string",
+              "description": "Regex pattern for validation (string types only)"
+            },
+            "enum": {
+              "type": "array",
+              "description": "Allowed values"
+            }
+          }
+        }
+      }
+    }
+  }
+}

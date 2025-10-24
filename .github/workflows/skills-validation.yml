@@ -1,0 +1,409 @@
+name: Skills Validation Pipeline
+
+on:
+  push:
+    branches: [master, main, develop]
+    paths:
+      - '.claude/skills/**'
+      - '.qwen/skills/**'
+      - '.gemini/skills/**'
+      - 'schemas/skill-schema.json'
+      - 'scripts/test-skill.js'
+  pull_request:
+    branches: [master, main]
+    paths:
+      - '.claude/skills/**'
+      - '.qwen/skills/**'
+      - '.gemini/skills/**'
+  workflow_dispatch:
+
+jobs:
+  validate-skill-definitions:
+    name: Validate Skill JSON Schemas
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Install AJV for JSON Schema validation
+        run: npm install -g ajv-cli
+
+      - name: Validate Claude skills against schema
+        run: |
+          echo "🔍 Validating Claude skills..."
+          SKILL_COUNT=0
+          VALID_COUNT=0
+          INVALID_COUNT=0
+
+          for skill_json in .claude/skills/*/*/skill.json; do
+            if [ -f "$skill_json" ]; then
+              SKILL_COUNT=$((SKILL_COUNT + 1))
+              echo "  Validating: $skill_json"
+
+              if ajv validate -s schemas/skill-schema.json -d "$skill_json" --verbose; then
+                echo "    ✅ Valid"
+                VALID_COUNT=$((VALID_COUNT + 1))
+              else
+                echo "    ❌ Invalid"
+                INVALID_COUNT=$((INVALID_COUNT + 1))
+              fi
+            fi
+          done
+
+          echo ""
+          echo "📊 Validation Results:"
+          echo "  Total: $SKILL_COUNT"
+          echo "  Valid: $VALID_COUNT"
+          echo "  Invalid: $INVALID_COUNT"
+
+          if [ $INVALID_COUNT -gt 0 ]; then
+            echo "❌ $INVALID_COUNT skill(s) failed validation"
+            exit 1
+          fi
+
+          echo "✅ All $SKILL_COUNT Claude skills are valid!"
+
+      - name: Validate Qwen skills against schema
+        run: |
+          echo "🔍 Validating Qwen skills..."
+          for skill_json in .qwen/skills/*/*/skill.json; do
+            if [ -f "$skill_json" ]; then
+              ajv validate -s schemas/skill-schema.json -d "$skill_json" || exit 1
+            fi
+          done
+          echo "✅ All Qwen skills are valid!"
+
+      - name: Validate Gemini skills against schema
+        run: |
+          echo "🔍 Validating Gemini skills..."
+          for skill_json in .gemini/skills/*/*/skill.json; do
+            if [ -f "$skill_json" ]; then
+              ajv validate -s schemas/skill-schema.json -d "$skill_json" || exit 1
+            fi
+          done
+          echo "✅ All Gemini skills are valid!"
+
+  check-skill-completeness:
+    name: Check Skill File Completeness
+    runs-on: ubuntu-latest
+    needs: validate-skill-definitions
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required files
+        run: |
+          echo "📁 Checking skill file completeness..."
+          INCOMPLETE=0
+
+          for skill_dir in .claude/skills/*/*/; do
+            if [ ! -d "$skill_dir" ]; then
+              continue
+            fi
+
+            SKILL_NAME=$(basename "$skill_dir")
+            CATEGORY=$(basename "$(dirname "$skill_dir")")
+
+            echo "  Checking: $CATEGORY/$SKILL_NAME"
+
+            # Check skill.json exists
+            if [ ! -f "${skill_dir}skill.json" ]; then
+              echo "    ❌ Missing: skill.json"
+              INCOMPLETE=$((INCOMPLETE + 1))
+            else
+              echo "    ✅ Has: skill.json"
+            fi
+
+            # Check skill.md exists
+            if [ ! -f "${skill_dir}skill.md" ]; then
+              echo "    ❌ Missing: skill.md"
+              INCOMPLETE=$((INCOMPLETE + 1))
+            else
+              echo "    ✅ Has: skill.md"
+            fi
+
+            # Check README.md exists (recommended)
+            if [ ! -f "${skill_dir}README.md" ]; then
+              echo "    ⚠️  Missing: README.md (recommended for junior devs)"
+            else
+              echo "    ✅ Has: README.md"
+            fi
+
+            # Check examples.md exists (optional)
+            if [ -f "${skill_dir}examples.md" ]; then
+              echo "    ✅ Has: examples.md"
+            fi
+          done
+
+          if [ $INCOMPLETE -gt 0 ]; then
+            echo "❌ $INCOMPLETE required file(s) missing"
+            exit 1
+          fi
+
+          echo "✅ All skills have required files!"
+
+  verify-multi-ai-parity:
+    name: Verify Multi-AI Parity
+    runs-on: ubuntu-latest
+    needs: validate-skill-definitions
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Count skills per AI
+        run: |
+          echo "📊 Counting skills per AI..."
+          CLAUDE_COUNT=$(find .claude/skills -name "skill.json" | wc -l)
+          QWEN_COUNT=$(find .qwen/skills -name "skill.json" 2>/dev/null | wc -l || echo 0)
+          GEMINI_COUNT=$(find .gemini/skills -name "skill.json" 2>/dev/null | wc -l || echo 0)
+
+          echo "  Claude: $CLAUDE_COUNT skills"
+          echo "  Qwen: $QWEN_COUNT skills"
+          echo "  Gemini: $GEMINI_COUNT skills"
+
+          if [ "$CLAUDE_COUNT" != "$QWEN_COUNT" ] || [ "$CLAUDE_COUNT" != "$GEMINI_COUNT" ]; then
+            echo "❌ Skill count mismatch! All AIs must have the same number of skills."
+            echo "Run: ./scripts/sync-skills-across-ais.sh"
+            exit 1
+          fi
+
+          echo "✅ All AIs have $CLAUDE_COUNT skills (parity verified)"
+
+      - name: Check skills.json registry parity
+        run: |
+          echo "📋 Checking skills.json registries..."
+
+          if [ ! -f ".claude/skills.json" ]; then
+            echo "❌ .claude/skills.json not found"
+            exit 1
+          fi
+
+          if [ ! -f ".qwen/skills.json" ]; then
+            echo "⚠️  .qwen/skills.json not found (run sync script)"
+          fi
+
+          if [ ! -f ".gemini/skills.json" ]; then
+            echo "⚠️  .gemini/skills.json not found (run sync script)"
+          fi
+
+          # Check if registries are identical
+          if [ -f ".qwen/skills.json" ] && ! diff -q .claude/skills.json .qwen/skills.json > /dev/null; then
+            echo "⚠️  Claude and Qwen skills.json differ"
+          fi
+
+          if [ -f ".gemini/skills.json" ] && ! diff -q .claude/skills.json .gemini/skills.json > /dev/null; then
+            echo "⚠️  Claude and Gemini skills.json differ"
+          fi
+
+          echo "✅ Skills registry check complete"
+
+  validate-skill-metadata:
+    name: Validate Skill Metadata
+    runs-on: ubuntu-latest
+    needs: validate-skill-definitions
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check skill IDs match directory names
+        run: |
+          echo "🔍 Validating skill IDs..."
+          MISMATCHES=0
+
+          for skill_json in .claude/skills/*/*/skill.json; do
+            if [ ! -f "$skill_json" ]; then
+              continue
+            fi
+
+            SKILL_DIR=$(dirname "$skill_json")
+            DIR_NAME=$(basename "$SKILL_DIR")
+            SKILL_ID=$(node -p "JSON.parse(require('fs').readFileSync('$skill_json', 'utf8')).id")
+
+            echo "  Checking: $DIR_NAME"
+            if [ "$DIR_NAME" != "$SKILL_ID" ]; then
+              echo "    ❌ Mismatch: Directory='$DIR_NAME', ID='$SKILL_ID'"
+              MISMATCHES=$((MISMATCHES + 1))
+            else
+              echo "    ✅ Match: $SKILL_ID"
+            fi
+          done
+
+          if [ $MISMATCHES -gt 0 ]; then
+            echo "❌ $MISMATCHES skill ID mismatch(es) found"
+            exit 1
+          fi
+
+          echo "✅ All skill IDs match directory names"
+
+      - name: Check skill categories
+        run: |
+          echo "🏷️  Validating skill categories..."
+          INVALID_CATEGORIES=0
+
+          VALID_CATEGORIES=("prprompts-core" "automation" "validation" "utilities" "repository-meta" "development-workflow")
+
+          for skill_json in .claude/skills/*/*/skill.json; do
+            if [ ! -f "$skill_json" ]; then
+              continue
+            fi
+
+            CATEGORY=$(node -p "JSON.parse(require('fs').readFileSync('$skill_json', 'utf8')).category")
+            VALID=false
+
+            for valid_cat in "${VALID_CATEGORIES[@]}"; do
+              if [ "$CATEGORY" == "$valid_cat" ]; then
+                VALID=true
+                break
+              fi
+            done
+
+            if [ "$VALID" == false ]; then
+              echo "  ❌ Invalid category: $CATEGORY in $skill_json"
+              INVALID_CATEGORIES=$((INVALID_CATEGORIES + 1))
+            fi
+          done
+
+          if [ $INVALID_CATEGORIES -gt 0 ]; then
+            echo "❌ $INVALID_CATEGORIES invalid categor(ies) found"
+            exit 1
+          fi
+
+          echo "✅ All skill categories are valid"
+
+  check-documentation-quality:
+    name: Check Documentation Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check README.md existence
+        run: |
+          echo "📖 Checking junior-friendly documentation..."
+          MISSING_READMES=0
+          TOTAL_SKILLS=0
+
+          for skill_dir in .claude/skills/*/*/; do
+            if [ ! -d "$skill_dir" ]; then
+              continue
+            fi
+
+            TOTAL_SKILLS=$((TOTAL_SKILLS + 1))
+            SKILL_NAME=$(basename "$skill_dir")
+
+            if [ ! -f "${skill_dir}README.md" ]; then
+              echo "  ⚠️  Missing README.md: $SKILL_NAME"
+              MISSING_READMES=$((MISSING_READMES + 1))
+            fi
+          done
+
+          COVERAGE=$((100 * (TOTAL_SKILLS - MISSING_READMES) / TOTAL_SKILLS))
+
+          echo ""
+          echo "📊 Documentation Coverage:"
+          echo "  Total Skills: $TOTAL_SKILLS"
+          echo "  With README: $((TOTAL_SKILLS - MISSING_READMES))"
+          echo "  Missing: $MISSING_READMES"
+          echo "  Coverage: $COVERAGE%"
+
+          if [ $COVERAGE -lt 80 ]; then
+            echo "⚠️  Documentation coverage below 80%"
+          else
+            echo "✅ Documentation coverage: $COVERAGE%"
+          fi
+
+  generate-skill-report:
+    name: Generate Skill Report
+    runs-on: ubuntu-latest
+    needs: [validate-skill-definitions, check-skill-completeness, verify-multi-ai-parity]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate skill statistics
+        run: |
+          echo "# 📊 Skills Validation Report" > skill-report.md
+          echo "" >> skill-report.md
+          echo "**Generated:** $(date)" >> skill-report.md
+          echo "**Commit:** ${{ github.sha }}" >> skill-report.md
+          echo "" >> skill-report.md
+
+          # Count skills by category
+          echo "## Skills by Category" >> skill-report.md
+          echo "" >> skill-report.md
+
+          for category in .claude/skills/*/; do
+            if [ ! -d "$category" ]; then
+              continue
+            fi
+
+            CAT_NAME=$(basename "$category")
+            COUNT=$(find "$category" -name "skill.json" | wc -l)
+
+            echo "- **$CAT_NAME**: $COUNT skills" >> skill-report.md
+          done
+
+          TOTAL=$(find .claude/skills -name "skill.json" | wc -l)
+          echo "" >> skill-report.md
+          echo "**Total Skills:** $TOTAL" >> skill-report.md
+          echo "" >> skill-report.md
+
+          # Multi-AI status
+          echo "## Multi-AI Status" >> skill-report.md
+          echo "" >> skill-report.md
+          echo "- Claude: $(find .claude/skills -name 'skill.json' | wc -l) skills" >> skill-report.md
+          echo "- Qwen: $(find .qwen/skills -name 'skill.json' 2>/dev/null | wc -l || echo 0) skills" >> skill-report.md
+          echo "- Gemini: $(find .gemini/skills -name 'skill.json' 2>/dev/null | wc -l || echo 0) skills" >> skill-report.md
+
+          cat skill-report.md
+
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          name: skill-validation-report
+          path: skill-report.md
+
+  summary:
+    name: Validation Summary
+    runs-on: ubuntu-latest
+    needs: [validate-skill-definitions, check-skill-completeness, verify-multi-ai-parity, validate-skill-metadata, check-documentation-quality]
+    if: always()
+
+    steps:
+      - name: Check all jobs status
+        run: |
+          echo "=================================================="
+          echo "  Skills Validation Summary"
+          echo "=================================================="
+          echo ""
+          echo "Schema Validation: ${{ needs.validate-skill-definitions.result }}"
+          echo "Completeness Check: ${{ needs.check-skill-completeness.result }}"
+          echo "Multi-AI Parity: ${{ needs.verify-multi-ai-parity.result }}"
+          echo "Metadata Validation: ${{ needs.validate-skill-metadata.result }}"
+          echo "Documentation Quality: ${{ needs.check-documentation-quality.result }}"
+          echo ""
+
+          if [ "${{ needs.validate-skill-definitions.result }}" == "success" ] && \
+             [ "${{ needs.check-skill-completeness.result }}" == "success" ] && \
+             [ "${{ needs.verify-multi-ai-parity.result }}" == "success" ] && \
+             [ "${{ needs.validate-skill-metadata.result }}" == "success" ]; then
+            echo "✅ All validation checks passed!"
+            exit 0
+          else
+            echo "❌ Some validation checks failed"
+            exit 1
+          fi
