@@ -1,0 +1,106 @@
+{
+  "id": "phase-generator",
+  "name": "Phase Generator",
+  "version": "1.0.0",
+  "category": "prprompts-core",
+  "description": "Generate specific phases of PRPROMPTS files (Core, Quality, or Demo)",
+  "author": "PRPROMPTS Team",
+  "icon": "⚡",
+  "tags": ["prprompts", "generation", "phases", "partial"],
+
+  "inputs": {
+    "required": {
+      "prd_path": {
+        "type": "string",
+        "description": "Path to validated PRD file",
+        "default": "docs/PRD.md",
+        "validation": "^docs/.*\\.md$"
+      },
+      "phase": {
+        "type": "number",
+        "description": "Phase to generate (1=Core, 2=Quality, 3=Demo)",
+        "enum": [1, 2, 3]
+      }
+    },
+    "optional": {
+      "output_dir": {
+        "type": "string",
+        "description": "Output directory for PRPROMPTS files",
+        "default": "PRPROMPTS"
+      },
+      "overwrite": {
+        "type": "boolean",
+        "description": "Overwrite existing files",
+        "default": false
+      }
+    }
+  },
+
+  "outputs": {
+    "phase_name": {
+      "type": "string",
+      "description": "Name of phase generated (Core/Quality/Demo)"
+    },
+    "files_generated": {
+      "type": "array",
+      "description": "List of files generated in this phase"
+    },
+    "file_count": {
+      "type": "number",
+      "description": "Number of files generated"
+    }
+  },
+
+  "config": {
+    "interactive": false,
+    "timeout": 60000,
+    "retryable": true,
+    "maxRetries": 2,
+    "cacheable": false,
+    "cacheDuration": 0
+  },
+
+  "dependencies": ["prd-analyzer"],
+
+  "requirements": {
+    "flutter": false,
+    "projectInitialized": false,
+    "prdExists": true,
+    "prpromptsGenerated": false,
+    "gitRepo": false
+  },
+
+  "examples": [
+    {
+      "description": "Generate Phase 1 (Core) files only",
+      "command": "@claude use skill prprompts-core/phase-generator --phase 1",
+      "expectedOutput": "10 Phase 1 files generated (project overview, architecture, features, etc.)"
+    },
+    {
+      "description": "Generate Phase 2 (Quality) files",
+      "command": "@claude use skill prprompts-core/phase-generator --phase 2",
+      "expectedOutput": "12 Phase 2 files generated (testing, security, accessibility, etc.)"
+    },
+    {
+      "description": "Generate Phase 3 (Demo) files",
+      "command": "@claude use skill prprompts-core/phase-generator --phase 3",
+      "expectedOutput": "10 Phase 3 files generated (demo setup, presentation, deployment)"
+    }
+  ],
+
+  "cicd": {
+    "testable": true,
+    "mockInputs": {
+      "prd_path": "tests/fixtures/sample-prd.md",
+      "phase": 1,
+      "output_dir": "test-output/PRPROMPTS"
+    },
+    "expectedOutputs": {
+      "phase_name": "Core",
+      "file_count": 10
+    },
+    "fixtures": [
+      "tests/fixtures/sample-prd.md"
+    ]
+  }
+}
