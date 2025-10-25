@@ -173,6 +173,11 @@ Located in `templates/`:
 
 - `claude generate-stakeholder-review` - Create role-specific review checklists for PRD approval. Generates `docs/STAKEHOLDER_REVIEW.md` with sections for Executive/Business, Technical Lead, Product Manager, Compliance Officer, Security Lead, and Legal. Includes sign-off tracker and compliance-specific checklists (HIPAA, PCI-DSS, GDPR, COPPA).
 
+**NEW in v4.1 Phase 3: Implementation Planning**
+- `claude generate-implementation-plan` - Create intelligent implementation plan with sprint planning, team allocation, and dependency-aware task ordering. Integrates with FEATURE_DEPENDENCIES.md and COST_ESTIMATE.md for enhanced intelligence. Outputs `docs/IMPLEMENTATION_PLAN.md` (850+ lines) with: 2-week sprint breakdown, velocity-based allocation, task detail with code snippets, test scenarios, security checklists, critical path visualization, progress tracking metadata.
+
+- `claude update-plan` - Adaptive re-planning based on actual progress. Calculates velocity from completed sprints, identifies blockers and delays, re-allocates tasks to sprints, updates timeline forecasts, recommends scope/resource adjustments. Run after each sprint (every 2 weeks) to keep plan accurate. Supports TODO/IN_PROGRESS/BLOCKED/DONE task states.
+
 **5. PRPROMPTS Generator**
 - Reads `docs/PRD.md` (YAML frontmatter + markdown)
 - Extracts metadata: `compliance: ["hipaa", "pci-dss"]`, `platforms: ["ios", "android"]`, etc.
@@ -221,11 +226,11 @@ Five commands that automate Flutter development:
 
 **Configuration:**
 - `package.json` - npm package config, 14 scripts, peer dependencies
-- `.claude/config.yml` - Command registry for Claude (17 commands: 7 PRD + 6 PRPROMPTS + 4 automation)
+- `.claude/config.yml` - Command registry for Claude (20 commands: 8 PRD + 6 PRPROMPTS + 6 automation)
 - `bin/prprompts` - CLI dispatcher (400 lines, maps commands to AIs)
 - `scripts/postinstall.js` - Auto-installs extensions for detected AIs
 
-**Prompts (15 identical files per AI):**
+**Prompts (16 identical files per AI):**
 - `generate-prd.md` - Interactive wizard prompt (v4.1: added Step 0 template selection)
 - `auto-generate-prd.md` - Auto-generation prompt
 - `analyze-prd.md` - **ENHANCED v4.1:** PRD validation with 4-dimensional scoring (A-F grades) + AI confidence levels
@@ -233,6 +238,7 @@ Five commands that automate Flutter development:
 - `estimate-cost.md` - **NEW v4.1 Phase 2:** Comprehensive cost estimation with 10-section report
 - `analyze-dependencies.md` - **NEW v4.1 Phase 2:** Feature dependency mapping and critical path analysis
 - `generate-stakeholder-review.md` - **NEW v4.1 Phase 2:** Role-specific PRD review checklists
+- `generate-implementation-plan.md` - **NEW v4.1 Phase 3:** Intelligent implementation planning with sprints, velocity, team allocation
 - `prprompts-generator.md` - Main generator (all 32 files)
 - `phase-1-core.md`, `phase-2-quality.md`, `phase-3-demo.md` - Phase generators
 - `single-file-generator.md` - Regenerate one file

@@ -2212,7 +2212,9 @@ Before generating code, use strategic planning tools for budget and timeline:
 claude estimate-cost                  # Generate cost breakdown (60 sec)
 claude analyze-dependencies           # Map feature dependencies (45 sec)
 claude generate-stakeholder-review    # Create review checklists (30 sec)
-```
+claude generate-implementation-plan   # Create sprint-based implementation plan (90 sec) - NEW v4.1 Phase 3
+claude update-plan                    # Re-plan based on actual progress (30 sec) - NEW v4.1 Phase 3
+``````
 
 **Cost Estimator** (`estimate-cost`)
 - Development hours by feature complexity
@@ -2237,6 +2239,26 @@ claude generate-stakeholder-review    # Create review checklists (30 sec)
 - HIPAA/PCI-DSS/GDPR/COPPA specific sections
 - Output: `docs/STAKEHOLDER_REVIEW.md`
 
+**Implementation Planner** (`generate-implementation-plan`) **NEW v4.1 Phase 3**
+- Sprint-based task breakdown (2-week iterations)
+- Team allocation by skill level (senior/mid/junior)
+- Velocity-based sprint allocation
+- Code snippets and test scenarios per task
+- Critical path visualization
+- Risk register (HIPAA/PCI-DSS tasks flagged)
+- Progress tracking (TODO/IN_PROGRESS/BLOCKED/DONE)
+- Integrates with FEATURE_DEPENDENCIES.md and COST_ESTIMATE.md
+- Output: `docs/IMPLEMENTATION_PLAN.md` (850+ lines)
+
+**Adaptive Re-Planner** (`update-plan`) **NEW v4.1 Phase 3**
+- Calculates actual velocity from completed sprints
+- Identifies blockers and delays with impact analysis
+- Re-allocates remaining tasks to sprints
+- Updates timeline forecasts
+- Recommends scope/resource adjustments
+- Run after each sprint (every 2 weeks)
+- Maintains plan accuracy (±10% after 2-3 sprints)
+
 **Typical workflow:**
 ```bash
 # 1. Create PRD with template
@@ -2248,11 +2270,21 @@ claude estimate-cost              # Budget planning
 # 3. Analyze dependencies
 claude analyze-dependencies       # Timeline planning
 
-# 4. Generate stakeholder review
+# 4. Generate implementation plan (NEW v4.1 Phase 3)
+claude generate-implementation-plan   # Sprint planning
+
+# 5. Generate stakeholder review
 claude generate-stakeholder-review
 
-# 5. Get approvals, then generate PRPROMPTS
+# 6. Get approvals, then generate PRPROMPTS
 claude gen-prprompts
+
+# 7. Start development (uses implementation plan)
+claude bootstrap-from-prprompts
+claude implement-next             # Auto-implements next task
+
+# 8. After each sprint (every 2 weeks)
+claude update-plan                # Re-plan based on actual progress
 ```
 
 ### PRPROMPTS Generation
