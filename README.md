@@ -17,9 +17,10 @@
 [![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-Extension-green)](GEMINI.md)
 [![Flutter](https://img.shields.io/badge/Flutter-3.24+-blue)](https://flutter.dev)
 
-[![Windows](https://img.shields.io/badge/Windows-Supported-0078D6?logo=windows)](WINDOWS.md)
-[![macOS](https://img.shields.io/badge/macOS-Supported-000000?logo=apple)](#)
-[![Linux](https://img.shields.io/badge/Linux-Supported-FCC624?logo=linux&logoColor=black)](#)
+[![Windows](https://img.shields.io/badge/Windows-Supported-0078D6?logo=windows)](WINDOWS-QUICKSTART.md)
+[![macOS](https://img.shields.io/badge/macOS-Supported-000000?logo=apple)](MACOS-QUICKSTART.md)
+[![Linux](https://img.shields.io/badge/Linux-Supported-FCC624?logo=linux&logoColor=black)](#system-requirements)
+[![Cross-Platform](https://img.shields.io/badge/Cross--Platform-PowerShell%20%7C%20CMD%20%7C%20Bash%20%7C%20WSL-blue)](#platform-specific-notes)
 
 </div>
 
@@ -76,6 +77,74 @@ curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/
 [📦 Quick Install](#installation) • [🪟 Windows Guide](WINDOWS-QUICKSTART.md) • [✨ v4.1 Features](#v41-enterprise-features-new) • [📖 Docs](docs/PRPROMPTS-SPECIFICATION.md)
 
 </div>
+
+---
+
+## 📋 System Requirements
+
+<div align="center">
+
+| Component | Minimum Version | Notes |
+|-----------|----------------|-------|
+| **Node.js** | v20 or higher | LTS recommended • [Download](https://nodejs.org) |
+| **npm** | v9 or higher | Included with Node.js |
+| **Operating System** | Windows 10+, macOS 10.15+, Linux | Full cross-platform support |
+| **Shell** | Any | PowerShell, CMD, Git Bash, bash, zsh, WSL |
+| **AI CLI** | Latest | At least one: Claude Code, Qwen Code, or Gemini CLI |
+| **Flutter** | 3.24+ | For development only (not required for generation) |
+
+</div>
+
+### Platform-Specific Notes
+
+**Windows:**
+- ✅ Full support for PowerShell, CMD, and Git Bash
+- ✅ WSL (Windows Subsystem for Linux) supported
+- ✅ No administrator privileges required
+- 📖 [Windows Quick Start Guide](WINDOWS-QUICKSTART.md)
+
+**macOS:**
+- ✅ Full support for Intel and Apple Silicon (M1/M2/M3)
+- ✅ Works with Homebrew, nvm, or official Node.js
+- ✅ Both zsh and bash shells supported
+- ✅ No sudo required (use nvm recommended)
+- 📖 [macOS Quick Start Guide](MACOS-QUICKSTART.md)
+
+**Linux:**
+- ✅ Tested on Ubuntu, Debian, Fedora, Arch
+- ✅ Works with system npm, nvm, or Node Version Manager
+- ✅ All major distributions supported
+- 💡 Use nvm to avoid permission issues
+
+**Git Bash (Windows):**
+- ✅ Fully supported with automatic detection
+- ✅ All `.sh` scripts work natively
+- ✅ postinstall automatically uses bash installer
+- 💡 Recommended for Windows developers familiar with Unix commands
+
+### ✨ Recent Cross-Platform Improvements (v4.1.0+)
+
+**Installation Enhancements:**
+- ✅ **No mandatory parameters**: All installer scripts now work without arguments (defaults to `--global`)
+- ✅ **Smart shell detection**: Automatically detects PowerShell, CMD, Git Bash, and WSL on Windows
+- ✅ **Improved error handling**: Better error messages with platform-specific solutions
+- ✅ **Path auto-detection**: Works with standard npm, Homebrew, nvm, and custom npm configurations
+
+**Documentation Improvements:**
+- 📖 New [macOS Quick Start Guide](MACOS-QUICKSTART.md) with Apple Silicon notes
+- 📖 Enhanced [Windows Quick Start Guide](WINDOWS-QUICKSTART.md) with Git Bash support
+- 📖 Platform-specific verification commands (CMD, PowerShell, bash/zsh)
+- 📖 Clear permission guidance (no more sudo confusion)
+- 📖 Comprehensive troubleshooting for all platforms
+
+**Verification Commands:**
+```bash
+# Check your setup works correctly
+prprompts doctor              # Comprehensive diagnostics
+prprompts validate-keys       # Validate API keys
+
+# Platform-specific checks available in each guide
+```
 
 ---
 
