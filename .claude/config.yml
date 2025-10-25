@@ -18,11 +18,24 @@ commands:
   # PRD Analysis
   analyze-prd:
     prompt: "prompts/analyze-prd.md"
-    description: "Validate and analyze PRD, show customizations"
+    description: "Validate and analyze PRD, show customizations (v4.1: with AI confidence scoring)"
 
   refine-prd:
     prompt: "prompts/refine-prd.md"
     description: "Interactively improve PRD quality through AI-guided refinement"
+
+  # PRD Strategic Planning (NEW v4.1 - Phase 2)
+  estimate-cost:
+    prompt: "prompts/estimate-cost.md"
+    description: "💰 Generate detailed cost breakdown from PRD - labor, infrastructure, compliance"
+
+  analyze-dependencies:
+    prompt: "prompts/analyze-dependencies.md"
+    description: "🔗 Map feature dependencies and critical path - implementation order recommendations"
+
+  generate-stakeholder-review:
+    prompt: "prompts/generate-stakeholder-review.md"
+    description: "📋 Create stakeholder review checklists - business, technical, compliance sign-offs"
 
   # PRPROMPTS Generation Commands
   gen-prprompts:
