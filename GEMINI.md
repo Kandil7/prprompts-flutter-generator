@@ -6,13 +6,14 @@ Complete guide for using PRPROMPTS Generator with Google's Gemini CLI - now with
 
 ## 🆕 v4.0: Full Automation
 
-**Go from PRD to production Flutter app in 2-3 hours (40-60x faster!)** with 5 automation commands:
+**Go from PRD to production Flutter app in 2-3 hours (40-60x faster!)** with 6 automation commands:
 
-- 🚀 `/bootstrap-from-prprompts` - Complete project setup (2 min)
-- ✨ `/implement-next` - Auto-implement features (10 min each)
+- 🚀 `/bootstrap-from-prprompts` - Complete project setup with intelligent planning (2 min)
+- ✨ `/implement-next` - Auto-implement features with state tracking (10 min each)
 - 🤖 `/full-cycle` - Implement 1-10 features automatically (1-2 hours)
 - ✅ `/review-and-commit` - Validate & commit
 - 🔍 `/qa-check` - Comprehensive compliance audit
+- 📊 `/update-plan` - Adaptive re-planning with velocity tracking (30 sec) **NEW v4.1 Phase 3**
 
 **Result:** Production-ready app with 85%+ test coverage, HIPAA/PCI-DSS compliant, zero security vulnerabilities.
 
@@ -293,12 +294,71 @@ gemini gen-file            # Generate single file by name
 
 ### 🆕 v4.0 Automation Commands (40-60x Faster!)
 ```bash
-gemini bootstrap-from-prprompts  # Complete project setup (2 min)
-gemini implement-next            # Auto-implement next feature (10 min)
+gemini bootstrap-from-prprompts  # Complete project setup with intelligent planning (2 min)
+gemini implement-next            # Auto-implement with state tracking (10 min)
 gemini full-cycle                # Auto-implement 1-10 features (1-2 hours)
 gemini review-and-commit         # Validate and commit changes
 gemini qa-check                  # Comprehensive compliance audit
+gemini update-plan               # Adaptive re-planning (30 sec) - NEW v4.1 Phase 3
 ```
+
+---
+
+
+### 🆕 v4.1 Phase 3: Implementation Planning Commands
+
+**NEW intelligent project management commands:**
+
+```bash
+gemini generate-implementation-plan  # Create sprint-based plan (90 sec)
+gemini update-plan                   # Re-plan based on progress (30 sec)
+```
+
+**`generate-implementation-plan`** - Intelligent implementation planning with:
+- 📅 Sprint-based task breakdown (2-week iterations)
+- 👥 Team allocation by skill level (senior/mid/junior)
+- ⚡ Velocity-based sprint allocation
+- 📝 Code snippets and test scenarios per task
+- 🔗 Critical path visualization
+- ⚠️  Risk register (HIPAA/PCI-DSS tasks flagged)
+- 📊 Progress tracking (TODO/IN_PROGRESS/BLOCKED/DONE)
+- 🔄 Integrates with FEATURE_DEPENDENCIES.md and COST_ESTIMATE.md
+- 📄 Output: `docs/IMPLEMENTATION_PLAN.md` (850+ lines)
+
+**`update-plan`** - Adaptive re-planning with:
+- 📈 Calculates actual velocity from completed sprints
+- 🚧 Identifies blockers and delays with impact analysis
+- 🔄 Re-allocates remaining tasks to sprints
+- 📅 Updates timeline forecasts
+- 💡 Recommends scope/resource adjustments
+- ⏰ Run after each sprint (every 2 weeks)
+- 🎯 Maintains plan accuracy (±10% after 2-3 sprints)
+
+**Enhanced automation commands:**
+- `bootstrap-from-prprompts` now uses `generate-implementation-plan` for intelligent setup
+- `implement-next` now supports state tracking (TODO/IN_PROGRESS/BLOCKED/DONE) and velocity monitoring
+
+**Typical workflow with planning:**
+```bash
+# 1. Create PRD
+gemini create-prd
+
+# 2. Strategic planning (optional but recommended)
+gemini estimate-cost
+gemini analyze-dependencies
+
+# 3. Generate implementation plan (NEW)
+gemini generate-implementation-plan
+
+# 4. Start development (uses plan)
+gemini bootstrap-from-prprompts
+gemini implement-next
+
+# 5. After each sprint (NEW)
+gemini update-plan
+```
+
+**Learn more:** See `docs/IMPLEMENTATION-PLANNING-GUIDE.md` for comprehensive guide.
 
 ---
 
