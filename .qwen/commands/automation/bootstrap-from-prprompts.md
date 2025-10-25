@@ -121,114 +121,64 @@ Reference: @PRPROMPTS/04-api_integration.md
 ```
 
 ### 4. Generate Implementation Plan
-Create `docs/IMPLEMENTATION_PLAN.md` with all features from PRD:
 
-```markdown
-# Implementation Plan
+NOW run the intelligent implementation plan generator:
 
-Generated from: docs/PRD.md
-Date: [Current Date]
+**Check for enhanced planning files** (optional but recommended):
+```bash
+# Check if dependency analysis exists
+ls docs/FEATURE_DEPENDENCIES.md
 
-## Phase 1: Foundation & Architecture [CURRENT]
-
-### Task 1.1: Create Folder Structure [TODO]
-**PRPROMPTS:** @PRPROMPTS/01-feature_scaffold.md
-**Description:** Set up Clean Architecture folders
-**Files to create:**
-- lib/core/constants/
-- lib/core/errors/
-- lib/core/network/
-- lib/core/security/
-- lib/features/
-- lib/shared/theme/
-**Validation:**
-- [ ] All folders exist
-- [ ] Matches architecture diagram
-**Estimated:** 15 min
-
-### Task 1.2: Setup Dependencies [TODO]
-**PRPROMPTS:** @PRPROMPTS/04-api_integration.md, @PRPROMPTS/03-bloc_implementation.md
-**Description:** Add required packages to pubspec.yaml
-**Dependencies needed:**
-- flutter_bloc
-- equatable
-- dio (HTTP client)
-- get_it (DI)
-- [Add based on PRD requirements]
-**Validation:**
-- [ ] pubspec.yaml updated
-- [ ] flutter pub get successful
-**Estimated:** 10 min
-
-### Task 1.3: Create Design System [TODO]
-**PRPROMPTS:** @PRPROMPTS/06-design_system.md
-**Description:** Setup theme, colors, typography
-**Files to create:**
-- lib/shared/theme/app_theme.dart
-- lib/core/constants/app_colors.dart
-- lib/core/constants/app_typography.dart
-- lib/core/constants/app_spacing.dart
-**Validation:**
-- [ ] No hardcoded colors in code
-- [ ] Dark mode configured
-- [ ] Material 3 enabled
-**Estimated:** 30 min
-
-### Task 1.4: Setup Security Infrastructure [TODO]
-**PRPROMPTS:** @PRPROMPTS/16-security_and_compliance.md
-**Description:** Configure encryption and secure storage
-**Files to create:**
-- lib/core/security/encryption_service.dart
-- lib/core/security/secure_storage_service.dart
-- lib/core/security/jwt_service.dart (verification only!)
-**Validation:**
-- [ ] AES-256-GCM encryption configured
-- [ ] JWT verification uses RS256 (public key)
-- [ ] No private keys in Flutter code
-**Estimated:** 45 min
-
-### Task 1.5: Create Test Infrastructure [TODO]
-**PRPROMPTS:** @PRPROMPTS/05-testing_strategy.md
-**Description:** Setup test folders and utilities
-**Files to create:**
-- test/helpers/test_helper.dart
-- test/fixtures/fixture_reader.dart
-- test_driver/integration_test.dart
-**Validation:**
-- [ ] Test folder structure matches lib/
-- [ ] Mock generators configured
-**Estimated:** 20 min
-
-## Phase 2: Feature Implementation [TODO]
-
-[For each feature in PRD, create tasks following pattern above]
-
-### Task 2.1: [Feature 1] - Domain Layer [TODO]
-**PRPROMPTS:** @PRPROMPTS/01-feature_scaffold.md
-**Description:** Create entities, repositories, usecases
-...
-
-### Task 2.2: [Feature 1] - Data Layer [TODO]
-**PRPROMPTS:** @PRPROMPTS/04-api_integration.md
-...
-
-### Task 2.3: [Feature 1] - Presentation Layer [TODO]
-**PRPROMPTS:** @PRPROMPTS/03-bloc_implementation.md
-...
-
-[Continue for all features...]
-
-## Phase 3: Testing & Polish [TODO]
-
-### Task 3.1: Unit Tests [TODO]
-### Task 3.2: Widget Tests [TODO]
-### Task 3.3: Integration Tests [TODO]
-### Task 3.4: Security Audit [TODO]
-
----
-Progress: 0/[Total Tasks] (0%)
-Current Phase: Phase 1
+# Check if cost estimate exists
+ls docs/COST_ESTIMATE.md
 ```
+
+**If missing**, recommend running (but don't require):
+```
+💡 Pro Tip: For smarter implementation plans, run:
+  claude analyze-dependencies  # Creates FEATURE_DEPENDENCIES.md
+  claude estimate-cost         # Creates COST_ESTIMATE.md
+
+These files enable:
+- Dependency-aware task ordering (critical path)
+- Accurate time estimates
+- Team allocation recommendations
+
+Proceeding with basic plan...
+```
+
+**NOW execute**:
+Run the generate-implementation-plan command to create `docs/IMPLEMENTATION_PLAN.md`:
+
+```
+Generating intelligent implementation plan...
+
+✅ Plan created with:
+- Dependency analysis integrated
+- Sprint planning (2-week iterations)
+- Team allocation based on skill levels
+- Risk assessment for compliance tasks
+- Maximum task detail with code snippets
+- Progress tracking metadata
+
+📄 File: docs/IMPLEMENTATION_PLAN.md
+```
+
+**What gets generated**:
+- Sprint-based task breakdown (Phase 1, 2, 3...)
+- Each task includes:
+  - Owner assignment (based on PRD team_composition)
+  - Story points and time estimates
+  - Dependencies and blockers
+  - PRPROMPTS references
+  - Code snippets and test scenarios
+  - Validation checklists
+  - Security checklists (for HIPAA/PCI-DSS tasks)
+- Critical path visualization
+- Velocity tracking setup
+- Risk register
+
+**Note**: The generated plan is much more detailed than the basic template above. It includes maximum intelligence from PRD, FEATURE_DEPENDENCIES, and COST_ESTIMATE.
 
 ### 5. Create Project Structure
 Execute folder creation:
