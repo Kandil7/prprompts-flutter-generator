@@ -13,14 +13,14 @@ describe('PRPROMPTS File Structure Validation', () => {
     const claudePromptsDir = path.join(rootDir, '.claude', 'prompts');
     const expectedPrompts = [
       'prprompts-generator.md',
-      'create-prd.md',
-      'auto-gen-prd.md',
-      'prd-from-files.md',
+      'generate-prd.md',
+      'auto-generate-prd.md',
+      'generate-prd-from-files.md',
       'analyze-prd.md',
-      'gen-phase-1.md',
-      'gen-phase-2.md',
-      'gen-phase-3.md',
-      'gen-file.md',
+      'phase-1-core.md',
+      'phase-2-quality.md',
+      'phase-3-demo.md',
+      'single-file-generator.md',
     ];
 
     test('should have .claude/prompts directory', () => {
@@ -51,14 +51,14 @@ describe('PRPROMPTS File Structure Validation', () => {
     const qwenPromptsDir = path.join(rootDir, '.qwen', 'prompts');
     const expectedPrompts = [
       'prprompts-generator.md',
-      'create-prd.md',
-      'auto-gen-prd.md',
-      'prd-from-files.md',
+      'generate-prd.md',
+      'auto-generate-prd.md',
+      'generate-prd-from-files.md',
       'analyze-prd.md',
-      'gen-phase-1.md',
-      'gen-phase-2.md',
-      'gen-phase-3.md',
-      'gen-file.md',
+      'phase-1-core.md',
+      'phase-2-quality.md',
+      'phase-3-demo.md',
+      'single-file-generator.md',
     ];
 
     test('should have .qwen/prompts directory', () => {
@@ -82,14 +82,14 @@ describe('PRPROMPTS File Structure Validation', () => {
     const geminiPromptsDir = path.join(rootDir, '.gemini', 'prompts');
     const expectedPrompts = [
       'prprompts-generator.md',
-      'create-prd.md',
-      'auto-gen-prd.md',
-      'prd-from-files.md',
+      'generate-prd.md',
+      'auto-generate-prd.md',
+      'generate-prd-from-files.md',
       'analyze-prd.md',
-      'gen-phase-1.md',
-      'gen-phase-2.md',
-      'gen-phase-3.md',
-      'gen-file.md',
+      'phase-1-core.md',
+      'phase-2-quality.md',
+      'phase-3-demo.md',
+      'single-file-generator.md',
     ];
 
     test('should have .gemini/prompts directory', () => {

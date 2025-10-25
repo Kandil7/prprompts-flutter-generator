@@ -192,8 +192,8 @@ describe('PRPROMPTS Content Validation', () => {
       expect(content.split('\n').length).toBeGreaterThan(200);
 
       // Should contain key sections
-      expect(content).toContain('Project Overview');
-      expect(content).toContain('Technical Requirements');
+      expect(content).toContain('Executive Summary');
+      expect(content).toContain('Technical Architecture');
     });
 
     test('project_description.md should have description template', () => {
