@@ -163,8 +163,15 @@ Located in `templates/`:
 - `prd-saas-starter.md` - Multi-tenancy, enterprise SSO, subscription billing (144 lines)
 
 **NEW in v4.1: PRD Quality Tools**
-- `claude analyze-prd` - Now includes 4-dimensional scoring (Completeness, Clarity, Feasibility, Security) with A-F grades
+- `claude analyze-prd` - Now includes 4-dimensional scoring (Completeness, Clarity, Feasibility, Security) with A-F grades + AI confidence levels
 - `claude refine-prd` - Interactive quality improvement loop with before/after comparison
+
+**NEW in v4.1 Phase 2: PRD Strategic Planning**
+- `claude estimate-cost` - Generate comprehensive cost breakdown: development hours, labor costs (by role), infrastructure, compliance audits, third-party services. Outputs `docs/COST_ESTIMATE.md` with 10 sections including optimization opportunities and payment schedules. ±20% confidence ranges.
+
+- `claude analyze-dependencies` - Map feature dependencies and calculate critical path. Identifies blocking features, parallel work streams, and implementation order. Generates `docs/FEATURE_DEPENDENCIES.md` with visual dependency graph, 4-phase implementation plan, risk assessment, and team allocation suggestions.
+
+- `claude generate-stakeholder-review` - Create role-specific review checklists for PRD approval. Generates `docs/STAKEHOLDER_REVIEW.md` with sections for Executive/Business, Technical Lead, Product Manager, Compliance Officer, Security Lead, and Legal. Includes sign-off tracker and compliance-specific checklists (HIPAA, PCI-DSS, GDPR, COPPA).
 
 **5. PRPROMPTS Generator**
 - Reads `docs/PRD.md` (YAML frontmatter + markdown)
@@ -214,15 +221,18 @@ Five commands that automate Flutter development:
 
 **Configuration:**
 - `package.json` - npm package config, 14 scripts, peer dependencies
-- `.claude/config.yml` - Command registry for Claude (14 commands)
+- `.claude/config.yml` - Command registry for Claude (17 commands: 7 PRD + 6 PRPROMPTS + 4 automation)
 - `bin/prprompts` - CLI dispatcher (400 lines, maps commands to AIs)
 - `scripts/postinstall.js` - Auto-installs extensions for detected AIs
 
-**Prompts (11 identical files per AI):**
+**Prompts (14 identical files per AI):**
 - `generate-prd.md` - Interactive wizard prompt (v4.1: added Step 0 template selection)
 - `auto-generate-prd.md` - Auto-generation prompt
-- `analyze-prd.md` - **NEW v4.1:** PRD validation with 4-dimensional scoring (A-F grades)
+- `analyze-prd.md` - **ENHANCED v4.1:** PRD validation with 4-dimensional scoring (A-F grades) + AI confidence levels
 - `refine-prd.md` - **NEW v4.1:** Interactive quality improvement loop
+- `estimate-cost.md` - **NEW v4.1 Phase 2:** Comprehensive cost estimation with 10-section report
+- `analyze-dependencies.md` - **NEW v4.1 Phase 2:** Feature dependency mapping and critical path analysis
+- `generate-stakeholder-review.md` - **NEW v4.1 Phase 2:** Role-specific PRD review checklists
 - `prprompts-generator.md` - Main generator (all 32 files)
 - `phase-1-core.md`, `phase-2-quality.md`, `phase-3-demo.md` - Phase generators
 - `single-file-generator.md` - Regenerate one file
