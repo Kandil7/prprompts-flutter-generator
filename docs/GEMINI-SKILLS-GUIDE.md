@@ -1390,7 +1390,11 @@ ls ~/.gemini/commands/skills/automation/
 npm install -g prprompts-flutter-generator
 
 # 3. Manually install (if needed)
-bash ~/node_modules/prprompts-flutter-generator/scripts/install-gemini-skills.sh
+# Linux/macOS:
+bash $(npm root -g)/prprompts-flutter-generator/scripts/install-gemini-skills.sh
+
+# Windows (PowerShell):
+& "$(npm root -g)\prprompts-flutter-generator\scripts\install-gemini-skills.ps1"
 
 # 4. Restart Gemini CLI
 gemini
@@ -1404,11 +1408,15 @@ gemini
 
 **Solution:**
 ```powershell
-# Use PowerShell installer
+# Option 1: Use npm root to find correct path
+$NpmRoot = npm root -g
+& "$NpmRoot\prprompts-flutter-generator\scripts\install-gemini-skills.ps1"
+
+# Option 2: If npm root doesn't work, try standard location
 cd $env:APPDATA\npm\node_modules\prprompts-flutter-generator\scripts
 .\install-gemini-skills.ps1
 
-# Or batch file
+# Option 3: Use batch file
 .\install-gemini-skills.bat
 ```
 
@@ -1549,6 +1557,64 @@ find lib/ -name "*.dart" | wc -l
 - **flutter analyze:** 0 errors (100% pass)
 - **Architecture violations:** 0.5 per feature (avg)
 - **Security issues:** 1.2 per feature (avg, auto-fixable)
+
+---
+
+## Uninstalling Skills
+
+If you need to remove Gemini CLI skills:
+
+### Complete Uninstall
+
+**Remove all skills:**
+```bash
+# Linux/macOS:
+rm -rf ~/.gemini/commands/skills/
+
+# Windows (PowerShell):
+Remove-Item -Recurse -Force "$env:USERPROFILE\.gemini\commands\skills\"
+
+# Windows (Command Prompt):
+rd /s /q "%USERPROFILE%\.gemini\commands\skills\"
+```
+
+### Selective Uninstall
+
+**Remove specific skill category:**
+```bash
+# Remove automation skills only
+rm -rf ~/.gemini/commands/skills/automation/
+
+# Remove PRPROMPTS core skills only
+rm -rf ~/.gemini/commands/skills/prprompts-core/
+
+# Remove workflow skills only
+rm -rf ~/.gemini/commands/skills/development-workflow/
+```
+
+### Reinstall After Uninstall
+
+If you want to reinstall:
+```bash
+# Reinstall PRPROMPTS globally
+npm install -g prprompts-flutter-generator
+
+# Or run installer manually
+bash $(npm root -g)/prprompts-flutter-generator/scripts/install-gemini-skills.sh
+```
+
+### Verify Removal
+
+```bash
+# Check if skills directory is removed
+ls ~/.gemini/commands/skills/
+# Should show: No such file or directory
+
+# Start Gemini CLI and check
+gemini
+/help
+# Skills should not appear in the list
+```
 
 ---
 

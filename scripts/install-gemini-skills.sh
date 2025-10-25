@@ -89,4 +89,23 @@ echo "📖 Documentation:"
 echo "  Full guide: docs/GEMINI-SKILLS-GUIDE.md"
 echo "  Gemini setup: GEMINI.md"
 echo ""
+
+# Verify installation
+echo "🔍 Verifying installation..."
+if [ "$TOTAL_SKILLS" -eq 8 ]; then
+  echo "  ✅ All 8 skills installed successfully!"
+else
+  echo "  ⚠️  Expected 8 skills, but found $TOTAL_SKILLS"
+fi
+
+# Check if Gemini CLI is available
+if command -v gemini &> /dev/null; then
+  echo "  ✅ Gemini CLI is installed and available"
+  echo "  💡 Restart Gemini CLI and run /help to see new skills"
+else
+  echo "  ⚠️  Gemini CLI not found"
+  echo "  💡 Install with: npm install -g @google/gemini-cli"
+fi
+
+echo ""
 echo "✅ Installation successful!"

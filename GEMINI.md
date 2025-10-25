@@ -65,6 +65,72 @@ npm install -g @google/gemini-cli
 gemini --version
 ```
 
+### 3. Get Your Google API Key (Free!)
+
+Gemini CLI requires a Google API key, which is **completely free** with generous limits.
+
+**Get your API key:**
+1. Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Sign in with your Google account (or create one - it's free!)
+3. Click "Create API Key"
+4. Copy your API key
+
+**Free Tier Limits:**
+- ✅ **60 requests/minute** - Perfect for development
+- ✅ **1,000 requests/day** - More than enough for most teams
+- ✅ **1M token context** - Analyze entire large codebases
+- ✅ **No credit card required** - Completely free forever
+
+**API Key Management:**
+Gemini CLI will automatically prompt you to configure your API key on first use, or you can set it manually:
+
+```bash
+# Option 1: Interactive setup (recommended)
+gemini auth login
+
+# Option 2: Set environment variable
+export GOOGLE_API_KEY="your-api-key-here"
+
+# Option 3: Add to your shell profile
+echo 'export GOOGLE_API_KEY="your-api-key-here"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**Security Note:**
+- Never commit API keys to git repositories
+- Use environment variables for API key storage
+- API keys are stored securely by Gemini CLI
+
+---
+
+## Version Compatibility
+
+**Tested Versions:**
+- **Gemini CLI:** >= 1.0.0 (tested with 1.0.x, 1.1.x)
+- **Node.js:** >= 20.0.0 (LTS recommended)
+- **PRPROMPTS:** >= 4.0.0
+
+**Compatibility Notes:**
+- Gemini CLI is actively developed; breaking changes may occur in major versions
+- Always check [Gemini CLI Changelog](https://github.com/google/gemini-cli/releases) before upgrading
+- PRPROMPTS skills are forward-compatible with Gemini CLI minor version updates
+- If you encounter issues after a Gemini CLI update, reinstall PRPROMPTS:
+  ```bash
+  npm install -g prprompts-flutter-generator@latest
+  ```
+
+**Known Issues:**
+- **Gemini CLI < 1.0.0:** Not supported (TOML slash commands not available)
+- **Node.js < 20.0.0:** May cause compatibility issues with Gemini CLI
+
+**Version Check:**
+```bash
+# Check installed versions
+gemini --version
+node --version
+npm list -g prprompts-flutter-generator
+```
+
 ---
 
 ## Installation Methods

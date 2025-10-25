@@ -86,4 +86,24 @@ Write-Host "📖 Documentation:" -ForegroundColor Cyan
 Write-Host "  Full guide: docs\GEMINI-SKILLS-GUIDE.md"
 Write-Host "  Gemini setup: GEMINI.md"
 Write-Host ""
+
+# Verify installation
+Write-Host "🔍 Verifying installation..." -ForegroundColor Yellow
+if ($TotalSkills -eq 8) {
+    Write-Host "  ✅ All 8 skills installed successfully!" -ForegroundColor Green
+} else {
+    Write-Host "  ⚠️  Expected 8 skills, but found $TotalSkills" -ForegroundColor Yellow
+}
+
+# Check if Gemini CLI is available
+$GeminiCmd = Get-Command gemini -ErrorAction SilentlyContinue
+if ($GeminiCmd) {
+    Write-Host "  ✅ Gemini CLI is installed and available" -ForegroundColor Green
+    Write-Host "  💡 Restart Gemini CLI and run /help to see new skills"
+} else {
+    Write-Host "  ⚠️  Gemini CLI not found" -ForegroundColor Yellow
+    Write-Host "  💡 Install with: npm install -g @google/gemini-cli"
+}
+
+Write-Host ""
 Write-Host "✅ Installation successful!" -ForegroundColor Green

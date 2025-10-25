@@ -58,5 +58,15 @@ echo   # 1M token context + Free tier (60 req/min, 1K/day)
 echo.
 echo Documentation: docs\GEMINI-SKILLS-GUIDE.md
 echo.
+echo Verifying installation...
+where gemini >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo   - Gemini CLI is installed
+    echo   - Restart Gemini CLI and run /help to see new skills
+) else (
+    echo   - Warning: Gemini CLI not found
+    echo   - Install with: npm install -g @google/gemini-cli
+)
+echo.
 echo Installation successful!
 pause
