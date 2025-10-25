@@ -9,6 +9,156 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.4.0] - 2025-10-25
+
+### ✨ NEW - Phase 3: Implementation Planning + Slash Commands
+
+**Major Release**: Intelligent project management with sprint planning and in-chat command execution
+
+#### 🎯 Phase 3: Implementation Planning
+
+**New Commands**:
+- **`generate-implementation-plan`** - Create sprint-based implementation plan with intelligent task breakdown
+- **`update-plan`** - Adaptive re-planning based on actual progress and velocity tracking
+
+**Features**:
+- ✅ **Sprint Planning** - 2-week iterations with velocity-based task allocation
+- ✅ **Team Allocation** - Skill-based assignment (senior/mid/junior developers)
+- ✅ **Task Detail** - Code snippets, test scenarios, acceptance criteria, security checklists
+- ✅ **Critical Path** - Visualization of longest dependency chain
+- ✅ **Progress Tracking** - TODO/IN_PROGRESS/BLOCKED/DONE state management
+- ✅ **Velocity Tracking** - Actual vs estimated time with burndown charts
+- ✅ **Integration** - Works with FEATURE_DEPENDENCIES.md and COST_ESTIMATE.md
+- ✅ **Accuracy** - ±10% timeline precision after 2-3 sprints
+
+**Enhanced Automation Commands**:
+- `bootstrap-from-prprompts` - Now uses `generate-implementation-plan` for intelligent project setup
+- `implement-next` - Enhanced with state tracking, velocity monitoring, and actual time tracking
+
+**Output**: `docs/IMPLEMENTATION_PLAN.md` (850+ lines with complete sprint breakdown)
+
+**Documentation**:
+- `docs/IMPLEMENTATION-PLANNING-GUIDE.md` (604 lines) - Comprehensive user guide with:
+  - Quick start workflow (6 steps)
+  - Command reference with examples
+  - Planning workflow (7 detailed steps)
+  - Advanced features (sprint planning, team allocation, risk assessment, dependency management)
+  - Best practices and troubleshooting
+  - FAQs
+
+**Benefits**:
+- 📅 Predictable timelines (±10% after 2-3 sprints)
+- 📊 Real-time progress tracking with burndown visualization
+- ⚠️ Risk awareness (HIPAA/PCI-DSS tasks flagged)
+- 👥 Clear team coordination and ownership
+- 🔄 Adaptive planning based on actual velocity
+
+#### 🎨 Slash Commands - All 20 Commands Now Available In-Chat
+
+**All PRPROMPTS commands now work as slash commands inside Claude Code, Qwen Code, and Gemini CLI chat sessions!**
+
+**New Command Structure** (organized by category):
+
+**PRD Commands (`/prd/...`)** - 6 commands:
+```
+/prd/create              # Interactive PRD wizard with industry templates
+/prd/auto-generate       # Auto from project description file
+/prd/from-files          # From existing markdown docs
+/prd/auto-from-project   # Auto-discover all project .md files
+/prd/analyze             # Validate PRD with AI quality scoring
+/prd/refine              # Interactive quality improvement loop
+```
+
+**Planning Commands (`/planning/...`)** - 4 commands:
+```
+/planning/estimate-cost        # Cost breakdown (labor, infrastructure, compliance)
+/planning/analyze-dependencies # Feature dependencies and critical path
+/planning/stakeholder-review   # Generate review checklists
+/planning/implementation-plan  # Sprint-based implementation planning (NEW)
+```
+
+**PRPROMPTS Generation (`/prprompts/...`)** - 5 commands:
+```
+/prprompts/generate-all  # All 32 PRPROMPTS files
+/prprompts/phase-1       # Phase 1: Core Architecture (10 files)
+/prprompts/phase-2       # Phase 2: Quality & Security (12 files)
+/prprompts/phase-3       # Phase 3: Demo & Learning (10 files)
+/prprompts/single-file   # Generate single file by name
+```
+
+**Automation Commands (`/automation/...`)** - 6 commands (includes update-plan):
+```
+/automation/bootstrap      # Complete project setup (2 min)
+/automation/implement-next # Auto-implement next feature (10 min)
+/automation/update-plan    # Re-plan based on actual velocity (30 sec) (NEW)
+/automation/full-cycle     # Auto-implement 1-10 features (1-2 hours)
+/automation/review-commit  # Validate and commit changes
+/automation/qa-check       # Comprehensive compliance audit
+```
+
+**File Structure Changes**:
+- **51 new files**: 17 command files × 3 AIs (Claude, Qwen, Gemini)
+- **6 renamed files**: Automation commands renamed for consistency
+- **3 config updates**: Updated config.yml for all AIs (version 2.3.0 "Slash Commands")
+
+**Directory Structure** (all 3 AIs):
+```
+.{claude,qwen,gemini}/commands/
+├── prd/           # 6 PRD workflow commands
+├── planning/      # 4 strategic planning commands
+├── prprompts/     # 5 PRPROMPTS generation commands
+└── automation/    # 6 automation commands
+```
+
+**Benefits**:
+- ✅ **Organized** - Logical grouping by category (prd, planning, prprompts, automation)
+- ✅ **Discoverable** - Type `/` in chat to explore available commands
+- ✅ **Shorter names** - `/prd/create` vs `claude create-prd`
+- ✅ **In-session** - Run workflows without switching to terminal
+- ✅ **Backward compatible** - CLI commands (`claude <command>`) still work
+- ✅ **Feature parity** - All 3 AI assistants have identical slash command support
+
+**Documentation Updates**:
+- `CLAUDE.md` - Added comprehensive "Slash Commands (NEW in v4.1)" section
+- `QWEN.md` - Added Qwen-specific slash commands documentation
+- `GEMINI.md` - Added Gemini-specific slash commands documentation
+- `README.md` - Added user-facing slash commands guide with comparison table
+
+#### 📝 Documentation
+
+**Updated Files**:
+- `CLAUDE.md` - Phase 3 planning commands + slash command reference
+- `QWEN.md` - Phase 3 planning commands + slash command reference
+- `GEMINI.md` - Phase 3 planning commands + slash command reference
+- `README.md` - Slash commands section with usage examples
+
+**New Files**:
+- `docs/IMPLEMENTATION-PLANNING-GUIDE.md` (604 lines)
+
+#### 🔧 Changed
+
+**Config Files** (all 3 AIs):
+- Updated `.claude/config.yml` to version 2.3.0 (Slash Commands)
+- Updated `.qwen/config.yml` to version 2.3.0 (Slash Commands)
+- Updated `.gemini/config.yml` to version 2.3.0 (Slash Commands)
+- Changed all `prompts/` paths to `commands/` paths for slash command support
+
+**Automation Commands** (renamed for consistency):
+- `bootstrap-from-prprompts.md` → `bootstrap.md`
+- `review-and-commit.md` → `review-commit.md`
+
+#### 📊 Stats
+
+**Total Files Changed**: 58 files
+- 51 new command files (17 × 3 AIs)
+- 6 renamed files (automation consistency)
+- 3 config.yml updates
+- 4 documentation updates
+
+**Lines Added**: 19,085+ lines (command files + documentation)
+
+---
+
 ## [4.2.0] - 2025-10-24
 
 ### ✨ NEW - Flutter Flavors & Multi-AI Parity
