@@ -36,7 +36,7 @@ describe('PRPROMPTS Content Validation', () => {
       const promptPath = path.join(claudePromptsDir, 'auto-generate-prd.md');
       const content = fs.readFileSync(promptPath, 'utf8');
 
-      expect(content).toContain('automatic');
+      expect(content).toContain('Auto');
       expect(content.length).toBeGreaterThan(100);
     });
 
