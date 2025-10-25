@@ -75,6 +75,10 @@ commands:
     prompt: "commands/automation/implement-next.md"
     description: "✨ Auto-implement next feature from IMPLEMENTATION_PLAN.md (10 min) - with tests & validation"
 
+  update-plan:
+    prompt: "commands/automation/update-plan.md"
+    description: "📊 Re-plan based on actual progress - velocity tracking, blocker analysis, sprint reallocation"
+
   full-cycle:
     prompt: "commands/automation/full-cycle.md"
     description: "🤖 Auto-implement 1-10 features automatically (1-2 hours) - complete automation loop"
