@@ -2197,6 +2197,57 @@ claude refine-prd          # Interactive quality improvement loop (NEW v4.1)
 - Industry-specific features already defined
 - Fully customizable after loading
 
+### PRD Strategic Planning (NEW v4.1 Phase 2)
+
+Before generating code, use strategic planning tools for budget and timeline:
+
+```bash
+claude estimate-cost                  # Generate cost breakdown (60 sec)
+claude analyze-dependencies           # Map feature dependencies (45 sec)
+claude generate-stakeholder-review    # Create review checklists (30 sec)
+```
+
+**Cost Estimator** (`estimate-cost`)
+- Development hours by feature complexity
+- Labor costs by role (Senior/Mid/Junior rates)
+- Infrastructure & third-party service costs
+- Compliance audit costs (HIPAA, PCI-DSS, etc.)
+- 10-section report with ±20% confidence
+- Output: `docs/COST_ESTIMATE.md`
+
+**Dependency Analyzer** (`analyze-dependencies`)
+- Maps which features depend on others
+- Calculates critical path (longest dependency chain)
+- Identifies blocking features
+- Suggests 4-phase implementation plan
+- Recommends parallel work streams
+- Output: `docs/FEATURE_DEPENDENCIES.md`
+
+**Stakeholder Review** (`generate-stakeholder-review`)
+- Role-specific checklists (Executive, Technical, Compliance, Legal)
+- Customized per project type and compliance
+- Sign-off tracker for approvals
+- HIPAA/PCI-DSS/GDPR/COPPA specific sections
+- Output: `docs/STAKEHOLDER_REVIEW.md`
+
+**Typical workflow:**
+```bash
+# 1. Create PRD with template
+claude create-prd
+
+# 2. Get cost estimate
+claude estimate-cost              # Budget planning
+
+# 3. Analyze dependencies
+claude analyze-dependencies       # Timeline planning
+
+# 4. Generate stakeholder review
+claude generate-stakeholder-review
+
+# 5. Get approvals, then generate PRPROMPTS
+claude gen-prprompts
+```
+
 ### PRPROMPTS Generation
 
 ```bash
