@@ -72,7 +72,7 @@ irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master
 curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
 ```
 
-**📌 Git Bash on Windows:** All bash scripts work natively in Git Bash! The postinstall script automatically detects Git Bash and uses the correct installer. [Learn more](MACOS-QUICKSTART.md#git-bash-compatibility-on-windows)
+**📌 Git Bash on Windows:** All bash scripts work natively in Git Bash! The postinstall script automatically detects Git Bash and uses the correct installer. [Learn more](#git-bash-windows)
 
 [📦 Quick Install](#installation) • [🪟 Windows Guide](WINDOWS-QUICKSTART.md) • [✨ v4.1 Features](#v41-enterprise-features-new) • [📖 Docs](docs/PRPROMPTS-SPECIFICATION.md)
 
@@ -2792,6 +2792,8 @@ npm run test:commands     # Command availability
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
+**Full version history:** [CHANGELOG.md](CHANGELOG.md)
+
 ## 🙏 Acknowledgments
 
 - Built with [Claude Code](https://claude.ai/code) by Anthropic
@@ -2819,7 +2821,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📝 Changelog
 
-### v4.1.0 (October 2025) - Enterprise Features 🎉
+### v4.1.0 (October 2024) - Enterprise Features 🎉
 
 **New Features:**
 - 🎮 **Interactive Mode** - Menu-driven interface for easier command discovery
@@ -2844,7 +2846,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - `prprompts history` - Browse command history
 - `prprompts history-search` - Search previous commands
 
-### v4.0.0 (October 2025) - Full Automation & Skills System
+### v4.0.0 (October 2024) - Full Automation & Skills System
 - 🤖 Complete automation pipeline (40-60x faster)
 - 🎯 **Claude Code Skills System** - 30+ specialized automation skills
 - ✅ **Automation Phase Complete** - 5/5 skills implemented
