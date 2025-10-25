@@ -170,6 +170,47 @@ Feasibility = (Timeline_Score × 0.35) + (Team_Match × 0.25) + (Tech_Maturity �
 Security = (Compliance_Cov × 0.35) + (Auth_Score × 0.25) + (Data_Protect × 0.25) + (Audit_Score × 0.15)
 ```
 
+
+### Step 2.5: Calculate AI Confidence Levels (NEW v4.1)
+
+For each quality dimension, calculate confidence based on information availability:
+
+**Completeness Confidence:**
+- All 15 required sections present: 100%
+- Each missing section: -10%
+- YAML fields present: +5% per critical field (up to 30%)
+- Features well-documented: +20%
+
+**Clarity Confidence:**
+- All features have user stories: +25%
+- Technical requirements specified: +25%
+- Acceptance criteria defined: +25%
+- No ambiguous language detected: +25%
+
+**Feasibility Confidence:**
+- Timeline specified with milestones: +30%
+- Team composition fully detailed: +30%
+- Technology stack explicitly chosen: +20%
+- No red flags detected: +20%
+
+**Security Confidence:**
+- Compliance requirements listed: +30%
+- Auth method specified with config: +25%
+- Encryption requirements detailed: +25%
+- Sensitive data types identified: +20%
+
+**Confidence Interpretation:**
+- 90-100%: High confidence, assessment reliable
+- 70-89%: Medium confidence, assessment mostly reliable
+- 50-69%: Low confidence, human review recommended
+- < 50%: Very low confidence, assessment unreliable
+
+**When to flag low confidence:**
+- Missing critical information makes assessment uncertain
+- Vague language prevents accurate scoring
+- Contradictory requirements detected
+- Insufficient detail for dimension assessment
+
 ### Step 3: Calculate Overall Grade
 
 **Overall Percentage:**
@@ -249,6 +290,20 @@ Display analysis with quality scores:
 │  ─────────────────────────────────────────────          │
 │  OVERALL GRADE: [A/B/C/D/F] (XX%)                      │
 │  Status: [Ready/Improvements needed/Not ready]          │
+└─────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│ AI CONFIDENCE LEVELS (NEW v4.1)                         │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  Completeness:  [████████████████████] XX% confident   │
+│  Clarity:       [████████████████████] XX% confident   │
+│  Feasibility:   [████████████████████] XX% confident   │
+│  Security:      [████████████████████] XX% confident   │
+│                                                         │
+│  💡 Confidence indicates how much information was       │
+│     available to assess each dimension. Low confidence  │
+│     (< 70%) suggests human review needed in that area.  │
 └─────────────────────────────────────────────────────────┘
 
 **Project Details:**
