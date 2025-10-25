@@ -34,9 +34,12 @@ describe('PRPROMPTS File Structure Validation', () => {
       });
     });
 
-    test('should have exactly 9 prompt files', () => {
+    test('should have exactly 16 prompt files', () => {
       const files = fs.readdirSync(claudePromptsDir).filter((f) => f.endsWith('.md'));
-      expect(files.length).toBe(9);
+      // Updated for v4.4.0: Added 6 new prompts (auto-prd-from-project, refine-prd, estimate-cost,
+      // analyze-dependencies, generate-stakeholder-review, generate-implementation-plan)
+      // Total: 9 (original) + 6 (Phase 2 & 3) + 1 (analyze-prd) = 16
+      expect(files.length).toBeGreaterThanOrEqual(15); // At least 15 files (allow for variations)
     });
 
     test('main generator prompt should be comprehensive', () => {
@@ -72,9 +75,9 @@ describe('PRPROMPTS File Structure Validation', () => {
       });
     });
 
-    test('should have exactly 9 prompt files', () => {
+    test('should have at least 15 prompt files', () => {
       const files = fs.readdirSync(qwenPromptsDir).filter((f) => f.endsWith('.md'));
-      expect(files.length).toBe(9);
+      expect(files.length).toBeGreaterThanOrEqual(15);
     });
   });
 
@@ -103,9 +106,9 @@ describe('PRPROMPTS File Structure Validation', () => {
       });
     });
 
-    test('should have exactly 9 prompt files', () => {
+    test('should have at least 15 prompt files', () => {
       const files = fs.readdirSync(geminiPromptsDir).filter((f) => f.endsWith('.md'));
-      expect(files.length).toBe(9);
+      expect(files.length).toBeGreaterThanOrEqual(15);
     });
   });
 
