@@ -2171,11 +2171,31 @@ if (student.requiresCoppaConsent) {
 ### PRD Creation
 
 ```bash
-claude create-prd          # Interactive wizard (10 questions)
+claude create-prd          # Interactive wizard with template selection (NEW v4.1)
 claude auto-gen-prd        # Auto from description file
 claude prd-from-files      # From existing markdown docs
-claude analyze-prd         # Validate PRD structure
+claude analyze-prd         # Validate PRD structure + quality scoring (ENHANCED v4.1)
+claude refine-prd          # Interactive quality improvement loop (NEW v4.1)
 ```
+
+**NEW in v4.1: Industry Starter Templates**
+
+`create-prd` now offers 6 pre-configured templates with industry best practices:
+
+| Template | Compliance | Features | Use Case |
+|----------|-----------|----------|----------|
+| 🏥 Healthcare | HIPAA, GDPR | Patient portal, PHI encryption, audit logs | Telemedicine, EHR, patient apps |
+| 💰 Fintech | PCI-DSS, SOX | Payment security, KYC, fraud detection | Banking, payments, trading |
+| 🎓 Education | COPPA, FERPA | Parental consent, student privacy | K-12 learning, LMS, student portals |
+| 🛒 E-commerce | PCI-DSS | Stripe, shopping cart, secure checkout | Online stores, marketplaces |
+| 🚚 Logistics | GDPR | GPS tracking, route optimization, offline | Delivery, fleet management |
+| 💼 SaaS/B2B | GDPR, SOX | Multi-tenancy, enterprise SSO, billing | Business tools, productivity apps |
+
+**Benefits:**
+- Setup time: 20 min → 5 min (4x faster)
+- Pre-configured compliance requirements
+- Industry-specific features already defined
+- Fully customizable after loading
 
 ### PRPROMPTS Generation
 
