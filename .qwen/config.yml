@@ -1,54 +1,54 @@
 # Qwen Code Commands Configuration for PRPROMPTS Generator
-# Version: 2.2.0
+# Version: 2.3.0 (Slash Commands)
 # Optimized for Qwen3-Coder (256K-1M token context)
 
 commands:
   # PRD Creation Commands
   create-prd:
-    prompt: "prompts/generate-prd.md"
+    prompt: "commands/prd/create.md"
     description: "Interactive PRD creation wizard (10 questions)"
 
   auto-gen-prd:
-    prompt: "prompts/auto-generate-prd.md"
+    prompt: "commands/prd/auto-generate.md"
     description: "Auto-generate PRD from description (zero interaction)"
 
   prd-from-files:
-    prompt: "prompts/generate-prd-from-files.md"
+    prompt: "commands/prd/from-files.md"
     description: "Generate PRD from existing markdown files (optional input)"
 
   # PRD Analysis
   analyze-prd:
-    prompt: "prompts/analyze-prd.md"
+    prompt: "commands/prd/analyze.md"
     description: "Validate and analyze PRD, show customizations"
 
   refine-prd:
-    prompt: "prompts/refine-prd.md"
+    prompt: "commands/prd/refine.md"
     description: "Interactively improve PRD quality through AI-guided refinement"
 
   # PRPROMPTS Generation Commands
   gen-prprompts:
-    prompt: "prompts/prprompts-generator.md"
+    prompt: "commands/prprompts/generate-all.md"
     description: "Generate all 32 PRPROMPTS files from PRD"
 
   gen-phase-1:
-    prompt: "prompts/phase-1-core.md"
+    prompt: "commands/prprompts/phase-1.md"
     description: "Generate Phase 1: Core Architecture (10 files)"
 
   gen-phase-2:
-    prompt: "prompts/phase-2-quality.md"
+    prompt: "commands/prprompts/phase-2.md"
     description: "Generate Phase 2: Quality & Security (12 files)"
 
   gen-phase-3:
-    prompt: "prompts/phase-3-demo.md"
+    prompt: "commands/prprompts/phase-3.md"
     description: "Generate Phase 3: Demo & Learning (10 files)"
 
   gen-file:
-    prompt: "prompts/single-file-generator.md"
+    prompt: "commands/prprompts/single-file.md"
     description: "Generate a single PRPROMPTS file by name"
 
   # v4.0 Automation Commands (Full AI-Powered Development Pipeline)
   bootstrap-from-prprompts:
-    prompt: "commands/automation/bootstrap-from-prprompts.md"
+    prompt: "commands/automation/bootstrap.md"
     description: "🚀 Complete project setup from PRPROMPTS (2 min) - Clean Architecture, security, tests"
 
   implement-next:
@@ -60,7 +60,7 @@ commands:
     description: "🤖 Auto-implement 1-10 features automatically (1-2 hours) - complete automation loop"
 
   review-and-commit:
-    prompt: "commands/automation/review-and-commit.md"
+    prompt: "commands/automation/review-commit.md"
     description: "✅ Validate and commit changes - PRPROMPTS compliance, security checks, tests"
 
   qa-check:

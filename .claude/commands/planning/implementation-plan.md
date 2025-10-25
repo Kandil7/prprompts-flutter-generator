@@ -1,0 +1,863 @@
+---
+name: Generate Implementation Plan
+description: Create intelligent, dependency-aware implementation plan with sprint planning and team allocation
+author: Implementation Planning Engine
+version: 2.0.0
+tags: [prd, planning, implementation, sprints, team, velocity]
+---
+
+# Generate Implementation Plan
+
+## Overview
+
+Create a comprehensive, intelligent implementation plan from PRD that includes:
+- **Dependency-aware task ordering** (uses critical path from FEATURE_DEPENDENCIES.md)
+- **Sprint planning** (2-week sprints, velocity-based allocation)
+- **Team allocation** (skill-based assignment from PRD team_composition)
+- **Risk assessment** (HIPAA/PCI-DSS/security tasks flagged)
+- **Maximum task detail** (subtasks, code snippets, test scenarios, acceptance criteria)
+- **Progress tracking** (TODO/IN_PROGRESS/BLOCKED/DONE states, velocity, burndown)
+
+Output: `docs/IMPLEMENTATION_PLAN.md` (~850+ lines)
+
+---
+
+## Step 1: Input Validation
+
+Check for required and optional files:
+
+```bash
+# Required
+ls docs/PRD.md
+
+# Optional (enhances intelligence)
+ls docs/FEATURE_DEPENDENCIES.md
+ls docs/COST_ESTIMATE.md
+```
+
+**If PRD.md missing**:
+```
+❌ Error: docs/PRD.md not found
+
+Please run:
+  claude create-prd
+  OR
+  claude auto-gen-prd
+
+Then try again.
+```
+
+**If optional files missing**:
+```
+⚠️  Warning: Enhanced planning files not found
+
+For smarter plans, run:
+  claude analyze-dependencies  # Creates FEATURE_DEPENDENCIES.md
+  claude estimate-cost         # Creates COST_ESTIMATE.md
+
+Proceeding with basic plan...
+```
+
+---
+
+## Step 2: Extract Data from PRD
+
+Read `docs/PRD.md` and extract:
+
+### From YAML Frontmatter:
+
+```yaml
+project_name: "HealthTracker Pro"
+project_type: "healthcare"
+platforms: ["ios", "android", "web"]
+compliance: ["hipaa", "gdpr"]
+sensitive_data: ["phi", "pii"]
+team_size: "5-10"
+team_composition: "balanced"  # junior-heavy | balanced | senior-heavy
+timeline_months: 6
+demo_frequency: "biweekly"
+state_management: "bloc"
+database: "firebase"
+auth_method: "jwt"
+```
+
+### From Markdown Body:
+
+Extract **Features** section - look for:
+```markdown
+## Features & User Stories
+
+### Epic 1: User Authentication
+Priority: P0
+Complexity: Medium
+
+**User Stories:**
+- As a user, I want to log in securely
+- As a user, I want biometric authentication
+
+**Acceptance Criteria:**
+- JWT verification (RS256)
+- MFA support
+- Session timeout (15 min)
+```
+
+Parse each feature to get:
+- **Name**: "User Authentication"
+- **Priority**: P0 (critical) | P1 (high) | P2 (medium) | P3 (low)
+- **Complexity**: Low | Medium | High | Critical
+- **User stories count**: 2
+- **Dependencies**: (inferred from description or explicit mentions)
+
+---
+
+## Step 3: Load Dependency Analysis (If Available)
+
+**If FEATURE_DEPENDENCIES.md exists**, read:
+
+1. **Critical Path**: Longest sequence of dependent features
+   ```
+   User Authentication (2 weeks) →
+   Database Schema (1 week) →
+   API Foundation (2 weeks) →
+   Payment Integration (2 weeks)
+   Total: 7 weeks
+   ```
+
+2. **Dependency Graph**: Adjacency list
+   ```
+   User Authentication
+     ├─ Depends on: [None]
+     └─ Blocks: [Dashboard, Profile, Settings, ...]
+
+   Dashboard
+     ├─ Depends on: [User Authentication, Real-time Infrastructure]
+     └─ Blocks: [Dashboard Widgets, Notifications]
+   ```
+
+3. **Parallel Work Streams**: Features with no dependencies
+   ```
+   Stream 1: User Auth → Profile → Settings
+   Stream 2: Design System → Component Library → UI Polish
+   Stream 3: Analytics Setup → Error Tracking (no blockers)
+   ```
+
+4. **Implementation Phases** (from FEATURE_DEPENDENCIES.md):
+   - Phase 1: Foundation (Week 1-2)
+   - Phase 2: Core Features (Week 3-6)
+   - Phase 3: Advanced Features (Week 7-10)
+   - Phase 4: Polish & Launch (Week 11-12)
+
+---
+
+## Step 4: Load Cost Estimates (If Available)
+
+**If COST_ESTIMATE.md exists**, read:
+
+1. **Feature Time Estimates**:
+   ```
+   User Authentication: 40 hours (±8 hours)
+   Dashboard: 60 hours (±12 hours)
+   Payment Integration: 80 hours (±16 hours)
+   ```
+
+2. **Team Breakdown**:
+   ```
+   Senior Dev: 120 hours @ $150/hr
+   Mid Dev: 200 hours @ $100/hr
+   Junior Dev: 100 hours @ $75/hr
+   ```
+
+3. **Risk Buffers**:
+   - HIPAA compliance tasks: +25% buffer
+   - PCI-DSS tasks: +30% buffer
+   - New technology: +20% buffer
+
+---
+
+## Step 5: Calculate Team Allocation
+
+Based on `team_size` and `team_composition`:
+
+### Team Size Mapping:
+- `"1-5"` → 3 developers (1 senior, 1 mid, 1 junior)
+- `"5-10"` → 7 developers (2 senior, 4 mid, 1 junior)
+- `"11-25"` → 15 developers (3 senior, 8 mid, 4 junior)
+- `"26-50"` → 30 developers (5 senior, 15 mid, 10 junior)
+
+### Team Composition Adjustment:
+- `"junior-heavy"`: -1 senior, +2 junior
+- `"balanced"`: No change
+- `"senior-heavy"`: +2 senior, -1 junior
+
+### Create Team Roster:
+
+```markdown
+## Team Allocation
+
+### Senior Developers (2)
+- **Alice**: Authentication, Security, Payment, Compliance
+- **Bob**: API Integration, Database, Architecture
+
+### Mid-Level Developers (4)
+- **Carol**: Dashboard UI, Feature Scaffolding
+- **Dave**: BLoC Implementation, State Management
+- **Eve**: Design System, Component Library
+- **Frank**: Testing, QA Automation
+
+### Junior Developers (1)
+- **Grace**: Documentation, Bug Fixes, Code Review Support
+```
+
+---
+
+## Step 6: Sprint Planning
+
+### Calculate Sprint Capacity:
+
+**Velocity Formula**:
+- Senior: 8 story points/sprint (40 hours/sprint ÷ 5 hours/SP)
+- Mid: 6 story points/sprint (40 hours/sprint ÷ 6.7 hours/SP)
+- Junior: 4 story points/sprint (40 hours/sprint ÷ 10 hours/SP)
+
+**Team Velocity**:
+```
+2 seniors × 8 SP = 16 SP
+4 mids × 6 SP = 24 SP
+1 junior × 4 SP = 4 SP
+Total: 44 SP/sprint
+```
+
+### Map Complexity to Story Points:
+
+- **Low complexity**: 3 SP (2 hours senior, 4 hours mid, 6 hours junior)
+- **Medium complexity**: 8 SP (6 hours senior, 10 hours mid, 16 hours junior)
+- **High complexity**: 13 SP (2 days senior, 3 days mid, 4 days junior)
+- **Critical complexity**: 21 SP (3 days senior, 5 days mid, 7 days junior)
+
+### Allocate Features to Sprints:
+
+**Algorithm**:
+1. Start with **critical path features** (from FEATURE_DEPENDENCIES.md)
+2. Allocate to earliest possible sprint (respecting dependencies)
+3. Fill remaining capacity with **parallel features**
+4. Balance workload across team members
+5. Ensure each sprint has mix of P0/P1/P2 tasks
+6. Add 20% buffer for unknowns
+
+**Example**:
+```
+Sprint 1 (44 SP capacity):
+  - User Authentication (13 SP) - Alice
+  - Design System Setup (8 SP) - Eve
+  - Folder Structure (3 SP) - Bob
+  - Test Infrastructure (5 SP) - Frank
+  - Documentation Setup (3 SP) - Grace
+  Total: 32 SP (73% capacity, 27% buffer)
+```
+
+---
+
+## Step 7: Risk Assessment
+
+### Identify High-Risk Tasks:
+
+**Compliance Risks**:
+- **HIPAA** tasks: Any feature handling PHI (patient health information)
+  - Risk Level: HIGH
+  - Mitigation: Encryption, audit logs, security review
+
+- **PCI-DSS** tasks: Any payment/card handling
+  - Risk Level: CRITICAL
+  - Mitigation: Tokenization, NO card storage, PCI audit
+
+- **GDPR** tasks: EU user data, right to deletion
+  - Risk Level: MEDIUM
+  - Mitigation: Data export, deletion APIs
+
+**Technical Risks**:
+- **New Technology**: First time using Stripe, Firebase, etc.
+  - Risk Level: MEDIUM
+  - Mitigation: Spike, proof-of-concept, training
+
+- **Third-party Dependencies**: External API reliability
+  - Risk Level: MEDIUM
+  - Mitigation: Fallback, retry logic, monitoring
+
+- **Complex Algorithms**: Real-time sync, encryption
+  - Risk Level: HIGH
+  - Mitigation: Code review, testing, security audit
+
+### Risk Register Format:
+
+```markdown
+## Risk Register
+
+| Task ID | Risk Level | Risk Description | Mitigation | Owner |
+|---------|------------|------------------|------------|-------|
+| 1.2 | HIGH | JWT misconfiguration (signing vs verifying) | Security review, PRPROMPTS/16 | Alice |
+| 2.4 | CRITICAL | PCI-DSS: Storing card numbers | Stripe tokenization only | Alice |
+| 3.1 | HIGH | PHI encryption weakness | AES-256-GCM, test vectors | Bob |
+```
+
+---
+
+## Step 8: Generate Detailed Tasks
+
+For each feature, create tasks with **maximum detail**:
+
+### Task Template:
+
+```markdown
+### Task X.Y: [Feature Name] - [Layer] [STATUS]
+
+**Owner**: [Team Member] ([Level]) | **Story Points**: X | **Risk**: [LOW/MEDIUM/HIGH/CRITICAL]
+**Estimated**: X hours | **Actual**: X hours (X% complete)
+**PRPROMPTS**: @PRPROMPTS/XX-filename.md, @PRPROMPTS/YY-filename.md
+**Dependencies**: Task A.B (DONE), Task C.D (IN_PROGRESS)
+**Blocks**: Task E.F, Task G.H
+
+**Description**: [1-2 sentence description]
+
+**Subtasks**:
+- [ ] X.Y.1 [Subtask description]
+- [ ] X.Y.2 [Subtask description]
+- [x] X.Y.3 [Completed subtask] (if status = IN_PROGRESS)
+
+**Files to Create** (X files):
+1. lib/path/to/file1.dart
+2. lib/path/to/file2.dart
+3. test/path/to/test1.dart
+...
+
+**Code Snippet - file1.dart**:
+```dart
+// Example implementation following PRPROMPTS patterns
+class Example {
+  // SECURITY: Comment explaining security consideration
+  // HIPAA: Comment explaining compliance requirement
+}
+```
+
+**Code Snippet - file2.dart**:
+```dart
+// Additional code example
+```
+
+**Validation Checklist**:
+- [ ] Follows PRPROMPTS/XX patterns
+- [ ] No hardcoded values
+- [ ] Error handling complete
+- [ ] Unit tests written
+
+**Security Checklist** (if Risk = HIGH/CRITICAL):
+- [ ] No sensitive data logged
+- [ ] Encryption at rest (AES-256-GCM)
+- [ ] HTTPS only, no HTTP
+- [ ] Input validation complete
+- [ ] No SQL injection vulnerabilities
+- [ ] Session timeout configured
+
+**Test Scenarios**:
+1. Happy path: [Description] → Expected result
+2. Edge case: [Description] → Expected result
+3. Error case: [Description] → Expected result
+4. Security test: [Description] → Expected result
+
+**Acceptance Criteria**:
+- ✅ Criterion 1 (if DONE)
+- ⏳ Criterion 2 (if IN_PROGRESS)
+- ⏳ Criterion 3 (if TODO)
+
+**Blockers**: [Description of blocker if STATUS = BLOCKED]
+
+**Notes**: [Any additional context, decisions, discussions]
+```
+
+---
+
+## Step 9: Generate Progress Tracking Metadata
+
+### Metadata Section:
+
+```markdown
+## Metadata
+- **Generated**: 2025-01-15
+- **Last Updated**: 2025-01-22 (Sprint 1 complete)
+- **Team Size**: 7 developers (2 senior, 4 mid, 1 junior)
+- **Sprint Duration**: 2 weeks
+- **Velocity**: 44 story points/sprint (team capacity)
+- **Actual Velocity**: 32 SP/sprint (average last 2 sprints)
+- **Total Tasks**: 87
+- **Total Story Points**: 320
+- **Estimated Duration**: 8 sprints (16 weeks)
+- **Actual Progress**: 2 sprints (4 weeks), 40% complete
+
+## Progress Dashboard
+Sprint 1: ██████████ 100% (32/32 SP) ✅
+Sprint 2: ████████░░ 80% (26/32 SP) ⏳
+Sprint 3: ███░░░░░░░ 30% (10/32 SP) ⏳
+Sprint 4: ░░░░░░░░░░ 0% (0/32 SP)
+Sprint 5: ░░░░░░░░░░ 0% (0/32 SP)
+
+Overall: ████░░░░░░ 40% (128/320 SP completed)
+
+## Burndown Chart Data
+| Sprint | Planned | Completed | Remaining |
+|--------|---------|-----------|-----------|
+| Sprint 1 | 32 | 32 | 288 |
+| Sprint 2 | 32 | 26 | 262 |
+| Sprint 3 | 32 | 10 | 252 (current) |
+| Sprint 4 | 32 | 0 | 252 |
+
+**Trend**: ⚠️ Behind schedule (6 SP behind, Sprint 3)
+**Forecast**: 9 sprints (18 weeks) at current velocity (32 SP/sprint)
+```
+
+### Critical Path Section:
+
+```markdown
+## Critical Path (Longest sequence: 12 weeks)
+
+1. ✅ User Authentication (Week 1-2) → DONE (2 weeks)
+2. ⏳ Database Schema (Week 2-3) → IN_PROGRESS (1 week, 80% complete)
+3. ⏸️ API Foundation (Week 3-5) → BLOCKED (2 weeks, waiting for backend)
+4. 🔜 Payment Integration (Week 5-7) → TODO (2 weeks)
+5. 🔜 Checkout Flow (Week 7-9) → TODO (2 weeks)
+6. 🔜 Order Management (Week 9-11) → TODO (2 weeks)
+7. 🔜 Admin Dashboard (Week 11-12) → TODO (1 week)
+
+**Total Critical Path**: 12 weeks
+**Actual Progress**: 2 weeks complete, 1 week in progress
+**Delays**: 0.4 weeks (API Foundation blocker)
+```
+
+---
+
+## Step 10: Output Generation
+
+Create `docs/IMPLEMENTATION_PLAN.md` with this structure:
+
+```markdown
+# Implementation Plan
+
+[Generated timestamp, metadata]
+
+## Metadata
+[Team size, velocity, totals, dates]
+
+## Progress Dashboard
+[Sprint progress bars, overall percentage]
+
+## Critical Path
+[Longest dependency chain, status]
+
+## Team Allocation
+[Owner assignments by skill level]
+
+## Risk Register
+[High-risk tasks, mitigations]
+
+---
+
+## Sprint 1: Foundation (Week 1-2) - 32 SP [COMPLETED]
+
+### Task 1.1: Create Clean Architecture [DONE]
+[Full task detail with code snippets, tests, validation]
+
+### Task 1.2: User Authentication - Domain Layer [DONE]
+[Full task detail]
+
+...
+
+---
+
+## Sprint 2: Core Features (Week 3-4) - 32 SP [80% COMPLETE]
+
+### Task 2.1: Dashboard - Domain Layer [DONE]
+[Full task detail]
+
+### Task 2.2: Dashboard - Data Layer [IN_PROGRESS]
+[Full task detail with progress indicators]
+
+### Task 2.3: API Foundation [BLOCKED]
+[Full task detail with blocker description]
+
+...
+
+---
+
+[Continue for all sprints...]
+
+---
+
+## Velocity Tracking
+
+| Sprint | Planned SP | Completed SP | Velocity | Trend |
+|--------|-----------|--------------|----------|-------|
+| Sprint 1 | 32 | 32 | 100% | ✅ On track |
+| Sprint 2 | 32 | 26 | 81% | ⚠️ Slight delay |
+| Sprint 3 | 32 | 10 | 31% | 🚨 Behind (Week 1 only) |
+
+**Velocity Insights**:
+- Team velocity: 44 SP/sprint (capacity), 32 SP/sprint (actual average)
+- Slowdown cause: Backend API delays blocking Tasks 2.3, 2.5, 3.1
+- Recommendation: Add parallel UI-only tasks for Sprint 3, reduce dependency on backend
+
+---
+
+## Appendix A: Story Point Reference
+
+- **1 SP** = 1 hour (junior), 30 min (senior) - Trivial tasks (config changes)
+- **3 SP** = 6 hours (junior), 2 hours (senior) - Simple tasks (folder setup, basic model)
+- **5 SP** = 10 hours (junior), 4 hours (senior) - Standard tasks (usecase, repository)
+- **8 SP** = 16 hours (junior), 6 hours (senior) - Complex tasks (BLoC, API integration)
+- **13 SP** = 3 days (junior), 2 days (senior) - Full feature (domain + data + presentation)
+- **21 SP** = 5 days (junior), 3 days (senior) - Epic feature (multiple screens, complex logic)
+
+## Appendix B: Task States
+
+- **TODO**: Not started, waiting for sprint or dependencies
+- **IN_PROGRESS**: Actively being worked on by assigned owner
+- **BLOCKED**: Waiting on external dependency (backend, design, decision)
+- **DONE**: Complete, validated, tested, committed to repo
+- **SKIPPED**: Removed from scope (documented in notes)
+
+## Appendix C: Priority Definitions
+
+- **P0** (Critical): Must have for launch, blocks other features
+- **P1** (High): Important for launch, user-facing
+- **P2** (Medium): Nice to have, can ship without
+- **P3** (Low): Future enhancement, post-launch
+
+## Appendix D: PRPROMPTS Reference
+
+All tasks reference PRPROMPTS files for implementation patterns:
+- **PRPROMPTS/01** - Feature Scaffold (Clean Architecture)
+- **PRPROMPTS/03** - BLoC Implementation (State Management)
+- **PRPROMPTS/04** - API Integration (HTTP, Error Handling)
+- **PRPROMPTS/05** - Testing Strategy (Unit, Widget, Integration)
+- **PRPROMPTS/06** - Design System (Theme, Colors, Typography)
+- **PRPROMPTS/16** - Security & Compliance (HIPAA, PCI-DSS, Encryption)
+- [See full PRPROMPTS/ directory for all 32 guides]
+```
+
+---
+
+## Step 11: Show Summary
+
+After creating `docs/IMPLEMENTATION_PLAN.md`, display:
+
+```
+✅ Implementation Plan Generated
+
+📄 File: docs/IMPLEMENTATION_PLAN.md
+📊 Total Tasks: 87
+🎯 Story Points: 320 SP
+⏱️  Estimated Duration: 8 sprints (16 weeks)
+👥 Team: 7 developers (2 senior, 4 mid, 1 junior)
+📈 Velocity: 44 SP/sprint (capacity), 32 SP/sprint (recommended)
+
+📋 Structure:
+   ├── Metadata & Progress Dashboard
+   ├── Critical Path Analysis
+   ├── Team Allocation
+   ├── Risk Register
+   ├── Sprint 1: Foundation (32 SP)
+   ├── Sprint 2: Core Features (32 SP)
+   ├── Sprint 3: Advanced Features (40 SP)
+   ├── Sprint 4-8: Feature Implementation
+   └── Appendices (Reference docs)
+
+🔗 Integration:
+   ✅ Used FEATURE_DEPENDENCIES.md (critical path, dependency graph)
+   ✅ Used COST_ESTIMATE.md (time estimates, team breakdown)
+   ✅ Used PRD.md (features, compliance, team composition)
+
+🚀 Next Steps:
+   1. Review plan with team
+   2. Run: claude bootstrap-from-prprompts (uses this plan)
+   3. Run: claude implement-next (implements Task 1.1)
+   4. Run: claude full-cycle 10 (implements 10 tasks automatically)
+   5. Run: claude update-plan (re-plan based on actual progress)
+
+💡 Pro Tips:
+   - Tasks have detailed code snippets and test scenarios
+   - High-risk tasks flagged with security checklists
+   - Critical path shows longest dependency chain
+   - Use /update-plan after each sprint to replan
+```
+
+---
+
+## Example Task (Full Detail)
+
+Here's an example of the maximum detail level for one task:
+
+### Task 1.2: User Authentication - Domain Layer [DONE]
+
+**Owner**: Alice (Senior) | **Story Points**: 13 | **Risk**: HIGH (HIPAA compliance)
+**Estimated**: 10 hours | **Actual**: 8.5 hours
+**PRPROMPTS**: @PRPROMPTS/01-feature_scaffold.md, @PRPROMPTS/16-security_and_compliance.md
+**Dependencies**: Task 1.1 (DONE - Clean Architecture)
+**Blocks**: Task 2.1 (Dashboard), Task 2.3 (Profile), Task 3.1 (Settings)
+
+**Description**: Implement authentication domain layer with JWT verification (RS256 only, no signing), user entity, and auth usecases following Clean Architecture.
+
+**Subtasks**:
+- [x] 1.2.1 Create User entity (lib/features/auth/domain/entities/user.dart)
+- [x] 1.2.2 Create AuthToken entity
+- [x] 1.2.3 Create AuthRepository interface
+- [x] 1.2.4 Create LoginUsecase
+- [x] 1.2.5 Create LogoutUsecase
+- [x] 1.2.6 Create RefreshTokenUsecase
+- [x] 1.2.7 Create VerifyTokenUsecase
+- [x] 1.2.8 Write unit tests (80%+ coverage)
+
+**Files Created** (14 files):
+1. lib/features/auth/domain/entities/user.dart
+2. lib/features/auth/domain/entities/auth_token.dart
+3. lib/features/auth/domain/repositories/auth_repository.dart
+4. lib/features/auth/domain/usecases/login_usecase.dart
+5. lib/features/auth/domain/usecases/logout_usecase.dart
+6. lib/features/auth/domain/usecases/refresh_token_usecase.dart
+7. lib/features/auth/domain/usecases/verify_token_usecase.dart
+8. test/features/auth/domain/entities/user_test.dart
+9. test/features/auth/domain/entities/auth_token_test.dart
+10. test/features/auth/domain/usecases/login_usecase_test.dart
+11. test/features/auth/domain/usecases/logout_usecase_test.dart
+12. test/features/auth/domain/usecases/refresh_token_usecase_test.dart
+13. test/features/auth/domain/usecases/verify_token_usecase_test.dart
+14. test/helpers/mock_auth_repository.dart
+
+**Code Snippet - entities/user.dart**:
+```dart
+import 'package:equatable/equatable.dart';
+
+/// User entity - Domain layer business object
+///
+/// SECURITY NOTES:
+/// - No password stored in entity (backend only)
+/// - User ID is UUID, NOT PHI (patient health information)
+/// - Email stored encrypted at rest (see SecureStorageService)
+///
+/// HIPAA COMPLIANCE:
+/// - User ID is non-PHI identifier
+/// - No medical data in this entity
+/// - Audit logs track all user access (see AuditService)
+class User extends Equatable {
+  final String id;          // UUID from backend
+  final String email;       // Encrypted at rest
+  final String? name;       // Optional display name
+  final List<String> roles; // ["patient", "doctor", "admin"]
+
+  const User({
+    required this.id,
+    required this.email,
+    this.name,
+    this.roles = const [],
+  });
+
+  bool get isPatient => roles.contains('patient');
+  bool get isDoctor => roles.contains('doctor');
+  bool get isAdmin => roles.contains('admin');
+
+  @override
+  List<Object?> get props => [id, email, name, roles];
+
+  @override
+  String toString() => 'User(id: $id, email: *****, roles: $roles)'; // Redacted email
+}
+```
+
+**Code Snippet - repositories/auth_repository.dart**:
+```dart
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
+import '../entities/user.dart';
+import '../entities/auth_token.dart';
+
+/// AuthRepository - Domain layer interface
+/// Implementation in data layer (auth_repository_impl.dart)
+///
+/// SECURITY: JWT verification uses RS256 public key (NO signing in Flutter!)
+abstract class AuthRepository {
+  /// Login with email/password
+  /// Returns User or Failure (NetworkFailure, AuthFailure)
+  Future<Either<Failure, User>> login({
+    required String email,
+    required String password,
+  });
+
+  /// Logout - clears secure storage
+  Future<Either<Failure, void>> logout();
+
+  /// Refresh access token using refresh token
+  /// Backend validates refresh token, issues new access token
+  Future<Either<Failure, AuthToken>> refreshToken(String refreshToken);
+
+  /// Verify JWT access token
+  /// SECURITY: Uses RS256 public key from backend
+  /// NEVER sign tokens in Flutter (no private key!)
+  Future<Either<Failure, User>> verifyToken(String jwtToken);
+
+  /// Get cached user from secure storage
+  Future<Either<Failure, User>> getCachedUser();
+}
+```
+
+**Code Snippet - usecases/login_usecase.dart**:
+```dart
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
+import '../../../../core/usecases/usecase.dart';
+import '../entities/user.dart';
+import '../repositories/auth_repository.dart';
+
+/// LoginUsecase - Business logic for user login
+///
+/// Flow:
+/// 1. Validate email/password (basic format check)
+/// 2. Call repository.login() → HTTP POST /api/auth/login
+/// 3. Backend validates credentials, returns JWT + refresh token
+/// 4. Store tokens in SecureStorage (AES-256 encrypted)
+/// 5. Return User entity
+class LoginUsecase implements UseCase<User, LoginParams> {
+  final AuthRepository repository;
+
+  LoginUsecase(this.repository);
+
+  @override
+  Future<Either<Failure, User>> call(LoginParams params) async {
+    // Validate input
+    if (!_isValidEmail(params.email)) {
+      return Left(ValidationFailure('Invalid email format'));
+    }
+    if (params.password.length < 8) {
+      return Left(ValidationFailure('Password must be 8+ characters'));
+    }
+
+    // Call repository
+    return await repository.login(
+      email: params.email,
+      password: params.password,
+    );
+  }
+
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+}
+
+class LoginParams {
+  final String email;
+  final String password;
+
+  LoginParams({required this.email, required this.password});
+}
+```
+
+**Validation Checklist**:
+- [x] Entities have no business logic (only data + equality)
+- [x] Repository is interface (no implementation in domain/)
+- [x] Usecases follow single responsibility principle
+- [x] Unit tests cover all edge cases (80%+ coverage)
+- [x] No passwords stored in Flutter code
+- [x] No business logic in entities
+
+**Security Checklist** (CRITICAL - HIPAA):
+- [x] JWT verification uses RS256 public key only
+- [x] No private keys in Flutter code (backend only!)
+- [x] User ID is non-PHI identifier (UUID)
+- [x] Email stored encrypted at rest (SecureStorageService)
+- [x] Session timeout configured (15 min, see main.dart)
+- [x] Passwords never logged or stored
+- [x] User.toString() redacts sensitive data
+
+**Test Scenarios**:
+1. **Happy path**: Login with valid credentials → User entity returned
+2. **Invalid email**: Login with "notanemail" → ValidationFailure
+3. **Short password**: Login with "pass" → ValidationFailure("8+ characters")
+4. **Wrong password**: Backend returns 401 → AuthFailure("Invalid credentials")
+5. **Network error**: No internet connection → NetworkFailure
+6. **Server error**: Backend 500 error → ServerFailure
+7. **Token expiry**: Access token expired, refresh succeeds → New token
+8. **Refresh token expired**: Refresh fails → Re-login required
+
+**Acceptance Criteria**:
+- ✅ All 7 domain layer files created
+- ✅ All 7 test files created with 80%+ coverage (actual: 87%)
+- ✅ Security audit passed (reviewed by Alice + Bob)
+- ✅ HIPAA compliance checklist complete
+- ✅ Code follows PRPROMPTS/01 Clean Architecture patterns
+- ✅ No analyzer warnings
+- ✅ Committed to repo with PR review
+
+**Blockers**: None (completed ahead of schedule)
+
+**Notes**:
+- Backend team confirmed RS256 public key available at /api/auth/public-key
+- Discussed session timeout with compliance officer: 15 min approved for HIPAA
+- Decided to use Equatable for entity equality (reduces boilerplate)
+- Alice pair-programmed with Bob on JWT verification logic
+
+---
+
+## Intelligence Features Summary
+
+This implementation plan includes:
+
+✅ **Dependency Integration**: Uses FEATURE_DEPENDENCIES.md critical path
+✅ **Cost Integration**: Uses COST_ESTIMATE.md time estimates
+✅ **Sprint Planning**: 2-week sprints, velocity-based allocation
+✅ **Team Allocation**: Skill-based assignment (senior/mid/junior)
+✅ **Risk Assessment**: HIPAA/PCI-DSS/security tasks flagged
+✅ **Maximum Detail**: Code snippets, test scenarios, acceptance criteria
+✅ **Progress Tracking**: TODO/IN_PROGRESS/BLOCKED/DONE states
+✅ **Velocity Tracking**: Burndown, trend analysis, forecasting
+✅ **Critical Path**: Longest dependency chain visualized
+✅ **Parallel Streams**: Identifies work that can run concurrently
+✅ **Compliance Aware**: Security checklists for sensitive tasks
+✅ **Adaptive**: Designed for use with /update-plan command
+
+---
+
+## Error Handling
+
+If any step fails, provide helpful error messages:
+
+**No features found in PRD**:
+```
+❌ Error: No features found in docs/PRD.md
+
+PRD must have a "## Features & User Stories" section with at least one feature.
+
+Please add features to PRD or regenerate:
+  claude refine-prd
+```
+
+**Team composition invalid**:
+```
+❌ Error: Invalid team_composition in PRD: "unknown"
+
+Valid values: "junior-heavy" | "balanced" | "senior-heavy"
+Please fix PRD YAML frontmatter.
+```
+
+**Timeline unrealistic**:
+```
+⚠️  Warning: Timeline unrealistic
+
+PRD timeline: 3 months
+Estimated duration: 8 sprints (16 weeks = 4 months)
+
+Recommend:
+  1. Reduce scope (remove P2/P3 features)
+  2. Increase team size
+  3. Extend timeline to 4 months
+
+Proceeding with 16-week plan...
+```
+
+---
+
+Generate the implementation plan following all steps above.

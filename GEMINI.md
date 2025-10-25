@@ -271,6 +271,67 @@ This installs commands for all 3 AI assistants side-by-side:
 
 ---
 
+## Slash Commands (NEW in v4.1)
+
+**All 20 PRPROMPTS commands are now available as slash commands within Gemini CLI chat sessions!**
+
+### What Are Slash Commands?
+
+Slash commands let you run PRPROMPTS workflows directly in Gemini CLI without leaving your chat session:
+- **From terminal**: `gemini create-prd` (traditional)
+- **In chat**: `/prd/create` (new slash command)
+
+### Organized Command Structure
+
+Commands are organized into 4 categories:
+
+**PRD Commands (`/prd/...`)**
+```
+/prd/create              # Interactive PRD wizard with templates
+/prd/auto-generate       # Auto from description file
+/prd/from-files          # From existing markdown docs
+/prd/auto-from-project   # Auto-discover all project .md files
+/prd/analyze             # Validate PRD with quality scoring
+/prd/refine              # Interactive quality improvement loop
+```
+
+**Planning Commands (`/planning/...`)**
+```
+/planning/estimate-cost        # Cost breakdown (labor, infrastructure, compliance)
+/planning/analyze-dependencies # Feature dependencies and critical path
+/planning/stakeholder-review   # Generate review checklists
+/planning/implementation-plan  # Sprint-based implementation planning
+```
+
+**PRPROMPTS Generation (`/prprompts/...`)**
+```
+/prprompts/generate-all  # All 32 PRPROMPTS files
+/prprompts/phase-1       # Phase 1: Core Architecture (10 files)
+/prprompts/phase-2       # Phase 2: Quality & Security (12 files)
+/prprompts/phase-3       # Phase 3: Demo & Learning (10 files)
+/prprompts/single-file   # Generate single file by name
+```
+
+**Automation Commands (`/automation/...`)**
+```
+/automation/bootstrap      # Complete project setup (2 min)
+/automation/implement-next # Auto-implement next feature (10 min)
+/automation/update-plan    # Re-plan based on actual velocity (30 sec)
+/automation/full-cycle     # Auto-implement 1-10 features (1-2 hours)
+/automation/review-commit  # Validate and commit changes
+/automation/qa-check       # Comprehensive compliance audit
+```
+
+### Benefits of Slash Commands
+
+✅ **Organized** - Logical grouping by category
+✅ **Discoverable** - Explore commands in chat
+✅ **Shorter names** - `/prd/create` vs `gemini create-prd`
+✅ **In-session** - Run workflows without switching to terminal
+✅ **Gemini advantage** - 1M context window analyzes massive codebases during slash command execution
+
+---
+
 ## Available Commands
 
 All commands work identically to Claude/Qwen versions:

@@ -1,0 +1,223 @@
+---
+name: Generate Phase 3
+description: Generate Phase 3 Demo & Learning files (10 files + README) with v2.0 spec
+author: Phase 3 Generator
+version: 2.0.0
+tags: [prprompts, phase-3, demo, learning, v2.0]
+---
+
+# Generate Phase 3: Demo & Learning (v2.0)
+
+## Overview
+Generate the 10 demo and learning PRPROMPTS files plus README, following v2.0 strict PRP pattern.
+
+## Input
+Read: `docs/PRD.md` - Extract YAML frontmatter for customization.
+
+## V2.0 SPECIFICATION
+
+### PRP Pattern (MANDATORY)
+Every file MUST follow this exact 6-section structure:
+
+```markdown
+## FEATURE
+What this guide helps you accomplish
+
+## EXAMPLES
+Real code with actual file paths
+
+## CONSTRAINTS
+✅ DO / ❌ DON'T rules
+
+## VALIDATION GATES
+Manual checklist + automated CI checks
+
+## BEST PRACTICES
+Junior-friendly "Why?" explanations
+
+## REFERENCES
+Official docs, tools, templates
+```
+
+### Quality Requirements
+- ✅ **Length**: 500-600 words per file (README: 300-400 words)
+- ✅ **No Placeholders**: All content actionable
+- ✅ **Real Examples**: Actual code, workflows, templates
+- ✅ **Junior-Friendly**: Explain benefits and rationale
+- ✅ **PRD-Adapted**: Files 26 and 31 heavily customized
+
+## Output
+
+**IMPORTANT**: All files MUST go inside the `PRPROMPTS/` folder.
+
+### Files to Generate (10 files + README, numbered 23-32)
+
+23. **23-ai_pair_programming_guide.md** (500-600 words)
+    - Claude Code, GitHub Copilot integration
+    - AI-assisted refactoring, test generation
+    - Human review required for AI code
+
+24. **24-dashboard_and_analytics.md** (500-600 words)
+    - Firebase Analytics, Crashlytics
+    - Event tracking, performance monitoring
+    - Privacy review, NO logging PII/PHI
+
+25. **25-tech_debt_and_refactor_strategy.md** (500-600 words)
+    - Debt scoring (High/Medium/Low)
+    - 20% sprint capacity for refactors
+    - GitHub Issues labeled `tech-debt`
+
+26. **26-demo_environment_setup.md** (500-600 words) ⭐ **PRD-CUSTOMIZED**
+    - **MUST adapt based on PRD's `project_type`**
+    - **Healthcare**: Pre-populated patient records
+      ```dart
+      final demoPatientsHealthcare = [
+        Patient(id: '1', name: 'John Doe', condition: 'Diabetes'),
+      ];
+      ```
+    - **Fintech**: Test credit cards (4242...)
+      ```dart
+      final demoCardsFintech = [
+        CreditCard(last4: '4242', brand: 'Visa', expiryMonth: 12, expiryYear: 2025),
+      ];
+      ```
+    - **Education**: Sample courses and students
+    - **E-commerce**: Demo products, orders
+    - **SaaS**: Sample workspaces, users
+
+27. **27-demo_progress_tracker.md** (500-600 words)
+    - Sprint burn-down, completed features
+    - Public `/demo-status` page
+    - PM approval before publishing
+
+28. **28-demo_branding_and_visuals.md** (500-600 words)
+    - Client-specific theming
+    - Logo replacement, color overrides
+    - Feature flags for client themes
+
+29. **29-demo_deployment_automation.md** (500-600 words)
+    - GitHub Actions for demo builds
+    - Firebase Hosting, GitHub Pages
+    - Smoke tests after deployment
+
+30. **30-client_demo_report_template.md** (500-600 words)
+    - Weekly/biweekly summaries
+    - Screenshots, video links, goals
+    - No technical jargon for clients
+
+31. **31-project_role_adaptation.md** (500-600 words) ⭐ **PRD-CUSTOMIZED**
+    - **MUST adapt based on PRD's `team_size` and `team_composition`**
+    - **Small (1-5)**: Generalists, rotated roles
+      ```markdown
+      ## Team: Small (5 devs)
+      - Tech Lead (1) - also codes 50% time
+      - Full-stack Developers (4) - all roles rotated
+      ```
+    - **Medium (5-15)**: Dedicated QA, DevOps
+      ```markdown
+      ## Team: Medium (12 devs)
+      - Tech Lead (1)
+      - Senior Developers (2) - architecture, mentoring
+      - Mid-level Developers (6) - features
+      - Junior Developers (2) - bugs, tests
+      - QA Engineer (1)
+      ```
+    - **Large (15+)**: Specialized teams (iOS, Android, Backend)
+      ```markdown
+      ## Team: Large (30 devs)
+      - Tech Lead (1)
+      - iOS Team (8) - Swift, SwiftUI
+      - Android Team (8) - Kotlin, Jetpack
+      - Flutter Team (10) - cross-platform
+      - Backend Team (3) - APIs, database
+      ```
+
+32. **32-lessons_learned_engine.md** (500-600 words)
+    - Retro format (Start/Stop/Continue)
+    - Action items tracking
+    - Blameless retros, follow-up on actions
+
+### README.md (300-400 words)
+- **Overview**: PRP pattern explanation
+- **File Index**: All 32 files with descriptions
+- **Usage Guide**: How to reference during development
+- **Customizations**: List PRD-based adaptations
+- **Tools**: Structurizr, Serena MCP, GitHub CLI
+
+### Final Folder Structure
+
+```
+PRPROMPTS/
+├── 01-10 (from Phase 1)
+├── 11-22 (from Phase 2)
+├── 23-ai_pair_programming_guide.md
+├── 24-dashboard_and_analytics.md
+├── 25-tech_debt_and_refactor_strategy.md
+├── 26-demo_environment_setup.md       ⭐ PRD-customized
+├── 27-demo_progress_tracker.md
+├── 28-demo_branding_and_visuals.md
+├── 29-demo_deployment_automation.md
+├── 30-client_demo_report_template.md
+├── 31-project_role_adaptation.md      ⭐ PRD-customized
+├── 32-lessons_learned_engine.md
+└── README.md                           ← Index & usage guide
+```
+
+**Total**: 33 files (32 guides + 1 README), all inside `PRPROMPTS/`
+
+## Customization Rules
+
+### Project Type (`project_type`) - File 26
+- **Healthcare**: PHI demo data, patient records
+- **Fintech**: Test cards, transactions
+- **Education**: Courses, students, grades
+- **E-commerce**: Products, orders, inventory
+- **SaaS**: Workspaces, teams, billing
+
+### Team Size (`team_size`) - File 31
+- **Small (1-5)**: Generalists, rotated responsibilities
+- **Medium (5-15)**: Dedicated roles (QA, DevOps)
+- **Large (15+)**: Specialized teams (iOS/Android/Backend)
+
+### Demo Frequency (`demo_frequency`) - File 27
+- **Weekly**: Weekly reports, rapid iterations
+- **Biweekly**: Biweekly summaries, standard sprints
+- **Monthly**: Monthly milestones, longer cycles
+
+## Success Message
+```
+✅ Generated Phase 3: Demo & Learning (10 files + README)
+
+Files created in PRPROMPTS/:
+- 23-ai_pair_programming_guide.md (571 words)
+- 24-dashboard_and_analytics.md (534 words)
+- 25-tech_debt_and_refactor_strategy.md (512 words)
+- 26-demo_environment_setup.md (578 words) ⭐ CUSTOMIZED
+- 27-demo_progress_tracker.md (498 words)
+- 28-demo_branding_and_visuals.md (521 words)
+- 29-demo_deployment_automation.md (543 words)
+- 30-client_demo_report_template.md (489 words)
+- 31-project_role_adaptation.md (567 words) ⭐ CUSTOMIZED
+- 32-lessons_learned_engine.md (534 words)
+- README.md (367 words)
+
+Special Customizations Applied:
+- Project Type: Healthcare → Patient demo data in file 26
+- Team Size: Medium (12) → Dedicated roles in file 31
+- Demo Frequency: Weekly → Weekly reports in file 27
+
+All 32 PRPROMPTS Files Complete!
+
+V2.0 Compliance:
+✅ All files follow PRP pattern (6 sections)
+✅ All files 500-600 words (README: 300-400)
+✅ PRD-driven customizations (files 26, 31)
+✅ Real examples with file paths
+✅ Junior-friendly explanations
+
+Start Coding:
+- Read index: cat PRPROMPTS/README.md
+- First feature: cat PRPROMPTS/01-feature_scaffold.md
+- Security: cat PRPROMPTS/16-security_and_compliance.md
+- Search: grep "jwt" PRPROMPTS/*.md
+```

@@ -1,5 +1,5 @@
 # Gemini Code CLI Configuration for PRPROMPTS Generator
-# Version: 2.2.0
+# Version: 2.3.0 (Slash Commands)
 # Optimized for Gemini 2.5 Pro (1M token context window)
 
 commands:
@@ -10,12 +10,12 @@ commands:
     category: "PRD Generation"
 
   auto-gen-prd:
-    prompt: "prompts/auto-generate-prd.md"
+    prompt: "commands/prd/auto-generate.md"
     description: "Auto-generate PRD from description (zero interaction)"
     category: "PRD Generation"
 
   prd-from-files:
-    prompt: "prompts/generate-prd-from-files.md"
+    prompt: "commands/prd/from-files.md"
     description: "Generate PRD from existing markdown files (optional input)"
     category: "PRD Generation"
 
@@ -26,7 +26,7 @@ commands:
     category: "PRD Generation"
 
   refine-prd:
-    prompt: "prompts/refine-prd.md"
+    prompt: "commands/prd/refine.md"
     description: "[prprompts] Interactively improve PRD quality through AI-guided refinement"
     category: "PRD Generation"
 
@@ -37,22 +37,22 @@ commands:
     category: "PRPROMPTS Generation"
 
   gen-phase-1:
-    prompt: "prompts/phase-1-core.md"
+    prompt: "commands/prprompts/phase-1.md"
     description: "Generate Phase 1: Core Architecture (10 files)"
     category: "PRPROMPTS Generation"
 
   gen-phase-2:
-    prompt: "prompts/phase-2-quality.md"
+    prompt: "commands/prprompts/phase-2.md"
     description: "Generate Phase 2: Quality & Security (12 files)"
     category: "PRPROMPTS Generation"
 
   gen-phase-3:
-    prompt: "prompts/phase-3-demo.md"
+    prompt: "commands/prprompts/phase-3.md"
     description: "Generate Phase 3: Demo & Learning (10 files)"
     category: "PRPROMPTS Generation"
 
   gen-file:
-    prompt: "prompts/single-file-generator.md"
+    prompt: "commands/prprompts/single-file.md"
     description: "Generate a single PRPROMPTS file by name"
     category: "PRPROMPTS Generation"
 

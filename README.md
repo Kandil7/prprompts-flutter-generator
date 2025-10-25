@@ -1989,6 +1989,52 @@ cat PRPROMPTS/README.md
 
 ---
 
+## 🎨 Slash Commands (NEW in v4.1)
+
+**All 20 commands now work as slash commands inside Claude Code, Qwen Code, and Gemini CLI chat sessions!**
+
+### Two Ways to Run Commands
+
+| Method | Example | Use Case |
+|--------|---------|----------|
+| **Terminal (traditional)** | `claude create-prd` | Scripting, automation, CI/CD |
+| **Chat (new slash commands)** | `/prd/create` | Interactive development, in-session workflows |
+
+### Organized by Category
+
+**In chat, type `/` to explore commands:**
+
+```
+/prd/create                     # Interactive PRD wizard
+/prd/auto-generate              # Auto from description file
+/prd/analyze                    # Validate PRD with quality scoring
+
+/planning/estimate-cost         # Cost breakdown
+/planning/implementation-plan   # Sprint-based planning
+
+/prprompts/generate-all         # All 32 PRPROMPTS files
+/prprompts/phase-1              # Phase 1 only
+
+/automation/bootstrap           # Complete project setup (2 min)
+/automation/implement-next      # Auto-implement next feature (10 min)
+/automation/update-plan         # Re-plan based on velocity (30 sec)
+```
+
+**Benefits:**
+- ✅ **Shorter names** - `/prd/create` vs `claude create-prd`
+- ✅ **Organized** - Grouped by category (prd, planning, prprompts, automation)
+- ✅ **Discoverable** - Type `/` in chat to explore
+- ✅ **In-session** - No need to switch to terminal
+
+**Works with all 3 AI assistants:**
+- **Claude Code** - Type `/prd/create` in chat
+- **Qwen Code** - Type `/prd/create` in chat
+- **Gemini CLI** - Type `/prd/create` in chat
+
+📖 **Full Documentation:** See [CLAUDE.md](CLAUDE.md#slash-commands-new-in-v41), [QWEN.md](QWEN.md#slash-commands-new-in-v41), [GEMINI.md](GEMINI.md#slash-commands-new-in-v41)
+
+---
+
 ## 📚 What Gets Generated
 
 ### 📂 Output Structure

@@ -1,74 +1,74 @@
 # Claude Code Commands Configuration for PRPROMPTS Generator
-# Version: 2.2.0
+# Version: 2.3.0 (Slash Commands)
 
 commands:
   # PRD Creation Commands
   create-prd:
-    prompt: "prompts/generate-prd.md"
+    prompt: "commands/prd/create.md"
     description: "Interactive PRD creation wizard (10 questions)"
 
   auto-gen-prd:
-    prompt: "prompts/auto-generate-prd.md"
+    prompt: "commands/prd/auto-generate.md"
     description: "Auto-generate PRD from description (zero interaction)"
 
   prd-from-files:
-    prompt: "prompts/generate-prd-from-files.md"
+    prompt: "commands/prd/from-files.md"
     description: "Generate PRD from existing markdown files (optional input)"
 
   auto-prd-from-project:
-    prompt: "prompts/auto-generate-prd-from-project.md"
+    prompt: "commands/prd/auto-from-project.md"
     description: "Auto-discover and consolidate all .md files in project into comprehensive PRD"
 
   # PRD Analysis
   analyze-prd:
-    prompt: "prompts/analyze-prd.md"
+    prompt: "commands/prd/analyze.md"
     description: "Validate and analyze PRD, show customizations (v4.1: with AI confidence scoring)"
 
   refine-prd:
-    prompt: "prompts/refine-prd.md"
+    prompt: "commands/prd/refine.md"
     description: "Interactively improve PRD quality through AI-guided refinement"
 
   # PRD Strategic Planning (NEW v4.1 - Phase 2)
   estimate-cost:
-    prompt: "prompts/estimate-cost.md"
+    prompt: "commands/planning/estimate-cost.md"
     description: "💰 Generate detailed cost breakdown from PRD - labor, infrastructure, compliance"
 
   analyze-dependencies:
-    prompt: "prompts/analyze-dependencies.md"
+    prompt: "commands/planning/analyze-dependencies.md"
     description: "🔗 Map feature dependencies and critical path - implementation order recommendations"
 
   generate-stakeholder-review:
-    prompt: "prompts/generate-stakeholder-review.md"
+    prompt: "commands/planning/stakeholder-review.md"
     description: "📋 Create stakeholder review checklists - business, technical, compliance sign-offs"
 
   generate-implementation-plan:
-    prompt: "prompts/generate-implementation-plan.md"
+    prompt: "commands/planning/implementation-plan.md"
     description: "📅 Create intelligent implementation plan with sprints, team allocation, and dependency-aware task ordering"
 
   # PRPROMPTS Generation Commands
   gen-prprompts:
-    prompt: "prompts/prprompts-generator.md"
+    prompt: "commands/prprompts/generate-all.md"
     description: "Generate all 32 PRPROMPTS files from PRD"
 
   gen-phase-1:
-    prompt: "prompts/phase-1-core.md"
+    prompt: "commands/prprompts/phase-1.md"
     description: "Generate Phase 1: Core Architecture (10 files)"
 
   gen-phase-2:
-    prompt: "prompts/phase-2-quality.md"
+    prompt: "commands/prprompts/phase-2.md"
     description: "Generate Phase 2: Quality & Security (12 files)"
 
   gen-phase-3:
-    prompt: "prompts/phase-3-demo.md"
+    prompt: "commands/prprompts/phase-3.md"
     description: "Generate Phase 3: Demo & Learning (10 files)"
 
   gen-file:
-    prompt: "prompts/single-file-generator.md"
+    prompt: "commands/prprompts/single-file.md"
     description: "Generate a single PRPROMPTS file by name"
 
   # v4.0 Automation Commands (Full AI-Powered Development Pipeline)
   bootstrap-from-prprompts:
-    prompt: "commands/automation/bootstrap-from-prprompts.md"
+    prompt: "commands/automation/bootstrap.md"
     description: "🚀 Complete project setup from PRPROMPTS (2 min) - Clean Architecture, security, tests"
 
   implement-next:
@@ -84,7 +84,7 @@ commands:
     description: "🤖 Auto-implement 1-10 features automatically (1-2 hours) - complete automation loop"
 
   review-and-commit:
-    prompt: "commands/automation/review-and-commit.md"
+    prompt: "commands/automation/review-commit.md"
     description: "✅ Validate and commit changes - PRPROMPTS compliance, security checks, tests"
 
   qa-check:

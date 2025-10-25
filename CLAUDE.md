@@ -78,6 +78,107 @@ git push origin v4.0.1
 
 ---
 
+## Slash Commands (NEW in v4.1)
+
+**All 20 PRPROMPTS commands are now available as slash commands within Claude Code chat sessions!**
+
+### What Are Slash Commands?
+
+Slash commands let you run PRPROMPTS workflows directly in Claude Code without leaving your chat session:
+- **From terminal**: `claude create-prd` (traditional)
+- **In chat**: `/prd/create` (new slash command)
+
+### Organized Command Structure
+
+Commands are organized into 4 categories:
+
+**PRD Commands (`/prd/...`)**
+```
+/prd/create              # Interactive PRD wizard with templates
+/prd/auto-generate       # Auto from description file
+/prd/from-files          # From existing markdown docs
+/prd/auto-from-project   # Auto-discover all project .md files
+/prd/analyze             # Validate PRD with quality scoring
+/prd/refine              # Interactive quality improvement loop
+```
+
+**Planning Commands (`/planning/...`)**
+```
+/planning/estimate-cost        # Cost breakdown (labor, infrastructure, compliance)
+/planning/analyze-dependencies # Feature dependencies and critical path
+/planning/stakeholder-review   # Generate review checklists
+/planning/implementation-plan  # Sprint-based implementation planning
+```
+
+**PRPROMPTS Generation (`/prprompts/...`)**
+```
+/prprompts/generate-all  # All 32 PRPROMPTS files
+/prprompts/phase-1       # Phase 1: Core Architecture (10 files)
+/prprompts/phase-2       # Phase 2: Quality & Security (12 files)
+/prprompts/phase-3       # Phase 3: Demo & Learning (10 files)
+/prprompts/single-file   # Generate single file by name
+```
+
+**Automation Commands (`/automation/...`)**
+```
+/automation/bootstrap      # Complete project setup (2 min)
+/automation/implement-next # Auto-implement next feature (10 min)
+/automation/update-plan    # Re-plan based on actual velocity (30 sec)
+/automation/full-cycle     # Auto-implement 1-10 features (1-2 hours)
+/automation/review-commit  # Validate and commit changes
+/automation/qa-check       # Comprehensive compliance audit
+```
+
+### Usage Examples
+
+**In Claude Code chat:**
+```
+User: /prd/create
+Claude: I'll help you create a PRD. First, would you like to start from an industry template?
+...
+
+User: /planning/implementation-plan
+Claude: I'll generate an intelligent implementation plan from your PRD...
+...
+
+User: /automation/bootstrap
+Claude: I'll set up your Flutter project with Clean Architecture from PRPROMPTS...
+...
+```
+
+### Benefits of Slash Commands
+
+✅ **Organized** - Logical grouping by category (prd, planning, prprompts, automation)
+✅ **Discoverable** - Type `/` in chat to explore available commands
+✅ **Shorter names** - `/prd/create` vs `claude create-prd`
+✅ **In-session** - Run workflows without switching to terminal
+✅ **Backward compatible** - `claude <command>` still works from terminal
+
+### File Structure
+
+Slash commands map directly to files in `.claude/commands/`:
+
+```
+.claude/commands/
+├── prd/
+│   ├── create.md
+│   ├── auto-generate.md
+│   └── ...
+├── planning/
+│   ├── estimate-cost.md
+│   └── ...
+├── prprompts/
+│   ├── generate-all.md
+│   └── ...
+└── automation/
+    ├── bootstrap.md
+    └── ...
+```
+
+**Note**: Original files in `.claude/prompts/` remain for backward compatibility with CLI commands.
+
+---
+
 ## Architecture Overview
 
 ### System Design
