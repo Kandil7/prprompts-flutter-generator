@@ -122,7 +122,7 @@ git push origin v4.0.1
 Each AI has **identical** structure:
 ```
 .claude/
-├── prompts/                    # 9 PRD/PRPROMPTS generation prompts
+├── prompts/                    # 10 PRD/PRPROMPTS generation prompts
 │   ├── generate-prd.md         # Interactive wizard (10 questions)
 │   ├── auto-generate-prd.md    # Auto from description
 │   ├── prprompts-generator.md  # All 32 files generator
@@ -143,7 +143,7 @@ Each AI has **identical** structure:
 - Copies prompts/commands to `~/.config/{ai}/prompts/` and `~/.config/{ai}/commands/`
 - Creates unified config at `~/.prprompts/config.json`
 
-**4. PRD Generation (4 methods + Industry Templates)**
+**4. PRD Generation (5 methods + Industry Templates)**
 - **Interactive** - 10 questions, saves to `docs/PRD.md`
   - **NEW in v4.1:** Template selection before questions (Step 0)
   - 6 industry templates: Healthcare, Fintech, Education, E-commerce, Logistics, SaaS/B2B
@@ -225,7 +225,7 @@ Five commands that automate Flutter development:
 - `bin/prprompts` - CLI dispatcher (400 lines, maps commands to AIs)
 - `scripts/postinstall.js` - Auto-installs extensions for detected AIs
 
-**Prompts (14 identical files per AI):**
+**Prompts (15 identical files per AI):**
 - `generate-prd.md` - Interactive wizard prompt (v4.1: added Step 0 template selection)
 - `auto-generate-prd.md` - Auto-generation prompt
 - `analyze-prd.md` - **ENHANCED v4.1:** PRD validation with 4-dimensional scoring (A-F grades) + AI confidence levels
