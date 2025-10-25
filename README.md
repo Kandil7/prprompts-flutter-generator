@@ -26,6 +26,39 @@
 
 ---
 
+## 📑 Table of Contents
+
+<details>
+<summary><strong>Click to expand</strong></summary>
+
+- [Quick Start](#one-command-complete-setup)
+  - [Quick Reference Card](#quick-reference-card)
+  - [Visual Workflow](#how-it-works---visual-workflow)
+- [System Requirements](#system-requirements)
+  - [Software Requirements](#software-requirements)
+  - [Hardware Requirements](#hardware-requirements)
+  - [Platform-Specific Notes](#platform-specific-notes)
+  - [Recent Improvements](#recent-cross-platform-improvements-v410)
+- [Configure AI Providers](#configure-ai-providers)
+- [Features](#features)
+  - [v4.1 Enterprise Features](#v41-enterprise-features-new)
+  - [v4.0 Full Automation](#v40-full-automation-new)
+  - [v3.0 Features](#v30-new-features)
+- [What Gets Generated](#what-gets-generated)
+- [Creating Your PRD](#creating-your-prd)
+- [Security & Compliance](#security--compliance)
+- [Quick Troubleshooting](#quick-troubleshooting)
+- [FAQ](#faq)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [Roadmap](#roadmap)
+- [Support & Community](#support--community)
+- [Changelog](#changelog)
+
+</details>
+
+---
+
 <div align="center">
 
 ## **Transform Your PRD into 32 Secure, Production-Ready Development Guides**
@@ -52,6 +85,39 @@ prprompts generate     # Generate all 32 files
 ```
 
 **✨ NEW: Interactive mode, API validation, rate limiting, progress indicators, and command history!**
+
+### 📊 How It Works - Visual Workflow
+
+```mermaid
+graph LR
+    A[📝 PRD Document] -->|60 seconds| B[32 PRPROMPTS Files]
+    B -->|Instant| C[🤖 AI Assistant]
+    C -->|1-2 hours| D[✅ Flutter Code]
+    D -->|Ready| E[🚀 Production App]
+
+    style A fill:#e1f5ff
+    style B fill:#fff9c4
+    style C fill:#f3e5f5
+    style D fill:#e8f5e9
+    style E fill:#c8e6c9
+```
+
+<table>
+<tr>
+<td align="center" width="20%"><strong>📝 PRD</strong><br/>Your requirements<br/><code>60 sec</code></td>
+<td align="center" width="5%">→</td>
+<td align="center" width="20%"><strong>📚 PRPROMPTS</strong><br/>32 secure guides<br/><code>Instant</code></td>
+<td align="center" width="5%">→</td>
+<td align="center" width="20%"><strong>🤖 AI Code</strong><br/>Auto-implementation<br/><code>1-2 hours</code></td>
+<td align="center" width="5%">→</td>
+<td align="center" width="20%"><strong>🚀 Production</strong><br/>Ready to deploy<br/><code>Done!</code></td>
+</tr>
+<tr>
+<td colspan="7" align="center">
+<strong>Total Time: 2-3 hours</strong> (vs 3-5 days manual) = <strong>40-60x faster!</strong>
+</td>
+</tr>
+</table>
 
 **⚠️ Permissions Note:**
 - **Windows:** No special permissions required (npm installs to your user directory)
@@ -80,18 +146,108 @@ curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/
 
 ---
 
+## ⚡ Quick Reference Card
+
+<div align="center">
+
+**One-Liner Install:**
+```bash
+npm install -g prprompts-flutter-generator && prprompts interactive
+```
+
+</div>
+
+<table>
+<tr>
+<td width="50%">
+
+### 🚀 Essential Commands
+
+```bash
+# Core workflow
+prprompts create         # Create PRD
+prprompts generate       # Generate 32 files
+prprompts interactive    # Launch menu UI
+
+# Diagnostics
+prprompts doctor         # Check setup
+prprompts validate-keys  # Validate APIs
+prprompts rate-status    # Check limits
+```
+
+</td>
+<td width="50%">
+
+### 🔗 Quick Links
+
+**Setup Guides:**
+- [Windows](WINDOWS-QUICKSTART.md) 🪟
+- [macOS](MACOS-QUICKSTART.md) 🍎
+- [Troubleshooting](docs/TROUBLESHOOTING.md) 🔧
+
+**AI Guides:**
+- [Claude](docs/CLAUDE-USER-GUIDE.md)
+- [Qwen](QWEN.md)
+- [Gemini](GEMINI.md)
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+
+### 🎯 Complete Workflow (2-3 hours)
+
+```bash
+# 1️⃣ Setup (30 seconds)
+npm install -g prprompts-flutter-generator
+prprompts setup-keys claude
+
+# 2️⃣ Generate PRPROMPTS (60 seconds)
+cd your-flutter-project
+prprompts create && prprompts generate
+
+# 3️⃣ Automate Development (1-2 hours)
+claude                                    # Start AI
+/bootstrap-from-prprompts                 # Setup project (2 min)
+/full-cycle                               # Implement features (1-2 hours)
+# Input: 10 features
+
+# 4️⃣ Quality Check (2 minutes)
+/qa-check                                 # Compliance audit
+
+# ✅ Result: Production-ready app with 70%+ test coverage!
+```
+
+</td>
+</tr>
+</table>
+
+---
+
 ## 📋 System Requirements
 
 <div align="center">
 
-| Component | Minimum Version | Notes |
-|-----------|----------------|-------|
-| **Node.js** | v20 or higher | LTS recommended • [Download](https://nodejs.org) |
-| **npm** | v9 or higher | Included with Node.js |
-| **Operating System** | Windows 10+, macOS 10.15+, Linux | Full cross-platform support |
-| **Shell** | Any | PowerShell, CMD, Git Bash, bash, zsh, WSL |
-| **AI CLI** | Latest | At least one: Claude Code, Qwen Code, or Gemini CLI |
-| **Flutter** | 3.24+ | For development only (not required for generation) |
+### Software Requirements
+
+| Component | Minimum | Recommended | Notes |
+|-----------|---------|-------------|-------|
+| **Node.js** | v20.0.0 | v20 LTS (20.11.0+) | LTS recommended • [Download](https://nodejs.org) |
+| **npm** | v9.0.0 | v10.0.0+ | Included with Node.js |
+| **Operating System** | Windows 10, macOS 10.15, Ubuntu 20.04 | Windows 11, macOS 14+, Latest LTS | Full cross-platform support |
+| **Shell** | Any | PowerShell 7+ / zsh | PowerShell, CMD, Git Bash, bash, zsh, WSL all supported |
+| **AI CLI** | Any one | Claude Code | At least one: Claude Code, Qwen Code, or Gemini CLI |
+| **Flutter** | 3.24+ | 3.27+ | For development only (not required for PRPROMPTS generation) |
+
+### Hardware Requirements
+
+| Resource | Minimum | Recommended | Notes |
+|----------|---------|-------------|-------|
+| **RAM** | 2 GB free | 4 GB+ free | More for large projects |
+| **Disk Space** | 500 MB | 1 GB+ | Includes npm dependencies |
+| **CPU** | Any | Multi-core | Faster generation with more cores |
+| **Network** | Required | Broadband | For AI API calls (Claude/Qwen/Gemini) |
+| **Internet Speed** | 1 Mbps+ | 10 Mbps+ | Faster API responses |
 
 </div>
 
@@ -2463,6 +2619,80 @@ prprompts doctor
    ```bash
    prprompts doctor  # Shows what's installed and configured
    ```
+
+---
+
+## 🔧 Quick Troubleshooting
+
+<table>
+<tr>
+<th>Issue</th>
+<th>Solution</th>
+</tr>
+<tr>
+<td><code>command not found: prprompts</code></td>
+<td>
+Run: <code>npm install -g prprompts-flutter-generator</code><br/>
+Check PATH: <code>echo $PATH</code> (should include npm bin)<br/>
+Restart terminal after installation
+</td>
+</tr>
+<tr>
+<td><code>command not found: claude/qwen/gemini</code></td>
+<td>
+Install AI CLI first:<br/>
+<code>npm install -g @anthropic-ai/claude-code</code><br/>
+Verify: <code>claude --version</code>
+</td>
+</tr>
+<tr>
+<td><code>EACCES: permission denied</code></td>
+<td>
+<strong>macOS/Linux:</strong> Use nvm instead of sudo<br/>
+<code>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash</code><br/>
+<strong>Windows:</strong> No admin needed (should work by default)
+</td>
+</tr>
+<tr>
+<td>API key not found/invalid</td>
+<td>
+Run setup wizard: <code>prprompts setup-keys claude</code><br/>
+Or set manually: <code>export ANTHROPIC_API_KEY=sk-ant-...</code><br/>
+Validate: <code>prprompts validate-keys</code>
+</td>
+</tr>
+<tr>
+<td>Rate limit errors (429)</td>
+<td>
+Check usage: <code>prprompts rate-status</code><br/>
+Switch AI: <code>prprompts switch gemini</code> (free tier)<br/>
+Wait for reset or upgrade plan
+</td>
+</tr>
+<tr>
+<td>Git Bash not working on Windows</td>
+<td>
+Use PowerShell installer:<br/>
+<code>.\scripts\install-commands.ps1</code><br/>
+Or use npm (works everywhere):<br/>
+<code>npm install -g prprompts-flutter-generator</code>
+</td>
+</tr>
+<tr>
+<td>Generated files empty/incomplete</td>
+<td>
+Check PRD exists: <code>cat docs/PRD.md</code><br/>
+Regenerate: <code>prprompts generate --force</code><br/>
+Check AI connection: <code>prprompts validate-keys</code>
+</td>
+</tr>
+</table>
+
+**Still stuck?**
+1. Run diagnostics: `prprompts doctor`
+2. Check [Full Troubleshooting Guide](docs/TROUBLESHOOTING.md) (775+ lines)
+3. Search [GitHub Issues](https://github.com/Kandil7/prprompts-flutter-generator/issues)
+4. Ask in [Discussions](https://github.com/Kandil7/prprompts-flutter-generator/discussions)
 
 ---
 
