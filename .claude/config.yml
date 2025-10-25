@@ -41,6 +41,10 @@ commands:
     prompt: "prompts/generate-stakeholder-review.md"
     description: "📋 Create stakeholder review checklists - business, technical, compliance sign-offs"
 
+  generate-implementation-plan:
+    prompt: "prompts/generate-implementation-plan.md"
+    description: "📅 Create intelligent implementation plan with sprints, team allocation, and dependency-aware task ordering"
+
   # PRPROMPTS Generation Commands
   gen-prprompts:
     prompt: "prompts/prprompts-generator.md"
