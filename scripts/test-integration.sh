@@ -195,7 +195,7 @@ echo "----------------------------------------"
 
 # Test 10: File structure check for automation
 test_start "Automation prompts exist"
-if [ -d "../../.claude/prompts/prprompts/automation" ] || [ -d "../../prompts/automation" ]; then
+if [ -d "../../.claude/commands/automation" ] || [ -d "../../prompts/automation" ]; then
   test_pass
 else
   test_fail "Automation prompts directory not found"
@@ -203,7 +203,7 @@ fi
 
 # Test 11: Bootstrap command readiness
 test_start "Bootstrap prompt file exists"
-if [ -f "../../.claude/prompts/prprompts/automation/bootstrap-from-prprompts.md" ] || \
+if [ -f "../../.claude/commands/automation/bootstrap.md" ] || \
    [ -f "../../prompts/automation/bootstrap-from-prprompts.md" ]; then
   test_pass
 else
@@ -212,7 +212,7 @@ fi
 
 # Test 12: Implement-next command readiness
 test_start "Implement-next prompt file exists"
-if [ -f "../../.claude/prompts/prprompts/automation/implement-next.md" ] || \
+if [ -f "../../.claude/commands/automation/implement-next.md" ] || \
    [ -f "../../prompts/automation/implement-next.md" ]; then
   test_pass
 else
@@ -221,7 +221,7 @@ fi
 
 # Test 13: Full-cycle command readiness
 test_start "Full-cycle prompt file exists"
-if [ -f "../../.claude/prompts/prprompts/automation/full-cycle.md" ] || \
+if [ -f "../../.claude/commands/automation/full-cycle.md" ] || \
    [ -f "../../prompts/automation/full-cycle.md" ]; then
   test_pass
 else
@@ -230,7 +230,7 @@ fi
 
 # Test 14: Review-and-commit command readiness
 test_start "Review-and-commit prompt file exists"
-if [ -f "../../.claude/prompts/prprompts/automation/review-and-commit.md" ] || \
+if [ -f "../../.claude/commands/automation/review-commit.md" ] || \
    [ -f "../../prompts/automation/review-and-commit.md" ]; then
   test_pass
 else
@@ -239,7 +239,7 @@ fi
 
 # Test 15: QA-check command readiness
 test_start "QA-check prompt file exists"
-if [ -f "../../.claude/prompts/prprompts/automation/qa-check.md" ] || \
+if [ -f "../../.claude/commands/automation/qa-check.md" ] || \
    [ -f "../../prompts/automation/qa-check.md" ]; then
   test_pass
 else
