@@ -5,11 +5,11 @@
 [![npm version](https://img.shields.io/npm/v/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![npm downloads](https://img.shields.io/npm/dt/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-4.1-success)](docs/NEW-FEATURES-V3.md)
+[![Version](https://img.shields.io/badge/Version-4.4-success)](docs/NEW-FEATURES-V3.md)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
 [![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#security--compliance)
-[![New](https://img.shields.io/badge/NEW-v4.1%20Interactive-purple)](#v41-enterprise-features-new)
+[![New](https://img.shields.io/badge/NEW-v4.4%20Slash%20Commands-purple)](#v44-slash-commands-new)
 [![Speed](https://img.shields.io/badge/Speed-40--60x%20Faster-green)](#v40-full-automation-new)
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Extension-blue)](CLAUDE.md)
@@ -41,6 +41,7 @@
   - [Recent Improvements](#recent-cross-platform-improvements-v410)
 - [Configure AI Providers](#configure-ai-providers)
 - [Features](#features)
+  - [v4.4 Slash Commands](#v44-slash-commands-new)
   - [v4.1 Enterprise Features](#v41-enterprise-features-new)
   - [v4.0 Full Automation](#v40-full-automation-new)
   - [v3.0 Features](#v30-new-features)
@@ -63,9 +64,9 @@
 
 ## **Transform Your PRD into 32 Secure, Production-Ready Development Guides**
 
-**Enterprise-grade Flutter development automation with interactive mode, API validation, rate limiting, and intelligent command management.**
+**Enterprise-grade Flutter development automation with slash commands, interactive mode, API validation, rate limiting, and intelligent command management.**
 
-**⏱️ Setup: 30 seconds** • **🎮 NEW v4.1: Interactive Mode** • **⚡ 40-60x Faster** • **🔒 Security Audited**
+**⏱️ Setup: 30 seconds** • **💬 NEW v4.4: Slash Commands** • **🎮 v4.1: Interactive Mode** • **⚡ 40-60x Faster** • **🔒 Security Audited**
 
 </div>
 
@@ -73,18 +74,23 @@
 
 ### **🚀 One Command. Complete Setup.**
 
-**🆕 v4.1.0 - Enterprise Features on npm! (Easiest!):**
+**🆕 v4.4.0 - Slash Commands + Enterprise Features on npm! (Easiest!):**
 ```bash
 # Install via npm (works on Windows/macOS/Linux)
 npm install -g prprompts-flutter-generator
 
 # Then use anywhere:
-prprompts interactive  # NEW: Launch interactive mode!
+prprompts interactive  # Launch interactive mode!
 prprompts create       # Create PRD
 prprompts generate     # Generate all 32 files
+
+# Or use slash commands in AI chat:
+/prd/create            # Create PRD in-chat
+/prprompts/generate-all # Generate all 32 files in-chat
 ```
 
-**✨ NEW: Interactive mode, API validation, rate limiting, progress indicators, and command history!**
+**✨ NEW v4.4: Slash commands for in-chat usage!**
+**✨ v4.1: Interactive mode, API validation, rate limiting, progress indicators, and command history!**
 
 ### 📊 How It Works - Visual Workflow
 
@@ -208,12 +214,12 @@ prprompts create && prprompts generate
 
 # 3️⃣ Automate Development (1-2 hours)
 claude                                    # Start AI
-/bootstrap-from-prprompts                 # Setup project (2 min)
-/full-cycle                               # Implement features (1-2 hours)
+/automation/bootstrap                     # Setup project (2 min)
+/automation/full-cycle                    # Implement features (1-2 hours)
 # Input: 10 features
 
 # 4️⃣ Quality Check (2 minutes)
-/qa-check                                 # Compliance audit
+/automation/qa-check                      # Compliance audit
 
 # ✅ Result: Production-ready app with 70%+ test coverage!
 ```
@@ -370,7 +376,7 @@ prprompts validate-keys  # Validate API keys
 prprompts interactive
 
 # Or test with commands
-prprompts --version      # Should show 4.1.0
+prprompts --version      # Should show 4.4.0
 ```
 
 **🔒 Security:** See [`.env.example`](.env.example) for detailed API key setup and [SECURITY.md](SECURITY.md#api-key-management) for best practices on API key management, rotation, and incident response.
@@ -918,6 +924,157 @@ npm update -g prprompts-flutter-generator
 prprompts --version  # Should show 4.1.0
 prprompts doctor     # Check extension status
 ```
+
+---
+
+## 💬 v4.4: Slash Commands (NEW!)
+
+<div align="center">
+
+**🚀 Use all 20 PRPROMPTS commands directly in your AI chat!**
+
+**No more switching between terminal and chat - everything in one place**
+
+</div>
+
+### 🎯 What Are Slash Commands?
+
+Slash commands let you run PRPROMPTS commands **directly in your AI assistant's chat interface** instead of using the terminal. Just type `/` and start typing to see available commands!
+
+<table>
+<tr>
+<td width="50%">
+
+### 📝 **Before v4.4: Terminal Only**
+
+```bash
+# Switch to terminal
+prprompts create
+
+# Back to chat to ask AI for help
+# Switch to terminal again
+prprompts generate
+
+# Back to chat...
+```
+
+**❌ Constant context switching**
+**❌ Hard to remember commands**
+**❌ Separate from AI conversation**
+
+</td>
+<td width="50%">
+
+### ✨ **After v4.4: In-Chat Commands**
+
+```
+# Everything in one chat session:
+/prd/create
+
+# AI helps you fill it out
+# Then continue:
+/prprompts/generate-all
+
+# Keep working in the same context!
+```
+
+**✅ Stay in the conversation**
+**✅ Discoverable with autocomplete**
+**✅ AI context maintained**
+
+</td>
+</tr>
+</table>
+
+### 📚 All 20 Slash Commands
+
+Commands are organized by category for easy discovery:
+
+<table>
+<tr>
+<td width="50%">
+
+#### **📝 PRD Commands** (`/prd/...`)
+
+| Command | Description |
+|---------|-------------|
+| `/prd/create` | Interactive PRD wizard |
+| `/prd/auto-generate` | Auto-generate from description |
+| `/prd/from-files` | Generate from markdown files |
+| `/prd/auto-from-project` | Auto-discover project files |
+| `/prd/analyze` | Validate and analyze PRD |
+| `/prd/refine` | AI-guided refinement |
+
+#### **📊 Planning Commands** (`/planning/...`)
+
+| Command | Description |
+|---------|-------------|
+| `/planning/estimate-cost` | Cost breakdown analysis |
+| `/planning/analyze-dependencies` | Feature dependency mapping |
+| `/planning/stakeholder-review` | Generate review checklists |
+| `/planning/implementation-plan` | Sprint-based planning |
+
+</td>
+<td width="50%">
+
+#### **📚 PRPROMPTS Commands** (`/prprompts/...`)
+
+| Command | Description |
+|---------|-------------|
+| `/prprompts/generate-all` | Generate all 32 files |
+| `/prprompts/phase-1` | Core Architecture (10 files) |
+| `/prprompts/phase-2` | Quality & Security (12 files) |
+| `/prprompts/phase-3` | Demo & Learning (10 files) |
+| `/prprompts/single-file` | Generate one specific file |
+
+#### **🤖 Automation Commands** (`/automation/...`)
+
+| Command | Description |
+|---------|-------------|
+| `/automation/bootstrap` | Complete project setup |
+| `/automation/implement-next` | Auto-implement next feature |
+| `/automation/update-plan` | Re-plan based on progress |
+| `/automation/full-cycle` | Auto-implement 1-10 features |
+| `/automation/review-commit` | Validate and commit changes |
+| `/automation/qa-check` | Compliance audit |
+
+</td>
+</tr>
+</table>
+
+### 🚀 Quick Start with Slash Commands
+
+```bash
+# 1. Install (one time)
+npm install -g prprompts-flutter-generator
+
+# 2. Open your AI assistant (Claude Code, Qwen Code, or Gemini CLI)
+claude
+
+# 3. Use slash commands in chat:
+/prd/create                    # Create your PRD
+/prprompts/generate-all        # Generate 32 files
+/automation/bootstrap          # Setup project
+/automation/implement-next     # Start implementing!
+```
+
+### 💡 Tips & Best Practices
+
+- **Discoverability**: Type `/` to see all available commands
+- **Category Organization**: Commands grouped by purpose (prd/, planning/, prprompts/, automation/)
+- **Context Maintained**: AI remembers your conversation while running commands
+- **Still Works in Terminal**: Traditional `prprompts create` still works if you prefer CLI
+- **Multi-AI Support**: Same slash commands work in Claude Code, Qwen Code, and Gemini CLI
+
+### 🔄 Comparison: CLI vs Slash Commands
+
+| Method | Example | Best For |
+|--------|---------|----------|
+| **Terminal CLI** | `prprompts create` | Scripting, automation, CI/CD |
+| **Slash Commands** | `/prd/create` | Interactive development, learning |
+| **Interactive Mode** | `prprompts interactive` | Menu-driven workflows |
+
+**💡 Pro Tip**: Use slash commands for interactive work and CLI for automation scripts!
 
 ---
 
