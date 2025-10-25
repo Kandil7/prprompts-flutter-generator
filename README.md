@@ -1891,6 +1891,12 @@ npm run test:commands
 <td>90%</td>
 </tr>
 <tr>
+<td>🔍 <strong>Project discovery</strong></td>
+<td><code>claude auto-prd-from-project</code></td>
+<td>1 min</td>
+<td>95%</td>
+</tr>
+<tr>
 <td>💭 <strong>Simple idea</strong></td>
 <td><code>claude auto-gen-prd</code></td>
 <td>1 min</td>
@@ -2174,6 +2180,7 @@ if (student.requiresCoppaConsent) {
 claude create-prd          # Interactive wizard with template selection (NEW v4.1)
 claude auto-gen-prd        # Auto from description file
 claude prd-from-files      # From existing markdown docs
+claude auto-prd-from-project  # Auto-discover all .md files (NEW v4.1)
 claude analyze-prd         # Validate PRD structure + quality scoring (ENHANCED v4.1)
 claude refine-prd          # Interactive quality improvement loop (NEW v4.1)
 ```
@@ -2266,6 +2273,9 @@ claude prd-from-files && claude gen-prprompts
 
 # From idea → PRPROMPTS (1 min)
 claude auto-gen-prd && claude gen-prprompts
+
+# From all project docs → PRPROMPTS (1 min) - NEW v4.1
+claude auto-prd-from-project && claude gen-prprompts
 
 # Interactive → PRPROMPTS (5 min)
 claude create-prd && claude gen-prprompts
@@ -2784,7 +2794,7 @@ Commands are identical across all 3.
 <details>
 <summary><strong>Q: Can I use this for existing projects?</strong></summary>
 
-**A:** Yes! Use `claude prd-from-files` to convert existing documentation into a PRD, then generate PRPROMPTS. Works great for legacy projects needing standardization.
+**A:** Yes! Use `claude auto-prd-from-project` to auto-discover all .md files, or `claude prd-from-files` to select specific docs, then generate PRPROMPTS. Works great for legacy projects needing standardization.
 
 </details>
 
