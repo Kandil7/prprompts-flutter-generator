@@ -55,6 +55,11 @@ gemini gen-prprompts
 # Test automation pipeline
 claude bootstrap-from-prprompts
 claude implement-next
+
+# Test PRD workflow commands (NEW in v4.1)
+claude create-prd       # Interactive PRD creation with template selection
+claude analyze-prd      # Analyze PRD quality with scoring (A-F grade)
+claude refine-prd       # Interactive PRD quality improvement loop
 ```
 
 ### Publishing
@@ -138,11 +143,28 @@ Each AI has **identical** structure:
 - Copies prompts/commands to `~/.config/{ai}/prompts/` and `~/.config/{ai}/commands/`
 - Creates unified config at `~/.prprompts/config.json`
 
-**4. PRD Generation (4 methods)**
+**4. PRD Generation (4 methods + Industry Templates)**
 - **Interactive** - 10 questions, saves to `docs/PRD.md`
+  - **NEW in v4.1:** Template selection before questions (Step 0)
+  - 6 industry templates: Healthcare, Fintech, Education, E-commerce, Logistics, SaaS/B2B
+  - Templates provide pre-configured compliance, features, and best practices
+  - Load as defaults, fully customizable in wizard
 - **Auto** - Infers from `project_description.md`
 - **From Files** - Converts existing markdown docs
-- **Manual** - User edits `templates/PRD-full-template.md`
+- **Manual** - User edits `templates/PRD-full-template.md` or industry starter templates
+
+**NEW in v4.1: Industry Starter Templates**
+Located in `templates/`:
+- `prd-healthcare-starter.md` - HIPAA, PHI encryption, patient portal (531 lines)
+- `prd-fintech-starter.md` - PCI-DSS, payment security, NEVER store cards (549 lines)
+- `prd-education-starter.md` - COPPA/FERPA, parental consent, student data (112 lines)
+- `prd-ecommerce-starter.md` - PCI-DSS + Stripe, shopping cart, checkout (123 lines)
+- `prd-logistics-starter.md` - GPS tracking, route optimization, offline-first (123 lines)
+- `prd-saas-starter.md` - Multi-tenancy, enterprise SSO, subscription billing (144 lines)
+
+**NEW in v4.1: PRD Quality Tools**
+- `claude analyze-prd` - Now includes 4-dimensional scoring (Completeness, Clarity, Feasibility, Security) with A-F grades
+- `claude refine-prd` - Interactive quality improvement loop with before/after comparison
 
 **5. PRPROMPTS Generator**
 - Reads `docs/PRD.md` (YAML frontmatter + markdown)
@@ -196,9 +218,11 @@ Five commands that automate Flutter development:
 - `bin/prprompts` - CLI dispatcher (400 lines, maps commands to AIs)
 - `scripts/postinstall.js` - Auto-installs extensions for detected AIs
 
-**Prompts (9 identical files per AI):**
-- `generate-prd.md` - Interactive wizard prompt
+**Prompts (11 identical files per AI):**
+- `generate-prd.md` - Interactive wizard prompt (v4.1: added Step 0 template selection)
 - `auto-generate-prd.md` - Auto-generation prompt
+- `analyze-prd.md` - **NEW v4.1:** PRD validation with 4-dimensional scoring (A-F grades)
+- `refine-prd.md` - **NEW v4.1:** Interactive quality improvement loop
 - `prprompts-generator.md` - Main generator (all 32 files)
 - `phase-1-core.md`, `phase-2-quality.md`, `phase-3-demo.md` - Phase generators
 - `single-file-generator.md` - Regenerate one file
@@ -207,8 +231,14 @@ Five commands that automate Flutter development:
 - Located in `.claude/commands/automation/`, `.qwen/commands/automation/`, `.gemini/commands/automation/`
 
 **Templates:**
-- `templates/PRD-full-template.md` - Manual PRD template
-- `templates/healthcare.md`, `fintech.md`, `ecommerce.md` - Industry templates
+- `templates/PRD-full-template.md` - Manual PRD template (comprehensive, blank)
+- **NEW v4.1: Industry Starter Templates** (pre-configured PRDs):
+  - `prd-healthcare-starter.md` - HIPAA, PHI encryption, 8 healthcare features
+  - `prd-fintech-starter.md` - PCI-DSS, payment security, 9 fintech features
+  - `prd-education-starter.md` - COPPA/FERPA, parental consent, K-12 focus
+  - `prd-ecommerce-starter.md` - PCI-DSS, Stripe, shopping cart, checkout
+  - `prd-logistics-starter.md` - GPS tracking, route optimization, offline-first
+  - `prd-saas-starter.md` - Multi-tenancy, enterprise SSO, subscription billing
 
 **Tests:**
 - `scripts/test-validation.sh` - Validates all 32 prompt files exist
