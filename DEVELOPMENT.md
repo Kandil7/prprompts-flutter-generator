@@ -26,7 +26,7 @@ Welcome to the PRPROMPTS development guide! This document will help you get star
 
 ### Prerequisites
 
-- **Node.js**: v18 or v20 (LTS recommended)
+- **Node.js**: v20 or higher (LTS recommended)
 - **npm**: v9 or higher
 - **Git**: Latest version
 - **Text Editor**: VS Code recommended

@@ -39,7 +39,7 @@ Complete guide for using PRPROMPTS Generator with Claude Code - now with full au
 
 ### 1. Install Node.js
 
-Claude Code requires Node.js 14 or higher:
+Claude Code requires Node.js 20 or higher:
 
 **Windows**:
 ```cmd
@@ -249,19 +249,55 @@ claude qa-check
 
 ## Verify Installation
 
-Test your setup:
+Test your setup with platform-specific commands:
+
+### Check Commands Are Available
 
 ```bash
-# Check if commands are available
+# All platforms (bash, PowerShell, CMD)
+claude --version
 claude create-prd --help
-
-# Verify config files exist
-# Windows:
-dir %USERPROFILE%\.config\claude\
-
-# macOS/Linux:
-ls -la ~/.config/claude/
 ```
+
+### Verify Config Files Exist
+
+**Windows CMD:**
+```cmd
+dir %USERPROFILE%\.config\claude\
+dir %USERPROFILE%\.config\claude\prompts\
+```
+
+**Windows PowerShell:**
+```powershell
+Get-ChildItem $env:USERPROFILE\.config\claude\
+Get-ChildItem $env:USERPROFILE\.config\claude\prompts\
+```
+
+**macOS/Linux (bash/zsh):**
+```bash
+ls -la ~/.config/claude/
+ls -la ~/.config/claude/prompts/
+```
+
+**Expected output:**
+- `config.yml` file present
+- `prompts/` directory with 9 `.md` files
+- All files should be readable (check permissions)
+
+### Test a Command
+
+```bash
+# Try creating a test PRD (will open interactive wizard)
+claude create-prd
+
+# Or test non-interactive command
+claude --help
+```
+
+**If commands not found:**
+- Check PATH configuration (see Troubleshooting section below)
+- Restart your terminal/shell
+- Run `prprompts doctor` for diagnostics
 
 ---
 

@@ -22,7 +22,7 @@
    prprompts generate
    ```
 
-**Prerequisites:** You need Node.js (v14+). [Download here](https://nodejs.org)
+**Prerequisites:** You need Node.js (v20+). [Download here](https://nodejs.org)
 
 **Don't have Claude Code yet?** Install it first:
 ```cmd
@@ -110,8 +110,10 @@ REM Start coding!
 
 Make sure you have:
 
-- ✅ **Node.js** (v14+): https://nodejs.org
+- ✅ **Node.js** (v20+): https://nodejs.org
 - ✅ **Git** (optional but recommended): https://git-scm.com
+
+**💡 Git Bash Users:** PRPROMPTS fully supports Git Bash on Windows! All bash scripts (`.sh`) work natively in Git Bash. The postinstall script automatically detects your shell environment and uses the correct installer.
 
 That's it!
 
@@ -140,6 +142,20 @@ Run PowerShell as Administrator:
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
+
+### Using Git Bash on Windows
+
+Git Bash is fully supported! All bash scripts work in Git Bash:
+
+```bash
+# Install using bash script (in Git Bash)
+bash scripts/install-commands.sh
+
+# Or use npm (works in any shell)
+npm install -g prprompts-flutter-generator
+```
+
+The postinstall script automatically detects Git Bash and uses `.sh` scripts instead of `.ps1` or `.bat`.
 
 ---
 

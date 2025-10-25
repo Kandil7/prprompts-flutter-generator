@@ -574,19 +574,78 @@ gemini qa-check
 
 ## Verify Installation
 
-Test your setup:
+Test your setup with platform-specific commands:
+
+### Check Commands Are Available
 
 ```bash
-# Check if commands are available
+# All platforms (bash, PowerShell, CMD)
+gemini --version
 gemini create-prd --help
-
-# Verify config files exist
-# Windows:
-dir %USERPROFILE%\.config\gemini\
-
-# macOS/Linux:
-ls -la ~/.config/gemini/
 ```
+
+### Verify Config Files Exist
+
+**Windows CMD:**
+```cmd
+dir %USERPROFILE%\.config\gemini\
+dir %USERPROFILE%\.config\gemini\prompts\
+```
+
+**Windows PowerShell:**
+```powershell
+Get-ChildItem $env:USERPROFILE\.config\gemini\
+Get-ChildItem $env:USERPROFILE\.config\gemini\prompts\
+```
+
+**macOS/Linux (bash/zsh):**
+```bash
+ls -la ~/.config/gemini/
+ls -la ~/.config/gemini/prompts/
+```
+
+**Expected output:**
+- `config.yml` file present
+- `prompts/` directory with 9 `.md` files
+- All files should be readable (check permissions)
+
+### Verify Gemini Skills (TOML Slash Commands)
+
+**Windows CMD:**
+```cmd
+dir %USERPROFILE%\.gemini\commands\skills\
+```
+
+**Windows PowerShell:**
+```powershell
+Get-ChildItem -Recurse $env:USERPROFILE\.gemini\commands\skills\ -Filter *.toml
+```
+
+**macOS/Linux (bash/zsh):**
+```bash
+find ~/.gemini/commands/skills/ -name "*.toml"
+```
+
+**Expected:** 8 TOML files (5 automation + 2 core + 1 workflow)
+
+### Test a Command
+
+```bash
+# Try creating a test PRD (will open interactive wizard)
+gemini create-prd
+
+# Or test non-interactive command
+gemini --help
+
+# Test Gemini skills (slash commands with colon separator)
+gemini
+# Then type: /help
+```
+
+**If commands not found:**
+- Check PATH configuration (see Troubleshooting section below)
+- Restart your terminal/shell
+- Run `prprompts doctor` for diagnostics
 
 ---
 

@@ -23,7 +23,7 @@ Before using the generator, ensure you have:
 ```bash
 # Required
 - Claude Code CLI (or Qwen Code / Gemini CLI)
-- Node.js 18+
+- Node.js 20+
 - Flutter 3.24+
 - Git
 

@@ -410,19 +410,78 @@ qwen qa-check
 
 ## Verify Installation
 
-Test your setup:
+Test your setup with platform-specific commands:
+
+### Check Commands Are Available
 
 ```bash
-# Check if commands are available
+# All platforms (bash, PowerShell, CMD)
+qwen --version
 qwen create-prd --help
-
-# Verify config files exist
-# Windows:
-dir %USERPROFILE%\.config\qwen\
-
-# macOS/Linux:
-ls -la ~/.config/qwen/
 ```
+
+### Verify Config Files Exist
+
+**Windows CMD:**
+```cmd
+dir %USERPROFILE%\.config\qwen\
+dir %USERPROFILE%\.config\qwen\prompts\
+```
+
+**Windows PowerShell:**
+```powershell
+Get-ChildItem $env:USERPROFILE\.config\qwen\
+Get-ChildItem $env:USERPROFILE\.config\qwen\prompts\
+```
+
+**macOS/Linux (bash/zsh):**
+```bash
+ls -la ~/.config/qwen/
+ls -la ~/.config/qwen/prompts/
+```
+
+**Expected output:**
+- `config.yml` file present
+- `prompts/` directory with 9 `.md` files
+- All files should be readable (check permissions)
+
+### Verify Qwen Skills (TOML Slash Commands)
+
+**Windows CMD:**
+```cmd
+dir %USERPROFILE%\.qwen\commands\skills\
+```
+
+**Windows PowerShell:**
+```powershell
+Get-ChildItem -Recurse $env:USERPROFILE\.qwen\commands\skills\ -Filter *.toml
+```
+
+**macOS/Linux (bash/zsh):**
+```bash
+find ~/.qwen/commands/skills/ -name "*.toml"
+```
+
+**Expected:** 8 TOML files (5 automation + 2 core + 1 workflow)
+
+### Test a Command
+
+```bash
+# Try creating a test PRD (will open interactive wizard)
+qwen create-prd
+
+# Or test non-interactive command
+qwen --help
+
+# Test Qwen skills (slash commands)
+qwen
+# Then type: /help
+```
+
+**If commands not found:**
+- Check PATH configuration (see Troubleshooting section below)
+- Restart your terminal/shell
+- Run `prprompts doctor` for diagnostics
 
 ---
 

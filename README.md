@@ -52,6 +52,13 @@ prprompts generate     # Generate all 32 files
 
 **✨ NEW: Interactive mode, API validation, rate limiting, progress indicators, and command history!**
 
+**⚠️ Permissions Note:**
+- **Windows:** No special permissions required (npm installs to your user directory)
+- **macOS/Linux:** Use one of these methods to avoid sudo:
+  - **Recommended:** Use [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager)
+  - **Alternative:** Configure npm for user-level installations (see [MACOS-QUICKSTART.md](MACOS-QUICKSTART.md#permission-denied-or-eacces-errors))
+  - **Not recommended:** Using `sudo npm install -g` can cause permission issues later
+
 **Alternative Methods:**
 
 **Windows PowerShell:**
@@ -63,6 +70,8 @@ irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master
 ```bash
 curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash
 ```
+
+**📌 Git Bash on Windows:** All bash scripts work natively in Git Bash! The postinstall script automatically detects Git Bash and uses the correct installer. [Learn more](MACOS-QUICKSTART.md#git-bash-compatibility-on-windows)
 
 [📦 Quick Install](#installation) • [🪟 Windows Guide](WINDOWS-QUICKSTART.md) • [✨ v4.1 Features](#v41-enterprise-features-new) • [📖 Docs](docs/PRPROMPTS-SPECIFICATION.md)
 
@@ -98,6 +107,8 @@ npm install -g @qwenlm/qwen-code
 # Option 3: Gemini CLI (by Google)
 npm install -g @google/gemini-cli
 ```
+
+**💡 Permissions:** On macOS/Linux, avoid `sudo` - use [nvm](https://github.com/nvm-sh/nvm) or configure npm user-level installs. See [MACOS-QUICKSTART.md](MACOS-QUICKSTART.md) for details.
 
 **2. Configure API Keys**:
 
@@ -2453,7 +2464,7 @@ Commands are identical across all 3.
 
 1. **Check Node.js version:**
    ```bash
-   node --version  # Should be v14 or higher
+   node --version  # Should be v20 or higher
    ```
 
 2. **Clear npm cache:**

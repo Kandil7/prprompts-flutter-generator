@@ -349,7 +349,7 @@ Includes GitHub Actions workflows:
 ## Installation & Quick Start
 
 ### Prerequisites
-- Node.js 18 or 20
+- Node.js 20 or higher
 - npm 9+
 - Flutter SDK
 - VS Code (recommended)

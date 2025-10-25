@@ -251,7 +251,7 @@ npm install -g .
 
 ```bash
 # Check prerequisites
-node --version    # Should be v14+
+node --version    # Should be v20+
 npm --version     # Should be v6+
 git --version     # Should be v2+
 

@@ -532,7 +532,7 @@ prprompts doctor
 
 ### System Requirements
 
-- Node.js v14+ (check with `node --version`)
+- Node.js v20+ (check with `node --version`)
 - npm v6+ (check with `npm --version`)
 - One AI assistant (Claude, Qwen, or Gemini)
 - Flutter 3.24+ (for development)

@@ -151,7 +151,7 @@ Add industry-specific examples:
 
 ### Prerequisites
 
-- **Node.js:** 18.x or 20.x
+- **Node.js:** 20.x or higher
 - **npm:** 9.x or higher
 - **Git:** Latest version
 - **Code editor:** VS Code (recommended) with extensions:
