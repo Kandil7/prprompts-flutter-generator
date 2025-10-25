@@ -8,6 +8,54 @@ Generate a comprehensive PRD in `docs/PRD.md` by analyzing and synthesizing info
 
 ## Input Process
 
+### Step 0: File Selection Method (NEW)
+
+**FIRST**, ask user how they want to select markdown files:
+
+```
+🔍 PRD Generation from Markdown Files
+
+How would you like to select markdown files?
+
+1. Auto-scan entire project (discovers all .md files automatically)
+2. Specify files manually (I'll tell you which files to use)
+
+Selection (1-2):
+```
+
+**IF user selects option 1 (Auto-scan):**
+- Use the **auto-generate-prd-from-project** approach
+- Discover all `.md` files in project using glob pattern: `**/*.md`
+- Use filename pattern matching to categorize content (see rules below)
+- Generate fresh YAML frontmatter from content analysis
+- Skip directly to content analysis and PRD generation
+- DO NOT ask for file paths
+
+**IF user selects option 2 (Manual):**
+- Proceed with Step 1 below (ask for specific file paths)
+
+**Filename Pattern Matching Rules (for Auto-scan mode):**
+
+1. **README.md** → Executive Summary + Product Vision (highest priority)
+2. **requirements*.md** (case-insensitive) → Requirements section
+3. **features*.md** or **feature*.md** → Features section
+4. **user*.md** or **persona*.md** → Target Users section
+5. **architecture*.md** or **tech*.md** or **technical*.md** → Technical Architecture
+6. **security*.md** or **compliance*.md** → Security & Compliance section
+7. **api*.md** → API Specifications
+8. **design*.md** or **ui*.md** or **ux*.md** → Design section
+9. **test*.md** or **qa*.md** → Testing Strategy
+10. **deploy*.md** or **release*.md** → Deployment section
+11. **risk*.md** → Risks & Mitigation
+12. **timeline*.md** or **roadmap*.md** or **schedule*.md** → Timeline/Roadmap
+13. **metric*.md** or **kpi*.md** or **success*.md** → Success Metrics
+14. **glossary*.md** or **terms*.md** → Glossary/Appendices
+15. **Others** → Categorized by directory name or Appendices
+
+---
+
+### Step 1: Manual File Selection (only if user chose option 2)
+
 1. **Ask for markdown files** (one or more):
    - Request file paths from the user
    - Read all provided files
