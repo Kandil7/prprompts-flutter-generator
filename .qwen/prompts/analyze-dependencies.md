@@ -1,0 +1,635 @@
+---
+name: Analyze Feature Dependencies
+description: Map feature dependencies and suggest optimal implementation order
+author: Dependency Analysis Engine
+version: 1.0.0
+tags: [prd, dependencies, planning, implementation, order]
+---
+
+# Feature Dependency Analysis
+
+## Overview
+Analyze PRD features to identify dependencies, blockers, and parallel work opportunities. Generate implementation order recommendations with critical path analysis.
+
+## Instructions
+
+### Step 1: Locate and Read PRD
+
+```bash
+# Expected location
+docs/PRD.md
+```
+
+If not found, ask user for PRD location.
+
+### Step 2: Extract Features
+
+Parse YAML frontmatter `features` array:
+
+```yaml
+features:
+  - name: "User Authentication"
+    complexity: "medium"
+    priority: "p0"
+    requires: ["biometric_auth", "mfa"]
+  - name: "Dashboard"
+    complexity: "medium"
+    priority: "p0"
+    requires: ["real_time_updates", "data_visualization"]
+```
+
+Also extract from PRD body if features have expanded descriptions with:
+- User stories
+- Technical requirements
+- Acceptance criteria
+
+### Step 3: Identify Dependency Types
+
+**1. Technical Dependencies (BLOCKING)**
+These MUST be implemented first:
+
+- **Authentication → All Features:**
+  - Any feature requiring user identity depends on auth
+  - Keywords: "user-specific", "personalized", "profile", "account"
+
+- **Database Schema → CRUD Features:**
+  - Data models must exist before features using them
+  - Keywords: "save", "retrieve", "update", "delete", "store"
+
+- **API Foundation → API-Dependent Features:**
+  - Backend endpoints required before frontend consumption
+  - Keywords: "fetch from server", "API call", "REST endpoint"
+
+- **Payment Integration → Monetization:**
+  - Stripe/PayPal setup blocks checkout, subscriptions, billing
+  - Keywords: "payment", "checkout", "billing", "subscription"
+
+- **Search Infrastructure → Search Features:**
+  - Elasticsearch/Algolia needed before search UI
+  - Keywords: "search", "find", "filter", "query"
+
+**2. Logical Dependencies (STRONGLY RECOMMENDED)**
+Should be implemented in order, but can be worked around:
+
+- **Core Entity → Related Entities:**
+  - Example: "Product" before "Product Reviews"
+  - Example: "User Profile" before "User Preferences"
+
+- **Create → Read/Update/Delete:**
+  - Must be able to create entities before managing them
+
+- **Basic Feature → Advanced Feature:**
+  - Example: "Text Chat" before "File Sharing in Chat"
+  - Example: "Product List" before "Product Comparison"
+
+**3. Domain Dependencies (RECOMMENDED)**
+Best practice ordering:
+
+- **Compliance Foundation → Data Features:**
+  - Encryption, audit logs before handling PHI/PII
+  - Keywords: "HIPAA", "PCI-DSS", "sensitive data"
+
+- **Offline Support → Online Features:**
+  - Sync infrastructure before features using it
+  - Keywords: "offline", "sync", "local storage"
+
+- **Real-time Infrastructure → Live Features:**
+  - WebSocket/Firestore setup before live updates
+  - Keywords: "real-time", "live", "instant", "push"
+
+**4. No Dependencies (PARALLEL)**
+Can start immediately and work in parallel:
+
+- UI-only features with mocked data
+- Design system / component library
+- Static content pages (About, Help, FAQ)
+- Analytics setup
+- Error tracking setup
+
+### Step 4: Analyze PRD Features
+
+For each feature, determine:
+
+1. **Direct Dependencies:** What must exist before this?
+   - Look for `requires` field in YAML
+   - Analyze feature description for keywords
+   - Check technical requirements
+
+2. **Reverse Dependencies:** What depends on this?
+   - Which features need this one?
+
+3. **Complexity Score:** From YAML (`low`/`medium`/`high`/`critical`)
+
+4. **Priority:** From YAML (`p0`/`p1`/`p2`)
+
+5. **Can Start When:**
+   - Immediately (no deps)
+   - After [Dependency] complete
+   - After [Dependency] started (parallel)
+
+### Step 5: Build Dependency Graph
+
+Create adjacency list:
+
+```
+User Authentication
+  ├─ Depends on: [None]
+  └─ Blocks: [Dashboard, Profile, Settings, ...]
+
+Dashboard
+  ├─ Depends on: [User Authentication, Real-time Infrastructure]
+  └─ Blocks: [Dashboard Widgets, Notifications]
+
+Payment Integration
+  ├─ Depends on: [User Authentication, Product Catalog]
+  └─ Blocks: [Checkout, Subscriptions, Invoices]
+```
+
+### Step 6: Identify Critical Path
+
+**Critical Path** = Longest sequence of dependent features
+
+Algorithm:
+1. Start from features with no dependencies
+2. Calculate total time to complete each feature + all its dependencies
+3. Feature with longest path = critical path
+
+```
+Critical Path Example:
+Authentication (2 weeks)
+  → Product Catalog (3 weeks)
+    → Shopping Cart (2 weeks)
+      → Payment Integration (4 weeks)
+        → Checkout (2 weeks)
+          = 13 weeks total (critical path)
+
+Parallel path:
+User Profile (1 week) → Settings (1 week) = 2 weeks (non-critical)
+```
+
+### Step 7: Recommend Implementation Phases
+
+**Phase 1 - Foundation (Weeks 1-4)**
+- No-dependency features
+- Critical path starters
+- Infrastructure setup
+
+**Phase 2 - Core Features (Weeks 5-12)**
+- P0 features dependent on Phase 1
+- Critical path middle sections
+
+**Phase 3 - Advanced Features (Weeks 13-20)**
+- P1 features
+- Features with multiple dependencies
+
+**Phase 4 - Polish (Weeks 21-24)**
+- P2 features
+- Nice-to-haves
+- Performance optimization
+
+### Step 8: Generate Dependency Report
+
+Create `docs/FEATURE_DEPENDENCIES.md`:
+
+```markdown
+# Feature Dependency Analysis: [Project Name]
+
+**Generated:** [Date]
+**Source:** docs/PRD.md
+**Total Features:** [Count]
+
+---
+
+## Executive Summary
+
+| Metric | Value |
+|--------|-------|
+| 🎯 Total Features | XX |
+| 🔴 P0 Features | XX |
+| 🟠 P1 Features | XX |
+| 🚀 Can Start Immediately | XX |
+| 🔗 Blocking Features | XX |
+| ⏱️ Critical Path Duration | XX weeks |
+| 🔀 Parallel Work Streams | X |
+
+**Key Insight:** [Most impactful finding, e.g., "Payment Integration is on critical path - any delay cascades to 5 downstream features"]
+
+---
+
+## Dependency Graph
+
+### Visual Representation
+
+```
+                    ┌─────────────────────┐
+                    │ Authentication (P0) │
+                    │   Medium - 2 weeks  │
+                    └──────────┬──────────┘
+                               │
+                 ┌─────────────┴──────────────┐
+                 │                            │
+        ┌────────▼────────┐        ┌────────▼────────┐
+        │  Dashboard (P0) │        │ User Profile    │
+        │  Medium - 3w    │        │   Low - 1w      │
+        └────────┬────────┘        └─────────────────┘
+                 │
+        ┌────────▼────────┐
+        │ Product Catalog │
+        │   High - 4w     │
+        └────────┬────────┘
+                 │
+    ┌────────────┴────────────┐
+    │                         │
+┌───▼──────────┐    ┌────────▼────────┐
+│ Shopping Cart│    │ Wishlist (P1)   │
+│  Medium - 2w │    │   Low - 1w      │
+└───┬──────────┘    └─────────────────┘
+    │
+┌───▼──────────────┐
+│ Payment (P0)     │
+│  Critical - 4w   │
+└───┬──────────────┘
+    │
+┌───▼──────────┐
+│ Checkout     │
+│ High - 2w    │
+└──────────────┘
+```
+
+---
+
+## Feature Matrix
+
+| Feature | Priority | Complexity | Depends On | Blocks | Can Start |
+|---------|----------|------------|------------|--------|-----------|
+| Authentication | P0 | Medium | None | 8 features | Week 1 |
+| Dashboard | P0 | Medium | Auth | Widgets | Week 3 |
+| Product Catalog | P0 | High | Auth, DB | Cart, Wishlist | Week 3 |
+| Shopping Cart | P0 | Medium | Catalog | Checkout | Week 7 |
+| Payment Integration | P0 | Critical | Auth, Cart | Checkout, Billing | Week 9 |
+| Checkout | P0 | High | Payment | None | Week 13 |
+| Wishlist | P1 | Low | Catalog | None | Week 7 |
+| User Profile | P0 | Low | Auth | Settings | Week 3 |
+| Settings | P1 | Low | Profile | None | Week 4 |
+| ... | ... | ... | ... | ... | ... |
+
+---
+
+## Critical Path Analysis
+
+**Critical Path:** Authentication → Product Catalog → Shopping Cart → Payment Integration → Checkout
+
+**Total Duration:** 15 weeks (60% of project timeline)
+
+### Critical Path Features
+
+1. **Authentication (P0)** - 2 weeks
+   - No dependencies
+   - **Blocks 8 features**
+   - Risk: Medium (complex auth flows)
+
+2. **Product Catalog (P0)** - 4 weeks
+   - Depends: Authentication
+   - **Blocks 5 features**
+   - Risk: High (large dataset, search complexity)
+
+3. **Shopping Cart (P0)** - 2 weeks
+   - Depends: Product Catalog
+   - Blocks: Payment, Checkout
+   - Risk: Low
+
+4. **Payment Integration (P0)** - 4 weeks
+   - Depends: Cart, Auth
+   - **Blocks 3 features**
+   - Risk: High (PCI-DSS compliance, Stripe integration)
+
+5. **Checkout (P0)** - 2 weeks
+   - Depends: Payment
+   - Blocks: None
+   - Risk: Medium (multi-step flow)
+
+⚠️ **Risk:** Any delay in critical path features directly delays project completion.
+
+💡 **Mitigation:**
+- Start critical path features first
+- Assign senior developers to critical path
+- Parallelize non-critical features
+
+---
+
+## Recommended Implementation Phases
+
+### 🚀 Phase 1: Foundation (Weeks 1-4)
+
+**Goal:** Enable parallel development
+
+| Feature | Priority | Complexity | Team | Duration |
+|---------|----------|------------|------|----------|
+| Authentication | P0 | Medium | Mobile + Backend | 2 weeks |
+| Database Schema | P0 | Low | Backend | 1 week |
+| API Foundation | P0 | Medium | Backend | 2 weeks |
+| Design System | P0 | Low | Design + Mobile | 2 weeks |
+| Error Tracking Setup | P0 | Low | DevOps | 1 week |
+
+**Parallel Streams:** 3
+- Stream A: Auth (mobile + backend)
+- Stream B: Database + API (backend)
+- Stream C: Design system (design + mobile)
+
+**Completion:** All features must finish before Phase 2
+
+---
+
+### 🏗️ Phase 2: Core Features (Weeks 5-12)
+
+**Goal:** Build P0 features on critical path
+
+| Feature | Depends On | Team | Start | Duration |
+|---------|-----------|------|-------|----------|
+| Product Catalog | Auth, API | Mobile + Backend | Week 5 | 4 weeks |
+| User Profile | Auth | Mobile | Week 5 | 1 week |
+| Dashboard | Auth, Real-time | Mobile + Backend | Week 5 | 3 weeks |
+| Shopping Cart | Catalog | Mobile | Week 9 | 2 weeks |
+| Search | Catalog | Backend + Mobile | Week 9 | 3 weeks |
+
+**Parallel Streams:** 2-3
+- Stream A: Catalog (critical path)
+- Stream B: Dashboard + Profile
+- Stream C: Search (starts week 9)
+
+---
+
+### 💳 Phase 3: Monetization (Weeks 11-16)
+
+**Goal:** Enable revenue features
+
+| Feature | Depends On | Team | Start | Duration |
+|---------|-----------|------|-------|----------|
+| Payment Integration | Auth, Cart | Backend + Mobile | Week 11 | 4 weeks |
+| Checkout Flow | Payment | Mobile | Week 15 | 2 weeks |
+| Order Management | Checkout | Mobile + Backend | Week 17 | 3 weeks |
+| Invoices | Payment | Backend | Week 15 | 2 weeks |
+
+**Parallel Streams:** 2
+- Stream A: Payment → Checkout (critical path)
+- Stream B: Invoices (parallel to checkout)
+
+---
+
+### ✨ Phase 4: Enhancements (Weeks 17-24)
+
+**Goal:** P1 features and polish
+
+| Feature | Depends On | Team | Start | Duration |
+|---------|-----------|------|-------|----------|
+| Wishlist | Catalog | Mobile | Week 17 | 1 week |
+| Product Reviews | Orders | Mobile + Backend | Week 20 | 2 weeks |
+| Push Notifications | Auth | Mobile + Backend | Week 17 | 2 weeks |
+| Settings | Profile | Mobile | Week 18 | 1 week |
+| Analytics Dashboard | Dashboard | Mobile | Week 22 | 2 weeks |
+
+**Parallel Streams:** 4-5 (all P1, no critical path)
+
+---
+
+## Blocking Features Analysis
+
+**Top 5 Blockers:** (Features that block the most others)
+
+1. **Authentication** → Blocks 8 features (Dashboard, Profile, Cart, Payment, etc.)
+   - **Impact:** Entire project blocked without this
+   - **Action:** Start Week 1, assign senior engineer
+   - **Completion Target:** Week 3
+
+2. **Product Catalog** → Blocks 5 features (Cart, Wishlist, Search, Reviews, Checkout)
+   - **Impact:** Core e-commerce features blocked
+   - **Action:** Start Week 5, full mobile + backend team
+   - **Completion Target:** Week 9
+
+3. **Payment Integration** → Blocks 3 features (Checkout, Invoices, Refunds)
+   - **Impact:** Revenue features blocked
+   - **Action:** Start Week 11, compliance review in parallel
+   - **Completion Target:** Week 15
+
+4. **API Foundation** → Blocks 10 features (all backend-dependent features)
+   - **Impact:** Frontend can only use mocked data without this
+   - **Action:** Start Week 1, backend team
+   - **Completion Target:** Week 3
+
+5. **Real-time Infrastructure** → Blocks 3 features (Dashboard, Notifications, Chat)
+   - **Impact:** Live features blocked
+   - **Action:** Start Week 4, backend specialist
+   - **Completion Target:** Week 6
+
+💡 **Strategy:** Complete these 5 blockers ASAP to unblock maximum parallel work.
+
+---
+
+## Parallel Work Opportunities
+
+**Max Concurrent Features:** 5-7 (based on team size)
+
+### High-Value Parallel Streams
+
+**Stream 1: Critical Path (Senior Team)**
+- Authentication → Catalog → Cart → Payment → Checkout
+- Never block this stream
+- Priority: P0 only
+
+**Stream 2: User Experience (Mid-Level Team)**
+- User Profile → Settings → Preferences
+- Dashboard → Widgets → Analytics
+- Can pause for critical path support
+
+**Stream 3: Infrastructure (Backend Specialists)**
+- API Foundation → Real-time → Search
+- Runs in parallel to all other streams
+- Priority: P0 foundation, then P1 enhancements
+
+**Stream 4: Nice-to-Haves (Junior Team)**
+- Wishlist → Favorites → Share
+- Reviews → Ratings → Comments
+- All P1/P2, can deprioritize
+
+---
+
+## Risk Assessment
+
+### High-Risk Dependencies
+
+⚠️ **Payment Integration** (Critical path, 4 weeks)
+- **Risk:** PCI-DSS compliance can take longer than expected
+- **Impact:** Blocks Checkout, delays revenue
+- **Mitigation:**
+  - Start compliance review in Week 1
+  - Use Stripe for SAQ-A (simplest compliance)
+  - Parallel: Build checkout with test mode
+
+⚠️ **Product Catalog** (Critical path, 4 weeks)
+- **Risk:** Large dataset performance issues
+- **Impact:** Blocks 5 downstream features
+- **Mitigation:**
+  - Implement pagination early
+  - Load test with production data size
+  - Consider Algolia for search
+
+⚠️ **Real-time Infrastructure** (Blocks 3 features)
+- **Risk:** WebSocket complexity, scaling issues
+- **Impact:** Dashboard, Notifications, Chat delayed
+- **Mitigation:**
+  - Use Firebase Realtime DB (managed service)
+  - Fallback to polling if websockets fail
+  - Implement retry logic
+
+---
+
+## Dependency Conflicts
+
+**None detected.** ✅
+
+_If circular dependencies existed, they would be listed here with resolution suggestions._
+
+---
+
+## Optimization Recommendations
+
+### 1. Start Critical Path Immediately
+**Action:** Begin Authentication and API Foundation in Week 1
+**Impact:** Enables 70% of other features to start by Week 3
+
+### 2. Parallelize Non-Dependent Features
+**Action:** Build User Profile, Settings, Design System in parallel to Auth
+**Impact:** 3 features complete while waiting for Auth → 3 weeks saved
+
+### 3. Mock Dependencies for Early Frontend Work
+**Action:** Create mock API responses for Catalog while backend builds real API
+**Impact:** Frontend team doesn't block, integration week saved
+
+### 4. Pre-start Compliance Work
+**Action:** Begin HIPAA/PCI-DSS audits before features are coded
+**Impact:** Compliance doesn't block launch → 2-4 weeks saved
+
+### 5. De-risk Critical Path Early
+**Action:** Spike Payment Integration in Week 1 (2-3 days research)
+**Impact:** Identify issues before they're on critical path → risk reduced
+
+---
+
+## Team Allocation Suggestions
+
+Based on dependencies and critical path:
+
+**Weeks 1-4 (Foundation):**
+- 50% team on critical path (Auth, API)
+- 30% on parallel infrastructure (Database, Real-time)
+- 20% on design system
+
+**Weeks 5-12 (Core Features):**
+- 60% team on critical path (Catalog, Cart)
+- 40% on parallel features (Dashboard, Profile)
+
+**Weeks 13-20 (Monetization):**
+- 70% team on critical path (Payment, Checkout)
+- 30% on nice-to-haves (Wishlist, Reviews)
+
+**Weeks 21-24 (Polish):**
+- 100% team on parallel P1 features
+
+---
+
+## Dependencies by Type
+
+### Technical Dependencies (MUST complete in order)
+- [Count] features with technical dependencies
+- Example: Payment → Checkout
+
+### Logical Dependencies (SHOULD complete in order)
+- [Count] features with logical dependencies
+- Example: Product → Product Reviews
+
+### Domain Dependencies (NICE TO complete in order)
+- [Count] features with domain dependencies
+- Example: Offline Sync → Offline Features
+
+### No Dependencies (Can start immediately)
+- [Count] features with no dependencies
+- Example: Design System, Static Pages
+
+---
+
+## Next Steps
+
+1. **Review & Validate:** Confirm dependencies with technical lead
+2. **Adjust Timeline:** Use critical path (XX weeks) for realistic schedule
+3. **Assign Teams:** Match senior engineers to critical path features
+4. **Create Sprints:** Break phases into 2-week sprints
+5. **Track Progress:** Update dependency status weekly
+6. **Risk Mitigation:** Address high-risk dependencies first
+
+**Commands:**
+- `claude estimate-cost` - Generate budget based on this timeline
+- `claude gen-prprompts` - Generate development guides for all features
+- `claude bootstrap-from-prprompts` - Start implementation
+
+---
+
+*Generated by Feature Dependency Analyzer v1.0.0*
+*Methodology: Technical dependency analysis + Critical path calculation*
+*Source: [PRD Path]*
+```
+
+### Step 9: Validation & Output
+
+After generating report:
+
+1. **Sanity Checks:**
+   - No circular dependencies?
+   - Critical path < 80% of timeline?
+   - At least 30% of features can start immediately?
+   - Blockers identified and flagged?
+
+2. **Output Message:**
+
+```
+✅ Generated dependency analysis at docs/FEATURE_DEPENDENCIES.md
+
+🔗 Dependency Summary:
+- Total Features: XX
+- Can Start Immediately: XX (XX%)
+- Critical Path: XX weeks (XX% of timeline)
+- Top Blocker: [Feature] (blocks XX features)
+
+🎯 Key Recommendations:
+1. Start [Blocker] in Week 1 (unblocks XX features)
+2. Parallelize [Feature A], [Feature B], [Feature C]
+3. De-risk [High-Risk Feature] with early spike
+
+⚠️ Critical Path Warning:
+[Feature] is on critical path. Any delay cascades to:
+- [Downstream 1] (Week XX)
+- [Downstream 2] (Week XX)
+- [Downstream 3] (Week XX)
+
+Next steps:
+1. Review dependency graph (Section 2)
+2. Validate critical path (Section 3)
+3. Run: claude estimate-cost
+4. Run: claude gen-prprompts
+
+Start implementation? (y/n)
+```
+
+## Notes
+
+- **Use graph visualization:** Mermaid or ASCII art for dependency graph
+- **Update during development:** Re-run analysis when PRD changes
+- **Consider team size:** More parallel streams require more team members
+- **Flag compliance blockers:** HIPAA audits can take 4-8 weeks
+- **Mock for parallelism:** Use mock data to unblock frontend while backend builds
+
+## Limitations
+
+- Cannot detect hidden dependencies in code
+- Assumes features are accurately described in PRD
+- Does not account for external dependencies (third-party APIs)
+- Critical path calculation assumes linear dependencies (no OR/XOR logic)
