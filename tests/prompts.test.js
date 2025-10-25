@@ -24,24 +24,24 @@ describe('PRPROMPTS Content Validation', () => {
       expect(content).toContain('Generate comprehensive');
     });
 
-    test('create-prd.md should have PRD wizard instructions', () => {
-      const promptPath = path.join(claudePromptsDir, 'create-prd.md');
+    test('generate-prd.md should have PRD wizard instructions', () => {
+      const promptPath = path.join(claudePromptsDir, 'generate-prd.md');
       const content = fs.readFileSync(promptPath, 'utf8');
 
       expect(content).toContain('PRD');
       expect(content.length).toBeGreaterThan(100);
     });
 
-    test('auto-gen-prd.md should have auto-generation instructions', () => {
-      const promptPath = path.join(claudePromptsDir, 'auto-gen-prd.md');
+    test('auto-generate-prd.md should have auto-generation instructions', () => {
+      const promptPath = path.join(claudePromptsDir, 'auto-generate-prd.md');
       const content = fs.readFileSync(promptPath, 'utf8');
 
       expect(content).toContain('automatic');
       expect(content.length).toBeGreaterThan(100);
     });
 
-    test('prd-from-files.md should have file analysis instructions', () => {
-      const promptPath = path.join(claudePromptsDir, 'prd-from-files.md');
+    test('generate-prd-from-files.md should have file analysis instructions', () => {
+      const promptPath = path.join(claudePromptsDir, 'generate-prd-from-files.md');
       const content = fs.readFileSync(promptPath, 'utf8');
 
       expect(content).toContain('file');
@@ -56,32 +56,32 @@ describe('PRPROMPTS Content Validation', () => {
       expect(content.length).toBeGreaterThan(100);
     });
 
-    test('gen-phase-1.md should have Phase 1 generation instructions', () => {
-      const promptPath = path.join(claudePromptsDir, 'gen-phase-1.md');
+    test('phase-1-core.md should have Phase 1 generation instructions', () => {
+      const promptPath = path.join(claudePromptsDir, 'phase-1-core.md');
       const content = fs.readFileSync(promptPath, 'utf8');
 
       expect(content).toContain('Phase 1');
       expect(content.length).toBeGreaterThan(100);
     });
 
-    test('gen-phase-2.md should have Phase 2 generation instructions', () => {
-      const promptPath = path.join(claudePromptsDir, 'gen-phase-2.md');
+    test('phase-2-quality.md should have Phase 2 generation instructions', () => {
+      const promptPath = path.join(claudePromptsDir, 'phase-2-quality.md');
       const content = fs.readFileSync(promptPath, 'utf8');
 
       expect(content).toContain('Phase 2');
       expect(content.length).toBeGreaterThan(100);
     });
 
-    test('gen-phase-3.md should have Phase 3 generation instructions', () => {
-      const promptPath = path.join(claudePromptsDir, 'gen-phase-3.md');
+    test('phase-3-demo.md should have Phase 3 generation instructions', () => {
+      const promptPath = path.join(claudePromptsDir, 'phase-3-demo.md');
       const content = fs.readFileSync(promptPath, 'utf8');
 
       expect(content).toContain('Phase 3');
       expect(content.length).toBeGreaterThan(100);
     });
 
-    test('gen-file.md should have file generation instructions', () => {
-      const promptPath = path.join(claudePromptsDir, 'gen-file.md');
+    test('single-file-generator.md should have file generation instructions', () => {
+      const promptPath = path.join(claudePromptsDir, 'single-file-generator.md');
       const content = fs.readFileSync(promptPath, 'utf8');
 
       expect(content).toContain('file');
@@ -103,14 +103,14 @@ describe('PRPROMPTS Content Validation', () => {
     test('all prompts should exist and have content', () => {
       const expectedPrompts = [
         'prprompts-generator.md',
-        'create-prd.md',
-        'auto-gen-prd.md',
-        'prd-from-files.md',
+        'generate-prd.md',
+        'auto-generate-prd.md',
+        'generate-prd-from-files.md',
         'analyze-prd.md',
-        'gen-phase-1.md',
-        'gen-phase-2.md',
-        'gen-phase-3.md',
-        'gen-file.md',
+        'phase-1-core.md',
+        'phase-2-quality.md',
+        'phase-3-demo.md',
+        'single-file-generator.md',
       ];
 
       expectedPrompts.forEach((promptFile) => {
@@ -135,14 +135,14 @@ describe('PRPROMPTS Content Validation', () => {
     test('all prompts should exist and have content', () => {
       const expectedPrompts = [
         'prprompts-generator.md',
-        'create-prd.md',
-        'auto-gen-prd.md',
-        'prd-from-files.md',
+        'generate-prd.md',
+        'auto-generate-prd.md',
+        'generate-prd-from-files.md',
         'analyze-prd.md',
-        'gen-phase-1.md',
-        'gen-phase-2.md',
-        'gen-phase-3.md',
-        'gen-file.md',
+        'phase-1-core.md',
+        'phase-2-quality.md',
+        'phase-3-demo.md',
+        'single-file-generator.md',
       ];
 
       expectedPrompts.forEach((promptFile) => {
