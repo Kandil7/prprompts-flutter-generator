@@ -16,19 +16,21 @@ echo ""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
-# Determine install location
-if [ "$1" == "--global" ]; then
+# Determine install location (default to --global if no argument)
+MODE="${1:---global}"
+
+if [ "$MODE" == "--global" ]; then
     INSTALL_TYPE="global"
     CONFIG_DIR="$HOME/.config/claude"
     echo -e "${YELLOW}Installing globally to: $CONFIG_DIR${NC}"
-elif [ "$1" == "--local" ]; then
+elif [ "$MODE" == "--local" ]; then
     INSTALL_TYPE="local"
     CONFIG_DIR="$(pwd)/.claude"
     echo -e "${YELLOW}Installing locally to: $CONFIG_DIR${NC}"
 else
     echo "Usage: $0 [--global|--local]"
     echo ""
-    echo "  --global: Install commands globally (available in all projects)"
+    echo "  --global: Install commands globally (available in all projects) [default]"
     echo "  --local:  Install commands in current project only"
     echo ""
     exit 1

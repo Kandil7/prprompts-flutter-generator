@@ -11,18 +11,16 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Check arguments
-if [ "$#" -ne 1 ]; then
+# Determine install mode (default to --global if no argument)
+MODE="${1:---global}"
+
+if [ "$MODE" != "--global" ] && [ "$MODE" != "--local" ]; then
+    echo -e "${RED}Error: Invalid argument. Use --global or --local${NC}"
     echo -e "${RED}Usage: $0 [--global|--local]${NC}"
     echo ""
-    echo "  --global: Install commands globally (available in all projects)"
+    echo "  --global: Install commands globally (available in all projects) [default]"
     echo "  --local:  Install commands in current project only"
     echo ""
-    exit 1
-fi
-
-if [ "$1" != "--global" ] && [ "$1" != "--local" ]; then
-    echo -e "${RED}Error: Invalid argument. Use --global or --local${NC}"
     exit 1
 fi
 
@@ -37,7 +35,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 
 # Determine install location
-if [ "$1" == "--global" ]; then
+if [ "$MODE" == "--global" ]; then
     CONFIG_DIR="$HOME/.config/qwen"
     echo -e "${YELLOW}Installing globally to: $CONFIG_DIR${NC}"
 else

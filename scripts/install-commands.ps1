@@ -3,9 +3,9 @@
 # PowerShell script for Windows
 
 param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$false)]
     [ValidateSet("--global", "--local")]
-    [string]$InstallType
+    [string]$InstallType = "--global"
 )
 
 # Colors for output

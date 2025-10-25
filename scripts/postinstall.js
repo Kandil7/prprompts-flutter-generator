@@ -36,6 +36,39 @@ function commandExists(command) {
   }
 }
 
+/**
+ * Detect Windows shell environment (PowerShell, CMD, Git Bash, WSL)
+ * @returns {string} 'powershell', 'cmd', 'bash', or 'wsl'
+ */
+function detectWindowsShell() {
+  if (os.platform() !== 'win32') {
+    return 'unix';
+  }
+
+  // Check if running in WSL
+  try {
+    const release = fs.readFileSync('/proc/version', 'utf8').toLowerCase();
+    if (release.includes('microsoft') || release.includes('wsl')) {
+      return 'wsl';
+    }
+  } catch {
+    // Not WSL
+  }
+
+  // Check for Git Bash by looking at common env vars
+  if (process.env.MSYSTEM || process.env.BASH) {
+    return 'bash';
+  }
+
+  // Check if PowerShell is the parent process
+  if (process.env.PSModulePath || process.env.WT_SESSION) {
+    return 'powershell';
+  }
+
+  // Default to CMD
+  return 'cmd';
+}
+
 function getConfigPath(ai) {
   const home = os.homedir();
   const platform = os.platform();
@@ -59,7 +92,8 @@ function copyPrompts(ai, configPath) {
   const promptsDir = path.join(configPath, 'prompts');
   ensureDirectory(promptsDir);
 
-  const sourceDir = path.join(__dirname, '..', '.claude', 'prompts');
+  // Use the correct AI directory (`.claude`, `.qwen`, or `.gemini`)
+  const sourceDir = path.join(__dirname, '..', `.${ai}`, 'prompts');
 
   if (!fs.existsSync(sourceDir)) {
     log(`  ⚠️  Warning: Source prompts directory not found at ${sourceDir}`, 'yellow');
@@ -80,7 +114,8 @@ function copyPrompts(ai, configPath) {
 
 function copyConfig(ai, configPath) {
   const configFile = path.join(configPath, 'config.yml');
-  const sourceConfig = path.join(__dirname, '..', '.claude', 'config.yml');
+  // Use the correct AI directory (`.claude`, `.qwen`, or `.gemini`)
+  const sourceConfig = path.join(__dirname, '..', `.${ai}`, 'config.yml');
 
   if (!fs.existsSync(sourceConfig)) {
     log(`  ⚠️  Warning: Source config not found at ${sourceConfig}`, 'yellow');
@@ -123,31 +158,37 @@ function installQwenSkills() {
   log('\nInstalling Qwen Code Skills...', 'blue');
 
   try {
-    const scriptPath = path.join(__dirname, 'install-qwen-skills.sh');
+    const bashScriptPath = path.join(__dirname, 'install-qwen-skills.sh');
+    const psScriptPath = path.join(__dirname, 'install-qwen-skills.ps1');
+    const batScriptPath = path.join(__dirname, 'install-qwen-skills.bat');
 
-    if (!fs.existsSync(scriptPath)) {
-      log('  ⚠️  Qwen skills installer not found, skipping', 'yellow');
-      return false;
-    }
-
-    // Run installation script
+    // Run installation script based on platform and environment
     if (os.platform() === 'win32') {
-      // On Windows, use bash if available
-      if (commandExists('bash')) {
-        execSync(`bash "${scriptPath}"`, { stdio: 'inherit' });
+      const shell = detectWindowsShell();
+
+      if ((shell === 'bash' || shell === 'wsl') && fs.existsSync(bashScriptPath)) {
+        // Git Bash or WSL - use bash script
+        execSync(`bash "${bashScriptPath}"`, { stdio: 'inherit' });
+      } else if (shell === 'powershell' && fs.existsSync(psScriptPath)) {
+        // PowerShell - use .ps1 script
+        execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, { stdio: 'inherit' });
+      } else if (fs.existsSync(batScriptPath)) {
+        // CMD - use .bat script
+        execSync(`"${batScriptPath}"`, { stdio: 'inherit' });
+      } else if (fs.existsSync(psScriptPath)) {
+        // Fallback to PowerShell
+        execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, { stdio: 'inherit' });
       } else {
-        // Use PowerShell script instead
-        const psScriptPath = path.join(__dirname, 'install-qwen-skills.ps1');
-        if (fs.existsSync(psScriptPath)) {
-          execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, { stdio: 'inherit' });
-        } else {
-          log('  ⚠️  No Windows installer found, skipping', 'yellow');
-          return false;
-        }
+        log('  ⚠️  No Windows installer found, skipping', 'yellow');
+        return false;
       }
     } else {
-      // macOS/Linux
-      execSync(`bash "${scriptPath}"`, { stdio: 'inherit' });
+      // macOS/Linux - use bash script
+      if (!fs.existsSync(bashScriptPath)) {
+        log('  ⚠️  Qwen skills installer not found, skipping', 'yellow');
+        return false;
+      }
+      execSync(`bash "${bashScriptPath}"`, { stdio: 'inherit' });
     }
 
     log('\n✓ Qwen Code Skills installed successfully!', 'green');
@@ -166,31 +207,37 @@ function installGeminiSkills() {
   log('\nInstalling Gemini CLI Skills...', 'blue');
 
   try {
-    const scriptPath = path.join(__dirname, 'install-gemini-skills.sh');
+    const bashScriptPath = path.join(__dirname, 'install-gemini-skills.sh');
+    const psScriptPath = path.join(__dirname, 'install-gemini-skills.ps1');
+    const batScriptPath = path.join(__dirname, 'install-gemini-skills.bat');
 
-    if (!fs.existsSync(scriptPath)) {
-      log('  ⚠️  Gemini skills installer not found, skipping', 'yellow');
-      return false;
-    }
-
-    // Run installation script
+    // Run installation script based on platform and environment
     if (os.platform() === 'win32') {
-      // On Windows, use bash if available
-      if (commandExists('bash')) {
-        execSync(`bash "${scriptPath}"`, { stdio: 'inherit' });
+      const shell = detectWindowsShell();
+
+      if ((shell === 'bash' || shell === 'wsl') && fs.existsSync(bashScriptPath)) {
+        // Git Bash or WSL - use bash script
+        execSync(`bash "${bashScriptPath}"`, { stdio: 'inherit' });
+      } else if (shell === 'powershell' && fs.existsSync(psScriptPath)) {
+        // PowerShell - use .ps1 script
+        execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, { stdio: 'inherit' });
+      } else if (fs.existsSync(batScriptPath)) {
+        // CMD - use .bat script
+        execSync(`"${batScriptPath}"`, { stdio: 'inherit' });
+      } else if (fs.existsSync(psScriptPath)) {
+        // Fallback to PowerShell
+        execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, { stdio: 'inherit' });
       } else {
-        // Use PowerShell script instead
-        const psScriptPath = path.join(__dirname, 'install-gemini-skills.ps1');
-        if (fs.existsSync(psScriptPath)) {
-          execSync(`powershell -ExecutionPolicy Bypass -File "${psScriptPath}"`, { stdio: 'inherit' });
-        } else {
-          log('  ⚠️  No Windows installer found, skipping', 'yellow');
-          return false;
-        }
+        log('  ⚠️  No Windows installer found, skipping', 'yellow');
+        return false;
       }
     } else {
-      // macOS/Linux
-      execSync(`bash "${scriptPath}"`, { stdio: 'inherit' });
+      // macOS/Linux - use bash script
+      if (!fs.existsSync(bashScriptPath)) {
+        log('  ⚠️  Gemini skills installer not found, skipping', 'yellow');
+        return false;
+      }
+      execSync(`bash "${bashScriptPath}"`, { stdio: 'inherit' });
     }
 
     log('\n✓ Gemini CLI Skills installed successfully!', 'green');

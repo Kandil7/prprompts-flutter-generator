@@ -3,9 +3,9 @@
 # Usage: powershell -ExecutionPolicy Bypass -File install-qwen-commands.ps1 [--global|--local]
 
 param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$false)]
     [ValidateSet("--global", "--local")]
-    [string]$Mode
+    [string]$Mode = "--global"
 )
 
 $ErrorActionPreference = "Stop"
