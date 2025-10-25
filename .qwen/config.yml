@@ -21,6 +21,10 @@ commands:
     prompt: "prompts/analyze-prd.md"
     description: "Validate and analyze PRD, show customizations"
 
+  refine-prd:
+    prompt: "prompts/refine-prd.md"
+    description: "Interactively improve PRD quality through AI-guided refinement"
+
   # PRPROMPTS Generation Commands
   gen-prprompts:
     prompt: "prompts/prprompts-generator.md"
