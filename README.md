@@ -316,6 +316,36 @@ qwen
 - **[Claude Skills](\.claude\skills\index.md)** - Claude Code skills documentation
 - **[Qwen Skills](docs/QWEN-SKILLS-GUIDE.md)** - Qwen Code TOML slash commands guide (NEW!)
 - **[Qwen Setup](QWEN.md)** - Complete Qwen Code setup with skills installation
+- **[Gemini Skills](docs/GEMINI-SKILLS-GUIDE.md)** - Gemini CLI TOML slash commands guide (NEW!)
+- **[Gemini Setup](GEMINI.md)** - Complete Gemini CLI setup with skills installation
+
+**Gemini CLI (NEW!):**
+```bash
+# Skills available as global TOML slash commands with colon separator
+gemini
+
+# Inline arguments (Gemini-specific feature!)
+/skills:automation:code-reviewer security lib/features/auth true
+# No prompts - arguments parsed automatically!
+
+# Leverage 1M token context
+/skills:automation:code-reviewer full lib/
+# Loads entire codebase (150 files) in single pass!
+
+# Complete automation workflow
+/skills:automation:flutter-bootstrapper . true true true true hipaa
+/skills:automation:automation-orchestrator 10
+/skills:automation:qa-auditor . hipaa,pci-dss true true QA_REPORT.md 85
+```
+
+**Gemini-Specific Advantages:**
+- ✅ **1M Token Context** - Analyze entire codebases (5x larger than Claude)
+- ✅ **{{args}} Support** - Inline arguments for streamlined workflows
+- ✅ **ReAct Agent Mode** - Autonomous reasoning and acting loops
+- ✅ **Free Tier** - 60 req/min, 1,000/day (no credit card required)
+- ✅ **Colon Separator** - `/skills:automation:code-reviewer` syntax (vs. Qwen's slash separator)
+
+📖 **[Gemini Skills Complete Guide](docs/GEMINI-SKILLS-GUIDE.md)** - Comprehensive usage guide with Gemini-specific features, workflows, and benchmarks
 
 ### New Automation Commands
 

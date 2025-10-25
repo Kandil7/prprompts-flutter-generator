@@ -236,6 +236,224 @@ gemini qa-check                  # Comprehensive compliance audit
 
 ---
 
+## 🎯 Gemini CLI Skills (NEW!)
+
+**PRPROMPTS now includes 8 specialized automation skills as global TOML slash commands for Gemini CLI.**
+
+### Available Skills
+
+**Automation (5 skills):**
+- `/skills:automation:flutter-bootstrapper` - Complete project setup with Clean Architecture, security, tests
+- `/skills:automation:feature-implementer` - Auto-implement features from implementation plan
+- `/skills:automation:automation-orchestrator` - Orchestrate multi-feature implementation (1-10 features)
+- `/skills:automation:code-reviewer` - Review code against PRPROMPTS patterns + security audit
+- `/skills:automation:qa-auditor` - Comprehensive compliance audit (HIPAA, PCI-DSS, GDPR)
+
+**PRPROMPTS Core (2 skills):**
+- `/skills:prprompts-core:phase-generator` - Generate PRPROMPTS files by phase (1=Core, 2=Quality, 3=Demo)
+- `/skills:prprompts-core:single-file-generator` - Regenerate single PRPROMPTS file (1-32)
+
+**Development Workflow (1 skill):**
+- `/skills:development-workflow:flutter-flavors` - Configure environment flavors (dev, staging, production)
+
+### Gemini-Specific Features
+
+**1. Colon Separator Syntax:**
+```bash
+gemini
+
+# Gemini uses colon separators (not slashes like Qwen)
+/skills:automation:code-reviewer
+/skills:prprompts-core:phase-generator
+```
+
+**2. Inline Arguments with {{args}}:**
+```bash
+# Traditional interactive mode
+/skills:automation:code-reviewer
+# > Review type? security
+# > Target path? lib/features/auth
+
+# Gemini inline arguments (faster!)
+/skills:automation:code-reviewer security lib/features/auth
+# No prompts - arguments parsed automatically!
+```
+
+**3. 1M Token Context Utilization:**
+```bash
+# Gemini can load entire codebase in single pass
+/skills:automation:code-reviewer full lib/
+
+# Loads:
+# - All files in lib/ (~150 files)
+# - All 32 PRPROMPTS files
+# - docs/PRD.md
+# - IMPLEMENTATION_PLAN.md
+# Total: ~800KB (fits in 1M context!)
+```
+
+**4. ReAct Agent Mode:**
+```bash
+# Gemini autonomously reasons and acts
+/skills:automation:automation-orchestrator 10
+
+# ReAct Loop:
+# 1. Reason: "Need to implement auth first"
+# 2. Act: Implement authentication feature
+# 3. Validate: Run tests → 3 failures detected
+# 4. Reason: "Missing mock factory"
+# 5. Act: Generate mock factory
+# 6. Validate: Run tests → All pass ✅
+# [Continues autonomously for all 10 features]
+```
+
+**5. Free Tier Optimization:**
+- **60 requests/minute** (4x more than Claude)
+- **1,000 requests/day** (10x more than Claude)
+- **No credit card required**
+
+```bash
+# Batch operations to maximize free tier
+/skills:automation:automation-orchestrator 10
+# Instead of 10 separate calls
+```
+
+### Smart Defaults
+
+Skills use intelligent defaults to minimize user input:
+
+```bash
+/skills:automation:flutter-bootstrapper
+
+# Only asks for critical inputs:
+# > Project path? (press Enter for .):
+# [Press Enter]
+# > Compliance standards? (press Enter for none):
+# hipaa,pci-dss
+
+# All other inputs use smart defaults:
+# ✅ enable_state_management: true (BLoC)
+# ✅ enable_security: true
+# ✅ enable_testing: true (80% coverage target)
+# ✅ enable_ci_cd: true
+```
+
+**Result:** 80% reduction in required inputs!
+
+### Quick Example Workflow
+
+**From PRD to Production App (30 minutes):**
+
+```bash
+# 1. Start Gemini CLI
+gemini
+
+# 2. Bootstrap complete project
+/skills:automation:flutter-bootstrapper . true true true true hipaa
+# Result (60 sec): 30 files, Clean Architecture, security, tests
+
+# 3. Implement all features
+/skills:automation:automation-orchestrator 10
+# Result (25 min): 150 files, 15K LOC, 10 features, 80% coverage
+
+# 4. Final QA audit
+/skills:automation:qa-auditor . hipaa,pci-dss true true QA_REPORT.md 85
+# Result (90 sec): Score 87/100 ✅ PASS
+
+# Total: 27 minutes
+# vs. Manual: 3-5 days (40-60x faster!)
+```
+
+### Key Capabilities
+
+**flutter-bootstrapper:**
+- Complete Clean Architecture setup
+- JWT verification (RS256 with public key)
+- AES-256-GCM encryption
+- Secure storage configuration
+- BLoC state management
+- Unit + widget test infrastructure
+- GitHub Actions CI/CD
+- Execution time: 60 seconds
+- Output: 30 files (~5,000 lines)
+
+**feature-implementer:**
+- Reads `IMPLEMENTATION_PLAN.md`
+- Generates domain/data/presentation layers
+- Creates unit + widget tests (80% coverage)
+- Follows PRPROMPTS patterns
+- Security-first implementation
+- Execution time: 2-3 minutes per feature
+- Output: 15 files per feature (~2,000 lines)
+
+**automation-orchestrator:**
+- Implements 1-10 features automatically
+- Progress tracking with ETA
+- Validation gates (architecture, security, tests)
+- Generates QA reports
+- Optional checkpoints
+- Execution time: 2-3 min per feature
+- Output: Full application with tests
+
+**code-reviewer:**
+- Architecture review (Clean Architecture compliance)
+- Security review (JWT, encryption, compliance)
+- Testing review (coverage, quality)
+- Style review (flutter analyze)
+- Output formats: markdown, JSON, console
+- Execution time: 30-45 seconds (leverages 1M context)
+
+**qa-auditor:**
+- Architecture audit (25 points)
+- Security audit (30 points) - HIPAA, PCI-DSS, GDPR
+- Testing audit (25 points)
+- Code quality audit (10 points)
+- Performance audit (5 points)
+- Accessibility audit (5 points)
+- Generates comprehensive `QA_REPORT.md`
+- Execution time: 60-90 seconds
+
+### Documentation
+
+**Complete Skills Guide:**
+- [docs/GEMINI-SKILLS-GUIDE.md](docs/GEMINI-SKILLS-GUIDE.md) - 900+ line comprehensive guide
+  - All 8 skills with detailed examples
+  - 4 complete workflow examples
+  - Smart defaults deep dive
+  - Gemini-specific features ({{args}}, 1M context, ReAct)
+  - Troubleshooting guide
+  - Performance benchmarks
+
+### Installation
+
+Skills are automatically installed when you install PRPROMPTS:
+
+```bash
+# Install PRPROMPTS globally
+npm install -g prprompts-flutter-generator
+
+# Skills are auto-installed to ~/.gemini/commands/skills/
+# Verify:
+gemini
+/help
+# You should see all 8 skills listed
+```
+
+**Manual Installation (if needed):**
+
+```bash
+# Linux/macOS:
+bash scripts/install-gemini-skills.sh
+
+# Windows (PowerShell):
+powershell -ExecutionPolicy Bypass -File scripts\install-gemini-skills.ps1
+
+# Windows (Batch):
+scripts\install-gemini-skills.bat
+```
+
+---
+
 ## Quick Start
 
 ### 1. Authenticate with Google
