@@ -2,8 +2,8 @@
 name: Generate PRD
 description: Generate complete Product Requirements Document with YAML frontmatter
 author: PRD Generator
-version: 1.0.0
-tags: [prd, requirements, documentation, flutter]
+version: 1.1.0
+tags: [prd, requirements, documentation, flutter, templates]
 ---
 
 # Generate Product Requirements Document
@@ -13,9 +13,65 @@ Generate a comprehensive Product Requirements Document (PRD) for a Flutter appli
 
 ## Instructions
 
+### Step 0: Template Selection (NEW in v4.1)
+
+**FIRST**, ask the user if they want to start from an industry template:
+
+```
+🚀 PRD Generation - Starting Point
+
+Would you like to start from an industry template? Templates include pre-configured compliance,
+features, and best practices for specific domains.
+
+Available templates:
+1. Healthcare     - HIPAA-compliant, PHI encryption, patient portal features
+2. Fintech        - PCI-DSS compliant, payment security, never store card numbers
+3. Education      - COPPA/FERPA compliant, parental consent, student data protection
+4. E-commerce     - PCI-DSS + Stripe, shopping cart, product catalog, secure checkout
+5. Logistics      - GPS tracking, route optimization, offline-first, proof of delivery
+6. SaaS/B2B       - Multi-tenancy, enterprise SSO, subscription billing, audit logs
+7. Generic        - Start from scratch, fully customized
+
+Selection (1-7):
+```
+
+**IF user selects 1-6:** Load the corresponding template from `templates/prd-{type}-starter.md`:
+- `prd-healthcare-starter.md` (1)
+- `prd-fintech-starter.md` (2)
+- `prd-education-starter.md` (3)
+- `prd-ecommerce-starter.md` (4)
+- `prd-logistics-starter.md` (5)
+- `prd-saas-starter.md` (6)
+
+**Template Loading Process:**
+1. Read the selected template file
+2. Parse its YAML frontmatter (extract all key-value pairs)
+3. Use template values as **defaults** for Step 1 questions
+4. Display: `✅ Loaded [Type] template with pre-configured [compliance list]`
+5. Proceed to Step 1 with defaults populated
+
+**IF user selects 7 (Generic):** Proceed to Step 1 with no defaults.
+
+**Template Customization:** After loading a template, user can still customize:
+- Project name (always required)
+- Add/remove features
+- Adjust team composition
+- Modify timelines
+- Add additional compliance requirements
+
 ### Step 1: Gather Information
 
-Ask the user these questions (or infer from their description):
+Ask the user these questions (or infer from their description).
+
+**IMPORTANT:** If a template was loaded in Step 0, show the template's default value in [brackets]
+and allow user to press Enter to keep it or type a new value.
+
+Example:
+```
+Project Name: [default from template if loaded]
+Project Type: healthcare [from template - press Enter to keep]
+Compliance: ["hipaa", "gdpr"] [from template - press Enter to keep or modify]
+```
 
 1. **Project Name**: What's the app called?
 2. **Project Type**: What category?
@@ -254,7 +310,8 @@ Next steps:
 1. Review: cat docs/PRD.md
 2. Customize: vim docs/PRD.md
 3. Analyze: claude analyze-prd
-4. Generate PRPROMPTS: claude gen-prprompts
+4. Refine: claude refine-prd (NEW - interactive quality improvement)
+5. Generate PRPROMPTS: claude gen-prprompts
 
 PRD Highlights:
 - [Key customization 1 based on project]
