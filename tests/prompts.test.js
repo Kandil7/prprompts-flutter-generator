@@ -20,8 +20,8 @@ describe('PRPROMPTS Content Validation', () => {
       expect(content.split('\n').length).toBeGreaterThan(500);
 
       // Should contain key sections
-      expect(content).toContain('Project Requirements Document (PRD)');
-      expect(content).toContain('Generate comprehensive');
+      expect(content).toContain('Generate PRPROMPTS');
+      expect(content).toContain('PRP');
     });
 
     test('generate-prd.md should have PRD wizard instructions', () => {
