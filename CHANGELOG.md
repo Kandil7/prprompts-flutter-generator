@@ -9,6 +9,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.4.1] - 2025-10-26
+
+### 🔧 Fixed - Multi-AI Feature Parity
+
+**Bug Fix**: Ensured all 3 AI assistants have identical slash command support
+
+#### Changes
+
+**Qwen Code Config**:
+- ✅ Added `auto-prd-from-project` command
+- ✅ Added all 4 planning commands (estimate-cost, analyze-dependencies, stakeholder-review, implementation-plan)
+- ✅ Added `update-plan` automation command
+- ✅ Updated descriptions for consistency
+
+**Gemini CLI Config**:
+- ✅ Added `auto-prd-from-project` command
+- ✅ Added all 4 planning commands with proper categories
+- ✅ Added `update-plan` automation command
+- ✅ Fixed path references (prompt: instead of file:)
+- ✅ Updated all automation paths to use `commands/automation/` subdirectory
+
+#### Result
+
+All 3 AI assistants now have **complete feature parity** with 20 slash commands:
+- **Claude Code**: 20 commands ✅
+- **Qwen Code**: 20 commands ✅ (was 15)
+- **Gemini CLI**: 20 commands ✅ (was 15)
+
+**Commands Added to Qwen & Gemini**:
+- `/prd/auto-from-project` - Auto-discover project files
+- `/planning/estimate-cost` - Cost breakdown
+- `/planning/analyze-dependencies` - Dependency mapping
+- `/planning/stakeholder-review` - Review checklists
+- `/planning/implementation-plan` - Sprint planning
+- `/automation/update-plan` - Progress-based re-planning
+
+---
+
 ## [4.4.0] - 2025-10-25
 
 ### ✨ NEW - Phase 3: Implementation Planning + Slash Commands
