@@ -16,14 +16,35 @@ commands:
     prompt: "commands/prd/from-files.md"
     description: "Generate PRD from existing markdown files (optional input)"
 
+  auto-prd-from-project:
+    prompt: "commands/prd/auto-from-project.md"
+    description: "Auto-discover and consolidate all .md files in project into comprehensive PRD"
+
   # PRD Analysis
   analyze-prd:
     prompt: "commands/prd/analyze.md"
-    description: "Validate and analyze PRD, show customizations"
+    description: "Validate and analyze PRD, show customizations (v4.1: with AI confidence scoring)"
 
   refine-prd:
     prompt: "commands/prd/refine.md"
     description: "Interactively improve PRD quality through AI-guided refinement"
+
+  # PRD Strategic Planning (NEW v4.1 - Phase 2)
+  estimate-cost:
+    prompt: "commands/planning/estimate-cost.md"
+    description: "💰 Generate detailed cost breakdown from PRD - labor, infrastructure, compliance"
+
+  analyze-dependencies:
+    prompt: "commands/planning/analyze-dependencies.md"
+    description: "🔗 Map feature dependencies and critical path - implementation order recommendations"
+
+  generate-stakeholder-review:
+    prompt: "commands/planning/stakeholder-review.md"
+    description: "📋 Create stakeholder review checklists - business, technical, compliance sign-offs"
+
+  generate-implementation-plan:
+    prompt: "commands/planning/implementation-plan.md"
+    description: "📅 Create intelligent implementation plan with sprints, team allocation, and dependency-aware task ordering"
 
   # PRPROMPTS Generation Commands
   gen-prprompts:
@@ -54,6 +75,10 @@ commands:
   implement-next:
     prompt: "commands/automation/implement-next.md"
     description: "✨ Auto-implement next feature from IMPLEMENTATION_PLAN.md (10 min) - with tests & validation"
+
+  update-plan:
+    prompt: "commands/automation/update-plan.md"
+    description: "📊 Re-plan based on actual progress - velocity tracking, blocker analysis, sprint reallocation"
 
   full-cycle:
     prompt: "commands/automation/full-cycle.md"

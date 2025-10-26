@@ -5,7 +5,7 @@
 commands:
   # PRD Creation Commands
   create-prd:
-    file: "commands/create-prd.md"
+    prompt: "commands/prd/create.md"
     description: "[prprompts] Interactive PRD creation wizard (10 questions)"
     category: "PRD Generation"
 
@@ -19,10 +19,15 @@ commands:
     description: "Generate PRD from existing markdown files (optional input)"
     category: "PRD Generation"
 
+  auto-prd-from-project:
+    prompt: "commands/prd/auto-from-project.md"
+    description: "Auto-discover and consolidate all .md files in project into comprehensive PRD"
+    category: "PRD Generation"
+
   # PRD Analysis
   analyze-prd:
-    file: "commands/analyze-prd.md"
-    description: "[prprompts] Validate and analyze PRD, show customizations"
+    prompt: "commands/prd/analyze.md"
+    description: "[prprompts] Validate and analyze PRD, show customizations (v4.1: with AI confidence scoring)"
     category: "PRD Generation"
 
   refine-prd:
@@ -30,9 +35,30 @@ commands:
     description: "[prprompts] Interactively improve PRD quality through AI-guided refinement"
     category: "PRD Generation"
 
+  # PRD Strategic Planning (NEW v4.1 - Phase 2)
+  estimate-cost:
+    prompt: "commands/planning/estimate-cost.md"
+    description: "💰 Generate detailed cost breakdown from PRD - labor, infrastructure, compliance"
+    category: "Planning"
+
+  analyze-dependencies:
+    prompt: "commands/planning/analyze-dependencies.md"
+    description: "🔗 Map feature dependencies and critical path - implementation order recommendations"
+    category: "Planning"
+
+  generate-stakeholder-review:
+    prompt: "commands/planning/stakeholder-review.md"
+    description: "📋 Create stakeholder review checklists - business, technical, compliance sign-offs"
+    category: "Planning"
+
+  generate-implementation-plan:
+    prompt: "commands/planning/implementation-plan.md"
+    description: "📅 Create intelligent implementation plan with sprints, team allocation, and dependency-aware task ordering"
+    category: "Planning"
+
   # PRPROMPTS Generation Commands
   gen-prprompts:
-    file: "commands/gen-prprompts.md"
+    prompt: "commands/prprompts/generate-all.md"
     description: "[prprompts] Generate all 32 PRPROMPTS files from PRD"
     category: "PRPROMPTS Generation"
 
@@ -58,31 +84,37 @@ commands:
 
   # v4.0 Automation Commands (Full AI-Powered Development Pipeline)
   bootstrap-from-prprompts:
-    file: "commands/bootstrap-from-prprompts.md"
+    prompt: "commands/automation/bootstrap.md"
     description: "🚀 [prprompts] Complete project setup from PRPROMPTS (2 min) - Clean Architecture, security, tests"
     category: "Automation"
     badge: "NEW"
 
   implement-next:
-    file: "commands/implement-next.md"
+    prompt: "commands/automation/implement-next.md"
     description: "✨ [prprompts] Auto-implement next feature from IMPLEMENTATION_PLAN.md (10 min) - with tests & validation"
     category: "Automation"
     badge: "NEW"
 
+  update-plan:
+    prompt: "commands/automation/update-plan.md"
+    description: "📊 Re-plan based on actual progress - velocity tracking, blocker analysis, sprint reallocation"
+    category: "Automation"
+    badge: "NEW"
+
   full-cycle:
-    file: "commands/full-cycle.md"
+    prompt: "commands/automation/full-cycle.md"
     description: "🤖 [prprompts] Auto-implement 1-10 features automatically (1-2 hours) - complete automation loop"
     category: "Automation"
     badge: "NEW"
 
   review-and-commit:
-    file: "commands/review-and-commit.md"
+    prompt: "commands/automation/review-commit.md"
     description: "✅ [prprompts] Validate and commit changes - PRPROMPTS compliance, security checks, tests"
     category: "Automation"
     badge: "NEW"
 
   qa-check:
-    file: "commands/qa-check.md"
+    prompt: "commands/automation/qa-check.md"
     description: "🔍 [prprompts] Comprehensive compliance audit - generates QA_REPORT.md with score"
     category: "Automation"
     badge: "NEW"
