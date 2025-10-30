@@ -275,6 +275,9 @@ const InteractiveMode = require('../lib/interactive-mode');
 const { createProgressBar, createSpinner } = require('../lib/progress-indicator');
 const CommandHistory = require('../lib/command-history');
 
+// Import updater module
+const Updater = require('../lib/updater');
+
 // Initialize command history
 const commandHistory = new CommandHistory();
 
@@ -324,6 +327,7 @@ ${colorize('NEW FEATURES (v4.1.0):', 'bright')}
 
 ${colorize('MAINTENANCE:', 'bright')}
   ${colorize('update', 'green')}            Update PRPROMPTS to latest version
+  ${colorize('check-updates', 'green')}     Check if updates are available
   ${colorize('version', 'green')}           Show version information
   ${colorize('help', 'green')}              Show this help message
 
@@ -539,6 +543,20 @@ function main() {
       console.error(colorize('Run "prprompts doctor" to diagnose issues', 'cyan'));
       process.exit(1);
     }
+
+    // Background update check (non-blocking, if auto-update enabled)
+    if (config.features?.auto_update !== false && Updater.shouldNotifyUpdate()) {
+      // Run background check asynchronously
+      Updater.backgroundUpdateCheck().then(updateInfo => {
+        // Check if update notification should be shown
+        const notification = Updater.getUpdateNotification();
+        if (notification) {
+          Updater.displayUpdateNotification(notification);
+        }
+      }).catch(() => {
+        // Silently ignore update check errors
+      });
+    }
   }
 
   // Handle help/version/no command
@@ -575,8 +593,22 @@ function main() {
       return;
 
     case 'update':
-      console.log(colorize('🔄 Checking for updates...', 'cyan'));
-      console.log(colorize('Feature coming soon!', 'yellow'));
+      Updater.performUpdate().then(() => {
+        process.exit(0);
+      }).catch(error => {
+        console.error(colorize('Update failed:', 'red'), error.message);
+        process.exit(1);
+      });
+      return;
+
+    case 'check-updates':
+      Updater.checkForUpdates(false).then(updateInfo => {
+        if (updateInfo.error) {
+          console.error(colorize('Error checking for updates:', 'red'), updateInfo.error);
+          process.exit(1);
+        }
+        process.exit(0);
+      });
       return;
 
     // Automation commands

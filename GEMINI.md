@@ -334,34 +334,46 @@ Commands are organized into 4 categories:
 
 ## Available Commands
 
-All commands work identically to Claude/Qwen versions:
+**All 20 PRPROMPTS commands work identically to Claude/Qwen versions:**
 
-### PRD Commands
+### PRD Commands (6 commands)
 ```bash
-gemini create-prd          # Interactive PRD wizard (10 questions)
-gemini auto-gen-prd        # Auto-generate PRD from description
-gemini prd-from-files      # Generate PRD from existing markdown
-gemini analyze-prd         # Validate and analyze PRD
+gemini create-prd              # Interactive PRD wizard (10 questions)
+gemini auto-gen-prd            # Auto-generate PRD from description file
+gemini prd-from-files          # Generate PRD from existing markdown
+gemini auto-prd-from-project   # Auto-discover all .md files in project
+gemini analyze-prd             # Validate PRD with AI confidence scoring
+gemini refine-prd              # Interactive PRD quality improvement loop
 ```
 
-### PRPROMPTS Generation
+### Planning Commands (4 commands) 🆕 v4.1
+```bash
+gemini estimate-cost                 # 💰 Cost breakdown - labor, infrastructure, compliance
+gemini analyze-dependencies          # 🔗 Feature dependencies and critical path
+gemini generate-stakeholder-review   # 📋 Role-specific review checklists
+gemini generate-implementation-plan  # 📅 Sprint-based implementation planning
+```
+
+### PRPROMPTS Generation (5 commands)
 ```bash
 gemini gen-prprompts       # Generate all 32 PRPROMPTS files
-gemini gen-phase-1         # Generate Phase 1 (10 files)
-gemini gen-phase-2         # Generate Phase 2 (12 files)
-gemini gen-phase-3         # Generate Phase 3 (10 files)
-gemini gen-file            # Generate single file by name
+gemini gen-phase-1         # Generate Phase 1: Core Architecture (10 files)
+gemini gen-phase-2         # Generate Phase 2: Quality & Security (12 files)
+gemini gen-phase-3         # Generate Phase 3: Demo & Learning (10 files)
+gemini gen-file            # Generate single file by name or number
 ```
 
-### 🆕 v4.0 Automation Commands (40-60x Faster!)
+### Automation Commands (6 commands) 🆕 v4.0
 ```bash
-gemini bootstrap-from-prprompts  # Complete project setup with intelligent planning (2 min)
-gemini implement-next            # Auto-implement with state tracking (10 min)
-gemini full-cycle                # Auto-implement 1-10 features (1-2 hours)
-gemini review-and-commit         # Validate and commit changes
-gemini qa-check                  # Comprehensive compliance audit
-gemini update-plan               # Adaptive re-planning (30 sec) - NEW v4.1 Phase 3
+gemini bootstrap-from-prprompts  # 🚀 Complete project setup (2 min)
+gemini implement-next            # ✨ Auto-implement next feature (10 min)
+gemini update-plan               # 📊 Re-plan based on actual progress (30 sec)
+gemini full-cycle                # 🤖 Auto-implement 1-10 features (1-2 hours)
+gemini review-and-commit         # ✅ Validate and commit changes
+gemini qa-check                  # 🔍 Comprehensive compliance audit
 ```
+
+**Total: 21 commands across 4 categories (PRD, Planning, PRPROMPTS, Automation)**
 
 ---
 

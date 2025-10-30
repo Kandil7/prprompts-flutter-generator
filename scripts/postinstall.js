@@ -248,6 +248,53 @@ function installGeminiSkills() {
   }
 }
 
+function getPackageVersion() {
+  try {
+    const packagePath = path.join(__dirname, '..', 'package.json');
+    const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+    return packageJson.version;
+  } catch (error) {
+    return '4.4.1'; // fallback
+  }
+}
+
+function saveVersionInfo(installedAIs) {
+  const home = os.homedir();
+  const prpromptsDir = path.join(home, '.prprompts');
+  const versionFile = path.join(prpromptsDir, 'version.json');
+  const currentVersion = getPackageVersion();
+
+  const versionInfo = {
+    version: currentVersion,
+    updated_at: new Date().toISOString(),
+    installed_ais: installedAIs
+  };
+
+  // Save to central version file
+  fs.writeFileSync(versionFile, JSON.stringify(versionInfo, null, 2));
+
+  // Save to each AI config directory
+  installedAIs.forEach(ai => {
+    const aiConfigPath = getConfigPath(ai);
+    if (fs.existsSync(aiConfigPath)) {
+      const aiVersionFile = path.join(aiConfigPath, '.prprompts-version.json');
+      const aiVersionInfo = {
+        prprompts_version: currentVersion,
+        updated_at: new Date().toISOString(),
+        ai: ai
+      };
+
+      try {
+        fs.writeFileSync(aiVersionFile, JSON.stringify(aiVersionInfo, null, 2));
+      } catch (error) {
+        // Silently ignore version file write errors
+      }
+    }
+  });
+
+  log(`✓ Version info saved: v${currentVersion}`, 'green');
+}
+
 function createPRPROMPTSConfig() {
   const home = os.homedir();
   const prpromptsDir = path.join(home, '.prprompts');
@@ -255,8 +302,10 @@ function createPRPROMPTSConfig() {
 
   ensureDirectory(prpromptsDir);
 
+  const currentVersion = getPackageVersion();
+
   const config = {
-    version: '4.0.0',
+    version: currentVersion,
     default_ai: 'claude',
     ais: {
       claude: { enabled: false, config_path: getConfigPath('claude') },
@@ -350,6 +399,10 @@ function main() {
       // Ignore config update errors
     }
   }
+
+  // Save version information
+  const installedAIsList = installedAIs.map(ai => ai.key);
+  saveVersionInfo(installedAIsList);
 
   // Summary
   log('\n========================================================', 'cyan');

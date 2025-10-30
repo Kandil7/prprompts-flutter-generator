@@ -32,10 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Result
 
-All 3 AI assistants now have **complete feature parity** with 20 slash commands:
-- **Claude Code**: 20 commands ✅
-- **Qwen Code**: 20 commands ✅ (was 15)
-- **Gemini CLI**: 20 commands ✅ (was 15)
+All 3 AI assistants now have **complete feature parity** with 21 slash commands:
+- **Claude Code**: 21 commands ✅
+- **Qwen Code**: 21 commands ✅ (was 14)
+- **Gemini CLI**: 21 commands ✅ (was 14)
 
 **Commands Added to Qwen & Gemini**:
 - `/prd/auto-from-project` - Auto-discover project files
@@ -91,7 +91,7 @@ All 3 AI assistants now have **complete feature parity** with 20 slash commands:
 - 👥 Clear team coordination and ownership
 - 🔄 Adaptive planning based on actual velocity
 
-#### 🎨 Slash Commands - All 20 Commands Now Available In-Chat
+#### 🎨 Slash Commands - All 21 Commands Now Available In-Chat
 
 **All PRPROMPTS commands now work as slash commands inside Claude Code, Qwen Code, and Gemini CLI chat sessions!**
 

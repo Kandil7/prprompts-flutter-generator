@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![npm downloads](https://img.shields.io/npm/dt/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-4.4-success)](docs/NEW-FEATURES-V3.md)
+[![Version](https://img.shields.io/badge/Version-4.4.1-success)](docs/NEW-FEATURES-V3.md)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
 [![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#security--compliance)
@@ -74,7 +74,7 @@
 
 ### **🚀 One Command. Complete Setup.**
 
-**🆕 v4.4.0 - Slash Commands + Enterprise Features on npm! (Easiest!):**
+**🆕 v4.4.1 - Complete Command Parity Across All AIs (Claude/Qwen/Gemini):**
 ```bash
 # Install via npm (works on Windows/macOS/Linux)
 npm install -g prprompts-flutter-generator
@@ -779,14 +779,18 @@ prprompts doctor     # Diagnose issues
 
 ### 🔄 Auto-Update System
 **Stay current effortlessly**
-- One-command updates from GitHub
+- One-command updates from npm registry
 - Automatic backup before update
+- Background update notifications
+- Version tracking per AI
 - Rollback capability
-- Version checking
 
 ```bash
-prprompts update     # Update to latest
+prprompts update         # Update to latest
+prprompts check-updates  # Check for new versions
 ```
+
+**Auto-notifications:** Updates are checked automatically once per day (configurable).
 
 </td>
 <td width="50%">
@@ -896,7 +900,7 @@ npm install -g prprompts-flutter-generator
 
 **What gets installed:**
 - ✅ All 3 AI extensions (Claude, Qwen, Gemini)
-- ✅ 5 automation commands per AI (14 total commands)
+- ✅ **21 commands per AI** (6 PRD + 4 Planning + 5 PRPROMPTS + 6 Automation)
 - ✅ 32 security-audited development guides
 - ✅ Project templates (Healthcare, Fintech, E-commerce)
 - ✅ Unified CLI (`prprompts` command)
@@ -907,8 +911,18 @@ npm install -g prprompts-flutter-generator
 ```bash
 cd your-flutter-project
 prprompts create && prprompts generate  # Generate PRPROMPTS (60 sec)
+
+# Use any AI assistant (all 21 commands available)
 claude bootstrap-from-prprompts         # Setup project (2 min)
 claude full-cycle                       # Auto-implement (1-2 hours)
+
+# Or with Gemini (same commands)
+gemini bootstrap-from-prprompts         # Setup project (2 min)
+gemini full-cycle                       # Auto-implement (1-2 hours)
+
+# Or with Qwen (same commands)
+qwen bootstrap-from-prprompts           # Setup project (2 min)
+qwen full-cycle                         # Auto-implement (1-2 hours)
 ```
 
 </td>
@@ -917,11 +931,11 @@ claude full-cycle                       # Auto-implement (1-2 hours)
 
 **Upgrade from previous versions:**
 ```bash
-# Update to v4.1.0 with all new features
+# Update to v4.4.1 with all new features
 npm update -g prprompts-flutter-generator
 
 # Verify
-prprompts --version  # Should show 4.1.0
+prprompts --version  # Should show 4.4.1
 prprompts doctor     # Check extension status
 ```
 
@@ -931,7 +945,7 @@ prprompts doctor     # Check extension status
 
 <div align="center">
 
-**🚀 Use all 20 PRPROMPTS commands directly in your AI chat!**
+**🚀 Use all 21 PRPROMPTS commands directly in your AI chat!**
 
 **No more switching between terminal and chat - everything in one place**
 
@@ -1205,10 +1219,10 @@ Features:
 </tr>
 </table>
 
-### 🚀 Quick Start with v4.1
+### 🚀 Quick Start with v4.4.1
 
 ```bash
-# 1. Install/Update to v4.1
+# 1. Install/Update to v4.4.1
 npm install -g prprompts-flutter-generator@latest
 
 # 2. Setup API keys interactively
@@ -1223,7 +1237,7 @@ prprompts rate-status        # View usage
 prprompts history            # Browse history
 ```
 
-### 📋 Complete v4.1 Command Reference
+### 📋 Complete v4.4.1 Command Reference
 
 <table>
 <tr>
@@ -2148,7 +2162,7 @@ cat PRPROMPTS/README.md
 
 ## 🎨 Slash Commands (NEW in v4.1)
 
-**All 20 commands now work as slash commands inside Claude Code, Qwen Code, and Gemini CLI chat sessions!**
+**All 21 commands now work as slash commands inside Claude Code, Qwen Code, and Gemini CLI chat sessions!**
 
 ### Two Ways to Run Commands
 
@@ -2796,6 +2810,11 @@ prprompts generate
 <td><code>prprompts update</code></td>
 </tr>
 <tr>
+<td><code>prprompts check-updates</code></td>
+<td>Check for available updates</td>
+<td><code>prprompts check-updates</code></td>
+</tr>
+<tr>
 <td><code>prprompts version</code></td>
 <td>Show version info</td>
 <td><code>prprompts version</code></td>
@@ -2849,10 +2868,17 @@ prprompts doctor
 
 **Update to Latest:**
 ```bash
-npm update -g prprompts-flutter-generator
-# or
+# Check for updates first
+prprompts check-updates
+
+# Install update
 prprompts update
+
+# Or use npm directly
+npm update -g prprompts-flutter-generator
 ```
+
+> **Auto-updates:** PRPROMPTS automatically checks for updates once per day and notifies you when a new version is available.
 
 ### 🔄 Upgrade to v3.1
 
@@ -3366,6 +3392,35 @@ MIT License - see [LICENSE](LICENSE) file for details.
 **Made with ❤️ for Flutter developers**
 
 ## 📝 Changelog
+
+### v4.4.1 (January 2025) - Complete Multi-AI Command Parity 🎯
+
+**New Features:**
+- ✅ **Complete Command Parity** - All 21 commands now visible in Qwen Code and Gemini CLI
+- ✅ **Extension Manifest Updates** - Updated qwen-extension.json and gemini-extension.json to v4.4.1
+- ✅ **Documentation Overhaul** - Comprehensive QWEN.md and GEMINI.md with full command reference
+- ✅ **Command Count Fix** - Corrected all documentation from 20 to 21 commands (6 PRD + 4 Planning + 5 PRPROMPTS + 6 Automation)
+
+**Improvements:**
+- ✅ Enhanced qwen-extension.json with missing PRD Planning commands
+- ✅ Enhanced gemini-extension.json with missing PRD Planning commands
+- ✅ Added missing automation command: `update-plan` to both extension manifests
+- ✅ Synchronized all AI extension versions to 4.4.1
+- ✅ Updated README.md with accurate command counts and version references
+
+**Commands Fixed:**
+- `auto-prd-from-project` - Now visible in Qwen/Gemini help
+- `refine-prd` - Now visible in Qwen/Gemini help
+- `estimate-cost` - Now visible in Qwen/Gemini help
+- `analyze-dependencies` - Now visible in Qwen/Gemini help
+- `generate-stakeholder-review` - Now visible in Qwen/Gemini help
+- `generate-implementation-plan` - Now visible in Qwen/Gemini help
+- `update-plan` - Now visible in Qwen/Gemini help
+
+**Documentation:**
+- Updated QWEN.md with complete 21-command reference
+- Updated GEMINI.md with complete 21-command reference
+- Updated README.md version badges and references
 
 ### v4.1.0 (October 2024) - Enterprise Features 🎉
 

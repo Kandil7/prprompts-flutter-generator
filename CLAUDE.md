@@ -76,6 +76,39 @@ npm publish --access public
 git push origin v4.0.1
 ```
 
+### Auto-Update System
+```bash
+# Check for updates
+prprompts check-updates
+
+# Update to latest version
+prprompts update
+
+# Users also see auto-notifications once per day
+```
+
+**How it works:**
+- **Version Tracking**: Each AI config directory gets `.prprompts-version.json` with current version
+- **Background Checks**: CLI checks npm registry once per day (non-blocking)
+- **Notifications**: Users see update banner if new version available
+- **Smooth Updates**: Backs up config before updating via `npm install -g`
+- **Multi-AI Sync**: All installed AIs (Claude, Qwen, Gemini) get updated simultaneously
+
+**Implementation files:**
+- `lib/updater.js` - Core auto-update logic (npm registry checks, version comparison)
+- `scripts/postinstall.js` - Saves version info to all AI configs on install
+- `bin/prprompts` - Background check integration + update commands
+
+**Configuration:**
+Users can disable auto-update notifications in `~/.prprompts/config.json`:
+```json
+{
+  "features": {
+    "auto_update": false  // Disables background checks
+  }
+}
+```
+
 ---
 
 ## Slash Commands (NEW in v4.1)

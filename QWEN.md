@@ -276,34 +276,46 @@ Commands are organized into 4 categories:
 
 ## Available Commands
 
-All commands work identically to Claude/Gemini versions:
+**All 20 PRPROMPTS commands work identically to Claude/Gemini versions:**
 
-### PRD Commands
+### PRD Commands (6 commands)
 ```bash
-qwen create-prd          # Interactive PRD wizard (10 questions)
-qwen auto-gen-prd        # Auto-generate PRD from description
-qwen prd-from-files      # Generate PRD from existing markdown
-qwen analyze-prd         # Validate and analyze PRD
+qwen create-prd              # Interactive PRD wizard (10 questions)
+qwen auto-gen-prd            # Auto-generate PRD from description file
+qwen prd-from-files          # Generate PRD from existing markdown
+qwen auto-prd-from-project   # Auto-discover all .md files in project
+qwen analyze-prd             # Validate PRD with AI confidence scoring
+qwen refine-prd              # Interactive PRD quality improvement loop
 ```
 
-### PRPROMPTS Generation
+### Planning Commands (4 commands) 🆕 v4.1
+```bash
+qwen estimate-cost                 # 💰 Cost breakdown - labor, infrastructure, compliance
+qwen analyze-dependencies          # 🔗 Feature dependencies and critical path
+qwen generate-stakeholder-review   # 📋 Role-specific review checklists
+qwen generate-implementation-plan  # 📅 Sprint-based implementation planning
+```
+
+### PRPROMPTS Generation (5 commands)
 ```bash
 qwen gen-prprompts       # Generate all 32 PRPROMPTS files
-qwen gen-phase-1         # Generate Phase 1 (10 files)
-qwen gen-phase-2         # Generate Phase 2 (12 files)
-qwen gen-phase-3         # Generate Phase 3 (10 files)
-qwen gen-file            # Generate single file by name
+qwen gen-phase-1         # Generate Phase 1: Core Architecture (10 files)
+qwen gen-phase-2         # Generate Phase 2: Quality & Security (12 files)
+qwen gen-phase-3         # Generate Phase 3: Demo & Learning (10 files)
+qwen gen-file            # Generate single file by name or number
 ```
 
-### 🆕 v4.0 Automation Commands (40-60x Faster!)
+### Automation Commands (6 commands) 🆕 v4.0
 ```bash
-qwen bootstrap-from-prprompts  # Complete project setup with intelligent planning (2 min)
-qwen implement-next            # Auto-implement with state tracking (10 min)
-qwen full-cycle                # Auto-implement 1-10 features (1-2 hours)
-qwen review-and-commit         # Validate and commit changes
-qwen qa-check                  # Comprehensive compliance audit
-qwen update-plan               # Adaptive re-planning (30 sec) - NEW v4.1 Phase 3
+qwen bootstrap-from-prprompts  # 🚀 Complete project setup (2 min)
+qwen implement-next            # ✨ Auto-implement next feature (10 min)
+qwen update-plan               # 📊 Re-plan based on actual progress (30 sec)
+qwen full-cycle                # 🤖 Auto-implement 1-10 features (1-2 hours)
+qwen review-and-commit         # ✅ Validate and commit changes
+qwen qa-check                  # 🔍 Comprehensive compliance audit
 ```
+
+**Total: 21 commands across 4 categories (PRD, Planning, PRPROMPTS, Automation)**
 
 ---
 
