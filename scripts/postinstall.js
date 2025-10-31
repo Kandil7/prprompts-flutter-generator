@@ -133,6 +133,43 @@ function copyConfig(ai, configPath) {
   return true;
 }
 
+function copyCommands(ai, configPath) {
+  const commandsDir = path.join(configPath, 'commands');
+  ensureDirectory(commandsDir);
+
+  // Use the correct AI directory (`.claude`, `.qwen`, or `.gemini`)
+  const sourceDir = path.join(__dirname, '..', `.${ai}`, 'commands');
+
+  if (!fs.existsSync(sourceDir)) {
+    log(`  ⚠️  Warning: Source commands directory not found at ${sourceDir}`, 'yellow');
+    return false;
+  }
+
+  // Copy all subdirectories (prd/, planning/, prprompts/, automation/)
+  const subdirs = fs.readdirSync(sourceDir).filter(item => {
+    const fullPath = path.join(sourceDir, item);
+    return fs.statSync(fullPath).isDirectory();
+  });
+
+  let totalFiles = 0;
+  subdirs.forEach(subdir => {
+    const sourceSubdir = path.join(sourceDir, subdir);
+    const destSubdir = path.join(commandsDir, subdir);
+    ensureDirectory(destSubdir);
+
+    const files = fs.readdirSync(sourceSubdir).filter(f => f.endsWith('.md'));
+    files.forEach(file => {
+      const source = path.join(sourceSubdir, file);
+      const dest = path.join(destSubdir, file);
+      fs.copyFileSync(source, dest);
+      totalFiles++;
+    });
+  });
+
+  log(`  ✓ Copied ${totalFiles} command files in ${subdirs.length} categories`, 'green');
+  return true;
+}
+
 function installForAI(ai, aiName) {
   log(`\nConfiguring ${aiName}...`, 'blue');
 
@@ -141,8 +178,9 @@ function installForAI(ai, aiName) {
 
   const promptsSuccess = copyPrompts(ai, configPath);
   const configSuccess = copyConfig(ai, configPath);
+  const commandsSuccess = copyCommands(ai, configPath);
 
-  if (promptsSuccess && configSuccess) {
+  if (promptsSuccess && configSuccess && commandsSuccess) {
     log(`✓ ${aiName} configured successfully!`, 'green');
     return true;
   }
