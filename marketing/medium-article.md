@@ -249,11 +249,11 @@ Why? Because the prompts encode best practices, security patterns, and testing s
 
 ---
 
-## v4.0: Full Automation
+## v4.4: Complete Command Parity
 
-PRPROMPTS v1-v3 were great for generating guides. But you still had to use them manually with your AI assistant.
+PRPROMPTS v1-v3 were great for generating guides. v4.0 introduced automation.
 
-v4.0 changed everything with the **Automation Pipeline**: Five commands that handle entire workflows.
+v4.4 changed everything by bringing **complete command parity**: All 21 commands now work identically across Claude Code, Qwen Code, and Gemini CLI. Choose your AI based on accuracy, cost, or context needs - the commands remain the same.
 
 ### `/prp-bootstrap-from-prprompts`
 **What it does:** Creates complete project structure
@@ -449,11 +449,11 @@ Same for PCI-DSS, GDPR, SOC2, COPPA, and FERPA.
 
 ---
 
-## Multi-AI Support
+## Multi-AI Support with Complete Command Parity
 
 Initially, I built PRPROMPTS for Claude Code. But I realized: different AIs have different strengths.
 
-So v4.0 supports three platforms:
+v4.4 brings complete command parity across three platforms - all 21 commands work identically:
 
 ### Claude Code (Anthropic)
 **Strengths:**
@@ -488,7 +488,7 @@ So v4.0 supports three platforms:
 - Personal projects
 - Learning and experimentation
 
-All work identically with PRPROMPTS. Install once, use with any AI.
+All work identically with PRPROMPTS v4.4. Install once, use with any AI. All 21 commands (6 PRD + 4 Planning + 5 PRPROMPTS + 6 Automation) work the same across all three platforms.
 
 ---
 
@@ -554,18 +554,18 @@ Security tools should be open source. You can inspect every line of code, every 
 
 ## Getting Started
 
-Ready to try PRPROMPTS?
+Ready to try PRPROMPTS v4.4?
 
 ### Step 1: Install
 ```bash
-npm install -g prprompts-flutter-generator
+npm install -g prprompts-flutter-generator@4.4.2
 ```
 
 This installs:
 - The `prprompts` CLI
-- Claude Code extension (if you have Claude)
-- Qwen Code extension (if you have Qwen)
-- Gemini CLI extension (if you have Gemini)
+- Claude Code extension with 21 commands (if you have Claude)
+- Qwen Code extension with 21 commands (if you have Qwen)
+- Gemini CLI extension with 21 commands (if you have Gemini)
 
 ### Step 2: Create PRD
 ```bash
@@ -637,23 +637,26 @@ Solo, I could build maybe 50 PRPROMPTS. With community, the possibilities are en
 
 ## The Future
 
-### v4.1 (Q1 2025)
+### v4.5 (Q1 2025)
 - VS Code extension
 - Additional compliance frameworks (ISO 27001, FedRAMP)
 - More example projects
 - Performance optimizations
+- Enhanced testing automation
 
-### v4.2 (Q2 2025)
+### v4.6 (Q2 2025)
 - Backend integration (Supabase, Firebase, custom)
 - GraphQL support
 - Real-time features
 - Advanced analytics
+- CI/CD pipeline generators
 
 ### v5.0 (Q3 2025)
 - React Native support
 - Kotlin Multiplatform
 - Team collaboration features
 - Enterprise version
+- White-label solutions
 
 ---
 
@@ -730,5 +733,5 @@ flutter, ai, automation, productivity, security, opensource, clean-architecture,
 **License:** (Choose appropriate Medium license)
 **Allow responses:** Yes
 **Featured image:** [Upload PRPROMPTS logo with "97% Faster" text]
-**SEO Title:** PRPROMPTS: Build Flutter Apps 97% Faster with AI Automation
-**SEO Description:** How I reduced Flutter development time from 3 weeks to 3 hours using AI-powered automation with built-in HIPAA, PCI-DSS, and GDPR compliance.
+**SEO Title:** PRPROMPTS v4.4: Build Flutter Apps 97% Faster with 21 AI Commands
+**SEO Description:** How I reduced Flutter development time from 3 weeks to 3 hours using AI-powered automation with built-in HIPAA, PCI-DSS, and GDPR compliance. Now with complete command parity across Claude, Qwen, and Gemini.

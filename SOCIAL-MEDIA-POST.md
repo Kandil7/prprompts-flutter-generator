@@ -27,14 +27,13 @@ PRPROMPTS transforms your Product Requirements Document into:
 
 In 2-3 hours, not days.
 
-**Tweet 4 (v4.0 Automation):**
-NEW in v4.0: Full automation with 5 commands:
+**Tweet 4 (v4.4 Complete Command Parity):**
+NEW in v4.4: All 21 commands work across Claude, Qwen & Gemini:
 
-/bootstrap-from-prprompts → Complete setup (2 min)
-/implement-next → Auto-implement features (10 min each)
-/full-cycle → Implement 1-10 features automatically
-/review-and-commit → Validate & commit
-/qa-check → Compliance audit
+✅ 6 PRD commands (create, analyze, refine, estimate-cost)
+✅ 4 Planning commands (dependencies, stakeholder review, implementation plan)
+✅ 5 PRPROMPTS generators (all 32 files, phase-based)
+✅ 6 Automation commands (bootstrap, implement-next, full-cycle, qa-check)
 
 **Tweet 5 (Real Example):**
 Real example - Healthcare app:
@@ -117,14 +116,15 @@ Most teams spend 3-5 days just setting up a production-ready project. Then anoth
 
 There's a better way.
 
-**Introducing PRPROMPTS v4.0**
+**Introducing PRPROMPTS v4.4**
 
 An open-source CLI tool that:
 1. Analyzes your Product Requirements Document
 2. Generates 32 customized, security-audited development guides
-3. AUTO-IMPLEMENTS your entire app with AI automation
-4. Ensures HIPAA/PCI-DSS/GDPR compliance
-5. Generates comprehensive tests (85%+ coverage)
+3. AUTO-IMPLEMENTS your entire app with 21 AI commands
+4. Works identically across Claude, Qwen, and Gemini
+5. Ensures HIPAA/PCI-DSS/GDPR compliance
+6. Generates comprehensive tests (85%+ coverage)
 
 **Real Results:**
 
@@ -181,13 +181,13 @@ Works with Claude Code, Qwen Code, Gemini CLI
 
 ## Reddit Post (r/FlutterDev)
 
-**Title:** [Tool] I built PRPROMPTS v4.0 - Go from PRD to production Flutter app in 2 hours with AI automation (Open Source)
+**Title:** [Tool] I built PRPROMPTS v4.4 - Go from PRD to production Flutter app in 2 hours with 21 AI commands (Open Source)
 
 **Body:**
 
 Hey r/FlutterDev!
 
-I've been working on **PRPROMPTS** for the past year, and v4.0 just launched with full AI automation. Thought you might find it useful.
+I've been working on **PRPROMPTS** for the past year, and v4.4 just launched with complete command parity across all AI assistants. Thought you might find it useful.
 
 **What is PRPROMPTS?**
 
@@ -207,13 +207,22 @@ Every Flutter project I worked on had the same issues:
 2. **Generate 32 guides** (60 seconds)
 3. **Auto-implement with v4.0** (2-3 hours)
 
-**v4.0 Automation Commands:**
+**v4.4 Command System (21 commands total):**
 
-- `/bootstrap-from-prprompts` - Complete project setup (2 min)
-- `/implement-next` - Auto-implement any feature (10 min)
-- `/full-cycle` - Implement 1-10 features automatically
-- `/review-and-commit` - Validate & commit
-- `/qa-check` - Compliance audit with detailed report
+**PRD Commands (6):**
+- `create-prd`, `auto-gen-prd`, `refine-prd`, `analyze-prd`
+- `estimate-cost`, `auto-prd-from-project`
+
+**Planning Commands (4):**
+- `analyze-dependencies`, `generate-stakeholder-review`
+- `generate-implementation-plan`, `update-plan`
+
+**PRPROMPTS Generation (5):**
+- `gen-prprompts`, `gen-phase-1/2/3`, `gen-file`
+
+**Automation Commands (6):**
+- `bootstrap-from-prprompts`, `implement-next`, `full-cycle`
+- `review-and-commit`, `qa-check`, `update-plan`
 
 **Real Example - Healthcare App:**
 
@@ -294,13 +303,13 @@ Happy to answer any questions!
 
 ## Dev.to Article (Shorter Version)
 
-**Title:** PRPROMPTS v4.0: Build Production Flutter Apps in 2 Hours with AI Automation
+**Title:** PRPROMPTS v4.4: Build Production Flutter Apps in 2 Hours with 21 AI Commands
 
 **Tags:** #flutter #ai #automation #opensource #security
 
 **Body:**
 
-I just shipped v4.0 of PRPROMPTS - an open-source tool that goes from Product Requirements Document to production Flutter app in 2-3 hours (not days).
+I just shipped v4.4 of PRPROMPTS - an open-source tool that goes from Product Requirements Document to production Flutter app in 2-3 hours (not days) with complete command parity across Claude, Qwen, and Gemini.
 
 **The Problem**
 
@@ -373,7 +382,7 @@ Questions? Ask in comments! 👇
 
 ## Hacker News Post
 
-**Title:** PRPROMPTS v4.0 – Generate production Flutter apps from PRD in 2 hours (Open Source)
+**Title:** PRPROMPTS v4.4 – Generate production Flutter apps from PRD in 2 hours with 21 AI commands (Open Source)
 
 **URL:** https://github.com/Kandil7/prprompts-flutter-generator
 
@@ -383,13 +392,14 @@ Author here!
 
 PRPROMPTS started as a way to solve a personal problem: every Flutter project I worked on had the same security vulnerabilities (JWT signing in client code, storing credit cards, logging PII).
 
-v4.0 introduces full AI automation - you can now go from Product Requirements Document to working, tested, compliant code in 2-3 hours.
+v4.4 introduces complete command parity across all AI assistants - you can now go from Product Requirements Document to working, tested, compliant code in 2-3 hours using any of the three supported AIs.
 
 **How it works:**
 
 1. Analyze your PRD (detects HIPAA, PCI-DSS, GDPR requirements)
 2. Generate 32 customized development guides (security patterns, compliance checklists)
-3. Auto-implement with 5 AI commands (/bootstrap, /implement-next, /full-cycle, etc.)
+3. Auto-implement with 21 AI commands (6 PRD + 4 Planning + 5 PRPROMPTS + 6 Automation)
+4. Works identically with Claude Code, Qwen Code, or Gemini CLI
 
 **Real usage:**
 
@@ -422,11 +432,12 @@ Happy to answer questions!
 
 **Description:**
 
-PRPROMPTS v4.0 revolutionizes Flutter development with AI automation. Give it your Product Requirements Document, and it generates 32 security-audited development guides, then auto-implements your entire app with tests in 2-3 hours (not days).
+PRPROMPTS v4.4 revolutionizes Flutter development with AI automation. Give it your Product Requirements Document, and it generates 32 security-audited development guides, then auto-implements your entire app with tests in 2-3 hours (not days).
 
 **Key Features:**
 
-🤖 Full AI Automation - 5 commands that implement features automatically
+🤖 Full AI Automation - 21 commands that work across Claude, Qwen, and Gemini
+🔄 Complete Command Parity - Identical functionality on all AI assistants
 🔒 Security-First - Prevents 15+ common vulnerabilities
 ✅ Compliance-Aware - HIPAA, PCI-DSS, GDPR, SOC2, COPPA, FERPA
 📊 85%+ Test Coverage - Comprehensive unit, widget, integration tests
