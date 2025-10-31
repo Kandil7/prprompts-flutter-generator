@@ -1,0 +1,377 @@
+description = "Validate PRD with quality scoring (A-F grades) and AI confidence levels"
+
+prompt = """
+---
+name: Analyze PRD
+description: Validate and analyze PRD with quality scoring, show customizations
+author: PRD Analyzer
+version: 2.0.0
+tags: [prd, validation, analysis, quality-scoring]
+---
+
+# Analyze Product Requirements Document
+
+## Overview
+Validate PRD structure, calculate comprehensive quality scores (Completeness, Clarity, Feasibility, Security), assign overall grade (A-F), and show what PRPROMPTS customizations will be applied based on the PRD metadata.
+
+## Input File
+Look for: `docs/PRD.md`
+
+## Analysis Steps
+
+### Step 1: Validate YAML Frontmatter
+
+Check for required fields:
+- `project_name` (required)
+- `project_type` (required)
+- `platforms` (required, must have at least one)
+- `auth_method` (required)
+
+### Step 2: Calculate Quality Scores
+
+#### 2.1 Completeness Score (0-100%)
+
+**Section Presence (60% weight):**
+Count present sections out of 15 expected:
+1. Executive Summary
+2. Product Vision
+3. Target Users (with personas)
+4. Core Features (detailed)
+5. Non-Functional Requirements
+6. Compliance Requirements (if compliance != [])
+7. User Flows
+8. Data Model
+9. API Specifications
+10. Design Guidelines
+11. Technical Architecture
+12. Testing Strategy
+13. Deployment Plan
+14. Timeline & Milestones
+15. Success Metrics
+
+**YAML Completeness (20% weight):**
+- All required fields present: project_name, project_type, platforms, auth_method
+- Optional but important fields: features, team_composition, testing_requirements
+
+**Feature Detail (20% weight):**
+For each feature, check:
+- Has description (2 points)
+- Has user stories (3 points)
+- Has acceptance criteria (3 points)
+- Has technical requirements (2 points)
+- Total per feature: 10 points
+- Average across all features
+
+**Formula:**
+```
+Completeness = (Present_Sections/15 × 60) + (YAML_Fields × 20) + (Avg_Feature_Detail × 20)
+```
+
+#### 2.2 Clarity Score (0-100%)
+
+**Ambiguity Detection (40% weight):**
+Scan for vague language in critical sections:
+- "maybe", "possibly", "might", "could be", "approximately", "around"
+- "TBD", "TODO", "To be determined"
+- "probably", "likely", "hopefully"
+- Count ambiguous phrases / total sentences
+- Clarity_Sub1 = 100 - (ambiguous_count × 5) # max deduction 100
+
+**Measurable Criteria (30% weight):**
+- Acceptance criteria are quantified (not just "fast", but "< 2 seconds")
+- Success metrics follow SMART format
+- Performance targets have numbers
+- Timeline has specific dates
+- Clarity_Sub2 = (Measurable_criteria / Total_criteria) × 100
+
+**Clear Priorities (15% weight):**
+- Features marked as P0/P1/P2 or similar
+- Dependencies identified
+- Must-haves vs nice-to-haves clear
+- Clarity_Sub3 = 100 if priorities clear, else 0
+
+**Concrete Timelines (15% weight):**
+- Specific dates vs "Q3", "soon", "later"
+- Milestones with deliverables
+- Clarity_Sub4 = 100 if concrete, 50 if partial, 0 if vague
+
+**Formula:**
+```
+Clarity = (Clarity_Sub1 × 0.4) + (Clarity_Sub2 × 0.3) + (Clarity_Sub3 × 0.15) + (Clarity_Sub4 × 0.15)
+```
+
+#### 2.3 Feasibility Score (0-100%)
+
+**Timeline vs Complexity (35% weight):**
+- Estimate story points per feature (complexity: low=3, medium=5, high=8, critical=13)
+- Calculate total story points
+- Estimate capacity: team_size.mobile × weeks × velocity_factor
+- Ratio = capacity / story_points
+- Feasibility_Sub1:
+  - Ratio >= 1.2: 100 (comfortable margin)
+  - Ratio 1.0-1.2: 85 (achievable)
+  - Ratio 0.8-1.0: 60 (tight)
+  - Ratio 0.5-0.8: 35 (risky)
+  - Ratio < 0.5: 10 (unrealistic)
+
+**Team Size vs Scope (25% weight):**
+- Check team composition matches project needs
+- Large team (16+): Can handle critical compliance, many features
+- Medium team (6-15): Can handle moderate complexity
+- Small team (1-5): Best for simple apps or MVP
+- Feasibility_Sub2 = 100 if match, 70 if slight mismatch, 30 if major gap
+
+**Technology Maturity (20% weight):**
+- Proven tech stack (Flutter stable, mature packages): 100
+- Some bleeding-edge (beta packages, experimental features): 70
+- Mostly experimental: 40
+- Unproven architecture: 10
+
+**Dependency Risks (20% weight):**
+- Count external dependencies: APIs, services, integrations
+- Low risk (0-3 deps): 100
+- Moderate risk (4-7 deps): 75
+- High risk (8-12 deps): 50
+- Very high risk (13+ deps): 25
+
+**Formula:**
+```
+Feasibility = (Timeline_Score × 0.35) + (Team_Match × 0.25) + (Tech_Maturity × 0.20) + (Dependency_Risk × 0.20)
+```
+
+#### 2.4 Security Score (0-100%)
+
+**Compliance Coverage (35% weight):**
+- If compliance standards specified:
+  - All standards have documentation sections: 100
+  - Partial documentation: 60
+  - No documentation: 0
+- If no compliance needed: 100 (N/A)
+
+**Authentication & Authorization (25% weight):**
+- Auth method specified: +40
+- JWT config complete (RS256, expiry, claims): +30
+- MFA mentioned: +15
+- Biometric auth for sensitive data: +15
+- Max: 100
+
+**Data Protection (25% weight):**
+- Encryption at rest specified: +35
+- Encryption in transit (TLS 1.3): +30
+- E2E encryption for messaging: +20
+- Secure storage for secrets: +15
+- Max: 100
+
+**Audit & Monitoring (15% weight):**
+- Audit logging for sensitive operations: +50
+- Security testing mentioned (pen testing): +30
+- Incident response plan: +20
+- Max: 100
+
+**Formula:**
+```
+Security = (Compliance_Cov × 0.35) + (Auth_Score × 0.25) + (Data_Protect × 0.25) + (Audit_Score × 0.15)
+```
+
+
+### Step 2.5: Calculate AI Confidence Levels (NEW v4.1)
+
+For each quality dimension, calculate confidence based on information availability:
+
+**Completeness Confidence:**
+- All 15 required sections present: 100%
+- Each missing section: -10%
+- YAML fields present: +5% per critical field (up to 30%)
+- Features well-documented: +20%
+
+**Clarity Confidence:**
+- All features have user stories: +25%
+- Technical requirements specified: +25%
+- Acceptance criteria defined: +25%
+- No ambiguous language detected: +25%
+
+**Feasibility Confidence:**
+- Timeline specified with milestones: +30%
+- Team composition fully detailed: +30%
+- Technology stack explicitly chosen: +20%
+- No red flags detected: +20%
+
+**Security Confidence:**
+- Compliance requirements listed: +30%
+- Auth method specified with config: +25%
+- Encryption requirements detailed: +25%
+- Sensitive data types identified: +20%
+
+**Confidence Interpretation:**
+- 90-100%: High confidence, assessment reliable
+- 70-89%: Medium confidence, assessment mostly reliable
+- 50-69%: Low confidence, human review recommended
+- < 50%: Very low confidence, assessment unreliable
+
+**When to flag low confidence:**
+- Missing critical information makes assessment uncertain
+- Vague language prevents accurate scoring
+- Contradictory requirements detected
+- Insufficient detail for dimension assessment
+
+### Step 3: Calculate Overall Grade
+
+**Overall Percentage:**
+```
+Overall = (Completeness × 0.30) + (Clarity × 0.25) + (Feasibility × 0.25) + (Security × 0.20)
+```
+
+**Letter Grade:**
+- A (90-100%): Production-ready PRD, excellent quality
+- B (80-89%): Strong PRD, minor improvements recommended
+- C (70-79%): Acceptable, significant improvements needed
+- D (60-69%): Major gaps, substantial rework required
+- F (<60%): Not ready for PRPROMPTS generation, critical issues
+
+### Step 4: Validate Compliance Consistency
+
+Check that compliance matches sensitive data:
+- If `compliance` includes "hipaa" → `sensitive_data` should include "phi"
+- If `compliance` includes "pci-dss" → `sensitive_data` should include "payment"
+- If `compliance` includes "gdpr" → warn if no "pii"
+
+### Step 5: Detect Customization Triggers
+
+Based on PRD frontmatter, identify which customizations will be applied:
+
+**Project Type Customizations:**
+- healthcare → Add PHI handling patterns, HIPAA guides
+- fintech → Add payment tokenization, PCI-DSS guides
+- education → Add COPPA compliance, parental consent patterns
+- logistics → Add GPS tracking, route optimization patterns
+- ecommerce → Add shopping cart, checkout patterns
+- saas → Add multi-tenancy, subscription patterns
+
+**Compliance Customizations:**
+- hipaa → `hipaa-compliance-checker` subagent, audit logging, PHI encryption
+- pci-dss → `fintech-security-reviewer` subagent, tokenization, no card storage
+- gdpr → Right to erasure, data portability, consent management
+- coppa → `coppa-compliance-monitor` subagent, parental consent flows
+
+**Architecture Customizations:**
+- offline_support: true → Offline sync strategies, conflict resolution, local storage guides
+- real_time: true → WebSocket patterns, real-time state management, presence tracking
+- jwt auth → JWT RS256 verification, token refresh, secure storage
+
+**Team Customizations:**
+- junior developers > 0 → Add "Why?" explanations, detailed onboarding
+- team size large → Multi-team coordination guides, CODEOWNERS automation
+- demo_frequency not "none" → Demo environment setup, synthetic data generation
+
+### Step 6: Count Affected Files
+
+Calculate how many PRPROMPTS files will be customized (out of 32 total).
+
+## Output Format
+
+Display analysis with quality scores:
+
+```
+═══════════════════════════════════════════════════════════
+📊 PRD QUALITY ANALYSIS
+═══════════════════════════════════════════════════════════
+
+**File:** docs/PRD.md
+**Project:** [project_name]
+**Type:** [project_type]
+**Analyzed:** [timestamp]
+
+┌─────────────────────────────────────────────────────────┐
+│ QUALITY SCORES                                          │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  Completeness:  [██████████░░░░░░░░░░] XX%            │
+│  Clarity:       [██████████████░░░░░░] XX%            │
+│  Feasibility:   [████████████████░░░░] XX%            │
+│  Security:      [████████████████████] XX%            │
+│                                                         │
+│  ─────────────────────────────────────────────          │
+│  OVERALL GRADE: [A/B/C/D/F] (XX%)                      │
+│  Status: [Ready/Improvements needed/Not ready]          │
+└─────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│ AI CONFIDENCE LEVELS (NEW v4.1)                         │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  Completeness:  [████████████████████] XX% confident   │
+│  Clarity:       [████████████████████] XX% confident   │
+│  Feasibility:   [████████████████████] XX% confident   │
+│  Security:      [████████████████████] XX% confident   │
+│                                                         │
+│  💡 Confidence indicates how much information was       │
+│     available to assess each dimension. Low confidence  │
+│     (< 70%) suggests human review needed in that area.  │
+└─────────────────────────────────────────────────────────┘
+
+**Project Details:**
+- Name: [project_name]
+- Type: [project_type]
+- Platforms: [platforms list]
+- Compliance: [compliance list or "None"]
+- Team Size: [team_size]
+- Timeline: [timeline]
+
+**Detected Triggers:**
+- [List all customization triggers detected]
+
+**Customizations To Apply:**
+- [Number] files will be customized (out of 32 total)
+- [List specific customizations]
+
+**Subagents To Generate:**
+- [List subagents that will be auto-generated]
+
+**Warnings:**
+[List any inconsistencies or missing recommended fields]
+
+**Recommendations:**
+[Suggest improvements or missing compliance requirements]
+
+**Next Steps:**
+[Grade-appropriate next steps based on overall score]
+- Grade A (90-100%): Ready for PRPROMPTS generation
+- Grade B (80-89%): Minor improvements suggested
+- Grade C (70-79%): Significant improvements recommended
+- Grade D (60-69%): Major rework required
+- Grade F (<60%): Not ready, must fix critical issues
+
+```
+
+## Validation Rules
+
+### Critical Errors (Block Generation):
+- Missing required fields (project_name, project_type, platforms, auth_method)
+- Invalid YAML syntax
+- Empty features list
+- Overall grade F (<60%)
+
+### Warnings (Allow but Warn):
+- Compliance mismatch (HIPAA without PHI)
+- No testing requirements specified
+- Timeline seems unrealistic
+- Team size doesn't match feature complexity
+
+### Recommendations:
+- Suggest compliance standards based on project type
+- Recommend offline support for certain project types
+- Suggest real-time for collaborative features
+- Recommend team size adjustments
+- Suggest refine-prd command for grades < B
+
+## Success Metrics
+
+**Analysis is successful when:**
+- ✅ All 4 quality scores calculated accurately
+- ✅ Overall grade assigned (A-F)
+- ✅ User understands PRD strengths and weaknesses
+- ✅ Clear actionable recommendations provided
+- ✅ User knows next steps (proceed, refine, or fix)
+- ✅ Customization preview shows what PRPROMPTS will generate
+
+"""

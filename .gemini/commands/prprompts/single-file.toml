@@ -1,0 +1,89 @@
+description = "Generate single PRPROMPTS file by name"
+
+prompt = """
+---
+name: Generate Single File
+description: Generate one specific PRPROMPTS file
+author: Single File Generator
+version: 1.0.0
+tags: [prprompts, single-file]
+---
+
+# Generate Single PRPROMPTS File
+
+## Overview
+Generate one specific PRPROMPTS file by name.
+
+## Input
+1. Read: `docs/PRD.md`
+2. Get filename from user or argument
+
+## Available Files
+
+### Phase 1: Core Architecture
+- feature_scaffold
+- responsive_layout
+- bloc_implementation
+- api_integration
+- testing_strategy
+- design_system_usage
+- onboarding_junior
+- accessibility_a11y
+- internationalization_i18n
+- performance_optimization
+
+### Phase 2: Quality & Security
+- git_branching_strategy
+- progress_tracking_workflow
+- multi_team_coordination
+- security_audit_checklist
+- release_management
+- security_and_compliance ⭐
+- performance_optimization_detailed
+- quality_gates_and_code_metrics
+- localization_and_accessibility
+- versioning_and_release_notes
+- team_culture_and_communication
+- autodoc_integration
+
+### Phase 3: Demo & Learning
+- ai_pair_programming_guide
+- dashboard_and_analytics
+- tech_debt_and_refactor_strategy
+- demo_environment_setup ⭐
+- demo_progress_tracker
+- demo_branding_and_visuals
+- demo_deployment_automation
+- client_demo_report_template
+- project_role_adaptation ⭐
+- lessons_learned_engine
+
+## Process
+
+1. Ask user: "Which file would you like to generate?"
+2. Validate filename exists in list above
+3. Read PRD for customizations
+4. Generate the specific file with full customization
+5. Save to: `PRPROMPTS/{number}-{filename}.md`
+
+## Output
+
+```
+✅ Generated: PRPROMPTS/16-security_and_compliance.md
+
+Customizations applied:
+- [List specific customizations for this file]
+
+View: cat PRPROMPTS/16-security_and_compliance.md
+```
+
+## Example Usage
+
+```bash
+claude gen-file
+# Prompts: Which file?
+# User types: security_and_compliance
+# Generates: PRPROMPTS/16-security_and_compliance.md
+```
+
+"""

@@ -286,6 +286,31 @@ function installGeminiSkills() {
   }
 }
 
+function generateTomlCommands() {
+  log('\nGenerating TOML command files...', 'blue');
+
+  try {
+    // Generate Qwen TOML commands
+    const qwenScript = path.join(__dirname, 'generate-qwen-command-toml.js');
+    if (fs.existsSync(qwenScript)) {
+      execSync(`node "${qwenScript}"`, { stdio: 'pipe' });
+      log('  ✓ Qwen TOML commands generated', 'green');
+    }
+
+    // Generate Gemini TOML commands
+    const geminiScript = path.join(__dirname, 'generate-gemini-command-toml.js');
+    if (fs.existsSync(geminiScript)) {
+      execSync(`node "${geminiScript}"`, { stdio: 'pipe' });
+      log('  ✓ Gemini TOML commands generated', 'green');
+    }
+
+    return true;
+  } catch (error) {
+    log(`  ⚠️  Warning: Failed to generate TOML files: ${error.message}`, 'yellow');
+    return false;
+  }
+}
+
 function getPackageVersion() {
   try {
     const packagePath = path.join(__dirname, '..', 'package.json');
@@ -406,6 +431,9 @@ function main() {
       log(`  ✓ ${ai.name}`, 'green');
     }
   });
+
+  // Generate TOML command files (required for Qwen and Gemini)
+  generateTomlCommands();
 
   // Install for each detected AI
   let successCount = 0;

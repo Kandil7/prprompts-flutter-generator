@@ -1,0 +1,186 @@
+description = "Generate Phase 1: Core Architecture (10 files)"
+
+prompt = """
+---
+name: Generate Phase 1
+description: Generate Phase 1 Core Architecture files (10 files) with v2.0 spec
+author: Phase 1 Generator
+version: 2.0.0
+tags: [prprompts, phase-1, architecture, v2.0]
+---
+
+# Generate Phase 1: Core Architecture (v2.0)
+
+## Overview
+Generate the 10 core architecture PRPROMPTS files following v2.0 strict PRP pattern.
+
+## Input
+Read: `docs/PRD.md` - Extract YAML frontmatter for customization.
+
+## V2.0 SPECIFICATION
+
+### PRP Pattern (MANDATORY)
+Every file MUST follow this exact 6-section structure:
+
+```markdown
+## FEATURE
+What this guide helps you accomplish
+
+## EXAMPLES
+Real code with actual file paths (e.g., lib/features/login/presentation/login_page.dart)
+
+## CONSTRAINTS
+✅ DO / ❌ DON'T rules
+
+## VALIDATION GATES
+Manual checklist + automated CI checks
+
+## BEST PRACTICES
+Junior-friendly explanations with "Why?" sections
+
+## REFERENCES
+Official docs, compliance guides, internal ADRs
+```
+
+### Quality Requirements
+- ✅ **Length**: 500-600 words per file
+- ✅ **No Placeholders**: Replace all `[...]`, `{feature_name}`, `TODO`
+- ✅ **Real Examples**: Actual Flutter file paths
+- ✅ **Junior-Friendly**: Explain "why" behind every rule
+- ✅ **Validation Gates**: Specify tests/docs/reviews required
+
+### Critical Security Corrections (v2.0)
+1. **JWT**: NEVER show Flutter signing tokens. Only verification with public key (RS256).
+2. **PCI-DSS**: NEVER store full credit card numbers. Use tokenization (Stripe/PayPal).
+3. **HIPAA**: Always encrypt PHI at rest (AES-256-GCM).
+
+## Output
+
+**IMPORTANT**: All files MUST go inside the `PRPROMPTS/` folder.
+
+### Files to Generate (10 files)
+
+1. **01-feature_scaffold.md** (500-600 words)
+   - Clean Architecture + BLoC pattern
+   - Folder structure: `lib/features/{feature_name}/`
+   - Real examples with actual paths
+   - Dependency rules: domain → no external imports
+
+2. **02-responsive_layout.md** (500-600 words)
+   - Adaptive UI: LayoutBuilder, MediaQuery, breakpoints
+   - Mobile/tablet/desktop patterns
+   - Test on 3 screen sizes
+
+3. **03-bloc_implementation.md** (500-600 words)
+   - BLoC vs Cubit decision matrix
+   - Complex state → BLoC, Simple → Cubit
+   - `on<Event>` pattern, NO emit in constructor
+
+4. **04-api_integration.md** (500-600 words) ⚠️ **CRITICAL**
+   - Dio/Retrofit setup, JWT **verification only**
+   - ❌ NEVER sign tokens in Flutter
+   - ✅ Verify with RSAPublicKey, check aud/iss/exp
+   - Include example:
+     ```dart
+     Future<bool> verifyToken(String token) async {
+       final jwt = JWT.verify(token, RSAPublicKey(publicKey),
+         audience: Audience(['my-app']), issuer: 'api.example.com');
+       return jwt.payload['exp'] > DateTime.now().millisecondsSinceEpoch / 1000;
+     }
+     ```
+
+5. **05-testing_strategy.md** (500-600 words)
+   - Test pyramid: 70% unit, 20% widget, 10% integration
+   - `bloc_test` package examples
+   - 80%+ coverage requirement
+
+6. **06-design_system_usage.md** (500-600 words)
+   - `lib/core/theme/app_theme.dart`
+   - AppColors, AppTextStyles, Material 3
+   - NO hardcoded colors/sizes
+
+7. **07-onboarding_junior.md** (500-600 words)
+   - Setup checklist: Flutter SDK, IDE, Git
+   - First PR workflow
+   - Explain "why" for each step
+
+8. **08-accessibility_a11y.md** (500-600 words)
+   - WCAG 2.1 Level AA compliance
+   - Semantics widget, 4.5:1 contrast
+   - TalkBack/VoiceOver testing
+
+9. **09-internationalization_i18n.md** (500-600 words)
+   - ARB files, flutter_localizations
+   - NO hardcoded strings
+   - RTL support if applicable
+
+10. **10-performance_optimization.md** (500-600 words)
+    - const constructors, lazy loading
+    - 60 FPS target
+    - DevTools profiling
+
+### Folder Structure
+
+```
+PRPROMPTS/
+├── 01-feature_scaffold.md
+├── 02-responsive_layout.md
+├── 03-bloc_implementation.md
+├── 04-api_integration.md           ⚠️ JWT verification critical
+├── 05-testing_strategy.md
+├── 06-design_system_usage.md
+├── 07-onboarding_junior.md
+├── 08-accessibility_a11y.md
+├── 09-internationalization_i18n.md
+└── 10-performance_optimization.md
+```
+
+## Customization Rules
+
+Apply based on PRD YAML frontmatter:
+
+### Auth Method (`auth_method`)
+- **JWT**: Add JWT verification example to 04-api_integration.md
+- **OAuth2**: Add OAuth2 flow, PKCE requirement
+- **Firebase**: Add Firebase Auth example
+
+### Offline Support (`offline_support: true`)
+- Add retry logic to 04-api_integration.md
+- Add offline-first patterns to 10-performance_optimization.md
+
+### Compliance (`compliance`)
+- **HIPAA**: Add HTTPS-only to 04-api_integration.md
+- **PCI-DSS**: Add TLS 1.2+ requirement to 04-api_integration.md
+- **GDPR**: Mention consent in 06-design_system_usage.md
+
+### State Management (`state_management`)
+- **BLoC**: Full BLoC examples in 03-bloc_implementation.md
+- **Riverpod**: Rename to state_management.md, use Riverpod examples
+
+## Success Message
+```
+✅ Generated Phase 1: Core Architecture (10 files)
+
+Files created in PRPROMPTS/:
+- 01-feature_scaffold.md (545 words)
+- 02-responsive_layout.md (532 words)
+- 03-bloc_implementation.md (567 words)
+- 04-api_integration.md (589 words) ⚠️ JWT verification included
+- 05-testing_strategy.md (521 words)
+- 06-design_system_usage.md (498 words)
+- 07-onboarding_junior.md (534 words)
+- 08-accessibility_a11y.md (567 words)
+- 09-internationalization_i18n.md (512 words)
+- 10-performance_optimization.md (543 words)
+
+V2.0 Compliance:
+✅ All files follow PRP pattern (6 sections)
+✅ All files 500-600 words
+✅ JWT verification (NO signing in Flutter)
+✅ Real code examples with file paths
+✅ Junior-friendly "why" explanations
+
+Next: claude gen-phase-2
+```
+
+"""

@@ -1,0 +1,441 @@
+description = "Create role-specific PRD review checklists"
+
+prompt = """
+---
+name: Generate Stakeholder Review Checklist
+description: Create customized PRD review checklists for different stakeholder types
+author: Stakeholder Review Generator
+version: 1.0.0
+tags: [prd, stakeholders, review, checklist, approval]
+---
+
+# Stakeholder Review Checklist Generator
+
+## Overview
+Generate customized review checklists for business, technical, and compliance stakeholders to systematically review and approve the PRD.
+
+## Instructions
+
+### Step 1: Read PRD
+
+```bash
+# Expected location
+docs/PRD.md
+```
+
+Extract key metadata from YAML frontmatter:
+- `project_type` (healthcare, fintech, education, etc.)
+- `compliance` array (HIPAA, PCI-DSS, GDPR, etc.)
+- `platforms` (iOS, Android, Web)
+- `team_composition`
+- `business_context.timeline`
+- `features` array
+
+### Step 2: Identify Stakeholder Types
+
+Based on project metadata, determine which stakeholders need to review:
+
+**Always Required:**
+- Executive/Business Stakeholder
+- Technical Lead
+- Product Manager
+
+**Conditionally Required:**
+- Compliance Officer (if compliance requirements present)
+- Security Lead (if sensitive_data present)
+- Legal (if compliance includes GDPR, HIPAA, PCI-DSS)
+- Finance (for budget approval)
+- Design Lead (if design team specified)
+
+### Step 3: Generate Stakeholder-Specific Checklists
+
+Create `docs/STAKEHOLDER_REVIEW.md` with role-specific sections:
+
+```markdown
+# Stakeholder Review Checklist: [Project Name]
+
+**PRD Source:** docs/PRD.md
+**Generated:** [Date]
+**Status:** ⏳ Pending Review
+
+---
+
+## Review Sign-off Tracker
+
+| Stakeholder | Role | Status | Date | Comments |
+|-------------|------|--------|------|----------|
+| [Name] | Executive Sponsor | ⏳ Pending | - | - |
+| [Name] | Product Manager | ⏳ Pending | - | - |
+| [Name] | Technical Lead | ⏳ Pending | - | - |
+| [Name] | Compliance Officer | ⏳ Pending | - | - |
+| [Name] | Security Lead | ⏳ Pending | - | - |
+| [Name] | Legal | ⏳ Pending | - | - |
+
+**Approval Threshold:** All stakeholders must approve before development begins.
+
+---
+
+## 📊 Executive/Business Review
+
+**Reviewer:** [Name/Title]
+**Focus:** Business value, ROI, strategic alignment
+
+### Business Case
+- [ ] Problem statement is clear and compelling
+- [ ] Target market/users are well-defined (XX,XXX users)
+- [ ] Success metrics are measurable (revenue, engagement, retention)
+- [ ] Competitive advantage is articulated
+- [ ] Timeline ([Timeline]) is realistic for business goals
+
+### Financial Review
+- [ ] Budget estimate provided (run `claude estimate-cost`)
+- [ ] ROI projection included
+- [ ] Revenue model is clear (if applicable)
+- [ ] Ongoing costs estimated (hosting, support)
+- [ ] Funding source identified
+
+### Strategic Alignment
+- [ ] Aligns with company OKRs/goals
+- [ ] Fits product roadmap
+- [ ] Market timing is appropriate
+- [ ] Resource allocation justified
+
+**Questions to Resolve:**
+1. What is the expected ROI in year 1?
+2. How does this compare to alternative investments?
+3. What are the risks if we delay 6 months?
+
+**Approval:** [ ] Approved [ ] Needs Changes [ ] Rejected
+
+**Comments:**
+_______________________________________________
+
+---
+
+## 💻 Technical Review
+
+**Reviewer:** [Name/Title]
+**Focus:** Feasibility, architecture, technical risks
+
+### Architecture Review
+- [ ] Technology stack is appropriate ([Platforms])
+- [ ] Architecture style ([Style]) fits requirements
+- [ ] Scalability to [Target Users] users is feasible
+- [ ] Offline support ([Yes/No]) is correctly scoped
+- [ ] Real-time requirements ([Yes/No]) are achievable
+
+### Technical Feasibility
+- [ ] All features are technically possible
+- [ ] Critical complexity features have spike plans
+- [ ] Third-party integrations are viable ([List])
+- [ ] Platform compatibility verified
+- [ ] Performance targets ([API Response Time]) are realistic
+
+### Team & Timeline
+- [ ] Team composition matches complexity
+- [ ] Timeline ([Timeline]) allows for quality development
+- [ ] Junior developer count ([Count]) is manageable
+- [ ] CI/CD pipeline requirements defined
+- [ ] Testing strategy is comprehensive
+
+### Technical Risks
+- [ ] All high-risk technical areas identified
+- [ ] Mitigation strategies defined
+- [ ] Backup plans for critical dependencies
+- [ ] Technical debt considerations addressed
+
+**Questions to Resolve:**
+1. Do we have expertise in [Critical Technology]?
+2. What happens if [Third-Party Service] is unavailable?
+3. How will we handle [Performance] at 10x scale?
+
+**Approval:** [ ] Approved [ ] Needs Changes [ ] Rejected
+
+**Comments:**
+_______________________________________________
+
+---
+
+## 🎨 Product Manager Review
+
+**Reviewer:** [Name/Title]
+**Focus:** User experience, feature completeness, priorities
+
+### Feature Completeness
+- [ ] All user personas are documented
+- [ ] User journeys are mapped for core flows
+- [ ] Features cover MVP requirements
+- [ ] Priority levels (P0/P1/P2) are correct
+- [ ] Feature dependencies identified (run `claude analyze-dependencies`)
+
+### User Experience
+- [ ] User stories are complete and testable
+- [ ] Acceptance criteria are clear
+- [ ] Edge cases considered
+- [ ] Error handling defined
+- [ ] Accessibility requirements included
+
+### Prioritization
+- [ ] P0 features are truly essential for launch
+- [ ] P1 features can be deferred if needed
+- [ ] Feature scope is realistic for timeline
+- [ ] MVP is clearly defined
+
+**Questions to Resolve:**
+1. Can we launch without [Feature]?
+2. What user segments are we NOT serving?
+3. How will we gather user feedback post-launch?
+
+**Approval:** [ ] Approved [ ] Needs Changes [ ] Rejected
+
+**Comments:**
+_______________________________________________
+
+---
+
+## 🔒 Compliance Officer Review
+
+**Reviewer:** [Name/Title]
+**Focus:** [Compliance Requirements] compliance
+
+### [Compliance Standard 1] Compliance (if HIPAA/PCI-DSS/etc.)
+
+**HIPAA Requirements:** (if applicable)
+- [ ] PHI is clearly identified
+- [ ] Encryption at rest (AES-256-GCM) specified
+- [ ] Encryption in transit (TLS 1.3) required
+- [ ] Audit logging for PHI access defined
+- [ ] Access controls implemented (RBAC)
+- [ ] BAA requirements with vendors documented
+- [ ] Data retention (6 years) specified
+- [ ] Breach notification process defined
+
+**PCI-DSS Requirements:** (if applicable)
+- [ ] Payment data handling uses tokenization
+- [ ] NO credit card storage in app/database
+- [ ] Stripe/payment provider is PCI-compliant
+- [ ] SAQ-A level compliance achieved
+- [ ] Annual security audit planned
+- [ ] Penetration testing scheduled
+
+**GDPR Requirements:** (if applicable)
+- [ ] User consent flows defined
+- [ ] Right to erasure implemented
+- [ ] Data portability supported
+- [ ] Privacy policy drafted
+- [ ] DPA with vendors in place
+- [ ] EU data residency addressed
+
+**COPPA Requirements:** (if applicable)
+- [ ] Age gate at registration
+- [ ] Parental consent flow for <13
+- [ ] No behavioral advertising for children
+- [ ] Data deletion within 30 days
+
+### Compliance Gaps
+- [ ] All compliance requirements from PRD are addressed
+- [ ] Vendor compliance verified
+- [ ] Audit schedule defined
+- [ ] Compliance training for team planned
+
+**Questions to Resolve:**
+1. Do all third-party vendors have required certifications?
+2. Who is the compliance officer during development?
+3. When is the first compliance audit?
+
+**Approval:** [ ] Approved [ ] Needs Changes [ ] Rejected
+
+**Comments:**
+_______________________________________________
+
+---
+
+## 🛡️ Security Lead Review
+
+**Reviewer:** [Name/Title]
+**Focus:** Security architecture, threat modeling
+
+### Authentication & Authorization
+- [ ] Auth method ([Method]) is secure
+- [ ] MFA/2FA required for sensitive operations
+- [ ] Session management defined
+- [ ] Password policy meets standards
+- [ ] JWT verification (NOT signing) in Flutter
+- [ ] Token refresh flow secure
+
+### Data Protection
+- [ ] Sensitive data ([Types]) identified
+- [ ] Encryption keys managed securely
+- [ ] Secure storage for credentials (Keychain/Keystore)
+- [ ] API keys NOT in source code
+- [ ] PII handling complies with [Compliance]
+
+### Threat Mitigation
+- [ ] SQL injection prevention
+- [ ] XSS protection
+- [ ] CSRF tokens where needed
+- [ ] Rate limiting on API
+- [ ] Input validation everywhere
+
+### Security Testing
+- [ ] Penetration testing planned
+- [ ] Security code review process
+- [ ] Vulnerability scanning in CI/CD
+- [ ] Incident response plan exists
+
+**Questions to Resolve:**
+1. Who conducts penetration testing?
+2. What is our bug bounty policy?
+3. How do we handle zero-day vulnerabilities?
+
+**Approval:** [ ] Approved [ ] Needs Changes [ ] Rejected
+
+**Comments:**
+_______________________________________________
+
+---
+
+## ⚖️ Legal Review
+
+**Reviewer:** [Name/Title]
+**Focus:** Legal compliance, contracts, IP
+
+### Legal Documents
+- [ ] Terms of Service drafted
+- [ ] Privacy Policy covers all data collection
+- [ ] Cookie Policy (if Web platform)
+- [ ] EULA (if applicable)
+- [ ] BAA drafted (if HIPAA)
+- [ ] DPA drafted (if GDPR)
+
+### Intellectual Property
+- [ ] All code will be company-owned
+- [ ] Third-party licenses reviewed
+- [ ] Open source compliance checked
+- [ ] Trademark search completed
+
+### Contracts & Vendors
+- [ ] Vendor contracts reviewed
+- [ ] SLAs defined
+- [ ] Liability clauses acceptable
+- [ ] Termination clauses clear
+
+**Questions to Resolve:**
+1. Are we using any GPL-licensed code?
+2. Do vendors meet our liability requirements?
+3. Is our data handling GDPR-compliant?
+
+**Approval:** [ ] Approved [ ] Needs Changes [ ] Rejected
+
+**Comments:**
+_______________________________________________
+
+---
+
+## 💰 Finance Review (Optional)
+
+**Reviewer:** [Name/Title]
+**Focus:** Budget, cost management
+
+### Budget Approval
+- [ ] Cost estimate reviewed (run `claude estimate-cost`)
+- [ ] Total cost: $XXX,XXX is within budget
+- [ ] Funding source approved
+- [ ] Contingency (20%) included
+- [ ] Payment schedule defined
+
+### Cost Management
+- [ ] Monthly burn rate acceptable
+- [ ] Infrastructure costs sustainable
+- [ ] Third-party service costs reviewed
+- [ ] Post-launch maintenance budgeted
+
+**Approval:** [ ] Approved [ ] Needs Changes [ ] Rejected
+
+**Comments:**
+_______________________________________________
+
+---
+
+## Final Approval
+
+**All stakeholders must sign off before proceeding to PRPROMPTS generation.**
+
+### Pre-Development Checklist
+- [ ] All stakeholder reviews complete
+- [ ] All "Needs Changes" addressed
+- [ ] PRD quality score ≥ B (run `claude analyze-prd`)
+- [ ] Cost estimate approved
+- [ ] Feature dependencies mapped (run `claude analyze-dependencies`)
+- [ ] Team allocated
+- [ ] Kickoff meeting scheduled
+
+### Next Steps After Approval
+
+1. **Generate PRPROMPTS:**
+   ```bash
+   claude gen-prprompts
+   ```
+
+2. **Set up project infrastructure:**
+   ```bash
+   claude bootstrap-from-prprompts
+   ```
+
+3. **Begin Sprint 1:**
+   - Focus on critical path features
+   - See dependency analysis for order
+
+---
+
+**Approval Date:** _______________
+**Approved By:** _______________
+**Next Review Date:** _______________ (quarterly)
+
+*Generated by Stakeholder Review Generator v1.0.0*
+```
+
+### Step 4: Output Message
+
+```
+✅ Generated stakeholder review checklist at docs/STAKEHOLDER_REVIEW.md
+
+📋 Review Summary:
+- [X] stakeholder types identified
+- [X] role-specific checklists created
+- Compliance focus: [List compliance requirements]
+
+Review Roles Required:
+- Executive/Business
+- Technical Lead
+- Product Manager
+[+ Compliance Officer (HIPAA/PCI-DSS)]
+[+ Security Lead (sensitive data)]
+[+ Legal (GDPR/contracts)]
+
+Next steps:
+1. Distribute to stakeholders for review
+2. Track approvals in sign-off table
+3. Address any "Needs Changes" feedback
+4. Run: claude analyze-prd (ensure Grade ≥ B)
+5. Once all approved: claude gen-prprompts
+
+Ready to distribute? (y/n)
+```
+
+## Notes
+
+- **Customize per industry:** Healthcare gets HIPAA section, Fintech gets PCI-DSS
+- **Track approvals:** Sign-off table at top for visibility
+- **Version control:** Commit checklist to git for audit trail
+- **Iterate:** Update checklist as PRD evolves
+- **Timeline:** Allow 1-2 weeks for stakeholder review process
+
+## Limitations
+
+- Cannot enforce approvals (requires manual tracking)
+- Checklist is template - customize per organization
+- Legal review varies by jurisdiction
+- Compliance requirements may change
+
+"""
