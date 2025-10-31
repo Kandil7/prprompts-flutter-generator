@@ -1,24 +1,19 @@
 {
   "name": "prprompts-flutter-generator",
-  "displayName": "PRPROMPTS Flutter Generator",
-  "version": "4.0.0",
-  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours (40-60x faster)",
-  "author": "Kandil7",
+  "version": "4.4.3",
+  "description": "AI-powered Flutter development with complete automation. Generate 32 security-audited guides & auto-implement production-ready apps in 2-3 hours (40-60x faster). Supports HIPAA, PCI-DSS, GDPR compliance with built-in security patterns.",
+  "author": {
+    "name": "Kandil7",
+    "url": "https://github.com/Kandil7"
+  },
+  "homepage": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
+  "repository": "https://github.com/Kandil7/prprompts-flutter-generator",
   "license": "MIT",
-  "homepage": "https://github.com/Kandil7/prprompts-flutter-generator",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Kandil7/prprompts-flutter-generator.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Kandil7/prprompts-flutter-generator/issues"
-  },
   "keywords": [
     "flutter",
     "claude",
     "claude-code",
     "anthropic",
-    "claude-sonnet",
     "prprompts",
     "automation",
     "ai-automation",
@@ -27,206 +22,19 @@
     "bloc",
     "hipaa",
     "pci-dss",
+    "gdpr",
     "compliance",
     "security-audited",
     "rapid-development",
-    "high-accuracy"
+    "code-generation",
+    "flutter-development",
+    "ai-assisted",
+    "development-tools"
   ],
-  "categories": [
-    "Development Tools",
-    "Code Generation",
-    "Flutter",
-    "Productivity",
-    "Production Apps"
-  ],
-  "claude": {
-    "version": ">=1.0.0",
-    "configFile": ".claude/config.yml",
-    "commandsPath": ".claude/commands",
-    "promptsPath": ".claude/prompts",
-    "models": [
-      "claude-sonnet-4.5",
-      "claude-sonnet-4",
-      "claude-sonnet-3.7",
-      "claude-opus-4"
-    ]
-  },
-  "features": {
-    "prdGeneration": {
-      "displayName": "PRD Generation",
-      "description": "Generate Product Requirements Documents with 4 methods",
-      "commands": [
-        "create-prd",
-        "auto-gen-prd",
-        "prd-from-files",
-        "analyze-prd"
-      ]
-    },
-    "prpromptsGeneration": {
-      "displayName": "PRPROMPTS Generation",
-      "description": "Generate 32 security-audited development guides",
-      "commands": [
-        "gen-prprompts",
-        "gen-phase-1",
-        "gen-phase-2",
-        "gen-phase-3",
-        "gen-file"
-      ]
-    },
-    "automation": {
-      "displayName": "Full Automation (v4.0)",
-      "description": "Complete automation pipeline - 40-60x faster development",
-      "commands": [
-        "bootstrap-from-prprompts",
-        "implement-next",
-        "full-cycle",
-        "review-and-commit",
-        "qa-check"
-      ],
-      "badge": "NEW"
-    }
-  },
-  "requirements": {
-    "node": ">=14.0.0",
-    "claude-code": ">=1.0.0"
-  },
-  "installation": {
-    "npm": "npm install -g prprompts-flutter-generator",
-    "script": "curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master/scripts/smart-install.sh | bash",
-    "manual": [
-      "git clone https://github.com/Kandil7/prprompts-flutter-generator.git",
-      "cd prprompts-flutter-generator",
-      "./scripts/install-commands.sh --global"
-    ]
-  },
-  "quickStart": {
-    "steps": [
-      "cd your-flutter-project",
-      "claude create-prd",
-      "claude gen-prprompts",
-      "claude bootstrap-from-prprompts",
-      "claude full-cycle"
-    ],
-    "timeToFirstValue": "2-3 hours (complete app with tests)",
-    "speedImprovement": "40-60x faster than manual development"
-  },
-  "support": {
-    "documentation": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
-    "claudeGuide": "https://github.com/Kandil7/prprompts-flutter-generator/blob/master/CLAUDE.md",
-    "commands": "https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/CLAUDE-COMMANDS.md",
-    "issues": "https://github.com/Kandil7/prprompts-flutter-generator/issues",
-    "discussions": "https://github.com/Kandil7/prprompts-flutter-generator/discussions",
-    "anthropic": "https://claude.ai/code"
-  },
-  "highlights": [
-    "🤖 v4.0 Full Automation - 5 commands for zero-touch development",
-    "⚡ 40-60x Faster - 3-5 days → 2-3 hours",
-    "🔒 Security-First - JWT, PCI-DSS, HIPAA patterns built-in",
-    "✅ 32 Development Guides - Complete coverage",
-    "🎯 Best Accuracy - 9.5/10 (industry-leading)",
-    "📊 85%+ Test Coverage - Comprehensive automated tests",
-    "🏆 Production-Ready - Official Anthropic support"
-  ],
-  "comparison": {
-    "claudeAdvantages": [
-      "Best accuracy (9.5/10) - industry-leading code quality",
-      "200K token context - sufficient for most projects",
-      "Production-ready reliability",
-      "Official Anthropic support and updates",
-      "Best for high-stakes applications",
-      "Excellent reasoning and code understanding",
-      "Strong safety and security focus",
-      "Professional tier available ($20/month)"
-    ]
-  },
-  "pricing": {
-    "free": {
-      "messages": "20 per day",
-      "features": "Full automation, all commands",
-      "support": "Community"
-    },
-    "pro": {
-      "cost": "$20/month",
-      "messages": "Unlimited",
-      "features": "Priority access, faster responses",
-      "support": "Priority support"
-    }
-  },
-  "compliance": [
-    "HIPAA",
-    "PCI-DSS",
-    "GDPR",
-    "SOC2",
-    "COPPA",
-    "FERPA"
-  ],
-  "examples": [
-    {
-      "name": "Healthcare App (HIPAA)",
-      "template": "templates/healthcare.md",
-      "time": "2 hours",
-      "features": [
-        "JWT RS256 authentication",
-        "PHI encryption (AES-256-GCM)",
-        "Audit logging",
-        "85% test coverage",
-        "HIPAA compliant"
-      ],
-      "accuracy": "9.5/10 - production-ready code"
-    },
-    {
-      "name": "Fintech App (PCI-DSS)",
-      "template": "templates/fintech.md",
-      "time": "2.5 hours",
-      "features": [
-        "Payment tokenization",
-        "PCI-DSS compliance",
-        "TLS 1.2+",
-        "Secure WebSocket",
-        "90% test coverage"
-      ],
-      "accuracy": "9.5/10 - zero security vulnerabilities"
-    },
-    {
-      "name": "Enterprise SaaS (SOC2)",
-      "template": "templates/ecommerce.md",
-      "time": "3 hours",
-      "features": [
-        "Multi-tenant architecture",
-        "Role-based access control",
-        "Audit trails",
-        "Data encryption",
-        "95% test coverage"
-      ],
-      "accuracy": "9.5/10 - enterprise-grade quality",
-      "note": "Best for mission-critical production apps"
-    }
-  ],
-  "metrics": {
-    "filesGenerated": 32,
-    "wordsPerFile": "500-600",
-    "setupTime": "30 seconds (npm install)",
-    "generationTime": "60 seconds (all 32 files)",
-    "automationTime": "2-3 hours (complete app)",
-    "speedup": "40-60x",
-    "testCoverage": "85%+",
-    "accuracy": "9.5/10",
-    "contextTokens": "200K"
-  },
-  "bestFor": [
-    "Production applications",
-    "High-stakes projects",
-    "Enterprise clients",
-    "Financial services",
-    "Healthcare applications",
-    "Mission-critical systems",
-    "Security-sensitive projects",
-    "Compliance-heavy industries"
-  ],
-  "useCases": {
-    "startups": "Build investor-ready MVP with production quality",
-    "enterprises": "Consistent security patterns across teams",
-    "agencies": "Deliver client projects with confidence",
-    "solo_developers": "Compete with funded teams on quality"
-  }
+  "commands": [
+    "./commands/prd",
+    "./commands/planning",
+    "./commands/prprompts",
+    "./commands/automation"
+  ]
 }

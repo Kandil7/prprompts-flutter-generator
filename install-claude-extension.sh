@@ -68,6 +68,9 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Create Claude config directory if it doesn't exist
 echo -e "${YELLOW}📁 Setting up Claude configuration...${NC}"
 mkdir -p "$CLAUDE_CONFIG_DIR/prompts"
+mkdir -p "$CLAUDE_CONFIG_DIR/commands/prd"
+mkdir -p "$CLAUDE_CONFIG_DIR/commands/planning"
+mkdir -p "$CLAUDE_CONFIG_DIR/commands/prprompts"
 mkdir -p "$CLAUDE_CONFIG_DIR/commands/automation"
 echo -e "${GREEN}✓ Created config directories${NC}"
 
@@ -77,11 +80,23 @@ cp -r "$SCRIPT_DIR/.claude/prompts/"* "$CLAUDE_CONFIG_DIR/prompts/" 2>/dev/null 
 PROMPT_COUNT=$(find "$CLAUDE_CONFIG_DIR/prompts/" -type f -name "*.md" | wc -l)
 echo -e "${GREEN}✓ Installed ${PROMPT_COUNT} prompt files${NC}"
 
-# Copy automation commands
-echo -e "${YELLOW}🤖 Installing v4.0 automation commands...${NC}"
+# Copy all command categories (v4.4.3 - 21 commands total)
+echo -e "${YELLOW}🤖 Installing all command categories...${NC}"
+
+# PRD commands (6 commands)
+cp -r "$SCRIPT_DIR/.claude/commands/prd/"* "$CLAUDE_CONFIG_DIR/commands/prd/" 2>/dev/null || true
+
+# Planning commands (4 commands)
+cp -r "$SCRIPT_DIR/.claude/commands/planning/"* "$CLAUDE_CONFIG_DIR/commands/planning/" 2>/dev/null || true
+
+# PRPROMPTS commands (5 commands)
+cp -r "$SCRIPT_DIR/.claude/commands/prprompts/"* "$CLAUDE_CONFIG_DIR/commands/prprompts/" 2>/dev/null || true
+
+# Automation commands (6 commands)
 cp -r "$SCRIPT_DIR/.claude/commands/automation/"* "$CLAUDE_CONFIG_DIR/commands/automation/" 2>/dev/null || true
-AUTO_COUNT=$(find "$CLAUDE_CONFIG_DIR/commands/automation/" -type f -name "*.md" | wc -l)
-echo -e "${GREEN}✓ Installed ${AUTO_COUNT} automation commands${NC}"
+
+CMD_COUNT=$(find "$CLAUDE_CONFIG_DIR/commands/" -type f -name "*.md" | wc -l)
+echo -e "${GREEN}✓ Installed ${CMD_COUNT} slash commands (21 total)${NC}"
 
 # Copy config.yml
 echo -e "${YELLOW}⚙️  Installing Claude config...${NC}"
@@ -102,45 +117,51 @@ echo -e "${GREEN}╚════════════════════
 echo ""
 
 # Show installed commands
-echo -e "${BLUE}📚 Available Commands:${NC}"
+echo -e "${BLUE}📚 All 21 Slash Commands Installed! (v4.4.3)${NC}"
 echo ""
-echo -e "${YELLOW}PRD Generation:${NC}"
-echo "  claude create-prd          # Interactive PRD wizard"
-echo "  claude auto-gen-prd        # Auto-generate from description"
-echo "  claude prd-from-files      # Generate from existing docs"
-echo "  claude analyze-prd         # Validate PRD"
+echo -e "${YELLOW}📝 PRD Commands (6):${NC}"
+echo "  /prd:create              # Interactive PRD wizard"
+echo "  /prd:auto-generate       # Auto-generate from description"
+echo "  /prd:auto-from-project   # Auto-discover project files"
+echo "  /prd:from-files          # Generate from existing docs"
+echo "  /prd:analyze             # Validate PRD quality"
+echo "  /prd:refine              # Interactive quality improvement"
 echo ""
-echo -e "${YELLOW}PRPROMPTS Generation:${NC}"
-echo "  claude gen-prprompts       # Generate all 32 files"
-echo "  claude gen-phase-1         # Phase 1: Core Architecture"
-echo "  claude gen-phase-2         # Phase 2: Quality & Security"
-echo "  claude gen-phase-3         # Phase 3: Demo & Learning"
-echo "  claude gen-file <name>     # Single file"
+echo -e "${YELLOW}📊 Planning Commands (4):${NC}"
+echo "  /planning:estimate-cost         # Cost breakdown analysis"
+echo "  /planning:analyze-dependencies  # Feature dependency mapping"
+echo "  /planning:stakeholder-review    # Review checklists"
+echo "  /planning:implementation-plan   # Sprint-based planning"
 echo ""
-echo -e "${YELLOW}🆕 v4.0 Automation (40-60x faster!):${NC}"
-echo "  claude bootstrap-from-prprompts  # Complete setup (2 min)"
-echo "  claude implement-next            # Auto-implement feature (10 min)"
-echo "  claude full-cycle                # Implement 1-10 features (1-2 hours)"
-echo "  claude review-and-commit         # Validate & commit"
-echo "  claude qa-check                  # Compliance audit"
+echo -e "${YELLOW}📚 PRPROMPTS Commands (5):${NC}"
+echo "  /prprompts:generate-all  # Generate all 32 files"
+echo "  /prprompts:phase-1       # Phase 1: Core Architecture"
+echo "  /prprompts:phase-2       # Phase 2: Quality & Security"
+echo "  /prprompts:phase-3       # Phase 3: Demo & Learning"
+echo "  /prprompts:single-file   # Generate single file"
 echo ""
-
-echo -e "${BLUE}🚀 Quick Start:${NC}"
-echo ""
-echo "  # 1. Navigate to your Flutter project"
-echo "  cd your-flutter-project"
-echo ""
-echo "  # 2. Generate PRPROMPTS"
-echo "  claude create-prd"
-echo "  claude gen-prprompts"
-echo ""
-echo "  # 3. Auto-build your app (v4.0!)"
-echo "  claude bootstrap-from-prprompts"
-echo "  claude full-cycle"
-echo "  claude qa-check"
+echo -e "${YELLOW}🤖 Automation Commands (6):${NC}"
+echo "  /automation:bootstrap      # Complete setup (2 min)"
+echo "  /automation:implement-next # Auto-implement feature (10 min)"
+echo "  /automation:full-cycle     # Implement 1-10 features (1-2 hours)"
+echo "  /automation:update-plan    # Re-plan based on progress"
+echo "  /automation:review-commit  # Validate & commit"
+echo "  /automation:qa-check       # Compliance audit"
 echo ""
 
-echo -e "${GREEN}✨ You're ready to go! Start with:${NC} ${YELLOW}claude create-prd${NC}"
+echo -e "${BLUE}🚀 Quick Start (In Claude Code Chat):${NC}"
+echo ""
+echo "  # 1. Open Claude Code in your Flutter project"
+echo "  cd your-flutter-project && claude"
+echo ""
+echo "  # 2. Use slash commands in chat:"
+echo "  /prd:create"
+echo "  /prprompts:generate-all"
+echo "  /automation:bootstrap"
+echo "  /automation:full-cycle"
+echo ""
+
+echo -e "${GREEN}✨ All 21 commands ready! Type${NC} ${YELLOW}/help${NC} ${GREEN}in Claude Code to see them.${NC}"
 echo ""
 echo -e "${BLUE}📖 Documentation:${NC} https://github.com/Kandil7/prprompts-flutter-generator/blob/master/CLAUDE.md"
 echo -e "${BLUE}💬 Support:${NC} https://github.com/Kandil7/prprompts-flutter-generator/issues"

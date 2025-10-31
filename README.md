@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![npm downloads](https://img.shields.io/npm/dt/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-4.4.1-success)](docs/NEW-FEATURES-V3.md)
+[![Version](https://img.shields.io/badge/Version-4.4.3-success)](docs/NEW-FEATURES-V3.md)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
 [![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#security--compliance)
@@ -74,22 +74,24 @@
 
 ### **🚀 One Command. Complete Setup.**
 
-**🆕 v4.4.1 - Complete Command Parity Across All AIs (Claude/Qwen/Gemini):**
+**🆕 v4.4.3 - Perfect Multi-AI Command Parity Achieved! (Claude/Qwen/Gemini):**
 ```bash
 # Install via npm (works on Windows/macOS/Linux)
 npm install -g prprompts-flutter-generator
 
-# Then use anywhere:
+# ALL 21 commands now work identically across all 3 AIs!
 prprompts interactive  # Launch interactive mode!
 prprompts create       # Create PRD
 prprompts generate     # Generate all 32 files
 
-# Or use slash commands in AI chat:
-/prd/create            # Create PRD in-chat
-/prprompts/generate-all # Generate all 32 files in-chat
+# Or use slash commands in AI chat (29 total: 21 commands + 8 skills):
+/prd:create            # Create PRD in-chat
+/prprompts:generate-all # Generate all 32 files in-chat
+/automation:bootstrap  # Complete project setup (2 min)
 ```
 
-**✨ NEW v4.4: Slash commands for in-chat usage!**
+**✨ NEW v4.4.3: TOML auto-generation = Perfect command parity everywhere!**
+**✨ v4.4: Slash commands for in-chat usage!**
 **✨ v4.1: Interactive mode, API validation, rate limiting, progress indicators, and command history!**
 
 ### 📊 How It Works - Visual Workflow
@@ -931,12 +933,16 @@ qwen full-cycle                         # Auto-implement (1-2 hours)
 
 **Upgrade from previous versions:**
 ```bash
-# Update to v4.4.1 with all new features
+# Update to v4.4.3 with perfect multi-AI parity
 npm update -g prprompts-flutter-generator
 
 # Verify
-prprompts --version  # Should show 4.4.1
+prprompts --version  # Should show 4.4.3
 prprompts doctor     # Check extension status
+
+# Verify TOML files generated correctly (Qwen/Gemini users)
+ls ~/.config/qwen/commands/*.toml     # Should show 21 .toml files
+ls ~/.config/gemini/commands/*.toml   # Should show 21 .toml files
 ```
 
 ---
@@ -1000,9 +1006,9 @@ prprompts generate
 </tr>
 </table>
 
-### 📚 All 20 Slash Commands
+### 📚 All 21 Slash Commands (Perfect Multi-AI Parity!)
 
-Commands are organized by category for easy discovery:
+Commands are organized by category for easy discovery. **ALL 21 commands work identically on Claude Code, Qwen Code, and Gemini CLI:**
 
 <table>
 <tr>
@@ -1219,10 +1225,10 @@ Features:
 </tr>
 </table>
 
-### 🚀 Quick Start with v4.4.1
+### 🚀 Quick Start with v4.4.3
 
 ```bash
-# 1. Install/Update to v4.4.1
+# 1. Install/Update to v4.4.3 (auto-generates TOML files for Qwen/Gemini)
 npm install -g prprompts-flutter-generator@latest
 
 # 2. Setup API keys interactively
@@ -1235,9 +1241,14 @@ prprompts interactive
 prprompts validate-keys      # Check API keys
 prprompts rate-status        # View usage
 prprompts history            # Browse history
+
+# 5. Verify multi-AI parity (all should show 21 commands)
+qwen /help                   # Qwen Code
+gemini /help                 # Gemini CLI
+claude /help                 # Claude Code
 ```
 
-### 📋 Complete v4.4.1 Command Reference
+### 📋 Complete v4.4.3 Command Reference (21 Commands + 8 Skills)
 
 <table>
 <tr>
@@ -1402,6 +1413,12 @@ graph LR
 
 ## 🤖 Choose Your AI Assistant
 
+**🎯 v4.4.3 Achievement: Perfect Multi-AI Parity**
+
+With v4.4.3, **ALL 21 commands (6 PRD + 4 Planning + 5 PRPROMPTS + 6 Automation) work identically** across Claude Code, Qwen Code, and Gemini CLI. Choose your AI based on what matters to YOU—accuracy, context size, or cost—**not** based on which features are available.
+
+**Same commands. Same workflows. Same results. Zero manual configuration.**
+
 <table>
 <tr>
 <th>Feature</th>
@@ -1441,7 +1458,7 @@ graph LR
 </tr>
 <tr>
 <td><strong>Commands</strong></td>
-<td colspan="3" align="center"><strong>Identical across all 3!</strong> Just replace <code>claude</code> with <code>qwen</code> or <code>gemini</code></td>
+<td colspan="3" align="center">✅ <strong>Perfect Parity (v4.4.3):</strong> ALL 21 commands + 8 skills work identically everywhere! Just replace <code>claude</code> with <code>qwen</code> or <code>gemini</code></td>
 </tr>
 </table>
 
@@ -3043,12 +3060,12 @@ Check AI connection: <code>prprompts validate-keys</code>
 <details>
 <summary><strong>Q: Do I need all 3 AI assistants?</strong></summary>
 
-**A:** No! Pick one:
-- **Claude Code** - Best accuracy, production apps
-- **Qwen Code** - Best for large codebases, self-host
-- **Gemini CLI** - Best free tier (1,000 req/day!)
+**A:** No! Pick one based on YOUR needs—v4.4.3 achieved perfect command parity:
+- **Claude Code** - Best accuracy (9.5/10), production apps
+- **Qwen Code** - Best context (256K-1M tokens), large codebases, self-host
+- **Gemini CLI** - Best free tier (60 req/min, 1,000/day!)
 
-Commands are identical across all 3.
+**ALL 21 commands + 8 skills work identically across all 3.** Choose by power/cost, not by features!
 
 </details>
 
@@ -3392,6 +3409,48 @@ MIT License - see [LICENSE](LICENSE) file for details.
 **Made with ❤️ for Flutter developers**
 
 ## 📝 Changelog
+
+### v4.4.3 (January 2025) - Perfect Multi-AI Parity with TOML Auto-Generation 🎯
+
+**The Breakthrough:**
+v4.4.3 achieves **perfect multi-AI command parity** through automatic TOML file generation. ALL 21 commands (6 PRD + 4 Planning + 5 PRPROMPTS + 6 Automation) now work identically across Claude Code, Qwen Code, and Gemini CLI with **zero manual configuration**.
+
+**New Features:**
+- ✅ **TOML Auto-Generation** - Automatic conversion of .md commands to .toml format during npm install
+- ✅ **Zero-Config Parity** - No manual setup needed, works out-of-the-box for all 3 AIs
+- ✅ **Generation Scripts** - Added `generate-qwen-command-toml.js` and `generate-gemini-command-toml.js`
+- ✅ **Enhanced Postinstall** - Automatic TOML generation integrated into installation pipeline
+- ✅ **29 Total Slash Commands** - 21 regular commands + 8 skills, all working everywhere
+
+**Technical Implementation:**
+- 📦 `scripts/generate-qwen-command-toml.js` - Converts 21 .md files to Qwen .toml format
+- 📦 `scripts/generate-gemini-command-toml.js` - Converts 21 .md files to Gemini .toml format
+- 🔧 Modified `scripts/postinstall.js` to call generation scripts before file copying
+- ✅ All 21 commands now visible in Qwen Code `/help` and Gemini CLI `/help`
+
+**Impact:**
+- **Choose by Power, Not Features** - Select your AI based on accuracy/context/cost, not capabilities
+- **Consistent Experience** - Same commands, same workflows, same results across all AIs
+- **Future-Proof** - Single source of truth (.md files), auto-generated formats for each AI
+- **Developer Friendly** - Update once in .md, auto-propagates to all AI formats
+
+**What Was Fixed:**
+v4.4.1 had manifest files but Qwen/Gemini require `.toml` format for command visibility. v4.4.3 automatically generates these files from markdown sources during installation, ensuring perfect parity without manual maintenance.
+
+**Verification:**
+```bash
+# After npm install, all 3 AIs show identical output:
+qwen /help      # Shows all 21 commands
+gemini /help    # Shows all 21 commands
+claude /help    # Shows all 21 commands
+```
+
+**Documentation:**
+- Updated README.md with v4.4.3 references and multi-AI parity emphasis
+- Updated all marketing materials (7 files) with v4.4.3 messaging
+- Enhanced installation documentation with TOML auto-generation explanation
+
+---
 
 ### v4.4.1 (January 2025) - Complete Multi-AI Command Parity 🎯
 
