@@ -17,8 +17,8 @@
 [![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-Extension-green)](GEMINI.md)
 [![Flutter](https://img.shields.io/badge/Flutter-3.24+-blue)](https://flutter.dev)
 
-[![Windows](https://img.shields.io/badge/Windows-Supported-0078D6?logo=windows)](WINDOWS-QUICKSTART.md)
-[![macOS](https://img.shields.io/badge/macOS-Supported-000000?logo=apple)](MACOS-QUICKSTART.md)
+[![Windows](https://img.shields.io/badge/Windows-Supported-0078D6?logo=windows)](docs/installation/WINDOWS-QUICKSTART.md)
+[![macOS](https://img.shields.io/badge/macOS-Supported-000000?logo=apple)](docs/installation/MACOS-QUICKSTART.md)
 [![Linux](https://img.shields.io/badge/Linux-Supported-FCC624?logo=linux&logoColor=black)](#system-requirements)
 [![Cross-Platform](https://img.shields.io/badge/Cross--Platform-PowerShell%20%7C%20CMD%20%7C%20Bash%20%7C%20WSL-blue)](#platform-specific-notes)
 
@@ -131,7 +131,7 @@ graph LR
 - **Windows:** No special permissions required (npm installs to your user directory)
 - **macOS/Linux:** Use one of these methods to avoid sudo:
   - **Recommended:** Use [nvm](https://github.com/nvm-sh/nvm) (Node Version Manager)
-  - **Alternative:** Configure npm for user-level installations (see [MACOS-QUICKSTART.md](MACOS-QUICKSTART.md#permission-denied-or-eacces-errors))
+  - **Alternative:** Configure npm for user-level installations (see [docs/installation/MACOS-QUICKSTART.md](docs/installation/MACOS-QUICKSTART.md#permission-denied-or-eacces-errors))
   - **Not recommended:** Using `sudo npm install -g` can cause permission issues later
 
 **Alternative Methods:**
@@ -148,7 +148,7 @@ curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/
 
 **📌 Git Bash on Windows:** All bash scripts work natively in Git Bash! The postinstall script automatically detects Git Bash and uses the correct installer. [Learn more](#git-bash-windows)
 
-[📦 Quick Install](#installation) • [🪟 Windows Guide](WINDOWS-QUICKSTART.md) • [✨ v4.1 Features](#v41-enterprise-features-new) • [📖 Docs](docs/PRPROMPTS-SPECIFICATION.md)
+[📦 Quick Install](#installation) • [🪟 Windows Guide](docs/installation/WINDOWS-QUICKSTART.md) • [✨ v4.1 Features](#v41-enterprise-features-new) • [📖 Docs](docs/PRPROMPTS-SPECIFICATION.md)
 
 </div>
 
@@ -189,8 +189,8 @@ prprompts rate-status    # Check limits
 ### 🔗 Quick Links
 
 **Setup Guides:**
-- [Windows](WINDOWS-QUICKSTART.md) 🪟
-- [macOS](MACOS-QUICKSTART.md) 🍎
+- [Windows](docs/installation/WINDOWS-QUICKSTART.md) 🪟
+- [macOS](docs/installation/MACOS-QUICKSTART.md) 🍎
 - [Troubleshooting](docs/TROUBLESHOOTING.md) 🔧
 
 **AI Guides:**
@@ -265,14 +265,14 @@ claude                                    # Start AI
 - ✅ Full support for PowerShell, CMD, and Git Bash
 - ✅ WSL (Windows Subsystem for Linux) supported
 - ✅ No administrator privileges required
-- 📖 [Windows Quick Start Guide](WINDOWS-QUICKSTART.md)
+- 📖 [Windows Quick Start Guide](docs/installation/WINDOWS-QUICKSTART.md)
 
 **macOS:**
 - ✅ Full support for Intel and Apple Silicon (M1/M2/M3)
 - ✅ Works with Homebrew, nvm, or official Node.js
 - ✅ Both zsh and bash shells supported
 - ✅ No sudo required (use nvm recommended)
-- 📖 [macOS Quick Start Guide](MACOS-QUICKSTART.md)
+- 📖 [macOS Quick Start Guide](docs/installation/MACOS-QUICKSTART.md)
 
 **Linux:**
 - ✅ Tested on Ubuntu, Debian, Fedora, Arch
@@ -295,8 +295,8 @@ claude                                    # Start AI
 - ✅ **Path auto-detection**: Works with standard npm, Homebrew, nvm, and custom npm configurations
 
 **Documentation Improvements:**
-- 📖 New [macOS Quick Start Guide](MACOS-QUICKSTART.md) with Apple Silicon notes
-- 📖 Enhanced [Windows Quick Start Guide](WINDOWS-QUICKSTART.md) with Git Bash support
+- 📖 New [macOS Quick Start Guide](docs/installation/MACOS-QUICKSTART.md) with Apple Silicon notes
+- 📖 Enhanced [Windows Quick Start Guide](docs/installation/WINDOWS-QUICKSTART.md) with Git Bash support
 - 📖 Platform-specific verification commands (CMD, PowerShell, bash/zsh)
 - 📖 Clear permission guidance (no more sudo confusion)
 - 📖 Comprehensive troubleshooting for all platforms
@@ -341,7 +341,7 @@ npm install -g @qwenlm/qwen-code
 npm install -g @google/gemini-cli
 ```
 
-**💡 Permissions:** On macOS/Linux, avoid `sudo` - use [nvm](https://github.com/nvm-sh/nvm) or configure npm user-level installs. See [MACOS-QUICKSTART.md](MACOS-QUICKSTART.md) for details.
+**💡 Permissions:** On macOS/Linux, avoid `sudo` - use [nvm](https://github.com/nvm-sh/nvm) or configure npm user-level installs. See [docs/installation/MACOS-QUICKSTART.md](docs/installation/MACOS-QUICKSTART.md) for details.
 
 **2. Configure API Keys**:
 
@@ -1968,7 +1968,7 @@ irm https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/master
 ```
 
 </td>
-<td><strong><a href="WINDOWS-QUICKSTART.md">📖 Full Windows Guide</a></strong></td>
+<td><strong><a href="docs/installation/WINDOWS-QUICKSTART.md">📖 Full Windows Guide</a></strong></td>
 </tr>
 <tr>
 <td><strong>🪟 Windows (Alternative)</strong></td>
@@ -2009,7 +2009,7 @@ curl -sSL https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/
 </tr>
 </table>
 
-**⚠️ Windows Users:** Don't use `bash` commands in PowerShell! Use the PowerShell method above. [See Windows Guide](WINDOWS-QUICKSTART.md)
+**⚠️ Windows Users:** Don't use `bash` commands in PowerShell! Use the PowerShell method above. [See Windows Guide](docs/installation/WINDOWS-QUICKSTART.md)
 
 **That's it!** Now run `prprompts create` or `claude create-prd` from any directory.
 
@@ -2042,7 +2042,7 @@ cd prprompts-flutter-generator
 claude create-prd --help
 ```
 
-**Windows users:** See [WINDOWS.md](WINDOWS.md) for detailed Windows installation.
+**Windows users:** See [WINDOWS.md](docs/installation/WINDOWS.md) for detailed Windows installation.
 
 </details>
 
@@ -3251,7 +3251,7 @@ rm -rf ~/.config/gemini/prompts/*prprompts*
 - **[Education Platform Example](examples/education-app-example.md)** - FERPA and COPPA compliant (1,006 lines)
 
 ### Platform Support
-- [Windows Installation](WINDOWS.md) - Native batch, PowerShell, Git Bash
+- [Windows Installation](docs/installation/WINDOWS.md) - Native batch, PowerShell, Git Bash
 - [Customization Guide](docs/CUSTOMIZATION.md) - Team-specific modifications
 
 ---

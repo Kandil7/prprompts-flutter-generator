@@ -751,7 +751,7 @@ flutter run
 - 📖 [Complete Guide](https://github.com/Kandil7/prprompts-flutter-generator/blob/master/README.md)
 - 🔐 [Security Patterns](https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/PRPROMPTS-SPECIFICATION.md)
 - 🤖 [Automation Guide](https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/AUTOMATION-GUIDE.md)
-- 🪟 [Windows Guide](https://github.com/Kandil7/prprompts-flutter-generator/blob/master/WINDOWS-QUICKSTART.md)
+- 🪟 [Windows Guide](https://github.com/Kandil7/prprompts-flutter-generator/blob/master/docs/installation/WINDOWS-QUICKSTART.md)
 
 **Video Tutorials:** (Coming Soon)
 - Getting Started in 5 Minutes

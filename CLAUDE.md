@@ -759,7 +759,7 @@ When adding features, update:
 - `docs/CLAUDE-USER-GUIDE.md` - Extension user guide
 - `README.md` - Main project documentation
 - `docs/AUTOMATION-GUIDE.md` - v4.0 workflows
-- `WINDOWS-QUICKSTART.md` - Windows installation
+- `docs/installation/WINDOWS-QUICKSTART.md` - Windows installation
 
 **For Security:**
 - `docs/BEST-PRACTICES.md` - Security patterns, compliance
