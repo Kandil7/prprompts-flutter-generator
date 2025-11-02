@@ -5,7 +5,8 @@
 [![npm version](https://img.shields.io/npm/v/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![npm downloads](https://img.shields.io/npm/dt/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-4.4.3-success)](docs/NEW-FEATURES-V3.md)
+[![Version](https://img.shields.io/badge/Version-5.0.0--alpha-orange)](CHANGELOG.md)
+[![Alpha](https://img.shields.io/badge/Status-ALPHA-red)](CHANGELOG.md#500-alpha)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
 [![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#security--compliance)
@@ -23,6 +24,24 @@
 [![Cross-Platform](https://img.shields.io/badge/Cross--Platform-PowerShell%20%7C%20CMD%20%7C%20Bash%20%7C%20WSL-blue)](#platform-specific-notes)
 
 </div>
+
+---
+
+## ⚠️ ALPHA STATUS
+
+**v5.0.0-alpha** includes React-to-Flutter refactoring features that are **still in development**. Core JSX-to-Flutter widget conversion is functional, but:
+
+- ⚠️ **Style conversion** not fully integrated (basic conversion only)
+- ⚠️ **Complex JSX patterns** partially supported
+- ⚠️ **Hooks conversion** (useState/useEffect) incomplete
+- ⚠️ **Context API** detection implemented, conversion pending
+- ⚠️ **Redux→BLoC** mapping incomplete
+
+**✅ Stable features:** All PRD generation and PRPROMPTS commands work perfectly.
+
+**⚠️ Alpha features:** React refactoring commands (`refactor-react`, `validate-flutter`) are experimental.
+
+**Not recommended for production refactoring yet.** Use existing PRD→PRPROMPTS→Flutter workflow for production projects.
 
 ---
 

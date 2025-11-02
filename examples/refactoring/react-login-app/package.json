@@ -1,0 +1,16 @@
+{
+  "name": "react-login-app-example",
+  "version": "1.0.0",
+  "description": "Example React app for refactoring to Flutter",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.1.0",
+    "@reduxjs/toolkit": "^1.9.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test"
+  }
+}

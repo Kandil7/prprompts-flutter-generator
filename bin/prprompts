@@ -268,6 +268,11 @@ function execAI(ai, args, config = null) {
 const AutomationManager = require('../lib/automation-manager');
 const AutomationValidator = require('../lib/automation-validator');
 
+// Import refactoring modules
+const RefactorCommand = require('../lib/refactoring/cli/RefactorCommand');
+const ValidateCommand = require('../lib/refactoring/cli/ValidateCommand');
+const InteractiveCommand = require('../lib/refactoring/cli/InteractiveCommand');
+
 // Import v4.1.0 enhancement modules
 const APIKeyValidator = require('../lib/api-key-validator');
 const RateLimiter = require('../lib/rate-limiter');
@@ -317,6 +322,12 @@ ${colorize('AUTOMATION:', 'bright')}
   ${colorize('auto-test', 'green')}         Run tests with coverage
   ${colorize('auto-reset', 'green')}        Reset automation state
 
+${colorize('REFACTORING (React-to-Flutter):', 'bright')}
+  ${colorize('refactor', 'green')} <src> <target>  Convert React to Flutter
+  ${colorize('refactor-interactive', 'green')}     Interactive conversion wizard
+  ${colorize('validate', 'green')} <path>          Validate Flutter code
+  ${colorize('convert', 'green')} <src> <target>   Alias for refactor
+
 ${colorize('NEW FEATURES (v4.1.0):', 'bright')}
   ${colorize('interactive', 'green')}       Start interactive mode (menu-driven)
   ${colorize('validate-keys', 'green')}     Validate API keys for all AIs
@@ -337,6 +348,8 @@ ${colorize('EXAMPLES:', 'bright')}
   ${colorize('prprompts generate', 'cyan')}          # Generate all PRPROMPTS
   ${colorize('prprompts switch gemini', 'cyan')}     # Use Gemini CLI
   ${colorize('prprompts doctor', 'cyan')}            # Check installation
+  ${colorize('prprompts refactor ./src ./flutter-app', 'cyan')}  # Convert React to Flutter
+  ${colorize('prprompts validate ./flutter-app', 'cyan')}        # Validate Flutter code
 
 ${colorize('DOCUMENTATION:', 'bright')}
   https://github.com/Kandil7/prprompts-flutter-generator
@@ -709,6 +722,67 @@ function main() {
       console.log(`\n🔍 Search results for "${searchQuery}":\n`);
       searchResults.slice(0, 20).forEach(cmd => {
         console.log(`  ${cmd}`);
+      });
+      return;
+
+    // Refactoring commands
+    case 'refactor':
+    case 'convert':
+      const reactSource = args[1];
+      const flutterTarget = args[2];
+
+      if (!reactSource || !flutterTarget) {
+        console.error(colorize('Usage: prprompts refactor <react-source> <flutter-target> [options]', 'red'));
+        console.error('\nOptions:');
+        console.error('  --ai <provider>           AI provider (claude, qwen, gemini, none)');
+        console.error('  --validate                Run validation after conversion');
+        console.error('  --state-management <type> State management (bloc, cubit, provider, auto)');
+        console.error('  --architecture <type>     Architecture (clean, mvc, mvvm)');
+        console.error('  --config <file>           Custom config file');
+        console.error('  --dry-run                 Preview without writing files');
+        console.error('  --verbose                 Detailed logging');
+        process.exit(1);
+      }
+
+      const refactorOptions = {
+        reactSource,
+        flutterTarget,
+        ai: args.includes('--ai') ? args[args.indexOf('--ai') + 1] : 'none',
+        validate: args.includes('--validate'),
+        stateManagement: args.includes('--state-management') ? args[args.indexOf('--state-management') + 1] : 'auto',
+        architecture: args.includes('--architecture') ? args[args.indexOf('--architecture') + 1] : 'clean',
+        dryRun: args.includes('--dry-run'),
+        verbose: args.includes('--verbose')
+      };
+
+      const refactorCmd = new RefactorCommand(refactorOptions);
+      refactorCmd.execute().then(result => {
+        process.exit(result.success ? 0 : 1);
+      });
+      return;
+
+    case 'refactor-interactive':
+      const interactiveCmd = new InteractiveCommand();
+      interactiveCmd.execute().then(result => {
+        process.exit(result.success ? 0 : 1);
+      });
+      return;
+
+    case 'validate':
+      const validatePath = args[1] || process.cwd();
+      const validateOptions = {
+        flutterPath: validatePath,
+        config: args.includes('--config') ? args[args.indexOf('--config') + 1] : 'standard',
+        format: args.includes('--format') ? args[args.indexOf('--format') + 1] : 'terminal',
+        output: args.includes('--output') ? args[args.indexOf('--output') + 1] : null,
+        threshold: args.includes('--threshold') ? parseInt(args[args.indexOf('--threshold') + 1]) : 0,
+        fix: args.includes('--fix'),
+        ci: args.includes('--ci')
+      };
+
+      const validateCmd = new ValidateCommand(validateOptions);
+      validateCmd.execute().then(result => {
+        process.exit(result.success ? 0 : 1);
       });
       return;
   }
