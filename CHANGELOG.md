@@ -9,9 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [5.0.0] - 2025-11-02
+## [5.0.0-alpha] - 2025-11-02
 
-### 🚀 MAJOR: React-to-Flutter Refactoring System
+### 🚀 ALPHA RELEASE: React-to-Flutter Refactoring System
+
+**⚠️ ALPHA STATUS**: This is an alpha release. Core JSX-to-Flutter widget conversion is still in development. Not recommended for production use yet.
 
 **Breaking Change**: This is a major version bump due to significant new functionality. No breaking changes to existing features.
 
