@@ -171,6 +171,34 @@ function copyCommands(ai, configPath) {
   return true;
 }
 
+function copyExtensionManifest(ai, configPath) {
+  // Claude doesn't use extension.json for command discovery
+  if (ai === 'claude') {
+    return true;
+  }
+
+  const destFile = path.join(configPath, 'extension.json');
+  const sourceFile = path.join(__dirname, '..', `${ai}-extension.json`);
+
+  if (!fs.existsSync(sourceFile)) {
+    log(`  ⚠️  Warning: Extension manifest not found at ${sourceFile}`, 'yellow');
+    return false;
+  }
+
+  // Always overwrite extension.json to ensure latest version with all features
+  fs.copyFileSync(sourceFile, destFile);
+
+  // Read and display version
+  try {
+    const manifest = JSON.parse(fs.readFileSync(destFile, 'utf8'));
+    log(`  ✓ Copied extension manifest (v${manifest.version})`, 'green');
+  } catch {
+    log(`  ✓ Copied extension manifest`, 'green');
+  }
+
+  return true;
+}
+
 function installForAI(ai, aiName) {
   log(`\nConfiguring ${aiName}...`, 'blue');
 
@@ -180,8 +208,9 @@ function installForAI(ai, aiName) {
   const promptsSuccess = copyPrompts(ai, configPath);
   const configSuccess = copyConfig(ai, configPath);
   const commandsSuccess = copyCommands(ai, configPath);
+  const manifestSuccess = copyExtensionManifest(ai, configPath);
 
-  if (promptsSuccess && configSuccess && commandsSuccess) {
+  if (promptsSuccess && configSuccess && commandsSuccess && manifestSuccess) {
     log(`✓ ${aiName} configured successfully!`, 'green');
     return true;
   }
