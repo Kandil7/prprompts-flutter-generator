@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
-const { RefactorCommand } = require('../../../lib/refactoring/cli/RefactorCommand');
+const RefactorCommand = require('../../../lib/refactoring/cli/RefactorCommand');
 const { fileHandler } = require('../../../lib/refactoring/utils/fileHandler');
 
 describe('Filesystem Error Handling', () => {

@@ -1,7 +1,7 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "5.0.0-alpha",
-  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours. NEW (ALPHA): React-to-Flutter refactoring with Clean Architecture, BLoC conversion, AI enhancement & comprehensive validation! Note: JSX conversion features still in development.",
+  "version": "5.0.0",
+  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours. NEW: Complete React-to-Flutter refactoring with intelligent style conversion, hooks → lifecycle mapping, JSX patterns → Flutter equivalents, Clean Architecture, BLoC state management, AI enhancement & comprehensive validation!",
   "keywords": [
     "flutter",
     "flutter-cli",

@@ -1,5 +1,5 @@
 const { ReactParser } = require('../../../lib/refactoring/parsers/ReactParser');
-const { RefactorCommand } = require('../../../lib/refactoring/cli/RefactorCommand');
+const RefactorCommand = require('../../../lib/refactoring/cli/RefactorCommand');
 const path = require('path');
 const fs = require('fs-extra');
 

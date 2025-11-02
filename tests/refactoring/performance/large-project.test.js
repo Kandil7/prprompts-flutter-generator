@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
-const { RefactorCommand } = require('../../../lib/refactoring/cli/RefactorCommand');
+const RefactorCommand = require('../../../lib/refactoring/cli/RefactorCommand');
 const { performance } = require('perf_hooks');
 
 describe('Large Project Performance Tests', () => {

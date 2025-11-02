@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
-const { RefactorCommand } = require('../../../lib/refactoring/cli/RefactorCommand');
+const RefactorCommand = require('../../../lib/refactoring/cli/RefactorCommand');
 const { MockAIClient } = require('../../../lib/refactoring/ai/MockAIClient');
 
 describe('End-to-End React-to-Flutter Conversion', () => {
