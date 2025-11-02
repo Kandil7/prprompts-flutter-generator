@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![npm downloads](https://img.shields.io/npm/dt/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-5.0.0-brightgreen)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-5.0.6-brightgreen)](CHANGELOG.md)
 [![Status](https://img.shields.io/badge/Status-Production-brightgreen)](CHANGELOG.md#500)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
@@ -50,23 +50,31 @@ prprompts refactor ./my-react-app ./my-flutter-app --state-mgmt bloc --ai claude
 # ✅ AI-enhanced code (optional)
 ```
 
-### 🎯 Slash Commands (NEW in v5.0.1)
+### 🎯 Slash Commands (UPDATED in v5.0.6)
 
 Run refactoring commands directly in your AI assistant chat:
 
 ```bash
-# Claude Code
+# Claude Code (use forward slash)
+claude
+/refactoring/convert-react-to-flutter
+/refactoring/validate-flutter
+
+# Qwen Code (use colon separator)
+qwen
 /refactoring:convert-react-to-flutter
+/refactoring:validate-flutter
 
-# Qwen Code
-qwen convert-react-to-flutter
+# Gemini CLI (use colon separator)
+gemini
+/refactoring:convert-react-to-flutter
+/refactoring:validate-flutter
 
-# Gemini CLI
-gemini convert-react-to-flutter
-
-# Or use the unified CLI
+# Or use the unified CLI from terminal
 prprompts refactor ./my-react-app ./my-flutter-app
 ```
+
+**Note**: Slash commands use TOML-based configuration with inline prompts. Pre-1.0 versions (Qwen 0.1.2, Gemini 0.11.3) support commands even if they don't appear in `/help`.
 
 ### 🔄 What Gets Converted
 

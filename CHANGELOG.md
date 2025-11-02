@@ -9,6 +9,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [5.0.6] - 2025-11-02
+
+### 🔧 Bug Fixes
+
+**Fixed TOML Slash Commands Format for Qwen/Gemini**
+
+- **Problem**: Refactoring slash commands existed but used incorrect TOML format (`prompt_file` reference instead of inline `prompt`)
+- **Root Cause**: TOML files were referencing external `.md` files instead of containing inline prompts as required by official Qwen/Gemini spec
+- **Solution**: Converted all refactoring TOML files to use inline `prompt = """..."""` format matching official specification
+- **Impact**: Slash commands now work correctly in all AI assistants with proper TOML format
+
+**Changes:**
+- Updated `~/.qwen/commands/refactoring/*.toml` to inline prompt format
+- Updated `~/.gemini/commands/refactoring/*.toml` to inline prompt format
+- Commands now follow official Qwen/Gemini TOML specification
+- Added comprehensive inline prompts for both `convert-react-to-flutter` and `validate-flutter`
+
+**Correct Usage:**
+```bash
+# Claude Code (forward slash)
+claude
+/refactoring/convert-react-to-flutter
+
+# Qwen Code (colon separator)
+qwen
+/refactoring:convert-react-to-flutter
+
+# Gemini CLI (colon separator)
+gemini
+/refactoring:convert-react-to-flutter
+```
+
+**Documentation:**
+- Updated README with correct slash command syntax and separators
+- Added note about pre-1.0 version behavior (commands work even if not in `/help`)
+- Clarified difference between Claude (/) and Qwen/Gemini (:) syntax
+
+---
+
 ## [5.0.5] - 2025-11-02
 
 ### 🐛 Bug Fixes
