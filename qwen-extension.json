@@ -101,6 +101,15 @@
         "qa-check"
       ],
       "badge": "NEW"
+    },
+    "refactoring": {
+      "displayName": "React-to-Flutter Refactoring (v5.0)",
+      "description": "Convert React/React Native apps to Flutter with Clean Architecture & BLoC",
+      "commands": [
+        "convert-react-to-flutter",
+        "validate-flutter"
+      ],
+      "badge": "NEW"
     }
   },
   "requirements": {
