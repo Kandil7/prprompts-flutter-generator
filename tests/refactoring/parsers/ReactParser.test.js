@@ -18,9 +18,10 @@ describe('ReactParser', () => {
     let component;
 
     beforeAll(() => {
+      const testParser = new ReactParser();
       const filePath = path.join(__dirname, '../fixtures/react/SimpleComponent.tsx');
       const sourceCode = fs.readFileSync(filePath, 'utf-8');
-      component = parser.parse(sourceCode, filePath);
+      component = testParser.parse(sourceCode, filePath);
     });
 
     test('should parse component successfully', () => {
@@ -51,9 +52,10 @@ describe('ReactParser', () => {
     let component;
 
     beforeAll(() => {
+      const testParser = new ReactParser();
       const filePath = path.join(__dirname, '../fixtures/react/StatefulComponent.tsx');
       const sourceCode = fs.readFileSync(filePath, 'utf-8');
-      component = parser.parse(sourceCode, filePath);
+      component = testParser.parse(sourceCode, filePath);
     });
 
     test('should parse component successfully', () => {
@@ -95,9 +97,10 @@ describe('ReactParser', () => {
     let component;
 
     beforeAll(() => {
+      const testParser = new ReactParser();
       const filePath = path.join(__dirname, '../fixtures/react/ClassComponent.tsx');
       const sourceCode = fs.readFileSync(filePath, 'utf-8');
-      component = parser.parse(sourceCode, filePath);
+      component = testParser.parse(sourceCode, filePath);
     });
 
     test('should parse class component successfully', () => {
