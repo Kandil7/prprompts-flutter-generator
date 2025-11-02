@@ -1,7 +1,7 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "4.4.3",
-  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours (40-60x faster). Now with Flutter flavors, 7 skills, multi-AI parity, API validation, rate limiting, and interactive mode!",
+  "version": "5.0.0",
+  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours. NEW: React-to-Flutter refactoring with Clean Architecture, BLoC conversion, AI enhancement & comprehensive validation!",
   "keywords": [
     "flutter",
     "flutter-cli",
@@ -12,6 +12,11 @@
     "mobile-development",
     "app-development",
     "cross-platform",
+    "refactoring",
+    "react-to-flutter",
+    "code-migration",
+    "react-migration",
+    "jsx-to-dart",
     "ai",
     "ai-automation",
     "ai-powered",
@@ -106,6 +111,10 @@
     "test:validation": "jest tests/validation.test.js",
     "test:package": "jest tests/package.test.js",
     "test:prompts": "jest tests/prompts.test.js",
+    "test:refactoring": "jest tests/refactoring --verbose",
+    "test:refactoring:integration": "jest tests/refactoring/integration",
+    "test:refactoring:errors": "jest tests/refactoring/errors",
+    "test:refactoring:performance": "jest tests/refactoring/performance",
     "test:bash": "bash ./scripts/test-validation.sh && bash ./scripts/test-commands.sh",
     "test:windows": "powershell -ExecutionPolicy Bypass -File ./scripts/test-validation.ps1 && powershell -ExecutionPolicy Bypass -File ./scripts/test-commands.ps1",
     "test:windows:bat": "./scripts/test-validation.bat && ./scripts/test-commands.bat",
@@ -166,7 +175,8 @@
     "@qwenlm/qwen-code": ">=1.0.0"
   },
   "devDependencies": {
-    "jest": "^30.2.0"
+    "jest": "^30.2.0",
+    "fs-extra": "^11.1.0"
   },
   "dependencies": {
     "@babel/parser": "^7.28.5",
