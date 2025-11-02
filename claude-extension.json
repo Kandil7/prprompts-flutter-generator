@@ -1,6 +1,6 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "AI-powered Flutter development with complete automation + React-to-Flutter refactoring. Generate 32 security-audited guides & auto-implement production-ready apps in 2-3 hours (40-60x faster). Convert React/React Native apps to Flutter with intelligent hooks, JSX patterns, and style conversion. Supports HIPAA, PCI-DSS, GDPR compliance with built-in security patterns.",
   "author": {
     "name": "Kandil7",
