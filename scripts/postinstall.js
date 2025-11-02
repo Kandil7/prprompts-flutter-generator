@@ -145,7 +145,7 @@ function copyCommands(ai, configPath) {
     return false;
   }
 
-  // Copy all subdirectories (prd/, planning/, prprompts/, automation/)
+  // Copy all subdirectories (prd/, planning/, prprompts/, automation/, refactoring/)
   const subdirs = fs.readdirSync(sourceDir).filter(item => {
     const fullPath = path.join(sourceDir, item);
     return fs.statSync(fullPath).isDirectory();

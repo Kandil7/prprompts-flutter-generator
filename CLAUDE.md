@@ -111,19 +111,19 @@ Users can disable auto-update notifications in `~/.prprompts/config.json`:
 
 ---
 
-## Slash Commands (NEW in v4.1)
+## Slash Commands (v4.1+, Enhanced in v5.0)
 
-**All 20 PRPROMPTS commands are now available as slash commands within Claude Code chat sessions!**
+**All 23 PRPROMPTS commands are now available as slash commands within Claude Code chat sessions!**
 
 ### What Are Slash Commands?
 
 Slash commands let you run PRPROMPTS workflows directly in Claude Code without leaving your chat session:
 - **From terminal**: `claude create-prd` (traditional)
-- **In chat**: `/prd/create` (new slash command)
+- **In chat**: `/create-prd` (new slash command)
 
 ### Organized Command Structure
 
-Commands are organized into 4 categories:
+Commands are organized into 5 categories:
 
 **PRD Commands (`/prd/...`)**
 ```
@@ -162,28 +162,44 @@ Commands are organized into 4 categories:
 /automation/qa-check       # Comprehensive compliance audit
 ```
 
+**Refactoring Commands (NEW in v5.0)**
+```
+/convert-react-to-flutter  # Convert React/React Native app to Flutter with Clean Architecture & BLoC
+/validate-flutter          # Validate Flutter code quality - code, security, performance, accessibility checks
+```
+
 ### Usage Examples
 
 **In Claude Code chat:**
 ```
-User: /prd/create
+User: /create-prd
 Claude: I'll help you create a PRD. First, would you like to start from an industry template?
 ...
 
-User: /planning/implementation-plan
+User: /implementation-plan
 Claude: I'll generate an intelligent implementation plan from your PRD...
 ...
 
-User: /automation/bootstrap
+User: /bootstrap
 Claude: I'll set up your Flutter project with Clean Architecture from PRPROMPTS...
+...
+
+User: /convert-react-to-flutter
+Claude: I'll help you convert your React application to Flutter! Let's start by gathering some information.
+Where is your React source code located? (e.g., ./src, ./components)
+...
+
+User: /validate-flutter
+Claude: I'll run comprehensive validation checks on your Flutter code covering architecture, security,
+performance, and accessibility. Which directory should I validate?
 ...
 ```
 
 ### Benefits of Slash Commands
 
-✅ **Organized** - Logical grouping by category (prd, planning, prprompts, automation)
+✅ **Organized** - Logical grouping by category (prd, planning, prprompts, automation, refactoring)
 ✅ **Discoverable** - Type `/` in chat to explore available commands
-✅ **Shorter names** - `/prd/create` vs `claude create-prd`
+✅ **Shorter names** - `/create-prd` vs `claude create-prd`
 ✅ **In-session** - Run workflows without switching to terminal
 ✅ **Backward compatible** - `claude <command>` still works from terminal
 
@@ -194,18 +210,23 @@ Slash commands map directly to files in `.claude/commands/`:
 ```
 .claude/commands/
 ├── prd/
-│   ├── create.md
-│   ├── auto-generate.md
+│   ├── create.md                    → /create-prd
+│   ├── auto-generate.md             → /auto-generate
 │   └── ...
 ├── planning/
-│   ├── estimate-cost.md
+│   ├── estimate-cost.md             → /estimate-cost
+│   ├── implementation-plan.md       → /implementation-plan
 │   └── ...
 ├── prprompts/
-│   ├── generate-all.md
+│   ├── generate-all.md              → /generate-all
 │   └── ...
-└── automation/
-    ├── bootstrap.md
-    └── ...
+├── automation/
+│   ├── bootstrap.md                 → /bootstrap
+│   ├── implement-next.md            → /implement-next
+│   └── ...
+└── refactoring/                      (NEW in v5.0)
+    ├── convert-react-to-flutter.md  → /convert-react-to-flutter
+    └── validate-flutter.md          → /validate-flutter
 ```
 
 **Note**: Original files in `.claude/prompts/` remain for backward compatibility with CLI commands.
