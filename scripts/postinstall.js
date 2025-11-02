@@ -157,7 +157,8 @@ function copyCommands(ai, configPath) {
     const destSubdir = path.join(commandsDir, subdir);
     ensureDirectory(destSubdir);
 
-    const files = fs.readdirSync(sourceSubdir).filter(f => f.endsWith('.md'));
+    // Copy both .md and .toml files (Qwen/Gemini need .toml for slash commands)
+    const files = fs.readdirSync(sourceSubdir).filter(f => f.endsWith('.md') || f.endsWith('.toml'));
     files.forEach(file => {
       const source = path.join(sourceSubdir, file);
       const dest = path.join(destSubdir, file);
