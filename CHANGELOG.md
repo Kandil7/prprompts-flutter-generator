@@ -9,6 +9,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [5.0.5] - 2025-11-02
+
+### 🐛 Bug Fixes
+
+**Fixed Refactoring Commands Not Appearing in Qwen/Gemini**
+
+- **Problem**: Refactoring slash commands (`/convert-react-to-flutter`, `/validate-flutter`) not appearing in Qwen Code and Gemini CLI `/help` output
+- **Root Cause**: Postinstall script was copying command files but NOT extension manifest files to `~/.config/{ai}/extension.json`
+- **Solution**: Added `copyExtensionManifest()` function to postinstall.js that copies extension manifests for Qwen and Gemini
+- **Impact**: Users can now discover and use refactoring commands in all 3 AI assistants
+
+**Changes:**
+- Enhanced `scripts/postinstall.js` with extension manifest copying
+- Manifests always overwrite to ensure latest version with all features
+- Version number displayed in installation log
+
+**After Update:**
+```bash
+npm install -g prprompts-flutter-generator@5.0.5
+
+# Qwen Code
+qwen
+/help  # Now shows /refactoring:convert-react-to-flutter and /refactoring:validate-flutter
+
+# Gemini CLI
+gemini
+/help  # Now shows /convert-react-to-flutter and /validate-flutter
+```
+
+---
+
 ## [5.0.0] - 2025-11-02
 
 ### 🎉 PRODUCTION RELEASE: Complete React-to-Flutter Refactoring System
