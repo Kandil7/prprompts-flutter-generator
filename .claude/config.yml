@@ -91,11 +91,20 @@ commands:
     prompt: "commands/automation/qa-check.md"
     description: "🔍 Comprehensive compliance audit - generates QA_REPORT.md with score"
 
+  # v5.0 React-to-Flutter Refactoring Commands
+  convert-react-to-flutter:
+    prompt: "commands/refactoring/convert-react-to-flutter.md"
+    description: "🔄 Convert React/React Native app to Flutter - Complete transformation with Clean Architecture & BLoC"
+
+  validate-flutter:
+    prompt: "commands/refactoring/validate-flutter.md"
+    description: "✅ Validate Flutter code quality - Comprehensive checks for code, security, performance, accessibility"
+
 # Project Settings
 project:
   name: "PRPROMPTS Flutter Generator"
-  version: "4.0.0"
-  description: "AI-powered Flutter development with full automation - 40-60x faster (3-5 days → 2-3 hours)"
+  version: "5.0.0"
+  description: "AI-powered Flutter development with full automation + React-to-Flutter refactoring - 40-60x faster (3-5 days → 2-3 hours)"
 
 # Default Behaviors
 defaults:

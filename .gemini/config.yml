@@ -119,11 +119,24 @@ commands:
     category: "Automation"
     badge: "NEW"
 
+  # v5.0 React-to-Flutter Refactoring Commands
+  convert-react-to-flutter:
+    prompt: "commands/refactoring/convert-react-to-flutter.md"
+    description: "🔄 [prprompts] Convert React/React Native app to Flutter - Complete transformation with Clean Architecture & BLoC"
+    category: "Refactoring"
+    badge: "NEW"
+
+  validate-flutter:
+    prompt: "commands/refactoring/validate-flutter.md"
+    description: "✅ [prprompts] Validate Flutter code quality - Comprehensive checks for code, security, performance, accessibility"
+    category: "Refactoring"
+    badge: "NEW"
+
 # Project Settings
 project:
   name: "PRPROMPTS Flutter Generator (Gemini Edition)"
-  version: "4.0.0"
-  description: "AI-powered Flutter development with full automation - 40-60x faster (3-5 days → 2-3 hours)"
+  version: "5.0.0"
+  description: "AI-powered Flutter development with full automation + React-to-Flutter refactoring - 40-60x faster (3-5 days → 2-3 hours)"
   ai_model: "gemini-2.5-pro"
   context_length: "1M tokens"
 

@@ -1,0 +1,19 @@
+# Gemini CLI Command: Validate Flutter Code
+# Auto-generated TOML command file for prprompts-flutter-generator v5.0.0
+
+[command]
+name = "validate-flutter"
+category = "refactoring"
+description = "✅ [prprompts] Validate Flutter code quality - Comprehensive checks for code, security, performance, accessibility"
+prompt_file = "validate-flutter.md"
+version = "5.0.0"
+badge = "NEW"
+
+[metadata]
+ai_engine = "gemini-2.5-pro"
+context_window = "1M tokens"
+agent_mode = true
+react_loop = true
+
+[tags]
+keywords = ["flutter", "validation", "code-quality", "security", "performance", "accessibility", "architecture", "testing", "prprompts"]

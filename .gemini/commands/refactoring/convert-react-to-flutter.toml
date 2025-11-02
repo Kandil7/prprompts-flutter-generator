@@ -1,0 +1,19 @@
+# Gemini CLI Command: Convert React to Flutter
+# Auto-generated TOML command file for prprompts-flutter-generator v5.0.0
+
+[command]
+name = "convert-react-to-flutter"
+category = "refactoring"
+description = "🔄 [prprompts] Convert React/React Native app to Flutter - Complete transformation with Clean Architecture & BLoC"
+prompt_file = "convert-react-to-flutter.md"
+version = "5.0.0"
+badge = "NEW"
+
+[metadata]
+ai_engine = "gemini-2.5-pro"
+context_window = "1M tokens"
+agent_mode = true
+react_loop = true
+
+[tags]
+keywords = ["react", "flutter", "refactoring", "conversion", "hooks", "jsx", "state-management", "clean-architecture", "bloc", "prprompts"]

@@ -1,7 +1,7 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "4.4.3",
-  "description": "AI-powered Flutter development with complete automation. Generate 32 security-audited guides & auto-implement production-ready apps in 2-3 hours (40-60x faster). Supports HIPAA, PCI-DSS, GDPR compliance with built-in security patterns.",
+  "version": "5.0.0",
+  "description": "AI-powered Flutter development with complete automation + React-to-Flutter refactoring. Generate 32 security-audited guides & auto-implement production-ready apps in 2-3 hours (40-60x faster). Convert React/React Native apps to Flutter with intelligent hooks, JSX patterns, and style conversion. Supports HIPAA, PCI-DSS, GDPR compliance with built-in security patterns.",
   "author": {
     "name": "Kandil7",
     "url": "https://github.com/Kandil7"
@@ -17,6 +17,9 @@
     "prprompts",
     "automation",
     "ai-automation",
+    "react-to-flutter",
+    "react-migration",
+    "code-refactoring",
     "production-ready",
     "clean-architecture",
     "bloc",
@@ -35,6 +38,7 @@
     "./commands/prd",
     "./commands/planning",
     "./commands/prprompts",
-    "./commands/automation"
+    "./commands/automation",
+    "./commands/refactoring"
   ]
 }
