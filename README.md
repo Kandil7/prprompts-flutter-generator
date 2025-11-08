@@ -5,12 +5,13 @@
 [![npm version](https://img.shields.io/npm/v/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![npm downloads](https://img.shields.io/npm/dt/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-5.0.6-brightgreen)](CHANGELOG.md)
-[![Status](https://img.shields.io/badge/Status-Production-brightgreen)](CHANGELOG.md#500)
-[![PRD Methods](https://img.shields.io/badge/PRD%20Methods-4-brightgreen)](#creating-your-prd)
+[![Version](https://img.shields.io/badge/Version-5.1.0-brightgreen)](CHANGELOG.md)
+[![Status](https://img.shields.io/badge/Status-Production-brightgreen)](CHANGELOG.md#510)
+[![PRD Methods](https://img.shields.io/badge/PRD%20Methods-6-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
+[![Commands](https://img.shields.io/badge/Commands-23%20Total-blue)](#available-commands)
 [![Security](https://img.shields.io/badge/Security-HIPAA%20%7C%20PCI--DSS%20%7C%20GDPR-red)](#security--compliance)
-[![New](https://img.shields.io/badge/NEW-v5.0%20React→Flutter-purple)](#-new-in-v500-complete-react-to-flutter-refactoring)
+[![New](https://img.shields.io/badge/NEW-v5.1%20Official%20Extensions-purple)](#-new-in-v510-official-ai-extension-support)
 [![Speed](https://img.shields.io/badge/Speed-40--60x%20Faster-green)](#v40-full-automation-new)
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Extension-blue)](CLAUDE.md)
@@ -27,7 +28,59 @@
 
 ---
 
-## 🎉 NEW IN v5.0.0: Complete React-to-Flutter Refactoring
+## 🎉 NEW IN v5.1.0: Official AI Extension Support
+
+**Production Ready!** v5.1.0 delivers official extension support for all three AI platforms with native integration, hooks automation, and TOML command format.
+
+### ✨ What's New
+
+**1. Claude Code Official Plugin**
+- ✅ Official plugin manifest (`.claude-plugin/plugin.json`)
+- ✅ Hooks automation system (4 event types)
+- ✅ Auto-formatting with `dart format` after every edit
+- ✅ Quality gates prompt (analyze, test, commit)
+- ✅ Flutter SDK verification at session start
+- ✅ Activity logging for analytics
+
+**2. Gemini CLI TOML Commands**
+- ✅ All 23 commands in native TOML format
+- ✅ Context file (`GEMINI.md`) for AI understanding
+- ✅ Enhanced extension manifest with settings
+- ✅ Inline command arguments support
+
+**3. Qwen Code MCP Configuration**
+- ✅ Optional MCP server settings (`settings.json`)
+- ✅ OAuth support configuration
+- ✅ Feature toggles for automation
+- ✅ Flutter/Dart SDK path settings
+
+### 🚀 Installation
+
+```bash
+# Install from npm (auto-detects all AIs)
+npm install -g prprompts-flutter-generator
+
+# What gets installed:
+# - Claude Code → Plugin + Hooks + 23 Commands
+# - Gemini CLI → TOML Commands + Context + Extension
+# - Qwen Code → Commands + Settings + MCP Config
+
+# Verify installation
+prprompts doctor
+```
+
+### 🎯 Benefits
+
+✅ **Native Integration** - No manual configuration needed
+✅ **Auto-Format** - Dart code formatted automatically (Claude)
+✅ **Quality Gates** - Prompted to run tests before committing
+✅ **Environment Checks** - Flutter SDK verified at startup
+✅ **Discoverable** - All commands visible in `/help`
+✅ **Official Distribution** - Install via package managers
+
+---
+
+## 🔄 v5.0 Feature: Complete React-to-Flutter Refactoring
 
 **Production Ready!** v5.0.0 delivers a complete, fully-tested React/React Native to Flutter conversion system with intelligent code transformation, Clean Architecture generation, and comprehensive validation.
 

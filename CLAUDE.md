@@ -111,7 +111,153 @@ Users can disable auto-update notifications in `~/.prprompts/config.json`:
 
 ---
 
-## Slash Commands (v4.1+, Enhanced in v5.0)
+## Official Claude Code Plugin (NEW in v5.1)
+
+**PRPROMPTS is now available as an official Claude Code plugin with hooks automation!**
+
+### Plugin Structure
+
+```
+.claude-plugin/
+└── plugin.json          # Official plugin manifest
+
+hooks/
+├── hooks.json           # Hooks configuration (4 event types)
+└── check-flutter-sdk.sh # Flutter SDK verification script
+```
+
+### Plugin Manifest (`.claude-plugin/plugin.json`)
+
+The plugin manifest enables installation via `/plugin install`:
+
+```json
+{
+  "name": "prprompts-flutter-generator",
+  "version": "5.1.0",
+  "description": "AI-powered Flutter development with full automation + React-to-Flutter refactoring...",
+  "author": { "name": "Kandil7", "email": "[email protected]" },
+  "commands": [
+    "./commands/prd",
+    "./commands/planning",
+    "./commands/prprompts",
+    "./commands/automation",
+    "./commands/refactoring"
+  ],
+  "hooks": "./hooks/hooks.json"
+}
+```
+
+**Key Features:**
+- ✅ Official plugin distribution via GitHub
+- ✅ Automatic hooks installation
+- ✅ Command organization by category
+- ✅ Version management
+- ✅ Backward compatible with manual installation
+
+### Hooks Automation (`hooks/hooks.json`)
+
+PRPROMPTS includes 4 hook event types for workflow automation:
+
+**1. PostToolUse (Auto-formatting)**
+- Triggers after `Edit` or `Write` tool use
+- Runs `dart format` on modified files
+- Ensures consistent code style
+
+**2. Stop (Quality Check)**
+- Triggers when generation completes
+- Prompts to run `flutter analyze`, `flutter test`, and `git commit`
+- Prevents forgetting critical steps
+
+**3. UserPromptSubmit (Activity Logging)**
+- Triggers on every user prompt
+- Logs activity to `.prprompts/activity.log`
+- Helps with usage analytics
+
+**4. SessionStart (Environment Check)**
+- Triggers when Claude Code session starts
+- Verifies Flutter SDK is available
+- Provides helpful installation link if missing
+
+**Hooks Configuration Example:**
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [{
+          "type": "command",
+          "command": "dart format --set-exit-if-changed $CLAUDE_PROJECT_DIR/lib || true",
+          "timeout": 30,
+          "description": "Auto-format Dart files after Edit tool"
+        }]
+      }
+    ],
+    "Stop": [{
+      "matcher": "*",
+      "hooks": [{
+        "type": "prompt",
+        "command": "Review the generated code and determine if additional actions are needed...",
+        "description": "Post-generation quality check"
+      }]
+    }]
+  }
+}
+```
+
+### Installation Methods
+
+**Option 1: Official Plugin (Recommended)**
+```bash
+# Coming soon - official Claude Code plugin registry
+/plugin install prprompts-flutter-generator
+```
+
+**Option 2: npm Install (Current)**
+```bash
+npm install -g prprompts-flutter-generator
+
+# Postinstall script automatically:
+# - Copies .claude-plugin/ to ~/.config/claude/.claude-plugin/
+# - Copies hooks/ to ~/.config/claude/hooks/
+# - Installs all 23 commands
+```
+
+**Option 3: Manual**
+```bash
+git clone https://github.com/Kandil7/prprompts-flutter-generator.git
+cd prprompts-flutter-generator
+bash install-claude-extension.sh
+```
+
+### Benefits of Plugin + Hooks
+
+✅ **Zero Manual Formatting** - Dart code auto-formatted after every edit
+✅ **Quality Gates** - Prompted to run tests and analysis before committing
+✅ **Environment Checks** - Flutter SDK verified at session start
+✅ **Activity Tracking** - Usage analytics for optimization
+✅ **Official Distribution** - Install via plugin registry (coming soon)
+✅ **Automatic Updates** - Version tracking across all AI configs
+
+### How It Works
+
+1. **User installs** via npm or plugin registry
+2. **Postinstall script** detects Claude Code is installed
+3. **Plugin manifest** copied to `~/.config/claude/.claude-plugin/`
+4. **Hooks config** copied to `~/.config/claude/hooks/`
+5. **Commands** installed to `~/.config/claude/commands/`
+6. **Claude Code** automatically loads plugin and hooks on next session
+7. **Hooks trigger** automatically during development workflow
+
+**Implementation Files:**
+- `.claude-plugin/plugin.json` - Plugin manifest (keywords, author, license)
+- `hooks/hooks.json` - Hooks configuration (4 event types)
+- `scripts/check-flutter-sdk.sh` - Flutter SDK verification script
+- `scripts/postinstall.js` - Installation logic (lines 223-337)
+
+---
+
+## Slash Commands (v4.1+, Enhanced in v5.1)
 
 **All 23 PRPROMPTS commands are now available as slash commands within Claude Code chat sessions!**
 

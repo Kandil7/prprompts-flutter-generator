@@ -1,7 +1,7 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "5.0.8",
-  "description": "AI-powered Flutter development with full automation - Generate 32 security-audited guides & auto-implement in 2-3 hours. NEW: Complete React-to-Flutter refactoring with intelligent style conversion, hooks → lifecycle mapping, JSX patterns → Flutter equivalents, Clean Architecture, BLoC state management, AI enhancement & comprehensive validation!",
+  "version": "5.1.0",
+  "description": "AI-powered Flutter development with full automation + official extension support - Generate 32 security-audited guides & auto-implement in 2-3 hours. NEW v5.1: Official Claude Code plugin with hooks, Gemini TOML commands, Qwen MCP settings. Features: Complete React-to-Flutter refactoring, intelligent style conversion, hooks → lifecycle mapping, JSX → Flutter equivalents, Clean Architecture, BLoC, AI enhancement & comprehensive validation!",
   "keywords": [
     "flutter",
     "flutter-cli",
@@ -88,8 +88,10 @@
     "lib/",
     "scripts/",
     ".claude/",
+    ".claude-plugin/",
     ".qwen/",
     ".gemini/",
+    "hooks/",
     "completions/",
     "templates/",
     "claude-extension.json",

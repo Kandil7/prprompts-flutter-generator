@@ -1,0 +1,953 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "description": "React to Flutter UI element mapping configuration",
+
+  "defaults": {
+    "textMapping": {
+      "h1": {
+        "widget": "Text",
+        "style": "headline1",
+        "fontSize": 32,
+        "fontWeight": "bold"
+      },
+      "h2": {
+        "widget": "Text",
+        "style": "headline2",
+        "fontSize": 28,
+        "fontWeight": "bold"
+      },
+      "h3": {
+        "widget": "Text",
+        "style": "headline3",
+        "fontSize": 24,
+        "fontWeight": "w600"
+      },
+      "h4": {
+        "widget": "Text",
+        "style": "headline4",
+        "fontSize": 20,
+        "fontWeight": "w600"
+      },
+      "h5": {
+        "widget": "Text",
+        "style": "headline5",
+        "fontSize": 18,
+        "fontWeight": "w500"
+      },
+      "h6": {
+        "widget": "Text",
+        "style": "headline6",
+        "fontSize": 16,
+        "fontWeight": "w500"
+      },
+      "p": {
+        "widget": "Text",
+        "style": "bodyText1"
+      },
+      "span": {
+        "widget": "Text",
+        "style": "bodyText2"
+      },
+      "strong": {
+        "widget": "Text",
+        "style": "bodyText1",
+        "fontWeight": "bold"
+      },
+      "em": {
+        "widget": "Text",
+        "style": "bodyText1",
+        "fontStyle": "italic"
+      },
+      "code": {
+        "widget": "Text",
+        "style": "bodyText2",
+        "fontFamily": "monospace"
+      }
+    },
+    "container": {
+      "widget": "Container"
+    },
+    "fallback": {
+      "widget": "Container",
+      "comment": "Fallback for unmapped elements"
+    }
+  },
+
+  "elements": {
+    "div": {
+      "mapTo": ["Container", "Row", "Column", "Stack"],
+      "rules": [
+        {
+          "if": "style.display == 'flex' && style.flexDirection == 'row'",
+          "use": "Row",
+          "props": {
+            "mainAxisAlignment": "styleToMainAxisAlignment(style.justifyContent)",
+            "crossAxisAlignment": "styleToCrossAxisAlignment(style.alignItems)"
+          }
+        },
+        {
+          "if": "style.display == 'flex' && (style.flexDirection == 'column' || !style.flexDirection)",
+          "use": "Column",
+          "props": {
+            "mainAxisAlignment": "styleToMainAxisAlignment(style.justifyContent)",
+            "crossAxisAlignment": "styleToCrossAxisAlignment(style.alignItems)"
+          }
+        },
+        {
+          "if": "hasAbsoluteOrRelativeChildren()",
+          "use": "Stack",
+          "props": {
+            "children": "convertToStackChildren()"
+          }
+        },
+        {
+          "else": "Container"
+        }
+      ]
+    },
+
+    "section": {
+      "mapTo": "Container",
+      "wrapIn": "Card",
+      "props": {
+        "margin": "EdgeInsets.all(16.0)"
+      }
+    },
+
+    "article": {
+      "mapTo": "Container",
+      "wrapIn": "Card"
+    },
+
+    "header": {
+      "mapTo": "Container",
+      "suggest": "AppBar",
+      "note": "Consider using AppBar if this is a page header"
+    },
+
+    "footer": {
+      "mapTo": "Container",
+      "note": "Consider using BottomAppBar or BottomNavigationBar"
+    },
+
+    "main": {
+      "mapTo": "Container",
+      "wrapIn": "Scaffold",
+      "props": {
+        "body": "convertedChildren"
+      }
+    },
+
+    "img": {
+      "mapTo": "Image",
+      "attrs": {
+        "src": {
+          "to": "Image.assetOrNetwork",
+          "strategy": "detectSourceType",
+          "rules": [
+            {
+              "if": "src.startsWith('http')",
+              "use": "Image.network"
+            },
+            {
+              "if": "src.startsWith('/')",
+              "use": "Image.asset",
+              "transform": "removeLeadingSlash"
+            },
+            {
+              "else": "Image.asset"
+            }
+          ]
+        },
+        "alt": {
+          "to": "Semantics.label"
+        },
+        "width": {
+          "to": "width",
+          "type": "double"
+        },
+        "height": {
+          "to": "height",
+          "type": "double"
+        }
+      }
+    },
+
+    "button": {
+      "mapTo": ["ElevatedButton", "TextButton", "OutlinedButton", "IconButton"],
+      "chooseBy": "classNameOrRole",
+      "rules": [
+        {
+          "if": "className.includes('primary') || role == 'primary'",
+          "use": "ElevatedButton"
+        },
+        {
+          "if": "className.includes('secondary') || role == 'secondary'",
+          "use": "OutlinedButton"
+        },
+        {
+          "if": "className.includes('text') || role == 'link'",
+          "use": "TextButton"
+        },
+        {
+          "if": "hasOnlyIcon()",
+          "use": "IconButton"
+        },
+        {
+          "else": "ElevatedButton"
+        }
+      ],
+      "attrs": {
+        "onClick": {
+          "to": "onPressed"
+        },
+        "disabled": {
+          "to": "onPressed: null"
+        }
+      }
+    },
+
+    "a": {
+      "mapTo": "InkWell",
+      "attrs": {
+        "href": {
+          "to": "onTap",
+          "strategy": "convertToNavigation",
+          "rules": [
+            {
+              "if": "href.startsWith('#')",
+              "use": "scrollToAnchor"
+            },
+            {
+              "if": "href.startsWith('http')",
+              "use": "launchUrl"
+            },
+            {
+              "else": "Navigator.pushNamed"
+            }
+          ]
+        }
+      },
+      "childMapping": {
+        "if": "hasTextOnly()",
+        "wrap": "Text"
+      }
+    },
+
+    "ul": {
+      "mapTo": "ListView",
+      "childrenMap": "li -> ListTile",
+      "props": {
+        "shrinkWrap": true,
+        "physics": "NeverScrollableScrollPhysics()"
+      }
+    },
+
+    "ol": {
+      "mapTo": "ListView",
+      "childrenMap": "li -> ListTile with leading number",
+      "props": {
+        "shrinkWrap": true,
+        "physics": "NeverScrollableScrollPhysics()"
+      }
+    },
+
+    "li": {
+      "mapTo": "ListTile",
+      "props": {
+        "title": "convertChildren()"
+      }
+    },
+
+    "input": {
+      "mapTo": {
+        "[type=text]": "TextField",
+        "[type=password]": "TextField with obscureText",
+        "[type=email]": "TextField with emailInputType",
+        "[type=number]": "TextField with numberInputType",
+        "[type=tel]": "TextField with phoneInputType",
+        "[type=url]": "TextField with urlInputType",
+        "[type=search]": "TextField with search decoration",
+        "[type=checkbox]": "Checkbox",
+        "[type=radio]": "Radio",
+        "[type=range]": "Slider",
+        "[type=date]": "DatePicker trigger",
+        "[type=time]": "TimePicker trigger",
+        "[type=file]": "FilePicker trigger",
+        "[type=submit]": "ElevatedButton",
+        "[type=button]": "ElevatedButton",
+        "[type=reset]": "TextButton"
+      },
+      "attrs": {
+        "placeholder": {
+          "to": "decoration.hintText"
+        },
+        "value": {
+          "to": "controller.text or initialValue"
+        },
+        "onChange": {
+          "to": "onChanged"
+        },
+        "onFocus": {
+          "to": "focusNode listener"
+        },
+        "onBlur": {
+          "to": "focusNode listener"
+        },
+        "required": {
+          "to": "validator: required"
+        },
+        "maxLength": {
+          "to": "maxLength"
+        },
+        "min": {
+          "to": "validator: minValue"
+        },
+        "max": {
+          "to": "validator: maxValue"
+        },
+        "pattern": {
+          "to": "validator: RegExp"
+        },
+        "disabled": {
+          "to": "enabled: false"
+        },
+        "readOnly": {
+          "to": "readOnly: true"
+        }
+      }
+    },
+
+    "textarea": {
+      "mapTo": "TextField",
+      "props": {
+        "maxLines": "null",
+        "minLines": 3
+      }
+    },
+
+    "select": {
+      "mapTo": "DropdownButton",
+      "childrenMap": "option -> DropdownMenuItem",
+      "attrs": {
+        "onChange": {
+          "to": "onChanged"
+        },
+        "value": {
+          "to": "value"
+        }
+      }
+    },
+
+    "option": {
+      "mapTo": "DropdownMenuItem",
+      "attrs": {
+        "value": {
+          "to": "value"
+        }
+      }
+    },
+
+    "form": {
+      "mapTo": "Form",
+      "props": {
+        "key": "GlobalKey<FormState>()"
+      },
+      "attrs": {
+        "onSubmit": {
+          "to": "onWillPop or submit button onPressed"
+        }
+      }
+    },
+
+    "label": {
+      "mapTo": "Text",
+      "wrapIn": "InputDecorator",
+      "attrs": {
+        "for": {
+          "to": "associate with FormField"
+        }
+      }
+    },
+
+    "table": {
+      "mapTo": "Table",
+      "childrenMap": "tr -> TableRow, td/th -> TableCell"
+    },
+
+    "tr": {
+      "mapTo": "TableRow",
+      "children": "TableCell"
+    },
+
+    "td": {
+      "mapTo": "TableCell",
+      "child": "convertChildren()"
+    },
+
+    "th": {
+      "mapTo": "TableCell",
+      "child": "Text with bold style"
+    },
+
+    "svg": {
+      "mapTo": "SvgPicture",
+      "package": "flutter_svg",
+      "note": "Requires flutter_svg package"
+    },
+
+    "canvas": {
+      "mapTo": "CustomPaint",
+      "note": "Requires manual CustomPainter implementation"
+    },
+
+    "video": {
+      "mapTo": "VideoPlayer",
+      "package": "video_player",
+      "note": "Requires video_player package"
+    },
+
+    "audio": {
+      "mapTo": "AudioPlayer",
+      "package": "audioplayers",
+      "note": "Requires audioplayers package"
+    },
+
+    "iframe": {
+      "mapTo": "WebView",
+      "package": "webview_flutter",
+      "note": "Requires webview_flutter package"
+    },
+
+    "nav": {
+      "mapTo": "NavigationBar or BottomNavigationBar",
+      "strategy": "detectPosition"
+    },
+
+    "dialog": {
+      "mapTo": "Dialog",
+      "attrs": {
+        "open": {
+          "to": "showDialog() call"
+        }
+      }
+    },
+
+    "progress": {
+      "mapTo": "LinearProgressIndicator",
+      "attrs": {
+        "value": {
+          "to": "value (0.0 to 1.0)"
+        }
+      }
+    },
+
+    "meter": {
+      "mapTo": "LinearProgressIndicator",
+      "note": "Similar to progress"
+    }
+  },
+
+  "styleRules": {
+    "margin": {
+      "to": "EdgeInsets",
+      "rules": [
+        {
+          "if": "allSidesEqual",
+          "use": "EdgeInsets.all(${value})"
+        },
+        {
+          "if": "verticalHorizontal",
+          "use": "EdgeInsets.symmetric(vertical: ${top}, horizontal: ${left})"
+        },
+        {
+          "else": "EdgeInsets.only(top: ${top}, right: ${right}, bottom: ${bottom}, left: ${left})"
+        }
+      ]
+    },
+
+    "padding": {
+      "to": "EdgeInsets",
+      "rules": "same as margin"
+    },
+
+    "font-size": {
+      "to": "fontSize",
+      "scale": 0.8,
+      "note": "CSS px to Flutter logical pixels"
+    },
+
+    "font-weight": {
+      "to": "fontWeight",
+      "mapping": {
+        "100": "FontWeight.w100",
+        "200": "FontWeight.w200",
+        "300": "FontWeight.w300",
+        "400": "FontWeight.w400",
+        "normal": "FontWeight.normal",
+        "500": "FontWeight.w500",
+        "600": "FontWeight.w600",
+        "bold": "FontWeight.bold",
+        "700": "FontWeight.w700",
+        "800": "FontWeight.w800",
+        "900": "FontWeight.w900"
+      }
+    },
+
+    "font-family": {
+      "to": "fontFamily",
+      "strategy": "mapOrKeep"
+    },
+
+    "color": {
+      "to": "color",
+      "strategy": "parseColor",
+      "examples": {
+        "#FF5733": "Color(0xFFFF5733)",
+        "rgb(255, 87, 51)": "Color.fromRGBO(255, 87, 51, 1.0)",
+        "rgba(255, 87, 51, 0.5)": "Color.fromRGBO(255, 87, 51, 0.5)"
+      }
+    },
+
+    "background-color": {
+      "to": "color (for Container decoration)",
+      "strategy": "parseColor"
+    },
+
+    "border": {
+      "to": "BoxDecoration.border",
+      "strategy": "parseBorder"
+    },
+
+    "border-radius": {
+      "to": "BorderRadius",
+      "rules": [
+        {
+          "if": "allCornersEqual",
+          "use": "BorderRadius.circular(${value})"
+        },
+        {
+          "else": "BorderRadius.only(...)"
+        }
+      ]
+    },
+
+    "box-shadow": {
+      "to": "BoxDecoration.boxShadow",
+      "approximate": true,
+      "strategy": "parseBoxShadow",
+      "note": "May require multiple BoxShadow entries"
+    },
+
+    "width": {
+      "to": "width",
+      "strategy": "convertSize",
+      "rules": [
+        {
+          "if": "percentage",
+          "use": "MediaQuery.of(context).size.width * ${value}"
+        },
+        {
+          "if": "px",
+          "use": "${value}.toDouble()"
+        },
+        {
+          "if": "auto or 100%",
+          "use": "double.infinity"
+        }
+      ]
+    },
+
+    "height": {
+      "to": "height",
+      "strategy": "convertSize",
+      "rules": "same as width"
+    },
+
+    "display": {
+      "mapping": {
+        "flex": "determine Row/Column based on flex-direction",
+        "grid": "GridView",
+        "none": "Visibility(visible: false)",
+        "inline": "Wrap",
+        "block": "Container"
+      }
+    },
+
+    "position": {
+      "mapping": {
+        "absolute": "Positioned",
+        "relative": "Stack with Positioned",
+        "fixed": "Positioned with global key",
+        "sticky": "SliverAppBar or custom implementation"
+      }
+    },
+
+    "top": {
+      "to": "Positioned.top"
+    },
+
+    "right": {
+      "to": "Positioned.right"
+    },
+
+    "bottom": {
+      "to": "Positioned.bottom"
+    },
+
+    "left": {
+      "to": "Positioned.left"
+    },
+
+    "z-index": {
+      "to": "Stack child order",
+      "note": "Higher z-index should be later in children array"
+    },
+
+    "opacity": {
+      "to": "Opacity.opacity",
+      "range": "0.0 to 1.0"
+    },
+
+    "overflow": {
+      "mapping": {
+        "hidden": "ClipRect",
+        "scroll": "SingleChildScrollView",
+        "auto": "SingleChildScrollView (if content overflows)"
+      }
+    },
+
+    "text-align": {
+      "to": "textAlign",
+      "mapping": {
+        "left": "TextAlign.left",
+        "right": "TextAlign.right",
+        "center": "TextAlign.center",
+        "justify": "TextAlign.justify"
+      }
+    },
+
+    "text-decoration": {
+      "to": "decoration",
+      "mapping": {
+        "underline": "TextDecoration.underline",
+        "line-through": "TextDecoration.lineThrough",
+        "none": "TextDecoration.none"
+      }
+    },
+
+    "line-height": {
+      "to": "height (in TextStyle)",
+      "note": "Relative to font size"
+    },
+
+    "letter-spacing": {
+      "to": "letterSpacing"
+    },
+
+    "text-transform": {
+      "to": "string transformation",
+      "mapping": {
+        "uppercase": "text.toUpperCase()",
+        "lowercase": "text.toLowerCase()",
+        "capitalize": "capitalize(text)"
+      }
+    },
+
+    "cursor": {
+      "to": "MouseRegion.cursor",
+      "mapping": {
+        "pointer": "SystemMouseCursors.click",
+        "text": "SystemMouseCursors.text",
+        "move": "SystemMouseCursors.move"
+      }
+    },
+
+    "transition": {
+      "to": "AnimatedContainer or Animation",
+      "approximate": true,
+      "note": "Requires animation implementation"
+    },
+
+    "transform": {
+      "to": "Transform widget",
+      "strategies": {
+        "translate": "Transform.translate",
+        "rotate": "Transform.rotate",
+        "scale": "Transform.scale"
+      }
+    },
+
+    "flex": {
+      "to": "Expanded.flex"
+    },
+
+    "flex-grow": {
+      "to": "Expanded.flex"
+    },
+
+    "flex-shrink": {
+      "note": "Not directly supported, handle in layout"
+    },
+
+    "justify-content": {
+      "to": "mainAxisAlignment",
+      "mapping": {
+        "flex-start": "MainAxisAlignment.start",
+        "flex-end": "MainAxisAlignment.end",
+        "center": "MainAxisAlignment.center",
+        "space-between": "MainAxisAlignment.spaceBetween",
+        "space-around": "MainAxisAlignment.spaceAround",
+        "space-evenly": "MainAxisAlignment.spaceEvenly"
+      }
+    },
+
+    "align-items": {
+      "to": "crossAxisAlignment",
+      "mapping": {
+        "flex-start": "CrossAxisAlignment.start",
+        "flex-end": "CrossAxisAlignment.end",
+        "center": "CrossAxisAlignment.center",
+        "stretch": "CrossAxisAlignment.stretch",
+        "baseline": "CrossAxisAlignment.baseline"
+      }
+    },
+
+    "align-self": {
+      "note": "Wrap child in Align widget"
+    },
+
+    "gap": {
+      "to": "SizedBox between children",
+      "note": "Add SizedBox(width/height: ${gap}) between children"
+    }
+  },
+
+  "stateMapping": {
+    "useState": {
+      "default": "Cubit",
+      "thresholdForBloc": 3,
+      "note": "Use Cubit for simple state, Bloc for complex state",
+      "rules": [
+        {
+          "if": "stateCount <= 2",
+          "use": "StatefulWidget with setState"
+        },
+        {
+          "if": "stateCount <= thresholdForBloc",
+          "use": "Cubit"
+        },
+        {
+          "else": "Bloc"
+        }
+      ]
+    },
+
+    "useEffect": {
+      "mapTo": {
+        "no deps": "initState + dispose",
+        "with deps": "didUpdateWidget",
+        "cleanup": "dispose"
+      }
+    },
+
+    "useContext": {
+      "mapTo": "Provider or GetIt",
+      "default": "Provider.of<T>(context)"
+    },
+
+    "useReducer": {
+      "mapTo": "Bloc",
+      "note": "Map to Bloc with events and states"
+    },
+
+    "useRef": {
+      "mapTo": "GlobalKey or late variable",
+      "strategy": "determineByUsage"
+    },
+
+    "useMemo": {
+      "mapTo": "computed value in build method",
+      "note": "Flutter rebuilds are already optimized"
+    },
+
+    "useCallback": {
+      "mapTo": "method in class",
+      "note": "Methods are already memoized in Dart classes"
+    },
+
+    "Redux": {
+      "mapTo": "Bloc",
+      "mapping": {
+        "store": "BlocProvider",
+        "actions": "events",
+        "reducers": "state transformations",
+        "selectors": "select() method"
+      }
+    },
+
+    "MobX": {
+      "mapTo": "ChangeNotifier + Provider",
+      "mapping": {
+        "observable": "notifyListeners()",
+        "action": "method that calls notifyListeners()",
+        "computed": "getter"
+      }
+    },
+
+    "Recoil": {
+      "mapTo": "Riverpod",
+      "note": "Similar concept of atomic state"
+    },
+
+    "Zustand": {
+      "mapTo": "ChangeNotifier + Provider",
+      "note": "Lightweight state management"
+    }
+  },
+
+  "routing": {
+    "react-router": {
+      "mapTo": "GoRouter",
+      "mapping": {
+        "BrowserRouter": "GoRouter configuration",
+        "Route": "GoRoute",
+        "Link": "context.go() or TextButton",
+        "Navigate": "context.go()",
+        "useNavigate": "GoRouter.of(context).go()",
+        "useParams": "state.params",
+        "useLocation": "GoRouter.of(context).location"
+      },
+      "routePattern": "path"
+    },
+
+    "react-router-dom": {
+      "mapTo": "GoRouter",
+      "note": "Same as react-router"
+    },
+
+    "reach-router": {
+      "mapTo": "GoRouter",
+      "note": "Similar patterns to react-router"
+    }
+  },
+
+  "lifecycle": {
+    "componentDidMount": {
+      "mapTo": "initState"
+    },
+
+    "componentDidUpdate": {
+      "mapTo": "didUpdateWidget"
+    },
+
+    "componentWillUnmount": {
+      "mapTo": "dispose"
+    },
+
+    "shouldComponentUpdate": {
+      "mapTo": "override build with condition or use const widgets"
+    },
+
+    "getDerivedStateFromProps": {
+      "mapTo": "didUpdateWidget"
+    },
+
+    "componentDidCatch": {
+      "mapTo": "ErrorWidget.builder"
+    }
+  },
+
+  "patterns": {
+    "HOC": {
+      "mapTo": "Wrapper widget or mixin",
+      "note": "Higher-Order Components map to wrapper widgets"
+    },
+
+    "Render Props": {
+      "mapTo": "Builder function parameter",
+      "note": "Pass builder function as parameter"
+    },
+
+    "Compound Components": {
+      "mapTo": "Nested widgets with shared state",
+      "note": "Use InheritedWidget or Provider for shared state"
+    },
+
+    "Controlled Components": {
+      "mapTo": "TextEditingController",
+      "note": "Use controllers for form inputs"
+    },
+
+    "Uncontrolled Components": {
+      "mapTo": "StatefulWidget with internal state",
+      "note": "Widget manages its own state"
+    }
+  },
+
+  "packages": {
+    "axios": {
+      "mapTo": "http or dio",
+      "preference": "dio",
+      "note": "Dio provides more features similar to axios"
+    },
+
+    "react-query": {
+      "mapTo": "flutter_bloc with repository pattern",
+      "note": "Implement caching in repository layer"
+    },
+
+    "formik": {
+      "mapTo": "flutter_form_builder",
+      "note": "Or use Form widget with validators"
+    },
+
+    "react-hook-form": {
+      "mapTo": "flutter_form_builder",
+      "note": "Or custom form solution"
+    },
+
+    "styled-components": {
+      "mapTo": "Theme + TextStyle",
+      "note": "Use Theme for consistent styling"
+    },
+
+    "material-ui": {
+      "mapTo": "Flutter Material widgets",
+      "note": "Flutter has built-in Material Design"
+    },
+
+    "ant-design": {
+      "mapTo": "Custom widgets or flutter_ant_design",
+      "note": "May require custom implementation"
+    },
+
+    "framer-motion": {
+      "mapTo": "Flutter animations",
+      "note": "Use AnimatedWidget or custom animations"
+    },
+
+    "react-spring": {
+      "mapTo": "Flutter animations",
+      "note": "Physics-based animations with AnimationController"
+    },
+
+    "lottie-react": {
+      "mapTo": "lottie",
+      "package": "lottie",
+      "note": "Similar Lottie support in Flutter"
+    }
+  },
+
+  "customRules": {
+    "description": "Add your custom mapping rules here",
+    "example": {
+      "MyCustomComponent": {
+        "mapTo": "MyFlutterWidget",
+        "props": {},
+        "note": "Custom component mapping"
+      }
+    }
+  }
+}

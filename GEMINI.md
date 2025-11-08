@@ -1,10 +1,35 @@
-# Gemini CLI Extension for PRPROMPTS v4.0
+# Gemini CLI Extension for PRPROMPTS v5.1.0
 
-Complete guide for using PRPROMPTS Generator with Google's Gemini CLI - now with full automation!
+Complete guide for using PRPROMPTS Generator with Google's Gemini CLI - now with official extension support and React-to-Flutter refactoring!
 
 ---
 
-## 🆕 v4.0: Full Automation
+## 🆕 v5.1.0: Official Extension + React-to-Flutter Refactoring
+
+**NEW: Official Gemini CLI Extension with TOML Commands**
+
+All 23 commands now in proper TOML format for native Gemini CLI integration:
+- ✅ `/prd:create`, `/prd:analyze`, `/prd:refine` (6 PRD commands)
+- ✅ `/planning:estimate-cost`, `/planning:implementation-plan` (4 planning commands)
+- ✅ `/prprompts:generate-all`, `/prprompts:phase-1/2/3` (5 generation commands)
+- ✅ `/automation:bootstrap`, `/automation:full-cycle` (6 automation commands)
+- ✅ `/refactoring:convert-react-to-flutter`, `/refactoring:validate-flutter` (2 NEW refactoring commands)
+
+**NEW: React-to-Flutter Conversion System**
+- 🔄 `/refactoring:convert-react-to-flutter` - Convert entire React/React Native apps to Flutter with Clean Architecture & BLoC
+- ✅ `/refactoring:validate-flutter` - Comprehensive code validation (architecture, security, performance, accessibility)
+- 🚀 AST-based conversion with Dart refactor engine
+- 📦 Asset optimization (multi-resolution images, SVG, fonts)
+- 🎯 State management mapping (useState→Cubit, Redux→BLoC)
+
+**Install as Official Extension:**
+```bash
+gemini extensions install https://github.com/Kandil7/prprompts-flutter-generator
+```
+
+---
+
+## v4.0: Full Automation
 
 **Go from PRD to production Flutter app in 2-3 hours (40-60x faster!)** with 6 automation commands:
 
@@ -13,7 +38,7 @@ Complete guide for using PRPROMPTS Generator with Google's Gemini CLI - now with
 - 🤖 `/full-cycle` - Implement 1-10 features automatically (1-2 hours)
 - ✅ `/review-and-commit` - Validate & commit
 - 🔍 `/qa-check` - Comprehensive compliance audit
-- 📊 `/update-plan` - Adaptive re-planning with velocity tracking (30 sec) **NEW v4.1 Phase 3**
+- 📊 `/update-plan` - Adaptive re-planning with velocity tracking (30 sec)
 
 **Result:** Production-ready app with 85%+ test coverage, HIPAA/PCI-DSS compliant, zero security vulnerabilities.
 
@@ -271,9 +296,9 @@ This installs commands for all 3 AI assistants side-by-side:
 
 ---
 
-## Slash Commands (NEW in v4.1)
+## Slash Commands (NEW in v4.1, Enhanced in v5.1)
 
-**All 20 PRPROMPTS commands are now available as slash commands within Gemini CLI chat sessions!**
+**All 23 PRPROMPTS commands are now available as slash commands within Gemini CLI chat sessions!**
 
 ### What Are Slash Commands?
 
@@ -283,7 +308,7 @@ Slash commands let you run PRPROMPTS workflows directly in Gemini CLI without le
 
 ### Organized Command Structure
 
-Commands are organized into 4 categories:
+Commands are organized into 5 categories:
 
 **PRD Commands (`/prd/...`)**
 ```
@@ -322,6 +347,12 @@ Commands are organized into 4 categories:
 /automation/qa-check       # Comprehensive compliance audit
 ```
 
+**Refactoring Commands (`/refactoring/...`)** 🆕 v5.1
+```
+/refactoring/convert-react-to-flutter  # Convert React/React Native app to Flutter
+/refactoring/validate-flutter          # Validate Flutter code quality
+```
+
 ### Benefits of Slash Commands
 
 ✅ **Organized** - Logical grouping by category
@@ -334,7 +365,7 @@ Commands are organized into 4 categories:
 
 ## Available Commands
 
-**All 20 PRPROMPTS commands work identically to Claude/Qwen versions:**
+**All 23 PRPROMPTS commands work identically to Claude/Qwen versions:**
 
 ### PRD Commands (6 commands)
 ```bash
@@ -373,7 +404,13 @@ gemini review-and-commit         # ✅ Validate and commit changes
 gemini qa-check                  # 🔍 Comprehensive compliance audit
 ```
 
-**Total: 21 commands across 4 categories (PRD, Planning, PRPROMPTS, Automation)**
+### Refactoring Commands (2 commands) 🆕 v5.1
+```bash
+gemini convert-react-to-flutter  # 🔄 Convert React/React Native app to Flutter with Clean Architecture & BLoC
+gemini validate-flutter          # ✅ Validate Flutter code quality (architecture, security, performance, accessibility)
+```
+
+**Total: 23 commands across 5 categories (PRD, Planning, PRPROMPTS, Automation, Refactoring)**
 
 ---
 

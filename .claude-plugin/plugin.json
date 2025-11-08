@@ -1,0 +1,39 @@
+{
+  "name": "prprompts-flutter-generator",
+  "version": "5.1.0",
+  "description": "AI-powered Flutter development with full automation + React-to-Flutter refactoring. Includes PRD creation, PRPROMPTS generation, implementation planning, automated coding, and comprehensive refactoring tools.",
+  "author": {
+    "name": "Kandil7",
+    "email": "[email protected]",
+    "url": "https://github.com/Kandil7"
+  },
+  "homepage": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
+  "repository": "https://github.com/Kandil7/prprompts-flutter-generator",
+  "license": "MIT",
+  "keywords": [
+    "flutter",
+    "claude-code",
+    "prprompts",
+    "automation",
+    "react-to-flutter",
+    "clean-architecture",
+    "bloc",
+    "hipaa",
+    "pci-dss",
+    "gdpr",
+    "compliance",
+    "prd",
+    "planning",
+    "code-generation",
+    "refactoring",
+    "ai-assisted-development"
+  ],
+  "commands": [
+    "./commands/prd",
+    "./commands/planning",
+    "./commands/prprompts",
+    "./commands/automation",
+    "./commands/refactoring"
+  ],
+  "hooks": "./hooks/hooks.json"
+}

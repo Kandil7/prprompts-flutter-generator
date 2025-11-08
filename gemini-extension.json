@@ -1,7 +1,7 @@
 {
   "name": "prprompts-flutter-generator",
   "displayName": "PRPROMPTS Flutter Generator",
-  "version": "5.0.6",
+  "version": "5.1.0",
   "description": "AI-powered Flutter development with full automation + React-to-Flutter refactoring - Generate 32 security-audited guides & auto-implement in 2-3 hours (40-60x faster). Convert React/React Native apps to Flutter with intelligent hooks, JSX patterns, and style conversion.",
   "author": "Kandil7",
   "license": "MIT",
@@ -18,6 +18,7 @@
     "gemini",
     "gemini-cli",
     "gemini-code-assist",
+    "gemini-extension",
     "prprompts",
     "automation",
     "ai-automation",
@@ -30,7 +31,8 @@
     "pci-dss",
     "compliance",
     "security-audited",
-    "rapid-development"
+    "rapid-development",
+    "toml-commands"
   ],
   "categories": [
     "Development Tools",
@@ -42,7 +44,16 @@
     "version": ">=1.0.0",
     "configFile": ".gemini/config.yml",
     "commandsPath": ".gemini/commands",
-    "promptsPath": ".gemini/prompts"
+    "promptsPath": ".gemini/prompts",
+    "contextFileName": "GEMINI.md",
+    "tomlCommandsPath": ".gemini/commands",
+    "settings": {
+      "flutterSdkPath": "${FLUTTER_SDK_PATH}",
+      "dartSdkPath": "${DART_SDK_PATH}",
+      "projectRoot": "${PROJECT_ROOT}",
+      "enableAutoFormat": true,
+      "enableValidation": true
+    }
   },
   "features": {
     "prdGeneration": {

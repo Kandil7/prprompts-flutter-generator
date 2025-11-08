@@ -1,0 +1,66 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "dart format --set-exit-if-changed $CLAUDE_PROJECT_DIR/lib || true",
+            "timeout": 30,
+            "description": "Auto-format Dart files after Edit tool"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "dart format --set-exit-if-changed $CLAUDE_PROJECT_DIR/lib || true",
+            "timeout": 30,
+            "description": "Auto-format Dart files after Write tool"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "prompt",
+            "command": "Review the generated code and determine if additional actions are needed:\n\n1. Should we run flutter analyze to check for errors?\n2. Should we run flutter test to verify tests pass?\n3. Should we commit the changes to git?\n\nRespond with JSON:\n{\n  \"decision\": \"approve|block\",\n  \"reason\": \"Brief explanation\",\n  \"suggestions\": [\"Suggested next steps\"]\n}",
+            "description": "Post-generation quality check"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[PRPROMPTS] User submitted prompt at $(date)\" >> $CLAUDE_PROJECT_DIR/.prprompts/activity.log || true",
+            "timeout": 5,
+            "description": "Log user activity for analytics"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/check-flutter-sdk.sh || true",
+            "timeout": 10,
+            "description": "Verify Flutter SDK is available"
+          }
+        ]
+      }
+    ]
+  }
+}

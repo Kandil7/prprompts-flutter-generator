@@ -199,6 +199,143 @@ function copyExtensionManifest(ai, configPath) {
   return true;
 }
 
+function copyDirectoryRecursive(source, dest) {
+  // Create destination directory
+  ensureDirectory(dest);
+
+  // Read all items in source directory
+  const items = fs.readdirSync(source);
+
+  items.forEach(item => {
+    const sourcePath = path.join(source, item);
+    const destPath = path.join(dest, item);
+
+    if (fs.statSync(sourcePath).isDirectory()) {
+      // Recursively copy directories
+      copyDirectoryRecursive(sourcePath, destPath);
+    } else {
+      // Copy file
+      fs.copyFileSync(sourcePath, destPath);
+    }
+  });
+}
+
+function installClaudePlugin(configPath) {
+  log('\nInstalling Claude Code Plugin...', 'blue');
+
+  try {
+    const sourcePluginDir = path.join(__dirname, '..', '.claude-plugin');
+    const destPluginDir = path.join(configPath, '.claude-plugin');
+
+    if (!fs.existsSync(sourcePluginDir)) {
+      log('  ⚠️  .claude-plugin directory not found, skipping', 'yellow');
+      return false;
+    }
+
+    // Copy entire .claude-plugin directory
+    copyDirectoryRecursive(sourcePluginDir, destPluginDir);
+
+    // Verify plugin.json was copied
+    const pluginJsonPath = path.join(destPluginDir, 'plugin.json');
+    if (fs.existsSync(pluginJsonPath)) {
+      const pluginJson = JSON.parse(fs.readFileSync(pluginJsonPath, 'utf8'));
+      log(`  ✓ Installed Claude Code Plugin v${pluginJson.version}`, 'green');
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    log(`  ⚠️  Failed to install Claude plugin: ${error.message}`, 'yellow');
+    return false;
+  }
+}
+
+function installClaudeHooks(configPath) {
+  log('\nInstalling Claude Code Hooks...', 'blue');
+
+  try {
+    const sourceHooksDir = path.join(__dirname, '..', 'hooks');
+    const destHooksDir = path.join(configPath, 'hooks');
+
+    if (!fs.existsSync(sourceHooksDir)) {
+      log('  ⚠️  hooks directory not found, skipping', 'yellow');
+      return false;
+    }
+
+    // Copy entire hooks directory
+    copyDirectoryRecursive(sourceHooksDir, destHooksDir);
+
+    // Verify hooks.json was copied
+    const hooksJsonPath = path.join(destHooksDir, 'hooks.json');
+    if (fs.existsSync(hooksJsonPath)) {
+      const hooksJson = JSON.parse(fs.readFileSync(hooksJsonPath, 'utf8'));
+      const hookCount = Object.keys(hooksJson.hooks || {}).length;
+      log(`  ✓ Installed ${hookCount} hook event types`, 'green');
+
+      // Make scripts executable on Unix systems
+      if (os.platform() !== 'win32') {
+        const scriptsDir = path.join(__dirname, '..', 'scripts');
+        const scriptFiles = ['check-flutter-sdk.sh'];
+
+        scriptFiles.forEach(script => {
+          const scriptPath = path.join(scriptsDir, script);
+          if (fs.existsSync(scriptPath)) {
+            try {
+              fs.chmodSync(scriptPath, '755');
+            } catch {
+              // Ignore chmod errors
+            }
+          }
+        });
+      }
+
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    log(`  ⚠️  Failed to install Claude hooks: ${error.message}`, 'yellow');
+    return false;
+  }
+}
+
+function installQwenSettings(configPath) {
+  log('\nInstalling Qwen Code Settings...', 'blue');
+
+  try {
+    const sourceSettingsFile = path.join(__dirname, '..', '.qwen', 'settings.json');
+    const destSettingsFile = path.join(configPath, 'settings.json');
+
+    if (!fs.existsSync(sourceSettingsFile)) {
+      log('  ⚠️  .qwen/settings.json not found, skipping', 'yellow');
+      return false;
+    }
+
+    // Copy settings.json
+    fs.copyFileSync(sourceSettingsFile, destSettingsFile);
+
+    // Read and display version
+    try {
+      const settings = JSON.parse(fs.readFileSync(destSettingsFile, 'utf8'));
+      log(`  ✓ Installed Qwen settings v${settings.extension.version}`, 'green');
+
+      // Display MCP status
+      if (settings.mcp && settings.mcp.enabled) {
+        log('  ✓ MCP server configuration included', 'green');
+      } else {
+        log('  ℹ️  MCP server disabled (can be enabled in settings.json)', 'cyan');
+      }
+    } catch {
+      log('  ✓ Installed Qwen settings', 'green');
+    }
+
+    return true;
+  } catch (error) {
+    log(`  ⚠️  Failed to install Qwen settings: ${error.message}`, 'yellow');
+    return false;
+  }
+}
+
 function installForAI(ai, aiName) {
   log(`\nConfiguring ${aiName}...`, 'blue');
 
@@ -210,7 +347,20 @@ function installForAI(ai, aiName) {
   const commandsSuccess = copyCommands(ai, configPath);
   const manifestSuccess = copyExtensionManifest(ai, configPath);
 
-  if (promptsSuccess && configSuccess && commandsSuccess && manifestSuccess) {
+  // AI-specific installations
+  let extraSuccess = true;
+
+  if (ai === 'claude') {
+    // Install Claude Code plugin and hooks
+    const pluginSuccess = installClaudePlugin(configPath);
+    const hooksSuccess = installClaudeHooks(configPath);
+    extraSuccess = pluginSuccess && hooksSuccess;
+  } else if (ai === 'qwen') {
+    // Install Qwen settings
+    extraSuccess = installQwenSettings(configPath);
+  }
+
+  if (promptsSuccess && configSuccess && commandsSuccess && manifestSuccess && extraSuccess) {
     log(`✓ ${aiName} configured successfully!`, 'green');
     return true;
   }

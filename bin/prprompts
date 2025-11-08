@@ -272,6 +272,12 @@ const AutomationValidator = require('../lib/automation-validator');
 const RefactorCommand = require('../lib/refactoring/cli/RefactorCommand');
 const ValidateCommand = require('../lib/refactoring/cli/ValidateCommand');
 const InteractiveCommand = require('../lib/refactoring/cli/InteractiveCommand');
+const AnalyzeCommand = require('../lib/refactoring/cli/AnalyzeCommand');
+const ProgressCommand = require('../lib/refactoring/cli/ProgressCommand');
+const PreviewCommand = require('../lib/refactoring/cli/PreviewCommand');
+const ApplyCommand = require('../lib/refactoring/cli/ApplyCommand');
+const ConfigCommand = require('../lib/refactoring/cli/ConfigCommand');
+const LLMTestCommand = require('../lib/refactoring/cli/LLMTestCommand');
 
 // Import v4.1.0 enhancement modules
 const APIKeyValidator = require('../lib/api-key-validator');
@@ -327,6 +333,12 @@ ${colorize('REFACTORING (React-to-Flutter):', 'bright')}
   ${colorize('refactor-interactive', 'green')}     Interactive conversion wizard
   ${colorize('validate', 'green')} <path>          Validate Flutter code
   ${colorize('convert', 'green')} <src> <target>   Alias for refactor
+  ${colorize('analyze-project', 'green')} <src>    Analyze React project structure
+  ${colorize('refactor-progress', 'green')}        Show conversion progress
+  ${colorize('refactor-preview', 'green')} <feat>  Preview feature changes
+  ${colorize('refactor-apply', 'green')} <feat>    Apply feature changes
+  ${colorize('refactor-config', 'green')}          Manage refactoring config
+  ${colorize('llm-test', 'green')} [provider]      Test LLM provider health
 
 ${colorize('NEW FEATURES (v4.1.0):', 'bright')}
   ${colorize('interactive', 'green')}       Start interactive mode (menu-driven)
@@ -782,6 +794,128 @@ function main() {
 
       const validateCmd = new ValidateCommand(validateOptions);
       validateCmd.execute().then(result => {
+        process.exit(result.success ? 0 : 1);
+      });
+      return;
+
+    case 'analyze-project':
+      const analyzeProjectPath = args[1];
+      if (!analyzeProjectPath) {
+        console.error(colorize('Usage: prprompts analyze-project <react-source> [options]', 'red'));
+        console.error('\nOptions:');
+        console.error('  --format <type>    Output format (json, markdown, html, terminal)');
+        console.error('  --output <file>    Output file path');
+        console.error('  --detailed         Include detailed analysis');
+        console.error('  --estimate         Include time estimates');
+        process.exit(1);
+      }
+
+      const analyzeOptions = {
+        reactSource: analyzeProjectPath,
+        format: args.includes('--format') ? args[args.indexOf('--format') + 1] : 'terminal',
+        output: args.includes('--output') ? args[args.indexOf('--output') + 1] : null,
+        detailed: args.includes('--detailed'),
+        estimate: args.includes('--estimate')
+      };
+
+      const analyzeCmd = new AnalyzeCommand(analyzeOptions);
+      analyzeCmd.execute().then(result => {
+        process.exit(result.success ? 0 : 1);
+      });
+      return;
+
+    case 'refactor-progress':
+      const progressOptions = {
+        watch: args.includes('--watch'),
+        detailed: args.includes('--detailed'),
+        json: args.includes('--json')
+      };
+
+      const progressCmd = new ProgressCommand(progressOptions);
+      progressCmd.execute().then(result => {
+        process.exit(result.success ? 0 : 1);
+      });
+      return;
+
+    case 'refactor-preview':
+      const previewFeature = args[1];
+      if (!previewFeature) {
+        console.error(colorize('Usage: prprompts refactor-preview <feature> [options]', 'red'));
+        console.error('\nOptions:');
+        console.error('  --split            Show split view');
+        console.error('  --stats            Show statistics only');
+        console.error('  --html <file>      Export to HTML');
+        console.error('  --interactive      Interactive mode');
+        process.exit(1);
+      }
+
+      const previewOptions = {
+        feature: previewFeature,
+        split: args.includes('--split'),
+        stats: args.includes('--stats'),
+        html: args.includes('--html') ? args[args.indexOf('--html') + 1] : null,
+        interactive: args.includes('--interactive')
+      };
+
+      const previewCmd = new PreviewCommand(previewOptions);
+      previewCmd.execute().then(result => {
+        process.exit(result.success ? 0 : 1);
+      });
+      return;
+
+    case 'refactor-apply':
+      const applyFeature = args[1];
+      if (!applyFeature) {
+        console.error(colorize('Usage: prprompts refactor-apply <feature> [options]', 'red'));
+        console.error('\nOptions:');
+        console.error('  --validate         Run validation before applying');
+        console.error('  --backup           Create backup before applying');
+        console.error('  --force            Force application even if conflicts');
+        console.error('  --dry-run          Preview without applying');
+        process.exit(1);
+      }
+
+      const applyOptions = {
+        feature: applyFeature,
+        validate: args.includes('--validate'),
+        backup: args.includes('--backup'),
+        force: args.includes('--force'),
+        dryRun: args.includes('--dry-run')
+      };
+
+      const applyCmd = new ApplyCommand(applyOptions);
+      applyCmd.execute().then(result => {
+        process.exit(result.success ? 0 : 1);
+      });
+      return;
+
+    case 'refactor-config':
+      const configAction = args[1] || 'edit';
+      const configOptions = {
+        action: configAction, // edit, show, save, load, validate, reset
+        profile: args.includes('--profile') ? args[args.indexOf('--profile') + 1] : null,
+        file: args.includes('--file') ? args[args.indexOf('--file') + 1] : null,
+        interactive: args.includes('--interactive')
+      };
+
+      const configCmd = new ConfigCommand(configOptions);
+      configCmd.execute().then(result => {
+        process.exit(result.success ? 0 : 1);
+      });
+      return;
+
+    case 'llm-test':
+      const llmProvider = args[1] || 'all';
+      const llmOptions = {
+        provider: llmProvider, // claude, gemini, qwen, all
+        health: args.includes('--health'),
+        models: args.includes('--models'),
+        benchmark: args.includes('--benchmark'),
+        iterations: args.includes('--iterations') ? parseInt(args[args.indexOf('--iterations') + 1]) : 3
+      };
+
+      const llmTestCmd = new LLMTestCommand(llmOptions);
+      llmTestCmd.execute().then(result => {
         process.exit(result.success ? 0 : 1);
       });
       return;

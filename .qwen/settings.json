@@ -1,0 +1,136 @@
+{
+  "$schema": "https://qwenlm.github.io/qwen-code/schemas/settings.json",
+  "extension": {
+    "name": "prprompts-flutter-generator",
+    "version": "5.1.0",
+    "displayName": "PRPROMPTS Flutter Generator",
+    "description": "AI-powered Flutter development with full automation + React-to-Flutter refactoring",
+    "author": "Kandil7",
+    "license": "MIT",
+    "homepage": "https://github.com/Kandil7/prprompts-flutter-generator",
+    "repository": "https://github.com/Kandil7/prprompts-flutter-generator"
+  },
+  "qwen": {
+    "version": ">=1.0.0",
+    "configFile": ".qwen/config.yml",
+    "commandsPath": ".qwen/commands",
+    "promptsPath": ".qwen/prompts",
+    "skillsPath": ".qwen/skills",
+    "contextFileName": "QWEN.md"
+  },
+  "commands": {
+    "prd": [
+      "create-prd",
+      "auto-gen-prd",
+      "prd-from-files",
+      "auto-prd-from-project",
+      "analyze-prd",
+      "refine-prd"
+    ],
+    "planning": [
+      "estimate-cost",
+      "analyze-dependencies",
+      "generate-stakeholder-review",
+      "generate-implementation-plan"
+    ],
+    "prprompts": [
+      "gen-prprompts",
+      "gen-phase-1",
+      "gen-phase-2",
+      "gen-phase-3",
+      "gen-file"
+    ],
+    "automation": [
+      "bootstrap-from-prprompts",
+      "implement-next",
+      "update-plan",
+      "full-cycle",
+      "review-and-commit",
+      "qa-check"
+    ],
+    "refactoring": [
+      "convert-react-to-flutter",
+      "validate-flutter"
+    ]
+  },
+  "mcp": {
+    "enabled": false,
+    "servers": {
+      "prprompts-server": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@prprompts/mcp-server"
+        ],
+        "transport": "stdio",
+        "description": "PRPROMPTS MCP server for advanced automation (optional)",
+        "env": {
+          "PRPROMPTS_VERSION": "5.1.0",
+          "FLUTTER_SDK_PATH": "${FLUTTER_SDK_PATH}",
+          "DART_SDK_PATH": "${DART_SDK_PATH}"
+        }
+      }
+    }
+  },
+  "features": {
+    "prdGeneration": {
+      "enabled": true,
+      "templates": [
+        "healthcare",
+        "fintech",
+        "education",
+        "ecommerce",
+        "logistics",
+        "saas"
+      ]
+    },
+    "automation": {
+      "enabled": true,
+      "autoFormat": true,
+      "autoValidate": true,
+      "autoTest": false
+    },
+    "refactoring": {
+      "enabled": true,
+      "preserveComments": true,
+      "convertStyles": true,
+      "optimizeAssets": true
+    },
+    "security": {
+      "scanCode": true,
+      "enforceCompliance": true,
+      "auditLogging": true
+    }
+  },
+  "settings": {
+    "flutter": {
+      "sdkPath": "${FLUTTER_SDK_PATH}",
+      "dartSdkPath": "${DART_SDK_PATH}",
+      "enableHotReload": true
+    },
+    "editor": {
+      "formatOnSave": true,
+      "lintOnSave": true
+    },
+    "prprompts": {
+      "outputDirectory": "PRPROMPTS",
+      "prdsDirectory": "docs",
+      "templateDirectory": "templates"
+    },
+    "compliance": {
+      "default": [],
+      "supported": [
+        "HIPAA",
+        "PCI-DSS",
+        "GDPR",
+        "SOC2",
+        "COPPA",
+        "FERPA"
+      ]
+    }
+  },
+  "telemetry": {
+    "enabled": false,
+    "anonymousUsageData": false
+  }
+}

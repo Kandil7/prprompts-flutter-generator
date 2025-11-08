@@ -40,6 +40,10 @@ const COMMANDS = {
     'full-cycle',
     'review-commit',
     'qa-check'
+  ],
+  refactoring: [
+    'convert-react-to-flutter',
+    'validate-flutter'
   ]
 };
 
@@ -72,7 +76,11 @@ const DESCRIPTIONS = {
   'automation/update-plan': 'Re-plan based on actual velocity and progress (30 sec)',
   'automation/full-cycle': 'Auto-implement 1-10 features with dependency management (1-2 hours)',
   'automation/review-commit': 'Validate code against PRPROMPTS patterns and commit',
-  'automation/qa-check': 'Comprehensive compliance audit (architecture, security, testing)'
+  'automation/qa-check': 'Comprehensive compliance audit (architecture, security, testing)',
+
+  // Refactoring commands
+  'refactoring/convert-react-to-flutter': 'Convert React/React Native app to Flutter with Clean Architecture & BLoC',
+  'refactoring/validate-flutter': 'Validate Flutter code quality - architecture, security, performance, accessibility'
 };
 
 function escapeTomlString(str) {
@@ -144,12 +152,14 @@ function main() {
   console.log('   .gemini/commands/planning/*.toml (4 files)');
   console.log('   .gemini/commands/prprompts/*.toml (5 files)');
   console.log('   .gemini/commands/automation/*.toml (6 files)');
+  console.log('   .gemini/commands/refactoring/*.toml (2 files)');
   console.log('');
   console.log('🎯 Usage in Gemini CLI:');
   console.log('   /prd:create');
   console.log('   /planning:estimate-cost');
   console.log('   /prprompts:generate-all');
   console.log('   /automation:bootstrap');
+  console.log('   /refactoring:convert-react-to-flutter');
   console.log('');
   console.log('📋 Next steps:');
   console.log('   1. Copy to user config: cp -r .gemini/commands/* ~/.gemini/commands/');
