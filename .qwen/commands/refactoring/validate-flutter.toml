@@ -1,17 +1,368 @@
-# Qwen Code Command: Validate Flutter Code
-# Auto-generated TOML command file for prprompts-flutter-generator v5.0.0
+description = "Validate Flutter code quality - comprehensive checks for code, security, performance, accessibility"
 
-[command]
-name = "validate-flutter"
-category = "refactoring"
-description = "✅ Validate Flutter code quality - Comprehensive checks for code, security, performance, accessibility"
-prompt_file = "validate-flutter.md"
-version = "5.0.0"
+prompt = """
+# Validate Flutter Code
 
-[metadata]
-ai_engine = "qwen3-coder"
-context_optimized = true
-supports_extended_context = true
+You are validating Flutter code quality, security, performance, and compliance using the PRPROMPTS validation system.
 
-[tags]
-keywords = ["flutter", "validation", "code-quality", "security", "performance", "accessibility", "architecture", "testing"]
+## Overview
+
+This command runs comprehensive validation checks on Flutter code and generates detailed reports with actionable recommendations.
+
+## Steps
+
+### 1. Gather Information
+
+Ask the user:
+
+1. **Flutter project path**: Where is the Flutter project?
+   - Example: `./flutter-app`, `.`, `./mobile`
+   - Validate that pubspec.yaml exists
+
+2. **Validation strictness**: What level of strictness?
+   - **Strict**: High standards (min score 85/100)
+   - **Standard**: Balanced (min score 70/100) - recommended
+   - **Lenient**: Permissive (min score 50/100)
+   - **Security**: Focus on security issues only
+   - **Performance**: Focus on performance issues only
+
+3. **Report format**: How should results be displayed?
+   - **Terminal**: Colorized output in terminal (default)
+   - **HTML**: Interactive HTML report with charts
+   - **JSON**: Machine-readable format
+   - **Markdown**: Documentation-friendly format
+
+4. **Auto-fix**: Should fixable issues be corrected automatically?
+
+### 2. Run Validation
+
+Execute the validation command:
+
+```bash
+prprompts validate <path> --config <preset> --format <format>
+```
+
+Example:
+```bash
+prprompts validate ./flutter-app --config strict --format html --fix
+```
+
+### 3. Show Results
+
+Display validation results with clear formatting:
+
+```
+🔍 Validation Results
+
+┌──────────────────────────────────────┐
+│        Score: 85/100                 │
+│        Grade: B                      │
+└──────────────────────────────────────┘
+
+📊 Detailed Scores:
+┌────────────────┬───────┬───────┐
+│ Category       │ Score │ Grade │
+├────────────────┼───────┼───────┤
+│ Code Quality   │ 90/100│   A   │
+│ Security       │ 100/100│  A   │
+│ Performance    │ 75/100│   C   │
+│ Accessibility  │ 65/100│   D   │
+│ Architecture   │ 88/100│   B   │
+└────────────────┴───────┴───────┘
+
+⚠️  Issues Summary:
+  • Errors: 2
+  • Warnings: 5
+  • Info: 8
+```
+
+### 4. Highlight Critical Issues
+
+Show top issues that need attention:
+
+```
+❌ Errors (2):
+  1. [A11y] Missing Semantics label for interactive widget
+     lib/features/auth/presentation/pages/login_page.dart:42
+     💡 Auto-fixable with --fix
+
+  2. [Security] Hardcoded API key detected
+     lib/core/network/api_client.dart:15
+     ⚠️  Manual fix required
+
+⚠️  Warnings (5):
+  1. [Perf] Missing const constructor - causes unnecessary rebuilds
+     lib/features/auth/presentation/widgets/user_card.dart:15
+     💡 Auto-fixable with --fix
+
+  2. [Code] Unused import statement
+     lib/features/dashboard/presentation/pages/home_page.dart:8
+     💡 Auto-fixable with --fix
+```
+
+### 5. Provide Recommendations
+
+Give actionable advice:
+
+```
+💡 Recommendations:
+  1. Add Semantics labels to all interactive widgets for accessibility
+  2. Move API keys to environment variables or secure storage
+  3. Use const constructors wherever possible for performance
+  4. Remove unused imports to reduce bundle size
+  5. Add more unit tests (current coverage: 65%, target: 80%)
+```
+
+### 6. Show Report Location
+
+If HTML/JSON/Markdown format was generated:
+
+```
+📄 Reports saved:
+  • HTML: flutter-app/.prprompts/validation-report.html
+  • JSON: flutter-app/.prprompts/validation-report.json
+
+🌐 Opening HTML report in browser...
+```
+
+### 7. Offer Next Actions
+
+Ask what the user wants to do:
+
+```
+What would you like to do next?
+  1. Auto-fix safe issues (--fix flag)
+  2. Review specific file in detail
+  3. Re-run validation after fixes
+  4. View detailed report in browser
+  5. Export results for CI/CD
+```
+
+## Example Conversation
+
+**Assistant**: I'll validate your Flutter code. Where is your Flutter project located?
+
+**User**: ./flutter-app
+
+**Assistant**: What validation strictness level would you like?
+1. Strict (85/100 minimum)
+2. Standard (70/100 minimum) - recommended
+3. Lenient (50/100 minimum)
+4. Security-focused
+5. Performance-focused
+
+**User**: 2
+
+**Assistant**: How should I present the results?
+1. Terminal (colorized output)
+2. HTML (interactive report)
+3. JSON (machine-readable)
+4. Markdown (documentation)
+
+**User**: HTML
+
+**Assistant**: Should I auto-fix issues that can be corrected safely?
+
+**User**: Yes
+
+**Assistant**: Perfect! Running validation with these settings:
+- Project: ./flutter-app
+- Config: Standard (min score 70/100)
+- Format: HTML
+- Auto-fix: Enabled
+
+```bash
+prprompts validate ./flutter-app --config standard --format html --fix
+```
+
+[Show progress and results]
+
+## Validation Categories
+
+### 1. Code Quality (Weight: 25%)
+- Code organization and structure
+- Naming conventions
+- Code complexity
+- Documentation
+- Dead code detection
+- Import organization
+
+### 2. Security (Weight: 30%)
+- Hardcoded secrets detection
+- Insecure network calls (HTTP vs HTTPS)
+- SQL injection vulnerabilities
+- XSS prevention
+- Secure storage usage
+- JWT validation patterns
+
+### 3. Performance (Weight: 25%)
+- Widget rebuild optimization
+- Const constructors
+- Lazy loading
+- Memory leaks
+- Expensive operations in build methods
+- Image optimization
+
+### 4. Accessibility (Weight: 10%)
+- Semantics labels
+- Color contrast
+- Touch target sizes
+- Screen reader support
+- Keyboard navigation
+
+### 5. Architecture (Weight: 10%)
+- Clean Architecture compliance
+- Dependency injection
+- Separation of concerns
+- SOLID principles
+- Feature organization
+
+## Auto-Fixable Issues
+
+These issues can be automatically corrected with `--fix`:
+
+1. **Missing const constructors**: Add `const` keyword
+2. **Unused imports**: Remove import statements
+3. **Trailing commas**: Add for better formatting
+4. **Async without await**: Remove unnecessary `async`
+5. **Prefer final**: Change `var` to `final` where appropriate
+
+## Manual Fix Required
+
+These issues need human review:
+
+1. **Hardcoded secrets**: Move to environment variables
+2. **Security vulnerabilities**: Implement proper security patterns
+3. **Architecture violations**: Refactor code structure
+4. **Complex logic**: Simplify or break down
+5. **Missing tests**: Write unit/widget tests
+
+## CI/CD Integration
+
+For CI/CD pipelines, use:
+
+```bash
+prprompts validate ./flutter-app --ci --threshold 85
+```
+
+This will:
+- Exit with code 0 if score ≥ threshold
+- Exit with code 1 if score < threshold
+- Output minimal, CI-friendly format
+
+## Validation Presets
+
+### Strict
+- Minimum score: 85/100
+- Fails on warnings
+- Checks everything
+- Best for production code
+
+### Standard
+- Minimum score: 70/100
+- Warnings are allowed
+- Balanced checks
+- Good for active development
+
+### Lenient
+- Minimum score: 50/100
+- Very permissive
+- Basic checks only
+- Good for prototypes
+
+### Security
+- Minimum score: 90/100 (security only)
+- Focuses on security issues
+- Fails on any security error
+- Required for compliance
+
+### Performance
+- Minimum score: 75/100 (performance only)
+- Focuses on performance issues
+- Warns on slow widgets
+- Good for optimization phase
+
+## Common Issues & Solutions
+
+### Issue: "Low accessibility score"
+**Solution**: Add Semantics widgets:
+```dart
+Semantics(
+  label: 'Login button',
+  button: true,
+  child: ElevatedButton(...),
+)
+```
+
+### Issue: "Performance warnings about missing const"
+**Solution**: Add const constructors:
+```dart
+const Text('Hello')  // Instead of: Text('Hello')
+const SizedBox(height: 20)
+```
+
+### Issue: "Security warning about hardcoded API key"
+**Solution**: Use environment variables:
+```dart
+// Instead of:
+const apiKey = 'sk-1234567890';
+
+// Use:
+final apiKey = dotenv.env['API_KEY']!;
+```
+
+### Issue: "Architecture violation"
+**Solution**: Follow Clean Architecture layers:
+- Domain layer: Entities, repositories, use cases
+- Data layer: Models, data sources, repository implementations
+- Presentation layer: BLoC/Cubit, pages, widgets
+
+## Report Features
+
+### HTML Report Includes:
+- Interactive charts and graphs
+- Filterable issue list
+- Code snippets with syntax highlighting
+- Trend analysis (if run multiple times)
+- Exportable to PDF
+
+### JSON Report Includes:
+- Machine-readable format
+- All validation data
+- Can be parsed by other tools
+- Good for CI/CD integration
+
+### Markdown Report Includes:
+- Documentation-friendly
+- Can be committed to repo
+- Readable in GitHub/GitLab
+- Good for PR descriptions
+
+## Important Notes
+
+- **Run regularly**: Validation should be part of your workflow
+- **Fix incrementally**: Don't try to fix everything at once
+- **Prioritize**: Fix errors before warnings
+- **Track progress**: Save reports to see improvement over time
+- **CI integration**: Add validation to your pipeline
+- **Team standards**: Agree on minimum score threshold
+
+## Commands Reference
+
+```bash
+# Basic validation
+prprompts validate <path>
+
+# With options
+prprompts validate ./flutter-app --config strict --format html
+
+# Auto-fix
+prprompts validate ./flutter-app --fix
+
+# CI mode
+prprompts validate ./flutter-app --ci --threshold 85
+
+# Save to file
+prprompts validate ./flutter-app --format json --output report.json
+```
+"""
