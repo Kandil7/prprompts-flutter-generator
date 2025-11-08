@@ -183,6 +183,10 @@
     "@babel/parser": "^7.28.5",
     "@babel/traverse": "^7.28.5",
     "@babel/types": "^7.28.5",
-    "fs-extra": "^11.1.0"
+    "chalk": "^4.1.2",
+    "fs-extra": "^11.1.0",
+    "glob": "^10.3.10",
+    "inquirer": "^8.2.6",
+    "ora": "^5.4.1"
   }
 }
