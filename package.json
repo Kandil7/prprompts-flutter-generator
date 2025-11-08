@@ -140,7 +140,6 @@
     "validate:package": "npm pack --dry-run && echo \"✅ Package validated\"",
     "validate:extensions": "bash -c 'for file in *-extension.json; do echo \"Validating $file...\"; node -e \"JSON.parse(require(\\\"fs\\\").readFileSync(\\\"$file\\\", \\\"utf8\\\"))\" || exit 1; done && echo \"✅ All extensions valid\"'",
     "precommit": "npm run lint && npm run test",
-    "prepublishOnly": "npm run test:all && npm run validate:package",
     "setup": "./scripts/setup.sh",
     "smart-install": "bash ./scripts/smart-install.sh",
     "generate": "./scripts/generate-prprompts.sh all",
@@ -167,7 +166,8 @@
     "auto:bootstrap": "node ./lib/automation-manager.js bootstrap",
     "auto:implement": "node ./lib/automation-manager.js implement",
     "auto:test": "node ./lib/automation-manager.js test",
-    "auto:reset": "node ./lib/automation-manager.js reset"
+    "auto:reset": "node ./lib/automation-manager.js reset",
+    "prepublishOnly": "npm run test:all && npm run validate:package"
   },
   "peerDependencies": {
     "@anthropic-ai/claude-code": ">=1.0.0"
@@ -177,8 +177,8 @@
     "@qwenlm/qwen-code": ">=1.0.0"
   },
   "devDependencies": {
-    "jest": "^30.2.0",
-    "fs-extra": "^11.1.0"
+    "fs-extra": "^11.1.0",
+    "jest": "^30.2.0"
   },
   "dependencies": {
     "@babel/parser": "^7.28.5",
