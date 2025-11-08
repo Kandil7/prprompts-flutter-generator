@@ -177,12 +177,12 @@
     "@qwenlm/qwen-code": ">=1.0.0"
   },
   "devDependencies": {
-    "fs-extra": "^11.1.0",
     "jest": "^30.2.0"
   },
   "dependencies": {
     "@babel/parser": "^7.28.5",
     "@babel/traverse": "^7.28.5",
-    "@babel/types": "^7.28.5"
+    "@babel/types": "^7.28.5",
+    "fs-extra": "^11.1.0"
   }
 }
