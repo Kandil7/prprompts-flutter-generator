@@ -148,8 +148,8 @@ describe('RefactorCommand', () => {
       const files = await command.findReactFiles('./test-src');
 
       expect(files.length).toBeGreaterThan(0);
-      expect(files).toContain(expect.stringContaining('App.jsx'));
-      expect(files).toContain(expect.stringContaining('Login.tsx'));
+      expect(files.some(f => f.includes('App.jsx'))).toBe(true);
+      expect(files.some(f => f.includes('Login.tsx'))).toBe(true);
     });
 
     it('should skip node_modules directory', async () => {
