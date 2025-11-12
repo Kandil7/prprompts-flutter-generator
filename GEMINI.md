@@ -412,6 +412,8 @@ gemini validate-flutter          # ✅ Validate Flutter code quality (architectu
 
 **Total: 23 commands across 5 categories (PRD, Planning, PRPROMPTS, Automation, Refactoring)**
 
+**Note:** Hooks automation is a Claude Code-specific feature and not available in Gemini CLI.
+
 ---
 
 

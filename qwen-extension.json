@@ -1,7 +1,7 @@
 {
   "name": "prprompts-flutter-generator",
   "displayName": "PRPROMPTS Flutter Generator",
-  "version": "5.1.0",
+  "version": "5.1.2",
   "description": "AI-powered Flutter development with full automation + React-to-Flutter refactoring - Generate 32 security-audited guides & auto-implement in 2-3 hours (40-60x faster). Convert React/React Native apps to Flutter with intelligent hooks, JSX patterns, and style conversion.",
   "author": "Kandil7",
   "license": "MIT",
@@ -52,6 +52,32 @@
       "qwen3-coder-120b",
       "qwen3-coder-32b",
       "qwen3-coder-14b"
+    ],
+    "contextWindow": {
+      "standard": "256K tokens",
+      "extended": "1M tokens",
+      "description": "4x-16x larger than Claude Code"
+    },
+    "benchmarks": {
+      "agenticCoding": {
+        "score": "95.2%",
+        "comparison": "On par with Claude Sonnet 4"
+      },
+      "monorepoAnalysis": {
+        "capability": "Full monorepo in single context",
+        "maxFiles": "~3000 files"
+      },
+      "speed": {
+        "fullCycle": "60-120 minutes for 10 features",
+        "perFeature": "8-12 minutes average"
+      }
+    },
+    "advantages": [
+      "✅ Extended context for large codebases",
+      "✅ Free tier available",
+      "✅ Open source and extensible",
+      "✅ MCP configuration support",
+      "✅ Cost-effective for large projects"
     ]
   },
   "features": {

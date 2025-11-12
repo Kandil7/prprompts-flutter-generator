@@ -1,33 +1,135 @@
 {
   "name": "prprompts-flutter-generator",
-  "version": "5.1.0",
-  "description": "AI-powered Flutter development with full automation + React-to-Flutter refactoring. Includes PRD creation, PRPROMPTS generation, implementation planning, automated coding, and comprehensive refactoring tools.",
+  "displayName": "PRPROMPTS Flutter Generator - Professional Development Automation",
+  "version": "5.1.2",
+  "description": "Enterprise-grade Flutter development automation. Transform PRD → 32 security-audited guides → production app in 2-3 hours (40-60x faster). Features: React-to-Flutter refactoring, Clean Architecture, BLoC, HIPAA/PCI-DSS/GDPR compliance, 85%+ test coverage.",
+  "publisher": "Kandil7",
+  "icon": "https://raw.githubusercontent.com/Kandil7/prprompts-flutter-generator/main/assets/icon.png",
+  "galleryBanner": {
+    "color": "#0175C2",
+    "theme": "dark"
+  },
+  "categories": [
+    "Development",
+    "Automation",
+    "Flutter",
+    "Code Generation",
+    "Security"
+  ],
+  "badges": [
+    {
+      "url": "https://img.shields.io/npm/v/prprompts-flutter-generator",
+      "href": "https://www.npmjs.com/package/prprompts-flutter-generator",
+      "description": "npm version"
+    },
+    {
+      "url": "https://img.shields.io/npm/dm/prprompts-flutter-generator",
+      "href": "https://www.npmjs.com/package/prprompts-flutter-generator",
+      "description": "Downloads"
+    }
+  ],
   "author": {
     "name": "Kandil7",
     "email": "[email protected]",
     "url": "https://github.com/Kandil7"
   },
   "homepage": "https://github.com/Kandil7/prprompts-flutter-generator#readme",
-  "repository": "https://github.com/Kandil7/prprompts-flutter-generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kandil7/prprompts-flutter-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kandil7/prprompts-flutter-generator/issues"
+  },
   "license": "MIT",
+  "engines": {
+    "claudeCode": "^1.0.0",
+    "node": ">=20.0.0"
+  },
   "keywords": [
     "flutter",
+    "flutter-development",
     "claude-code",
     "prprompts",
     "automation",
     "react-to-flutter",
     "clean-architecture",
-    "bloc",
-    "hipaa",
+    "bloc-pattern",
+    "hipaa-compliance",
     "pci-dss",
     "gdpr",
+    "security",
     "compliance",
-    "prd",
-    "planning",
+    "prd-management",
+    "sprint-planning",
     "code-generation",
     "refactoring",
-    "ai-assisted-development"
+    "ai-development",
+    "enterprise",
+    "production-ready"
   ],
+  "activationEvents": [
+    "onCommand:create-prd",
+    "onCommand:generate-all",
+    "onCommand:bootstrap",
+    "onWorkspaceContains:pubspec.yaml",
+    "onWorkspaceContains:PRPROMPTS/**"
+  ],
+  "contributes": {
+    "commands": {
+      "categories": [
+        {
+          "id": "prd",
+          "title": "PRD Management",
+          "icon": "📋"
+        },
+        {
+          "id": "planning",
+          "title": "Strategic Planning",
+          "icon": "📊"
+        },
+        {
+          "id": "prprompts",
+          "title": "PRPROMPTS Generation",
+          "icon": "🎯"
+        },
+        {
+          "id": "automation",
+          "title": "Development Automation",
+          "icon": "🤖"
+        },
+        {
+          "id": "refactoring",
+          "title": "Code Refactoring",
+          "icon": "🔄"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "PRPROMPTS Configuration",
+      "properties": {
+        "prprompts.autoUpdate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic update checking"
+        },
+        "prprompts.compliance": {
+          "type": "array",
+          "default": [],
+          "description": "Default compliance standards (hipaa, pci-dss, gdpr)",
+          "items": {
+            "type": "string",
+            "enum": ["hipaa", "pci-dss", "gdpr", "soc2", "coppa", "ferpa"]
+          }
+        },
+        "prprompts.testCoverage": {
+          "type": "number",
+          "default": 85,
+          "description": "Target test coverage percentage"
+        }
+      }
+    }
+  },
   "commands": [
     "./commands/prd",
     "./commands/planning",
@@ -35,5 +137,14 @@
     "./commands/automation",
     "./commands/refactoring"
   ],
-  "hooks": "./hooks/hooks.json"
+  "hooks": "./hooks/hooks.json",
+  "telemetry": {
+    "enabled": false,
+    "description": "No telemetry collected - your privacy is respected"
+  },
+  "changelog": "https://github.com/Kandil7/prprompts-flutter-generator/blob/main/CHANGELOG.md",
+  "qna": "marketplace",
+  "sponsor": {
+    "url": "https://github.com/sponsors/Kandil7"
+  }
 }

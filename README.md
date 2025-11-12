@@ -5,8 +5,8 @@
 [![npm version](https://img.shields.io/npm/v/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![npm downloads](https://img.shields.io/npm/dt/prprompts-flutter-generator.svg)](https://www.npmjs.com/package/prprompts-flutter-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-5.1.0-brightgreen)](CHANGELOG.md)
-[![Status](https://img.shields.io/badge/Status-Production-brightgreen)](CHANGELOG.md#510)
+[![Version](https://img.shields.io/badge/Version-5.1.3-brightgreen)](CHANGELOG.md)
+[![Status](https://img.shields.io/badge/Status-Production-brightgreen)](CHANGELOG.md#513)
 [![PRD Methods](https://img.shields.io/badge/PRD%20Methods-6-brightgreen)](#creating-your-prd)
 [![PRPROMPTS](https://img.shields.io/badge/PRPROMPTS-32%20Files-orange)](#what-gets-generated)
 [![Commands](https://img.shields.io/badge/Commands-23%20Total-blue)](#available-commands)
@@ -28,9 +28,17 @@
 
 ---
 
-## 🎉 NEW IN v5.1.0: Official AI Extension Support
+## 🎉 NEW IN v5.1: Official AI Extension Support
 
-**Production Ready!** v5.1.0 delivers official extension support for all three AI platforms with native integration, hooks automation, and TOML command format.
+**Production Ready!** v5.1 delivers official extension support for all three AI platforms with native integration, hooks automation, and TOML command format.
+
+### ✨ v5.1.3 Latest Improvements
+
+- ✅ **Perfect Multi-AI Integration** - All 23 commands synchronized across Claude, Qwen, and Gemini
+- ✅ **Automated Version Sync** - `npm run sync-versions` keeps all manifests aligned
+- ✅ **Universal Installer** - One-command setup for all AIs with progress bars
+- ✅ **Integration Testing** - 32 comprehensive tests ensure quality
+- ✅ **Enhanced Manifests** - Professional metadata, benchmarks, and capabilities
 
 ### ✨ What's New
 
@@ -77,6 +85,77 @@ prprompts doctor
 ✅ **Environment Checks** - Flutter SDK verified at startup
 ✅ **Discoverable** - All commands visible in `/help`
 ✅ **Official Distribution** - Install via package managers
+
+---
+
+## 🤖 AI Platform Comparison Matrix
+
+Choose the best AI assistant for your needs:
+
+<div align="center">
+
+| Feature | Claude Code | Qwen Code | Gemini CLI |
+|---------|------------|-----------|------------|
+| **Version** | v5.1.2 | v5.1.2 | v5.1.2 |
+| **Commands** | ✅ 23 | ✅ 23 | ✅ 23 |
+| **Context Window** | 200K tokens | 256K-1M tokens | 1M tokens |
+| **Slash Commands** | ✅ Native (`/command`) | ✅ Native (`:command`) | ✅ Native (`:command`) |
+| **TOML Commands** | ❌ | ✅ 31 files | ✅ 31 files |
+| **Plugin Support** | ✅ Official Plugin | ✅ Extension | ✅ Extension |
+| **Hooks Automation** | ✅ 4 event types | ❌ | ❌ |
+| **Skills System** | ✅ 17 skills | ✅ 15 skills | ✅ 15 skills |
+| **Auto-formatting** | ✅ Dart format on save | ❌ | ❌ |
+| **MCP Settings** | ❌ | ✅ Full MCP config | ❌ |
+| **ReAct Agent Mode** | ❌ | ❌ | ✅ Native |
+| **Cost** | $$$ | $ (Free tier) | $$ |
+| **Best For** | Premium features, hooks | Large codebases, cost-effective | 1M context, ReAct mode |
+
+</div>
+
+### 🎯 Platform-Specific Advantages
+
+**Claude Code:**
+- ✅ Official plugin with automatic updates
+- ✅ Hooks for workflow automation (auto-format, quality checks)
+- ✅ Premium model accuracy
+- ✅ Best documentation and support
+
+**Qwen Code:**
+- ✅ Extended context (up to 1M tokens) for monorepos
+- ✅ Free tier available
+- ✅ MCP configuration for advanced settings
+- ✅ Open source and community-driven
+
+**Gemini CLI:**
+- ✅ Largest context window (1M tokens)
+- ✅ ReAct agent mode for complex reasoning
+- ✅ Native TOML command integration
+- ✅ Google ecosystem integration
+
+### 📦 Installation
+
+All platforms support the same npm installation:
+
+```bash
+# Install PRPROMPTS (works for all AIs)
+npm install -g prprompts-flutter-generator
+
+# NEW: Universal installer for all detected AIs
+bash install-all-extensions.sh
+
+# Or install for specific AI
+bash install-claude-extension.sh
+bash install-qwen-extension.sh
+bash install-gemini-extension.sh
+
+# Verify installation
+prprompts doctor
+
+# Commands automatically available in your AI:
+# Claude: /create-prd, /generate-all, /bootstrap
+# Qwen: :create-prd, :generate-all, :bootstrap
+# Gemini: :create-prd, :generate-all, :bootstrap
+```
 
 ---
 

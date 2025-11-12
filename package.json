@@ -139,6 +139,7 @@
     "validate": "npm run validate:package && npm run validate:extensions",
     "validate:package": "npm pack --dry-run && echo \"✅ Package validated\"",
     "validate:extensions": "bash -c 'for file in *-extension.json; do echo \"Validating $file...\"; node -e \"JSON.parse(require(\\\"fs\\\").readFileSync(\\\"$file\\\", \\\"utf8\\\"))\" || exit 1; done && echo \"✅ All extensions valid\"'",
+    "sync-versions": "node scripts/sync-versions.js",
     "precommit": "npm run lint && npm run test",
     "setup": "./scripts/setup.sh",
     "smart-install": "bash ./scripts/smart-install.sh",

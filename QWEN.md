@@ -1,4 +1,4 @@
-# Qwen Code Extension for PRPROMPTS v4.0
+# Qwen Code Extension for PRPROMPTS v5.1.2
 
 Complete guide for using PRPROMPTS Generator with Qwen3-Coder - now with full automation!
 
@@ -315,7 +315,15 @@ qwen review-and-commit         # ✅ Validate and commit changes
 qwen qa-check                  # 🔍 Comprehensive compliance audit
 ```
 
-**Total: 21 commands across 4 categories (PRD, Planning, PRPROMPTS, Automation)**
+### Refactoring Commands (2 commands) 🆕 v5.0
+```bash
+qwen convert-react-to-flutter  # Convert React/React Native to Flutter
+qwen validate-flutter          # Comprehensive Flutter code validation
+```
+
+**Total: 23 commands across 5 categories (PRD, Planning, PRPROMPTS, Automation, Refactoring)**
+
+**Note:** Hooks automation is a Claude Code-specific feature and not available in Qwen Code.
 
 ---
 
