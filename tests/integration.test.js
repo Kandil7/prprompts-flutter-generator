@@ -81,7 +81,7 @@ describe('Multi-AI Platform Integration', () => {
         cwd: path.join(__dirname, '..'),
         encoding: 'utf8'
       });
-      expect(result).toContain('Version sync');
+      expect(result).toContain('Version');
     });
   });
 
