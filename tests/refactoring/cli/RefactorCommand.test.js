@@ -3,19 +3,21 @@
  */
 
 const RefactorCommand = require('../../../lib/refactoring/cli/RefactorCommand');
-const fs = require('fs').promises;
+const fs = require('fs-extra');
 const path = require('path');
 
 // Mock dependencies
-jest.mock('fs', () => ({
-  promises: {
-    stat: jest.fn(),
-    access: jest.fn(),
-    mkdir: jest.fn(),
-    readdir: jest.fn(),
-    readFile: jest.fn(),
-    writeFile: jest.fn()
-  }
+jest.mock('fs-extra', () => ({
+  stat: jest.fn(),
+  access: jest.fn(),
+  ensureDir: jest.fn(),
+  mkdir: jest.fn(),
+  readdir: jest.fn(),
+  readFile: jest.fn(),
+  writeFile: jest.fn(),
+  pathExists: jest.fn(),
+  readJson: jest.fn(),
+  writeJson: jest.fn(),
 }));
 
 jest.mock('../../../lib/refactoring/parsers/ReactParser');
@@ -93,7 +95,7 @@ describe('RefactorCommand', () => {
     it('should create Flutter target directory if it does not exist', async () => {
       fs.stat.mockResolvedValue({ isDirectory: () => true });
       fs.access.mockRejectedValue(new Error());
-      fs.mkdir.mockResolvedValue();
+      fs.ensureDir.mockResolvedValue();
 
       await command.validateInputs();
 

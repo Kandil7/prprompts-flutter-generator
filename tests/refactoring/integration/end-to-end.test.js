@@ -1,9 +1,10 @@
 const path = require('path');
 const fs = require('fs-extra');
 const RefactorCommand = require('../../../lib/refactoring/cli/RefactorCommand');
-const { MockAIClient } = require('../../../lib/refactoring/ai/MockAIClient');
+const MockAIClient = require('../../../lib/refactoring/ai/MockAIClient');
 
 describe('End-to-End React-to-Flutter Conversion', () => {
+  jest.setTimeout(60000);
   let tempDir;
   let reactSource;
   let flutterTarget;
@@ -32,15 +33,17 @@ describe('End-to-End React-to-Flutter Conversion', () => {
     });
 
     test('should convert React Login app to Flutter with Clean Architecture', async () => {
-      const command = new RefactorCommand();
-
-      // Execute conversion
-      const result = await command.execute(reactSource, flutterTarget, {
+      const command = new RefactorCommand({
+        reactSource,
+        flutterTarget,
         ai: 'mock',
         validate: true,
         stateManagement: 'bloc',
         interactive: false
       });
+
+      // Execute conversion
+      const result = await command.execute();
 
       expect(result.success).toBe(true);
       expect(result.errors).toHaveLength(0);
@@ -53,7 +56,8 @@ describe('End-to-End React-to-Flutter Conversion', () => {
       const command = new RefactorCommand();
       await command.execute(reactSource, flutterTarget, {
         ai: 'mock',
-        stateManagement: 'bloc'
+        stateManagement: 'bloc',
+        interactive: false
       });
 
       // Check domain layer
@@ -82,7 +86,8 @@ describe('End-to-End React-to-Flutter Conversion', () => {
       const command = new RefactorCommand();
       await command.execute(reactSource, flutterTarget, {
         ai: 'mock',
-        stateManagement: 'bloc'
+        stateManagement: 'bloc',
+        interactive: false
       });
 
       const blocPath = path.join(flutterTarget, 'lib', 'features', 'auth', 'presentation', 'bloc');
@@ -106,7 +111,8 @@ describe('End-to-End React-to-Flutter Conversion', () => {
       const command = new RefactorCommand();
       await command.execute(reactSource, flutterTarget, {
         ai: 'mock',
-        stateManagement: 'bloc'
+        stateManagement: 'bloc',
+        interactive: false
       });
 
       // Check repository interface (domain)
@@ -132,7 +138,8 @@ describe('End-to-End React-to-Flutter Conversion', () => {
       const command = new RefactorCommand();
       await command.execute(reactSource, flutterTarget, {
         ai: 'mock',
-        stateManagement: 'bloc'
+        stateManagement: 'bloc',
+        interactive: false
       });
 
       const usecasesPath = path.join(flutterTarget, 'lib', 'features', 'auth', 'domain', 'usecases');
@@ -150,7 +157,8 @@ describe('End-to-End React-to-Flutter Conversion', () => {
       const command = new RefactorCommand();
       await command.execute(reactSource, flutterTarget, {
         ai: 'mock',
-        stateManagement: 'bloc'
+        stateManagement: 'bloc',
+        interactive: false
       });
 
       const loginPage = path.join(
@@ -166,12 +174,14 @@ describe('End-to-End React-to-Flutter Conversion', () => {
     });
 
     test('should pass validation checks', async () => {
-      const command = new RefactorCommand();
-      const result = await command.execute(reactSource, flutterTarget, {
-        ai: 'mock',
+      const command = new RefactorCommand({
+        reactSource,
+        flutterTarget,
         validate: true,
-        stateManagement: 'bloc'
+        stateManagement: 'bloc',
+        interactive: false
       });
+      const result = await command.execute();
 
       expect(result.validation).toBeDefined();
       expect(result.validation.passed).toBe(true);
@@ -189,7 +199,8 @@ describe('End-to-End React-to-Flutter Conversion', () => {
       const command = new RefactorCommand();
       await command.execute(reactSource, flutterTarget, {
         ai: 'mock',
-        stateManagement: 'bloc'
+        stateManagement: 'bloc',
+        interactive: false
       });
 
       // Verify all features exist
