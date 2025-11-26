@@ -163,6 +163,15 @@
         "validate-flutter"
       ],
       "badge": "NEW"
+    },
+    "localization": {
+      "displayName": "Flutter Localization (v5.2)",
+      "description": "One-command app localization with ar-en support and RTL",
+      "commands": [
+        "localize-app",
+        "update-localization-prprompts"
+      ],
+      "badge": "NEW"
     }
   },
   "requirements": {

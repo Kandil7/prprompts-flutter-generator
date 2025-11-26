@@ -1,0 +1,13 @@
+{
+  "@@locale": "ar",
+  "textDirection": "rtl",
+  "@textDirection": {
+    "description": "Text direction for Arabic (rtl)"
+  },
+  "appTitle": "تطبيقي",
+  "welcomeMessage": "مرحباً، {userName}!",
+  "loginButton": "تسجيل الدخول",
+  "hintEnterEmail": "أدخل بريدك الإلكتروني",
+  "itemCount": "{count, plural, =0{لا توجد عناصر} =1{عنصر واحد} other{{count} عناصر}}",
+  "errorInvalidInput": "إدخال غير صحيح. يرجى المحاولة مرة أخرى."
+}

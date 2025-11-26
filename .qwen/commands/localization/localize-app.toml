@@ -1,0 +1,357 @@
+# PRPROMPTS Flutter Generator - Localize App Command
+# This command will be invoked via: /localize (or /localization/localize-app)
+
+description = "[prprompts] One-command Flutter app localization (ar-en)"
+
+prompt = """
+Automatically localize an existing Flutter app with Arabic-English (ar-en) support in one command.
+
+## Step 1: Validate Flutter Project
+
+Check that the current directory is a valid Flutter project:
+- `pubspec.yaml` exists
+- `lib/` directory exists
+- Contains `.dart` files
+
+If not valid, show error message:
+```
+❌ Error: Not a Flutter project
+Current directory: {current_dir}
+
+Please cd to your Flutter project root directory and try again.
+A Flutter project should have:
+  - pubspec.yaml
+  - lib/ directory with .dart files
+```
+
+## Step 2: Scan for Hardcoded Strings
+
+Scan all `.dart` files in `lib/` for hardcoded strings in the following widgets:
+- **Text widgets**: `Text('Hello')`, `Text("Welcome")`
+- **AppBar titles**: `AppBar(title: Text('Home'))`
+- **TextField hints**: `TextField(hintText: 'Enter email')`
+- **Button labels**: `ElevatedButton(child: Text('Submit'))`
+- **Dialog messages**: `AlertDialog(title: Text('Error'), content: Text('Invalid input'))`
+- **SnackBar messages**: `ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Saved')))`
+
+**Exclusions**:
+- Skip files already using `AppLocalizations.of(context)`
+- Skip comments and debug statements
+- Skip generated files (*.g.dart, *.freezed.dart)
+- Skip build/, .dart_tool/, generated/ directories
+
+**String Interpolation**:
+Convert Dart string interpolation to ICU MessageFormat:
+- `"Hello $name"` → `"Hello {name}"`
+- `"Total: ${cart.total}"` → `"Total: {total}"`
+
+Track:
+- Total unique strings found
+- Number of files scanned
+- Strings already localized (info message)
+
+## Step 3: Generate ARB Files
+
+### Create `lib/l10n/app_en.arb` (Master Template):
+
+```json
+{
+  "@@locale": "en",
+  
+  // Generate entries for each string found
+  "keyName": "Original English string",
+  "@keyName": {
+    "description": "Context description for translators",
+    "placeholders": {
+      "variableName": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  }
+}
+```
+
+**ARB Key Generation Rules**:
+- Convert to camelCase: "Welcome to App" → "welcomeToApp"
+- Add context prefix if applicable:
+  - Hints: "hintEnterEmail"
+  - Titles: "titleHome"
+  - Buttons: "buttonSubmit"
+  - Errors: "errorInvalidInput"
+
+**Metadata Requirements**:
+- Every string must have `@keyName` metadata
+- Include `description` field explaining context
+- Include `placeholders` for variables with types
+- Supported types: String, int, double, DateTime
+
+**ICU MessageFormat** (when applicable):
+```json
+"itemCount": "{count, plural, =0{No items} =1{One item} other{{count} items}}",
+"@itemCount": {
+  "description": "Number of items in cart",
+  "placeholders": {
+    "count": {
+      "type": "int"
+    }
+  }
+}
+```
+
+### Create `lib/l10n/app_ar.arb` (Arabic Translations):
+
+```json
+{
+  "@@locale": "ar",
+  "textDirection": "rtl",
+  "@textDirection": {
+    "description": "Text direction for Arabic (rtl)"
+  },
+  
+  // Copy all keys from app_en.arb
+  // If --ai flag NOT provided, leave English placeholders:
+  "welcomeToApp": "Welcome to App",
+  
+  // If --ai gemini|claude|qwen flag PROVIDED, generate AI translations:
+  "welcomeToApp": "مرحباً بك في التطبيق",
+  
+  // Preserve ICU MessageFormat placeholders:
+  "itemCount": "{count, plural, =0{لا توجد عناصر} =1{عنصر واحد} other{{count} عناصر}}"
+}
+```
+
+**Quality Checks**:
+- All keys from app_en.arb exist in app_ar.arb
+- Placeholders {variable} are preserved correctly
+- ICU MessageFormat syntax is valid
+- @@locale matches file name
+
+## Step 4: Configure L10n
+
+### Create `l10n.yaml` in project root:
+
+```yaml
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+nullable-getter: false
+preferred-supported-locales: ['en']
+```
+
+### Update `pubspec.yaml`:
+
+Add dependencies if not already present:
+```yaml
+dependencies:
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
+flutter:
+  generate: true
+```
+
+Only modify if these dependencies are missing. Show what was added.
+
+## Step 5: Generate Integration Guide
+
+Create `lib/l10n/integration_guide.md` with complete step-by-step instructions:
+
+### Section 1: Generated Files
+List all files created with descriptions.
+
+### Section 2: Statistics
+- Strings extracted: {count}
+- Files scanned: {count}
+- Languages: en, ar
+
+### Section 3: Setup Instructions
+
+**Step 1: Generate Localization Code**
+```bash
+flutter pub get
+flutter gen-l10n
+```
+
+**Step 2: Update MaterialApp**
+Show exact code to add:
+```dart
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+MaterialApp(
+  localizationsDelegates: [
+    AppLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: [
+    Locale('en'), // English
+    Locale('ar'), // Arabic
+  ],
+  locale: Locale('en'), // Default locale
+  // ... rest of your MaterialApp config
+)
+```
+
+**Step 3: Replace Hardcoded Strings**
+Show before/after examples:
+```dart
+// Before:
+Text('Welcome')
+
+// After:
+Text(AppLocalizations.of(context)!.welcomeMessage)
+```
+
+**Step 4: Test RTL Layout**
+```dart
+// In main.dart, test Arabic:
+locale: Locale('ar')
+```
+
+### Section 4: RTL Testing Checklist
+- ✅ Text flows right-to-left
+- ✅ Icons mirror correctly
+- ✅ Navigation drawer opens from right
+- ✅ Proper Arabic typography
+
+### Section 5: Translation Tips
+- Work with native Arabic speaker
+- Test with real Arabic users
+- Use proper diacritics
+- Consider regional variations
+
+### Section 6: Best Practices
+- Never hardcode UI strings
+- Always add context in @keyName descriptions
+- Handle plurals with ICU MessageFormat
+- Test all locales regularly
+
+### Section 7: Troubleshooting
+Common issues and solutions.
+
+### Section 8: Resources
+- Flutter i18n docs
+- ARB format specification
+- Arabic typography guide
+- RTL layout best practices
+
+## Step 6: Validation
+
+Run validation checks:
+
+1. ✅ ARB files are valid JSON
+2. ✅ All keys in app_en.arb exist in app_ar.arb
+3. ✅ ICU MessageFormat syntax is correct
+4. ✅ Placeholder matching across files
+5. ✅ @@locale keys present and correct
+6. ✅ l10n.yaml is valid YAML
+7. ✅ pubspec.yaml has required dependencies
+8. ✅ flutter.generate = true in pubspec.yaml
+
+Show validation summary:
+- ✅ X checks passed
+- ⚠️  Y warnings (list them)
+- ❌ Z errors (list them)
+
+If errors > 0, explain how to fix each error.
+
+## Step 7: Generate Report
+
+Show comprehensive summary:
+
+```
+✅ Localization Setup Complete!
+
+📊 Statistics:
+- Strings extracted: 47
+- Files scanned: 12
+- ARB files generated: 2 (en, ar)
+- Configuration files: 3
+
+📁 Generated Files:
+  📝 lib/l10n/app_en.arb (master template)
+  🌍 lib/l10n/app_ar.arb (Arabic translations)
+  ⚙️  l10n.yaml
+  📄 pubspec.yaml (updated)
+  📖 lib/l10n/integration_guide.md
+
+🌍 Languages Configured:
+  📝 English (en) - Master template
+  🌍 Arabic (ar) - RTL support enabled [AI-translated]
+
+✅ Validation: All checks passed (2 warnings)
+
+⚠️  Warnings:
+  1. Consider adding native speaker review for Arabic
+  2. Test RTL layout on real device
+
+📚 Next Steps:
+  1. Review translations in lib/l10n/app_ar.arb
+  2. Run: flutter pub get
+  3. Run: flutter gen-l10n
+  4. Update MaterialApp (see integration_guide.md)
+  5. Replace hardcoded strings
+  6. Test Arabic (RTL) layout
+
+📖 Complete instructions: lib/l10n/integration_guide.md
+
+Ready for multi-language support! 🚀
+```
+
+## AI Enhancement (if --ai flag provided)
+
+If user specified `--ai gemini` or `--ai claude` or `--ai qwen`:
+
+1. Generate Arabic translations using AI for all strings
+2. Preserve placeholders: {variable} → {variable}
+3. Maintain ICU MessageFormat structure for plurals
+4. Use culturally appropriate translations
+5. Add [AI-translated] tag to report
+
+**Translation quality rules**:
+- Natural, native-sounding Arabic
+- Proper grammar and diacritics
+- Mobile UI appropriate (concise)
+- RTL context aware
+
+## Update PRPROMPTS (if exists)
+
+If `PRPROMPTS/09-internationalization_i18n.md` exists:
+- Add ar-en specific examples
+- Include RTL layout guidance
+- Add Arabic typography section
+- Include code examples with Arabic strings
+
+## Dry Run Mode
+
+If `--dry-run` flag:
+- Show all files that WOULD be created
+- Show all changes that WOULD be made
+- Don't write any files
+- Add [DRY RUN] prefix to all output
+
+## Error Handling
+
+Handle these errors gracefully:
+- Not a Flutter project → clear error message
+- No hardcoded strings found → info message, ask if already localized
+- Permission denied → suggest running with proper permissions
+- Invalid language code → list supported languages
+- AI provider unavailable → fallback to English placeholders
+
+## Success Criteria
+
+✅ All user-facing strings extracted
+✅ Valid ARB files generated
+✅ Configuration files created
+✅ Integration guide generated
+✅ Validation passed
+✅ Clear next steps provided
+✅ RTL support configured for Arabic
+✅ User can run flutter gen-l10n successfully
+"""

@@ -1,0 +1,38 @@
+{
+  "@@locale": "en",
+  "appTitle": "My App",
+  "@appTitle": {
+    "description": "The application title shown in the app bar"
+  },
+  "welcomeMessage": "Welcome, {userName}!",
+  "@welcomeMessage": {
+    "description": "Personalized greeting displayed on the home screen",
+    "placeholders": {
+      "userName": {
+        "type": "String",
+        "example": "Ahmed"
+      }
+    }
+  },
+  "loginButton": "Login",
+  "@loginButton": {
+    "description": "Text shown on the login button"
+  },
+  "hintEnterEmail": "Enter your email",
+  "@hintEnterEmail": {
+    "description": "Hint text for email input field"
+  },
+  "itemCount": "{count, plural, =0{No items} =1{One item} other{{count} items}}",
+  "@itemCount": {
+    "description": "Number of items in the shopping cart",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errorInvalidInput": "Invalid input. Please try again.",
+  "@errorInvalidInput": {
+    "description": "Error message shown for invalid user input"
+  }
+}

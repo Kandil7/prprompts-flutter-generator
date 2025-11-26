@@ -1,0 +1,2142 @@
+﻿
+> prprompts-flutter-generator@5.1.3 test:refactoring:integration
+> jest tests/refactoring/integration --verbose
+
+npm : FAIL tests/refactorin
+g/integration/ai-validation
+.test.js
+At line:1 char:1
++ npm run test:refactoring:
+integration -- --verbose 
+2>&1 | Out-File -Fi ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo         
+     : NotSpeci    fied: 
+(FAIL tests    
+/refa...idation.t    
+est.js:String) []    , 
+RemoteException
+    + FullyQualifiedE    
+rrorId : NativeCo    
+mmandError
+ 
+  AI Enhancement to 
+Validation Flow
+    Code Enhancement 
+Pipeline
+      ├ù should enhance 
+generated Flutter code 
+with AI (13 ms)
+      ├ù should improve 
+code quality metrics 
+through enhancement (5 ms)
+    Validation After 
+Enhancement
+      ├ù should pass all 
+validation checks after AI 
+enhancement (2 ms)
+      ├ù should validate 
+accessibility improvements 
+(1 ms)
+      ├ù should validate 
+performance optimizations 
+(1 ms)
+    Iterative Enhancement 
+and Validation
+      ├ù should improve 
+code through multiple 
+enhancement cycles (2 ms)
+      ├ù should fix 
+validation issues through 
+targeted enhancement (1 ms)
+    AI-Generated Test 
+Validation
+      ├ù should validate 
+AI-generated test code (1 
+ms)
+    Validation Report 
+Integration
+      ├ù should generate 
+comprehensive report after 
+enhancement (1 ms)
+      ├ù should track 
+improvements in validation 
+report (1 ms)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ Code 
+Enhancement Pipeline ΓÇ║ 
+should enhance generated 
+Flutter code with AI
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ Code 
+Enhancement Pipeline ΓÇ║ 
+should improve code 
+quality metrics through 
+enhancement
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ 
+Validation After 
+Enhancement ΓÇ║ should 
+pass all validation checks 
+after AI enhancement
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ 
+Validation After 
+Enhancement ΓÇ║ should 
+validate accessibility 
+improvements
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ 
+Validation After 
+Enhancement ΓÇ║ should 
+validate performance 
+optimizations
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ 
+Iterative Enhancement and 
+Validation ΓÇ║ should 
+improve code through 
+multiple enhancement cycles
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ 
+Iterative Enhancement and 
+Validation ΓÇ║ should fix 
+validation issues through 
+targeted enhancement
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ 
+AI-Generated Test 
+Validation ΓÇ║ should 
+validate AI-generated test 
+code
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ 
+Validation Report 
+Integration ΓÇ║ should 
+generate comprehensive 
+report after enhancement
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  ΓùÅ AI Enhancement to 
+Validation Flow ΓÇ║ 
+Validation Report 
+Integration ΓÇ║ should 
+track improvements in 
+validation report
+
+    TypeError: 
+CodeEnhancer is not a 
+constructor
+
+    [0m [90m 10 |[39m   
+beforeEach(() [33m=>[39m 
+{
+     [90m 11 |[39m     
+mockAI [33m=[39m 
+[36mnew[39m [33mMockAICl
+ient[39m()[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+12 |[39m     enhancer 
+[33m=[39m [36mnew[39m 
+[33mCodeEnhancer[39m(mockA
+I)[33m;[39m
+     [90m    |[39m       
+         
+[31m[1m^[22m[39m
+     [90m 13 |[39m     
+validator [33m=[39m 
+[36mnew[39m [33mValidati
+onOrchestrator[39m()[33m;
+[39m
+     [90m 14 |[39m   
+})[33m;[39m
+     [90m 15 |[39m[0m
+
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/ai-v
+alidation.test.js:12:16)
+
+  console.log
+    [2025-11-24T22:54:50.157Z] [INFO] [ReactParser] Parsing file: HelloWidget.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.292Z] [INFO] [ReactParser] Γ£ô Successfully parsed: HelloWidget
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.328Z] [INFO] [ReactParser] Parsing file: ProfileCard.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.336Z] [INFO] [ReactParser] Γ£ô Successfully parsed: ProfileCard
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.339Z] [INFO] [WidgetGenerator] Generating Flutter widget for: ProfileCard
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.353Z] [INFO] [WidgetGenerator] Γ£ô Generated widget: ProfileCardWidget (stateless)
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.359Z] [INFO] [ReactParser] Parsing file: Counter.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.367Z] [INFO] [ReactParser] Γ£ô Successfully parsed: Counter
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.368Z] [INFO] [WidgetGenerator] Generating Flutter widget for: Counter
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.371Z] [INFO] [WidgetGenerator] Γ£ô Generated widget: CounterWidget (stateful)
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.376Z] [INFO] [ReactParser] Parsing file: LoginForm.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.383Z] [INFO] [ReactParser] Γ£ô Successfully parsed: LoginForm
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.385Z] [INFO] [WidgetGenerator] Generating Flutter widget for: LoginForm
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.387Z] [INFO] [WidgetGenerator] Γ£ô Generated widget: LoginFormWidget (stateful)
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.404Z] [INFO] [ReactParser] Parsing file: DataFetcher.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.409Z] [INFO] [ReactParser] Γ£ô Successfully parsed: DataFetcher
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.411Z] [INFO] [WidgetGenerator] Generating Flutter widget for: DataFetcher
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.413Z] [INFO] [WidgetGenerator] Γ£ô Generated widget: DataFetcherWidget (stateful)
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.419Z] [INFO] [ReactParser] Parsing file: SimpleWidget.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.425Z] [INFO] [ReactParser] Γ£ô Successfully parsed: SimpleWidget
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.429Z] [INFO] [WidgetGenerator] Generating Flutter widget for: SimpleWidget
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.432Z] [INFO] [WidgetGenerator] Γ£ô Generated widget: SimpleWidget (stateless)
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.437Z] [INFO] [ReactParser] Parsing file: TestWidget.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.441Z] [INFO] [ReactParser] Γ£ô Successfully parsed: TestWidget
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.443Z] [INFO] [WidgetGenerator] Generating Flutter widget for: TestWidget
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.446Z] [INFO] [WidgetGenerator] Γ£ô Generated widget: TestWidget (stateful)
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.453Z] [INFO] [ReactParser] Parsing file: ConfigurableWidget.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.457Z] [INFO] [ReactParser] Γ£ô Successfully parsed: ConfigurableWidget
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.459Z] [INFO] [WidgetGenerator] Generating Flutter widget for: ConfigurableWidget
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.462Z] [INFO] [WidgetGenerator] Γ£ô Generated widget: ConfigurableWidget (stateless)
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.465Z] [INFO] [ReactParser] Parsing file: Invalid.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.error
+    [2025-11-24T22:54:50.470Z] [ERROR] [ReactParser] Failed to parse Invalid.jsx at line 4, column 14: Unterminated JSX contents. (4:14)
+
+    [0m [90m 218 |[39m     [90m// Console output[39m
+     [90m 219 |[39m     [36mif[39m (level [33m===[39m [33mLogLevel[39m[33m.[39m[33mERROR[39m) {
+    [31m[1m>[22m[39m[90m 220 |[39m       console[33m.[39merror(formattedMessage)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 221 |[39m     } [36melse[39m {
+     [90m 222 |[39m       console[33m.[39mlog(formattedMessage)[33m;[39m
+     [90m 223 |[39m     }[0m
+
+      at Logger.error [as _log] (lib/refactoring/utils/logger.js:220:15)
+      at Logger._log [as error] (lib/refactoring/utils/logger.js:311:10)
+      at ReactParser.error (lib/refactoring/parsers/ReactParser.js:86:14)
+      at parse (tests/refactoring/integration/parser-generator.test.js:304:16)
+      at Object.<anonymous> (node_modules/expect/build/index.js:1824:9)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:2235:93)
+      at Object.toThrow (tests/refactoring/integration/parser-generator.test.js:305:10)
+
+  console.log
+    [2025-11-24T22:54:50.492Z] [INFO] [ReactParser] Parsing file: UnsupportedComponent.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.498Z] [INFO] [ReactParser] Γ£ô Successfully parsed: UnsupportedComponent
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.499Z] [INFO] [WidgetGenerator] Generating Flutter widget for: UnsupportedComponent
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.500Z] [INFO] [WidgetGenerator] Γ£ô Generated widget: UnsupportedComponentWidget (stateless)
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.412Z] [INFO] [RefactorCommand] ≡ƒÜÇ Starting React-to-Flutter conversion...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.498Z] [INFO] [RefactorCommand] ≡ƒöì Validating inputs...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.error
+    [2025-11-24T22:54:50.502Z] [ERROR] [RefactorCommand] 
+    Γ¥î Conversion failed: Invalid AI provider: mock. Valid options: claude, qwen, gemini, none
+
+    [0m [90m 218 |[39m     [90m// Console output[39m
+     [90m 219 |[39m     [36mif[39m (level [33m===[39m [33mLogLevel[39m[33m.[39m[33mERROR[39m) {
+    [31m[1m>[22m[39m[90m 220 |[39m       console[33m.[39merror(formattedMessage)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 221 |[39m     } [36melse[39m {
+     [90m 222 |[39m       console[33m.[39mlog(formattedMessage)[33m;[39m
+     [90m 223 |[39m     }[0m
+
+      at Logger.error [as _log] (lib/refactoring/utils/logger.js:220:15)
+      at Logger._log [as error] (lib/refactoring/utils/logger.js:311:10)
+      at RefactorCommand.error [as execute] (lib/refactoring/cli/RefactorCommand.js:95:14)
+      at Object.<anonymous> (tests/refactoring/integration/end-to-end.test.js:46:22)
+
+  console.log
+    [2025-11-24T22:54:50.549Z] [INFO] [RefactorCommand] ≡ƒÜÇ Starting React-to-Flutter conversion...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.551Z] [INFO] [RefactorCommand] ≡ƒöì Validating inputs...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.error
+    [2025-11-24T22:54:50.554Z] [ERROR] [RefactorCommand] 
+    Γ¥î Conversion failed: React source directory not found: undefined
+
+    [0m [90m 218 |[39m     [90m// Console output[39m
+     [90m 219 |[39m     [36mif[39m (level [33m===[39m [33mLogLevel[39m[33m.[39m[33mERROR[39m) {
+    [31m[1m>[22m[39m[90m 220 |[39m       console[33m.[39merror(formattedMessage)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 221 |[39m     } [36melse[39m {
+     [90m 222 |[39m       console[33m.[39mlog(formattedMessage)[33m;[39m
+     [90m 223 |[39m     }[0m
+
+      at Logger.error [as _log] (lib/refactoring/utils/logger.js:220:15)
+      at Logger._log [as error] (lib/refactoring/utils/logger.js:311:10)
+      at RefactorCommand.error [as execute] (lib/refactoring/cli/RefactorCommand.js:95:14)
+      at Object.<anonymous> (tests/refactoring/integration/end-to-end.test.js:57:7)
+
+FAIL tests/refactoring/inte
+gration/parser-generator.te
+st.js
+  Parser to Generator Flow
+    Simple Component 
+Transformation
+      ├ù should parse 
+React component and 
+generate Flutter widget 
+(159 ms)
+      ├ù should preserve 
+component structure 
+through transformation (30 
+ms)
+    Stateful Component 
+Transformation
+      ├ù should convert 
+useState to StatefulWidget 
+(15 ms)
+      ├ù should handle 
+multiple state variables 
+(16 ms)
+    ComponentModel to 
+WidgetModel Mapping
+      ├ù should correctly 
+map component types (2 ms)
+      ├ù should map React 
+props to Flutter 
+constructor parameters (1 
+ms)
+      ├ù should map React 
+lifecycle to Flutter 
+lifecycle (13 ms)
+    Code Generation Quality
+      ├ù should generate 
+properly formatted Dart 
+code (18 ms)
+      ├ù should include 
+necessary imports (15 ms)
+      ├ù should generate 
+constructor with proper 
+syntax (12 ms)
+    Error Handling in 
+Transformation
+      ΓêÜ should handle 
+parsing errors gracefully 
+(27 ms)
+      ├ù should handle 
+unsupported React features 
+(10 ms)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ Simple Component 
+Transformation ΓÇ║ should 
+parse React component and 
+generate Flutter widget
+
+    expect(received).toBe(e
+xpected) // Object.is 
+equality
+
+    Expected: "functional"
+    Received: "widget"
+
+    [0m [90m 33 |[39m   
+    expect(componentModel)
+[33m.[39mtoBeInstanceOf([
+33mComponentModel[39m)[33
+m;[39m
+     [90m 34 |[39m       
+expect(componentModel[33m.
+[39mname)[33m.[39mtoBe(
+[32m'HelloWidget'[39m)[33
+m;[39m
+    
+[31m[1m>[22m[39m[90m 
+35 |[39m       expect(comp
+onentModel[33m.[39mtype)
+[33m.[39mtoBe([32m'functi
+onal'[39m)[33m;[39m
+     [90m    |[39m       
+                           
+ [31m[1m^[22m[39m
+     [90m 36 |[39m       
+expect(componentModel[33m.
+[39mprops)[33m.[39mtoHav
+eLength([35m1[39m)[33m;
+[39m
+     [90m 37 |[39m       
+expect(componentModel[33m.
+[39mprops[[35m0[39m][33
+m.[39mname)[33m.[39mtoBe
+([32m'name'[39m)[33m;[3
+9m
+     [90m 38 |[39m[0m
+
+      at Object.toBe (tests
+/refactoring/integration/pa
+rser-generator.test.js:35:3
+5)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ Simple Component 
+Transformation ΓÇ║ should 
+preserve component 
+structure through 
+transformation
+
+    expect(received).toCont
+ain(expected) // indexOf
+
+    Matcher error: 
+received value must not be 
+null nor undefined
+
+    Received has value: 
+undefined
+
+    [0m [90m 72 |[39m
+     [90m 73 |[39m       
+[90m// Verify Flutter 
+output[39m
+    
+[31m[1m>[22m[39m[90m 
+74 |[39m       expect(widg
+etModel[33m.[39mdartCode)
+[33m.[39mtoContain([32m'
+final User 
+user'[39m)[33m;[39m
+     [90m    |[39m       
+                           
+  [31m[1m^[22m[39m
+     [90m 75 |[39m       
+expect(widgetModel[33m.[3
+9mdartCode)[33m.[39mtoCon
+tain([32m'final 
+VoidCallback 
+onEdit'[39m)[33m;[39m
+     [90m 76 |[39m       
+expect(widgetModel[33m.[3
+9mdartCode)[33m.[39mtoCon
+tain([32m'Image.network'[
+39m)[33m;[39m
+     [90m 77 |[39m       
+expect(widgetModel[33m.[3
+9mdartCode)[33m.[39mtoCon
+tain([32m'ElevatedButton'
+[39m)[33m;[39m[0m
+
+      at Object.toContain (
+tests/refactoring/integrati
+on/parser-generator.test.js
+:74:36)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ Stateful 
+Component Transformation 
+ΓÇ║ should convert 
+useState to StatefulWidget
+
+    expect(received).toBe(e
+xpected) // Object.is 
+equality
+
+    Expected: true
+    Received: undefined
+
+    [0m [90m 102 |[39m
+     [90m 103 |[39m      
+ [90m// Verify state 
+detection[39m
+    
+[31m[1m>[22m[39m[90m 
+104 |[39m       expect(com
+ponentModel[33m.[39mhasSt
+ate)[33m.[39mtoBe([36mtr
+ue[39m)[33m;[39m
+     [90m     |[39m      
+                           
+      [31m[1m^[22m[39m
+     [90m 105 |[39m      
+ expect(componentModel[33m
+.[39mstate)[33m.[39mtoCo
+ntainEqual({
+     [90m 106 |[39m      
+   name[33m:[39m [32m'co
+unt'[39m[33m,[39m
+     [90m 107 |[39m      
+   type[33m:[39m [32m'in
+t'[39m[33m,[39m[0m
+
+      at Object.toBe (tests
+/refactoring/integration/pa
+rser-generator.test.js:104:
+39)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ Stateful 
+Component Transformation 
+ΓÇ║ should handle multiple 
+state variables
+
+    expect(received).toCont
+ain(expected) // indexOf
+
+    Matcher error: 
+received value must not be 
+null nor undefined
+
+    Received has value: 
+undefined
+
+    [0m [90m 146 |[39m
+     [90m 147 |[39m      
+ [90m// Verify Flutter 
+state[39m
+    
+[31m[1m>[22m[39m[90m 
+148 |[39m       expect(wid
+getModel[33m.[39mdartCode
+)[33m.[39mtoContain([32m
+'String email = 
+\'\''[39m)[33m;[39m
+     [90m     |[39m      
+                           
+   [31m[1m^[22m[39m
+     [90m 149 |[39m      
+ expect(widgetModel[33m.[
+39mdartCode)[33m.[39mtoCo
+ntain([32m'String 
+password = 
+\'\''[39m)[33m;[39m
+     [90m 150 |[39m      
+ expect(widgetModel[33m.[
+39mdartCode)[33m.[39mtoCo
+ntain([32m'bool loading = 
+false'[39m)[33m;[39m
+     [90m 151 |[39m     
+})[33m;[39m[0m
+
+      at Object.toContain (
+tests/refactoring/integrati
+on/parser-generator.test.js
+:148:36)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ ComponentModel to 
+WidgetModel Mapping ΓÇ║ 
+should correctly map 
+component types
+
+    ComponentModel: 
+filePath is required and 
+must be a string
+
+    [0m [90m 226 |[39m  
+ _validate({ 
+filePath[33m,[39m 
+name[33m,[39m type }) {
+     [90m 227 |[39m     
+[36mif[39m 
+([33m![39mfilePath 
+[33m||[39m 
+[36mtypeof[39m filePath 
+[33m!==[39m 
+[32m'string'[39m) {
+    
+[31m[1m>[22m[39m[90m 
+228 |[39m       
+[36mthrow[39m 
+[36mnew[39m [33mError[3
+9m([32m'ComponentModel: 
+filePath is required and 
+must be a 
+string'[39m)[33m;[39m
+     [90m     |[39m      
+       [31m[1m^[22m[39m
+     [90m 229 |[39m     }
+     [90m 230 |[39m     
+[36mif[39m 
+([33m![39mname 
+[33m||[39m 
+[36mtypeof[39m name 
+[33m!==[39m 
+[32m'string'[39m) {
+     [90m 231 |[39m      
+ [36mthrow[39m 
+[36mnew[39m [33mError[3
+9m([32m'ComponentModel: 
+name is required and must 
+be a string'[39m)[33m;[3
+9m[0m
+
+      at 
+ComponentModel._validate (l
+ib/refactoring/models/Compo
+nentModel.js:228:13)
+      at new _validate (lib
+/refactoring/models/Compone
+ntModel.js:206:10)
+      at tests/refactoring/
+integration/parser-generato
+r.test.js:175:23
+          at Array.forEach 
+(<anonymous>)
+      at Object.forEach (te
+sts/refactoring/integration
+/parser-generator.test.js:1
+74:17)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ ComponentModel to 
+WidgetModel Mapping ΓÇ║ 
+should map React props to 
+Flutter constructor 
+parameters
+
+    ComponentModel: 
+filePath is required and 
+must be a string
+
+    [0m [90m 226 |[39m  
+ _validate({ 
+filePath[33m,[39m 
+name[33m,[39m type }) {
+     [90m 227 |[39m     
+[36mif[39m 
+([33m![39mfilePath 
+[33m||[39m 
+[36mtypeof[39m filePath 
+[33m!==[39m 
+[32m'string'[39m) {
+    
+[31m[1m>[22m[39m[90m 
+228 |[39m       
+[36mthrow[39m 
+[36mnew[39m [33mError[3
+9m([32m'ComponentModel: 
+filePath is required and 
+must be a 
+string'[39m)[33m;[39m
+     [90m     |[39m      
+       [31m[1m^[22m[39m
+     [90m 229 |[39m     }
+     [90m 230 |[39m     
+[36mif[39m 
+([33m![39mname 
+[33m||[39m 
+[36mtypeof[39m name 
+[33m!==[39m 
+[32m'string'[39m) {
+     [90m 231 |[39m      
+ [36mthrow[39m 
+[36mnew[39m [33mError[3
+9m([32m'ComponentModel: 
+name is required and must 
+be a string'[39m)[33m;[3
+9m[0m
+
+      at 
+ComponentModel._validate (l
+ib/refactoring/models/Compo
+nentModel.js:228:13)
+      at new _validate (lib
+/refactoring/models/Compone
+ntModel.js:206:10)
+      at 
+Object.<anonymous> (tests/r
+efactoring/integration/pars
+er-generator.test.js:187:21
+)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ ComponentModel to 
+WidgetModel Mapping ΓÇ║ 
+should map React lifecycle 
+to Flutter lifecycle
+
+    expect(received).toCont
+ain(expected) // indexOf
+
+    Matcher error: 
+received value must not be 
+null nor undefined
+
+    Received has value: 
+undefined
+
+    [0m [90m 220 |[39m
+     [90m 221 |[39m      
+ [90m// useEffect with 
+empty deps ΓåÆ 
+initState[39m
+    
+[31m[1m>[22m[39m[90m 
+222 |[39m       expect(wid
+getModel[33m.[39mdartCode
+)[33m.[39mtoContain([32m
+'@override'[39m)[33m;[39
+m
+     [90m     |[39m      
+                           
+   [31m[1m^[22m[39m
+     [90m 223 |[39m      
+ expect(widgetModel[33m.[
+39mdartCode)[33m.[39mtoCo
+ntain([32m'void initState(
+)'[39m)[33m;[39m
+     [90m 224 |[39m      
+ expect(widgetModel[33m.[
+39mdartCode)[33m.[39mtoCo
+ntain([32m'super.initState
+()'[39m)[33m;[39m
+     [90m 225 |[39m     
+})[33m;[39m[0m
+  console.log
+    [2025-11-24T22:54:50.571Z] [INFO] [RefactorCommand] ≡ƒÜÇ Starting React-to-Flutter conversion...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.573Z] [INFO] [RefactorCommand] ≡ƒöì Validating inputs...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+
+      at Object.toContain (
+tests/refactoring/integrati
+on/parser-generator.test.js
+:222:36)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ Code Generation 
+Quality ΓÇ║ should 
+generate properly 
+formatted Dart code
+
+    TypeError: expect(recei
+ved).toMatch(expected)
+
+    Matcher error: 
+received value must be a 
+string
+
+    Received has value: 
+undefined
+
+    [0m [90m 242 |[39m
+     [90m 243 |[39m      
+ [90m// Check 
+formatting[39m
+    
+[31m[1m>[22m[39m[90m 
+244 |[39m       expect(wid
+getModel[33m.[39mdartCode
+)[33m.[39mtoMatch([35m/^
+class \w+ extends \w+Widget
+/m[39m)[33m;[39m
+     [90m     |[39m      
+                           
+   [31m[1m^[22m[39m
+     [90m 245 |[39m      
+ expect(widgetModel[33m.[
+39mdartCode)[33m.[39mtoCo
+ntain([32m'@override'[39m
+)[33m;[39m
+     [90m 246 |[39m      
+ expect(widgetModel[33m.[
+39mdartCode)[33m.[39mtoCo
+ntain([32m'Widget 
+build(BuildContext 
+context)'[39m)[33m;[39m
+     [90m 247 |[39m[0m
+
+      at Object.toMatch (te
+sts/refactoring/integration
+/parser-generator.test.js:2
+44:36)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ Code Generation 
+Quality ΓÇ║ should include 
+necessary imports
+
+    expect(received).toCont
+ain(expected) // indexOf
+
+    Expected value: "packag
+e:flutter/material.dart"
+    Received array: 
+[{"as": null, "hide": [], 
+"package": 
+"flutter/material.dart", 
+"path": null, "show": []}]
+
+    [0m [90m 266 |[39m  
+     [36mconst[39m 
+widgetModel [33m=[39m gen
+erator[33m.[39mgenerate(c
+omponentModel)[33m;[39m
+     [90m 267 |[39m
+    
+[31m[1m>[22m[39m[90m 
+268 |[39m       expect(wid
+getModel[33m.[39mimports)
+[33m.[39mtoContain([32m'
+package:flutter/material.da
+rt'[39m)[33m;[39m
+     [90m     |[39m      
+                           
+  [31m[1m^[22m[39m
+     [90m 269 |[39m     
+})[33m;[39m
+     [90m 270 |[39m
+     [90m 271 |[39m     
+test([32m'should generate 
+constructor with proper 
+syntax'[39m[33m,[39m () 
+[33m=>[39m {[0m
+
+      at Object.toContain (
+tests/refactoring/integrati
+on/parser-generator.test.js
+:268:35)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ Code Generation 
+Quality ΓÇ║ should 
+generate constructor with 
+proper syntax
+
+    TypeError: expect(recei
+ved).toMatch(expected)
+
+    Matcher error: 
+received value must be a 
+string
+
+    Received has value: 
+undefined
+
+    [0m [90m 284 |[39m
+     [90m 285 |[39m      
+ [90m// Check constructor 
+syntax[39m
+    
+[31m[1m>[22m[39m[90m 
+286 |[39m       expect(wid
+getModel[33m.[39mdartCode
+)[33m.[39mtoMatch([35m/c
+onst 
+\w+\(\{/[39m)[33m;[39m
+     [90m     |[39m      
+                           
+   [31m[1m^[22m[39m
+     [90m 287 |[39m      
+ expect(widgetModel[33m.[
+39mdartCode)[33m.[39mtoCo
+ntain([32m'required this.t
+itle'[39m)[33m;[39m
+     [90m 288 |[39m      
+ expect(widgetModel[33m.[
+39mdartCode)[33m.[39mtoCo
+ntain([32m'this.color'[39
+m)[33m;[39m
+     [90m 289 |[39m      
+ expect(widgetModel[33m.[
+39mdartCode)[33m.[39mtoCo
+ntain([32m'this.onTap'[39
+m)[33m;[39m[0m
+
+      at Object.toMatch (te
+sts/refactoring/integration
+/parser-generator.test.js:2
+86:36)
+
+  ΓùÅ Parser to Generator 
+Flow ΓÇ║ Error Handling in 
+Transformation ΓÇ║ should 
+handle unsupported React 
+features
+
+    expect(received).toBeDe
+fined()
+
+    Received: undefined
+
+    [0m [90m 327 |[39m
+     [90m 328 |[39m      
+ [90m// Should still 
+generate, but with 
+warnings[39m
+    
+[31m[1m>[22m[39m[90m 
+329 |[39m       expect(wid
+getModel[33m.[39mwarnings
+)[33m.[39mtoBeDefined()[
+33m;[39m
+     [90m     |[39m      
+                           
+   [31m[1m^[22m[39m
+     [90m 330 |[39m      
+ expect(widgetModel[33m.[
+39mwarnings[33m.[39mlengt
+h)[33m.[39mtoBeGreaterTha
+n([35m0[39m)[33m;[39m
+     [90m 331 |[39m     
+})[33m;[39m
+     [90m 332 |[39m   
+})[33m;[39m[0m
+
+      at 
+Object.toBeDefined (tests/r
+efactoring/integration/pars
+er-generator.test.js:329:36
+)
+
+  console.error
+    [2025-11-24T22:54:50.578Z] [ERROR] [RefactorCommand] 
+    Γ¥î Conversion failed: React source directory not found: undefined
+
+    [0m [90m 218 |[39m     [90m// Console output[39m
+     [90m 219 |[39m     [36mif[39m (level [33m===[39m [33mLogLevel[39m[33m.[39m[33mERROR[39m) {
+    [31m[1m>[22m[39m[90m 220 |[39m       console[33m.[39merror(formattedMessage)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 221 |[39m     } [36melse[39m {
+     [90m 222 |[39m       console[33m.[39mlog(formattedMessage)[33m;[39m
+     [90m 223 |[39m     }[0m
+
+      at Logger.error [as _log] (lib/refactoring/utils/logger.js:220:15)
+      at Logger._log [as error] (lib/refactoring/utils/logger.js:311:10)
+      at RefactorCommand.error [as execute] (lib/refactoring/cli/RefactorCommand.js:95:14)
+      at Object.<anonymous> (tests/refactoring/integration/end-to-end.test.js:87:7)
+
+  console.log
+    [2025-11-24T22:54:50.600Z] [INFO] [RefactorCommand] ≡ƒÜÇ Starting React-to-Flutter conversion...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.603Z] [INFO] [RefactorCommand] ≡ƒöì Validating inputs...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.error
+    [2025-11-24T22:54:50.605Z] [ERROR] [RefactorCommand] 
+    Γ¥î Conversion failed: React source directory not found: undefined
+
+    [0m [90m 218 |[39m     [90m// Console output[39m
+     [90m 219 |[39m     [36mif[39m (level [33m===[39m [33mLogLevel[39m[33m.[39m[33mERROR[39m) {
+    [31m[1m>[22m[39m[90m 220 |[39m       console[33m.[39merror(formattedMessage)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 221 |[39m     } [36melse[39m {
+     [90m 222 |[39m       console[33m.[39mlog(formattedMessage)[33m;[39m
+     [90m 223 |[39m     }[0m
+
+      at Logger.error [as _log] (lib/refactoring/utils/logger.js:220:15)
+      at Logger._log [as error] (lib/refactoring/utils/logger.js:311:10)
+      at RefactorCommand.error [as execute] (lib/refactoring/cli/RefactorCommand.js:95:14)
+      at Object.<anonymous> (tests/refactoring/integration/end-to-end.test.js:112:7)
+
+  console.log
+    [2025-11-24T22:54:50.623Z] [INFO] [RefactorCommand] ≡ƒÜÇ Starting React-to-Flutter conversion...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.625Z] [INFO] [RefactorCommand] ≡ƒöì Validating inputs...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.error
+    [2025-11-24T22:54:50.628Z] [ERROR] [RefactorCommand] 
+    Γ¥î Conversion failed: React source directory not found: undefined
+
+    [0m [90m 218 |[39m     [90m// Console output[39m
+     [90m 219 |[39m     [36mif[39m (level [33m===[39m [33mLogLevel[39m[33m.[39m[33mERROR[39m) {
+    [31m[1m>[22m[39m[90m 220 |[39m       console[33m.[39merror(formattedMessage)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 221 |[39m     } [36melse[39m {
+     [90m 222 |[39m       console[33m.[39mlog(formattedMessage)[33m;[39m
+     [90m 223 |[39m     }[0m
+
+      at Logger.error [as _log] (lib/refactoring/utils/logger.js:220:15)
+      at Logger._log [as error] (lib/refactoring/utils/logger.js:311:10)
+      at RefactorCommand.error [as execute] (lib/refactoring/cli/RefactorCommand.js:95:14)
+      at Object.<anonymous> (tests/refactoring/integration/end-to-end.test.js:139:7)
+
+  console.log
+    [2025-11-24T22:54:50.642Z] [INFO] [RefactorCommand] ≡ƒÜÇ Starting React-to-Flutter conversion...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.643Z] [INFO] [RefactorCommand] ≡ƒöì Validating inputs...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.error
+    [2025-11-24T22:54:50.646Z] [ERROR] [RefactorCommand] 
+    Γ¥î Conversion failed: React source directory not found: undefined
+
+    [0m [90m 218 |[39m     [90m// Console output[39m
+     [90m 219 |[39m     [36mif[39m (level [33m===[39m [33mLogLevel[39m[33m.[39m[33mERROR[39m) {
+    [31m[1m>[22m[39m[90m 220 |[39m       console[33m.[39merror(formattedMessage)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 221 |[39m     } [36melse[39m {
+     [90m 222 |[39m       console[33m.[39mlog(formattedMessage)[33m;[39m
+     [90m 223 |[39m     }[0m
+
+      at Logger.error [as _log] (lib/refactoring/utils/logger.js:220:15)
+      at Logger._log [as error] (lib/refactoring/utils/logger.js:311:10)
+      at RefactorCommand.error [as execute] (lib/refactoring/cli/RefactorCommand.js:95:14)
+      at Object.<anonymous> (tests/refactoring/integration/end-to-end.test.js:158:7)
+
+  console.log
+    [2025-11-24T22:54:50.659Z] [INFO] [RefactorCommand] ≡ƒÜÇ Starting React-to-Flutter conversion...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.662Z] [INFO] [RefactorCommand] ≡ƒöì Validating inputs...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.664Z] [INFO] [RefactorCommand] Γ£ô Γ£à Inputs validated
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.665Z] [INFO] [RefactorCommand] ≡ƒôû Parsing React files...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.669Z] [INFO] [ReactParser] Parsing file: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\react-app\src\features\auth\authSlice.js
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.700Z] [WARN] [ReactParser] No React component found in: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\react-app\src\features\auth\authSlice.js
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+Parsing React files... ΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûæΓûæΓûæΓûæΓûæΓûæΓûæΓûæΓûæΓûæΓûæΓûæΓûæΓûæΓûæ 50% (1/2 files) [1s]  console.log
+    [2025-11-24T22:54:50.702Z] [INFO] [ReactParser] Parsing file: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\react-app\src\features\auth\LoginPage.jsx
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.712Z] [INFO] [ReactParser] Γ£ô Successfully parsed: LoginPage
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+Parsing React files... ΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûê 100% (2/2 files) [0s]
+  console.log
+    [2025-11-24T22:54:50.713Z] [INFO] [RefactorCommand] Γ£ô Γ£à Parsed 1 components
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.714Z] [INFO] [RefactorCommand] ≡ƒÅù∩╕Å  Generating Flutter code...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.715Z] [INFO] [CleanArchitectureGenerator] Generating Clean Architecture for: LoginPage
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.719Z] [INFO] [CleanArchitectureGenerator] Creating folder structure for: login_page
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.722Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\domain\entities
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.728Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\domain\repositories
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.730Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\domain\usecases
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.732Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\data\models
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.738Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\data\datasources
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.741Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\data\repositories
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.744Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\presentation\bloc
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.747Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\presentation\cubit
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.750Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\presentation\pages
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.753Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\presentation\widgets
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.764Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\test\features\login_page\domain\usecases
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.768Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\test\features\login_page\data\repositories
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.772Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\test\features\login_page\presentation\bloc
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.777Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\test\features\login_page\presentation\cubit
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.779Z] [INFO] [FileHandler] Γ£ô Created directory: C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\test\features\login_page\presentation\pages
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.781Z] [INFO] [CleanArchitectureGenerator] Γ£ô Created folder structure for: login_page
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.784Z] [INFO] [CleanArchitectureGenerator] Generating domain layer for: login_page
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.789Z] [INFO] [FileHandler] Γ£ô Wrote 323 characters to C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\domain\entities\login_page.dart
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.791Z] [INFO] [CleanArchitectureGenerator] Γ£ô Generated 1 domain layer files
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.793Z] [INFO] [CleanArchitectureGenerator] Generating data layer for: login_page
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.795Z] [INFO] [CleanArchitectureGenerator] No API endpoints, skipping data layer generation
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.797Z] [INFO] [CleanArchitectureGenerator] Generating presentation layer for: login_page
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.799Z] [INFO] [BlocGenerator] Generating cubit for: LoginPage
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.807Z] [INFO] [BlocGenerator] Γ£ô Generated Cubit files for: LoginPage
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.810Z] [INFO] [FileHandler] Γ£ô Wrote 519 characters to C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\presentation\cubit\login_page_state.dart
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.813Z] [INFO] [FileHandler] Γ£ô Wrote 191 characters to C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\presentation\cubit\login_page_cubit.dart
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.816Z] [INFO] [WidgetGenerator] Generating Flutter widget for: LoginPage
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.825Z] [INFO] [WidgetGenerator] Γ£ô Generated widget: LoginPageWidget (stateful)
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.826Z] [INFO] [CodeGenerator] Generating Dart code for: LoginPageWidget
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.830Z] [INFO] [CodeGenerator] Γ£ô Generated 32 lines of Dart code
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.833Z] [INFO] [FileHandler] Γ£ô Wrote 607 characters to C:\flutter_projects\prprompts-flutter-generator\tests\refactoring\temp\test-1764024890655\flutter-app\lib\features\login_page\presentation\pages\login.dart
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.834Z] [INFO] [CleanArchitectureGenerator] Γ£ô Generated 3 presentation layer files
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.835Z] [INFO] [CleanArchitectureGenerator] Γ£ô Generated 4 files for LoginPage
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+Generating Flutter code... ΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûê 100% (1/1 components) [ETA: 0s]
+  console.log
+    [2025-11-24T22:54:50.837Z] [INFO] [RefactorCommand] Γ£ô Γ£à Generated 2 Flutter files
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.838Z] [INFO] [RefactorCommand] ≡ƒöì Validating Flutter code...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.error
+    [2025-11-24T22:54:50.839Z] [ERROR] [RefactorCommand] 
+    Γ¥î Conversion failed: orchestrator.validate is not a function
+
+    [0m [90m 218 |[39m     [90m// Console output[39m
+     [90m 219 |[39m     [36mif[39m (level [33m===[39m [33mLogLevel[39m[33m.[39m[33mERROR[39m) {
+    [31m[1m>[22m[39m[90m 220 |[39m       console[33m.[39merror(formattedMessage)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 221 |[39m     } [36melse[39m {
+     [90m 222 |[39m       console[33m.[39mlog(formattedMessage)[33m;[39m
+     [90m 223 |[39m     }[0m
+
+      at Logger.error [as _log] (lib/refactoring/utils/logger.js:220:15)
+      at Logger._log [as error] (lib/refactoring/utils/logger.js:311:10)
+      at RefactorCommand.error [as execute] (lib/refactoring/cli/RefactorCommand.js:95:14)
+      at Object.<anonymous> (tests/refactoring/integration/end-to-end.test.js:184:22)
+
+  console.log
+    [2025-11-24T22:54:50.862Z] [INFO] [RefactorCommand] ≡ƒÜÇ Starting React-to-Flutter conversion...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.log
+    [2025-11-24T22:54:50.863Z] [INFO] [RefactorCommand] ≡ƒöì Validating inputs...
+
+      at Logger.log [as _log] (lib/refactoring/utils/logger.js:222:15)
+
+  console.error
+    [2025-11-24T22:54:50.865Z] [ERROR] [RefactorCommand] 
+    Γ¥î Conversion failed: React source directory not found: undefined
+
+    [0m [90m 218 |[39m     [90m// Console output[39m
+     [90m 219 |[39m     [36mif[39m (level [33m===[39m [33mLogLevel[39m[33m.[39m[33mERROR[39m) {
+    [31m[1m>[22m[39m[90m 220 |[39m       console[33m.[39merror(formattedMessage)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 221 |[39m     } [36melse[39m {
+     [90m 222 |[39m       console[33m.[39mlog(formattedMessage)[33m;[39m
+     [90m 223 |[39m     }[0m
+
+      at Logger.error [as _log] (lib/refactoring/utils/logger.js:220:15)
+      at Logger._log [as error] (lib/refactoring/utils/logger.js:311:10)
+      at RefactorCommand.error [as execute] (lib/refactoring/cli/RefactorCommand.js:95:14)
+      at Object.<anonymous> (tests/refactoring/integration/end-to-end.test.js:200:7)
+
+FAIL tests/refactoring/inte
+gration/end-to-end.test.js
+  End-to-End 
+React-to-Flutter Conversion
+    Complete Login App 
+Conversion
+      ├ù should convert 
+React Login app to Flutter 
+with Clean Architecture 
+(137 ms)
+      ├ù should create all 
+required feature 
+directories (21 ms)
+      ├ù should generate 
+BLoC state management 
+files (30 ms)
+      ├ù should generate 
+repository pattern 
+correctly (23 ms)
+      ├ù should generate 
+use cases for business 
+logic (18 ms)
+      ├ù should generate 
+UI page with proper 
+structure (18 ms)
+      ├ù should pass 
+validation checks (200 ms)
+    Multiple Features 
+Conversion
+      ├ù should convert 
+multiple features 
+independently (19 ms)
+
+  ΓùÅ End-to-End 
+React-to-Flutter 
+Conversion ΓÇ║ Complete 
+Login App Conversion ΓÇ║ 
+should convert React Login 
+app to Flutter with Clean 
+Architecture
+
+    expect(received).toBe(e
+xpected) // Object.is 
+equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m 46 |[39m   
+    [36mconst[39m result 
+[33m=[39m 
+[36mawait[39m command[33
+m.[39mexecute()[33m;[39m
+     [90m 47 |[39m
+    
+[31m[1m>[22m[39m[90m 
+48 |[39m       expect(resu
+lt[33m.[39msuccess)[33m.
+[39mtoBe([36mtrue[39m)[
+33m;[39m
+     [90m    |[39m       
+                       
+[31m[1m^[22m[39m
+     [90m 49 |[39m       
+expect(result[33m.[39merr
+ors)[33m.[39mtoHaveLength
+([35m0[39m)[33m;[39m
+     [90m 50 |[39m
+     [90m 51 |[39m       
+[90m// Verify Clean 
+Architecture 
+structure[39m[0m
+
+      at Object.toBe (tests
+/refactoring/integration/en
+d-to-end.test.js:48:30)
+
+  ΓùÅ End-to-End 
+React-to-Flutter 
+Conversion ΓÇ║ Complete 
+Login App Conversion ΓÇ║ 
+should create all required 
+feature directories
+
+    expect(received).toBe(e
+xpected) // Object.is 
+equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m 63 |[39m   
+    [90m// Check domain 
+layer[39m
+     [90m 64 |[39m       
+[36mconst[39m domainPath 
+[33m=[39m path[33m.[39m
+join(flutterTarget[33m,[3
+9m 
+[32m'lib'[39m[33m,[39m 
+[32m'features'[39m[33m,
+[39m [32m'auth'[39m[33m,
+[39m [32m'domain'[39m)[
+33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+65 |[39m       
+expect([36mawait[39m fs[
+33m.[39mpathExists(domainP
+ath))[33m.[39mtoBe([36mt
+rue[39m)[33m;[39m
+     [90m    |[39m       
+                           
+             
+[31m[1m^[22m[39m
+     [90m 66 |[39m       
+expect([36mawait[39m fs[
+33m.[39mpathExists(path[3
+3m.[39mjoin(domainPath[33
+m,[39m [32m'entities'[39
+m)))[33m.[39mtoBe([36mtr
+ue[39m)[33m;[39m
+     [90m 67 |[39m       
+expect([36mawait[39m fs[
+33m.[39mpathExists(path[3
+3m.[39mjoin(domainPath[33
+m,[39m [32m'repositories'
+[39m)))[33m.[39mtoBe([3
+6mtrue[39m)[33m;[39m
+     [90m 68 |[39m       
+expect([36mawait[39m fs[
+33m.[39mpathExists(path[3
+3m.[39mjoin(domainPath[33
+m,[39m [32m'usecases'[39
+m)))[33m.[39mtoBe([36mtr
+ue[39m)[33m;[39m[0m
+
+      at Object.toBe (tests
+/refactoring/integration/en
+d-to-end.test.js:65:47)
+
+  ΓùÅ End-to-End 
+React-to-Flutter 
+Conversion ΓÇ║ Complete 
+Login App Conversion ΓÇ║ 
+should generate BLoC state 
+management files
+
+    expect(received).toBe(e
+xpected) // Object.is 
+equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m  98 |[39m  
+     [36mconst[39m 
+stateFile [33m=[39m path
+[33m.[39mjoin(blocPath[33
+m,[39m [32m'auth_state.da
+rt'[39m)[33m;[39m
+     [90m  99 |[39m
+    
+[31m[1m>[22m[39m[90m 
+100 |[39m       
+expect([36mawait[39m fs[
+33m.[39mpathExists(blocFil
+e))[33m.[39mtoBe([36mtru
+e[39m)[33m;[39m
+     [90m     |[39m      
+                           
+            
+[31m[1m^[22m[39m
+     [90m 101 |[39m      
+ expect([36mawait[39m fs
+[33m.[39mpathExists(eventF
+ile))[33m.[39mtoBe([36mt
+rue[39m)[33m;[39m
+     [90m 102 |[39m      
+ expect([36mawait[39m fs
+[33m.[39mpathExists(stateF
+ile))[33m.[39mtoBe([36mt
+rue[39m)[33m;[39m
+     [90m 103 |[39m[0m
+
+      at Object.toBe (tests
+/refactoring/integration/en
+d-to-end.test.js:100:45)
+
+  ΓùÅ End-to-End 
+React-to-Flutter 
+Conversion ΓÇ║ Complete 
+Login App Conversion ΓÇ║ 
+should generate repository 
+pattern correctly
+
+    expect(received).toBe(e
+xpected) // Object.is 
+equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m 120 |[39m  
+       
+flutterTarget[33m,[39m 
+[32m'lib'[39m[33m,[39m 
+[32m'features'[39m[33m,
+[39m [32m'auth'[39m[33m,
+[39m [32m'domain'[39m[3
+3m,[39m [32m'repositories
+'[39m[33m,[39m [32m'aut
+h_repository.dart'[39m
+     [90m 121 |[39m      
+ )[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+122 |[39m       
+expect([36mawait[39m fs[
+33m.[39mpathExists(repoInt
+erface))[33m.[39mtoBe([3
+6mtrue[39m)[33m;[39m
+     [90m     |[39m      
+                           
+                 
+[31m[1m^[22m[39m
+     [90m 123 |[39m
+     [90m 124 |[39m      
+ [36mconst[39m 
+interfaceContent 
+[33m=[39m 
+[36mawait[39m fs[33m.[3
+9mreadFile(repoInterface[3
+3m,[39m [32m'utf8'[39m)
+[33m;[39m
+     [90m 125 |[39m      
+ expect(interfaceContent)[
+33m.[39mtoContain([32m'ab
+stract class AuthRepository
+'[39m)[33m;[39m[0m
+
+      at Object.toBe (tests
+/refactoring/integration/en
+d-to-end.test.js:122:50)
+
+  ΓùÅ End-to-End 
+React-to-Flutter 
+Conversion ΓÇ║ Complete 
+Login App Conversion ΓÇ║ 
+should generate use cases 
+for business logic
+
+    expect(received).toBe(e
+xpected) // Object.is 
+equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m 147 |[39m  
+     [90m// Check for 
+login use case[39m
+     [90m 148 |[39m      
+ [36mconst[39m 
+loginUseCase [33m=[39m pa
+th[33m.[39mjoin(usecasesP
+ath[33m,[39m [32m'login_
+usecase.dart'[39m)[33m;[
+39m
+    
+[31m[1m>[22m[39m[90m 
+149 |[39m       
+expect([36mawait[39m fs[
+33m.[39mpathExists(loginUs
+eCase))[33m.[39mtoBe([36
+mtrue[39m)[33m;[39m
+     [90m     |[39m      
+                           
+                
+[31m[1m^[22m[39m
+     [90m 150 |[39m
+     [90m 151 |[39m      
+ [36mconst[39m content 
+[33m=[39m 
+[36mawait[39m fs[33m.[3
+9mreadFile(loginUseCase[33
+m,[39m [32m'utf8'[39m)[
+33m;[39m
+     [90m 152 |[39m      
+ expect(content)[33m.[39m
+toContain([32m'class Login
+UseCase'[39m)[33m;[39m[
+0m
+
+      at Object.toBe (tests
+/refactoring/integration/en
+d-to-end.test.js:149:49)
+
+  ΓùÅ End-to-End 
+React-to-Flutter 
+Conversion ΓÇ║ Complete 
+Login App Conversion ΓÇ║ 
+should generate UI page 
+with proper structure
+
+    expect(received).toBe(e
+xpected) // Object.is 
+equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m 165 |[39m  
+       
+flutterTarget[33m,[39m 
+[32m'lib'[39m[33m,[39m 
+[32m'features'[39m[33m,
+[39m [32m'auth'[39m[33m,
+[39m [32m'presentation'[
+39m[33m,[39m [32m'pages'
+[39m[33m,[39m 
+[32m'login_page.dart'[39m
+     [90m 166 |[39m      
+ )[33m;[39m
+    
+[31m[1m>[22m[39m[90m 
+167 |[39m       
+expect([36mawait[39m fs[
+33m.[39mpathExists(loginPa
+ge))[33m.[39mtoBe([36mtr
+ue[39m)[33m;[39m
+     [90m     |[39m      
+                           
+             
+[31m[1m^[22m[39m
+     [90m 168 |[39m
+     [90m 169 |[39m      
+ [36mconst[39m content 
+[33m=[39m 
+[36mawait[39m fs[33m.[3
+9mreadFile(loginPage[33m,
+[39m [32m'utf8'[39m)[33m
+;[39m
+     [90m 170 |[39m      
+ expect(content)[33m.[39m
+toContain([32m'class Login
+Page'[39m)[33m;[39m[0m
+
+      at Object.toBe (tests
+/refactoring/integration/en
+d-to-end.test.js:167:46)
+
+  ΓùÅ End-to-End 
+React-to-Flutter 
+Conversion ΓÇ║ Complete 
+Login App Conversion ΓÇ║ 
+should pass validation 
+checks
+
+    expect(received).toBeDe
+fined()
+
+    Received: undefined
+
+    [0m [90m 184 |[39m  
+     [36mconst[39m 
+result [33m=[39m 
+[36mawait[39m command[33
+m.[39mexecute()[33m;[39m
+     [90m 185 |[39m
+    
+[31m[1m>[22m[39m[90m 
+186 |[39m       expect(res
+ult[33m.[39mvalidation)[
+33m.[39mtoBeDefined()[33m
+;[39m
+     [90m     |[39m      
+                           
+[31m[1m^[22m[39m
+     [90m 187 |[39m      
+ expect(result[33m.[39mva
+lidation[33m.[39mpassed)
+[33m.[39mtoBe([36mtrue[3
+9m)[33m;[39m
+     [90m 188 |[39m      
+ expect(result[33m.[39mva
+lidation[33m.[39mscore)[
+33m.[39mtoBeGreaterThan([
+35m80[39m)[33m;[39m
+     [90m 189 |[39m     
+})[33m;[39m[0m
+
+      at 
+Object.toBeDefined (tests/r
+efactoring/integration/end-
+to-end.test.js:186:33)
+
+  ΓùÅ End-to-End 
+React-to-Flutter 
+Conversion ΓÇ║ Multiple 
+Features Conversion ΓÇ║ 
+should convert multiple 
+features independently
+
+    ENOENT: no such file 
+or directory, scandir 'C:\f
+lutter_projects\prprompts-f
+lutter-generator\tests\refa
+ctoring\temp\test-176402489
+0855\flutter-app\lib\featur
+es'
+
+
+Test Suites: 3 failed, 3 
+total
+Tests:       29 failed, 1 
+passed, 30 total
+Snapshots:   0 total
+Time:        2.351 s
+Ran all test suites 
+matching tests/refactoring/
+integration.

@@ -1,0 +1,334 @@
+# PRPROMPTS Flutter Generator - Update PRPROMPTS with Localization
+# This command updates PRPROMPTS file 09 after localization setup
+
+description = "[prprompts] Update internationalization PRPROMPTS with ar-en examples"
+
+prompt = """
+Update the PRPROMPTS internationalization file with Arabic-English specific examples and RTL guidance.
+
+## Prerequisites
+
+Check that these exist:
+- `PRPROMPTS/09-internationalization_i18n.md`
+- `lib/l10n/app_en.arb`
+- `lib/l10n/app_ar.arb`
+
+If PRPROMPTS directory doesn't exist, show message:
+```
+ℹ️  PRPROMPTS not found. Run /gen-prprompts first to generate PRPROMPTS files.
+```
+
+## Update Strategy
+
+Read existing `PRPROMPTS/09-internationalization_i18n.md` and enhance it with:
+
+### 1. Add ar-en Specific Examples Section
+
+Add after EXAMPLES section:
+
+```markdown
+## AR-EN SPECIFIC EXAMPLES
+
+### ARB Files Setup
+
+**English (Master Template)** - `lib/l10n/app_en.arb`:
+\`\`\`json
+{
+  "@@locale": "en",
+  "appTitle": "My App",
+  "@appTitle": {
+    "description": "Application title shown in app bar"
+  },
+  "welcomeMessage": "Welcome, {userName}!",
+  "@welcomeMessage": {
+    "description": "Personalized greeting on home screen",
+    "placeholders": {
+      "userName": {
+        "type": "String",
+        "example": "Ahmed"
+      }
+    }
+  },
+  "itemCount": "{count, plural, =0{No items} =1{One item} other{{count} items}}",
+  "@itemCount": {
+    "description": "Shopping cart item count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+\`\`\`
+
+**Arabic (Target Language)** - `lib/l10n/app_ar.arb`:
+\`\`\`json
+{
+  "@@locale": "ar",
+  "textDirection": "rtl",
+  "@textDirection": {
+    "description": "Text direction for Arabic"
+  },
+  "appTitle": "تطبيقي",
+  "welcomeMessage": "مرحباً، {userName}!",
+  "itemCount": "{count, plural, =0{لا توجد عناصر} =1{عنصر واحد} other{{count} عناصر}}"
+}
+\`\`\`
+
+### RTL Layout Configuration
+
+**MaterialApp Setup**:
+\`\`\`dart
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+MaterialApp(
+  localizationsDelegates: [
+    AppLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: [
+    Locale('en'),
+    Locale('ar'),
+  ],
+  // Let Flutter automatically determine text direction
+  // based on device locale
+  home: HomePage(),
+)
+\`\`\`
+
+**Usage in Widgets**:
+\`\`\`dart
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.appTitle),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            Text(l10n.welcomeMessage(userName: 'أحمد')),
+            Text(l10n.itemCount(5)), // "5 عناصر"
+          ],
+        ),
+      ),
+    );
+  }
+}
+\`\`\`
+
+### Arabic Typography
+
+**Font Configuration** (`pubspec.yaml`):
+\`\`\`yaml
+flutter:
+  fonts:
+    - family: NotoSansArabic
+      fonts:
+        - asset: fonts/NotoSansArabic-Regular.ttf
+        - asset: fonts/NotoSansArabic-Bold.ttf
+          weight: 700
+\`\`\`
+
+**Theme Setup**:
+\`\`\`dart
+ThemeData(
+  fontFamily: 'NotoSansArabic',
+  // Ensure proper font rendering for Arabic
+  textTheme: TextTheme(
+    bodyMedium: TextStyle(
+      fontFamily: 'NotoSansArabic',
+      fontSize: 16,
+      height: 1.5, // Better line spacing for Arabic
+    ),
+  ),
+)
+\`\`\`
+```
+
+### 2. Add RTL Best Practices Section
+
+Add after BEST PRACTICES section:
+
+```markdown
+## BEST PRACTICES - RTL SPECIFIC
+
+### Why RTL Matters
+- 420M Arabic speakers worldwide
+- Improves UX for Arabic, Hebrew, Persian, Urdu users
+- Required for regional market compliance
+- Shows cultural sensitivity and professionalism
+
+### RTL Layout Testing
+
+**Automated Tests**:
+\`\`\`dart
+testWidgets('RTL layout test', (WidgetTester tester) async {
+  await tester.pumpWidget(
+    MaterialApp(
+      locale: Locale('ar'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: HomePage(),
+    ),
+  );
+  
+  // Verify text direction
+  final BuildContext context = tester.element(find.byType(MaterialApp));
+  expect(Directionality.of(context), TextDirection.rtl);
+});
+\`\`\`
+
+**Manual Testing Checklist**:
+- ✅ Icons mirror appropriately (back button, chevrons)
+- ✅ Leading/trailing swapped correctly
+- ✅ Text flows right-to-left
+- ✅ Forms align to the right
+- ✅ Drawer opens from right side
+- ✅ Tabs order reversed
+- ✅ List items align to right
+
+### Common RTL Mistakes
+
+❌ **DON'T** hardcode text direction:
+\`\`\`dart
+TextDirection.ltr // ❌ Forces LTR even for Arabic
+\`\`\`
+
+✅ **DO** let Flutter determine direction:
+\`\`\`dart
+Directionality.of(context) // ✅ Adapts to locale
+\`\`\`
+
+❌ **DON'T** use left/right positioning:
+\`\`\`dart
+Padding(left: 16.0) // ❌ Always left padding
+\`\`\`
+
+✅ **DO** use start/end:
+\`\`\`dart
+EdgeInsetsDirectional.only(start: 16.0) // ✅ Adapts to RTL
+\`\`\`
+
+### Arabic Translation Quality
+
+**Work with Native Speakers**:
+- Use professional translation services
+- Test with native Arabic speakers
+- Consider regional dialects (Gulf, Egyptian, Levantine)
+- Review for cultural appropriateness
+
+**Typography Tips**:
+- Use fonts with proper Arabic ligature support
+- Increase line height to 1.5 minimum
+- Avoid all-caps (Arabic doesn't have capitals)
+- Ensure diacritics render correctly
+
+**Plural Forms**:
+- Arabic has 6 plural forms (zero, one, two, few, many, other)
+- ICU MessageFormat handles this automatically
+- Always test with different counts
+
+### Performance Considerations
+
+**Font Loading**:
+\`\`\`dart
+// Preload Arabic font to avoid layout shift
+precacheFont() async {
+  await rootBundle.load('fonts/NotoSansArabic-Regular.ttf');
+}
+\`\`\`
+
+**Locale Switching**:
+\`\`\`dart
+// Rebuild entire app when locale changes
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale _locale = Locale('en');
+  
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      locale: _locale,
+      // ... localization config
+    );
+  }
+}
+\`\`\`
+```
+
+### 3. Add to VALIDATION GATES
+
+Add these RTL-specific gates:
+
+```markdown
+## VALIDATION GATES - RTL ADDITIONS
+
+**Pre-commit** (run before every PR):
+- [ ] Test app with Arabic locale (`locale: Locale('ar')`)
+- [ ] Verify RTL layout using Flutter Inspector
+- [ ] Check EdgeInsetsDirectional usage (no EdgeInsets.only(left:))
+- [ ] Verify all ARB keys exist in both en and ar files
+- [ ] Run `flutter gen-l10n` without errors
+
+**Pre-release** (before submitting to stores):
+- [ ] Native Arabic speaker review of translations
+- [ ] RTL layout tested on 5+ different screen sizes
+- [ ] Arabic text renders correctly with no  boxes
+- [ ] Performance tested with Arabic fonts loaded
+- [ ] Screenshots for App Store include Arabic screenshots
+```
+
+## Show Update Summary
+
+After updating, show:
+
+```
+✅ Updated PRPROMPTS/09-internationalization_i18n.md
+
+Added:
+- ar-en specific ARB examples
+- RTL layout configuration code
+- Arabic typography setup
+- RTL best practices checklist
+- Common RTL mistakes to avoid
+- Arabic translation quality tips
+- RTL-specific validation gates
+
+📖 Review the updated file:
+   cat PRPROMPTS/09-internationalization_i18n.md
+
+🔗 Related files:
+   - lib/l10n/app_en.arb
+   - lib/l10n/app_ar.arb
+   - lib/l10n/integration_guide.md
+```
+
+## Preserve Existing Content
+
+**IMPORTANT**: Don't remove existing content. Only ADD new sections.
+
+Merge strategy:
+1. Keep all existing FEATURE, EXAMPLES, CONSTRAINTS sections
+2. Add AR-EN SPECIFIC EXAMPLES as new section
+3. Append to BEST PRACTICES (don't replace)
+4. Add new items to VALIDATION GATES
+
+If section already has ar-en examples, replace only that section.
+"""
