@@ -1,6 +1,6 @@
-const { CodeEnhancer } = require('../../../lib/refactoring/ai/CodeEnhancer');
+const CodeEnhancer = require('../../../lib/refactoring/ai/CodeEnhancer');
 const MockAIClient = require('../../../lib/refactoring/ai/MockAIClient');
-const { ValidationOrchestrator } = require('../../../lib/refactoring/validation/ValidationOrchestrator');
+const ValidationOrchestrator = require('../../../lib/refactoring/validation/ValidationOrchestrator');
 
 describe('AI Enhancement to Validation Flow', () => {
   let mockAI;
